@@ -1,0 +1,576 @@
+<?php
+// Ecobank Account Opening Form - PHP version
+// Converted from HTML to allow server interaction for auto-fill and printing
+include('../includes/session.php');
+?>
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecobank Account Opening Form</title>
+    <link rel="stylesheet" type="text/css" href="../vendors/styles/account_form.css">
+    <style>
+        /* Search Bar at Top - Hidden from Print */
+        @media screen {
+            #search-header {
+                background: linear-gradient(135deg, #042852 0%, #017ac5 100%);
+                color: white;
+                padding: 20px;
+                margin-bottom: 20px;
+                border-radius: 5px;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            #search-header input {
+                flex: 1;
+                min-width: 250px;
+                padding: 10px;
+                border: none;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+
+            #search-header button {
+                padding: 10px 20px;
+                background: white;
+                color: #667eea;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: all 0.3s;
+            }
+
+            #search-header button:hover {
+                background: #f0f0f0;
+            }
+
+            #generateMessage {
+                font-size: 12px;
+                color: #fff;
+                padding: 5px 10px;
+                background: rgba(0,0,0,0.2);
+                border-radius: 4px;
+                min-width: 200px;
+            }
+
+            /* Loader Style */
+            #loader {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 9999;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #loader.active {
+                display: flex;
+            }
+
+            .loader-spinner {
+                animation: rotate 1s infinite;
+                height: 50px;
+                width: 50px;
+                margin-right: 20px;
+            }
+
+            .loader-spinner:before,
+            .loader-spinner:after {
+                border-radius: 50%;
+                content: "";
+                display: block;
+                height: 20px;
+                width: 20px;
+            }
+
+            .loader-spinner:before {
+                animation: ball1 1s infinite;
+                background-color: #fff;
+                box-shadow: 30px 0 0 #0066cc;
+                margin-bottom: 10px;
+            }
+
+            .loader-spinner:after {
+                animation: ball2 1s infinite;
+                background-color: #0066cc;
+                box-shadow: 30px 0 0 #fff;
+            }
+
+            .loader-content {
+                display: flex;
+                align-items: center;
+                color: white;
+                font-size: 18px;
+            }
+
+            @keyframes rotate {
+                0% { transform: rotate(0deg) scale(0.8) }
+                50% { transform: rotate(360deg) scale(1.2) }
+                100% { transform: rotate(720deg) scale(0.8) }
+            }
+
+            @keyframes ball1 {
+                0% {
+                    box-shadow: 30px 0 0 #0066cc;
+                }
+                50% {
+                    box-shadow: 0 0 0 #0066cc;
+                    margin-bottom: 0;
+                    transform: translate(15px, 15px);
+                }
+                100% {
+                    box-shadow: 30px 0 0 #0066cc;
+                    margin-bottom: 10px;
+                }
+            }
+
+            @keyframes ball2 {
+                0% {
+                    box-shadow: 30px 0 0 #fff;
+                }
+                50% {
+                    box-shadow: 0 0 0 #fff;
+                    margin-top: -20px;
+                    transform: translate(15px, 15px);
+                }
+                100% {
+                    box-shadow: 30px 0 0 #fff;
+                    margin-top: 0;
+                }
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        }
+
+        @media print {
+            #search-header, #loader {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loader -->
+    <div id="loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div>Recherche en cours...</div>
+        </div>
+    </div>
+
+    <!-- Search Header -->
+    <div id="search-header">
+        <h3 style="margin: 0; flex: 1 0 100%;">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="60" zoomAndPan="magnify" viewBox="0 0 375 225" preserveAspectRatio="xMidYMid meet" version="1.0">
+                    <defs>
+                        <clippath id="28a01fd8dc">
+                            <path d="M 9.386719 25.0625 L 365.636719 25.0625 L 365.636719 199.8125 L 9.386719 199.8125 Z M 9.386719 25.0625 " clip-rule="nonzero"></path>
+                        </clippath>
+                    </defs>
+                    <path fill="#007eb6" d="M 65.179688 67.949219 L 66.386719 60.703125 L 35.582031 60.703125 C 32.257812 60.703125 29.238281 63.417969 28.636719 66.441406 L 16.554688 134.089844 C 15.949219 137.414062 18.066406 140.132812 21.386719 140.132812 L 55.210938 140.132812 L 56.421875 132.882812 L 27.425781 132.882812 L 32.863281 102.679688 L 56.421875 102.679688 L 57.628906 95.734375 L 34.070312 95.734375 L 38.902344 67.949219 Z M 80.28125 141.339844 C 66.6875 141.339844 58.835938 129.257812 62.460938 109.023438 C 66.085938 88.488281 78.167969 77.011719 92.058594 77.011719 C 99.609375 77.011719 103.535156 79.425781 105.046875 81.238281 L 101.722656 86.976562 C 100.214844 85.464844 97.496094 83.957031 92.964844 83.957031 C 81.789062 83.957031 75.449219 94.226562 73.03125 108.722656 C 70.011719 123.519531 73.636719 133.789062 83.601562 133.789062 C 87.832031 133.789062 90.851562 132.277344 93.570312 130.769531 L 95.078125 137.109375 C 92.058594 139.226562 87.226562 141.339844 80.28125 141.339844 Z M 123.167969 141.339844 C 106.253906 141.339844 101.421875 127.445312 104.441406 109.023438 C 107.761719 90.601562 117.730469 76.707031 134.339844 76.707031 C 151.554688 76.707031 156.386719 90.296875 153.066406 109.023438 C 149.742188 127.445312 139.777344 141.339844 123.167969 141.339844 Z M 133.132812 83.351562 C 121.355469 83.351562 116.523438 96.640625 114.40625 109.023438 C 112.292969 121.707031 112.597656 134.394531 124.375 134.394531 C 136.152344 134.394531 140.683594 121.707031 142.796875 109.324219 C 144.910156 96.640625 145.214844 83.351562 133.132812 83.351562 Z M 229.476562 141.339844 C 213.46875 141.339844 207.125 134.394531 208.9375 122.917969 C 211.960938 106.304688 228.269531 101.472656 247.898438 99.660156 L 248.503906 95.734375 C 250.316406 86.070312 244.878906 83.351562 237.027344 83.351562 C 230.984375 83.351562 225.246094 85.464844 221.320312 87.277344 L 219.8125 81.238281 C 223.738281 79.425781 230.984375 76.707031 239.746094 76.707031 C 251.222656 76.707031 260.582031 81.539062 257.867188 96.941406 L 250.917969 136.808594 C 245.785156 139.527344 238.234375 141.339844 229.476562 141.339844 Z M 246.992188 104.796875 C 230.984375 106.609375 221.019531 110.230469 218.90625 122.613281 C 217.394531 131.675781 222.226562 135.300781 231.289062 135.300781 C 235.214844 135.300781 239.140625 134.695312 241.859375 133.183594 Z M 293.804688 140.132812 L 301.65625 95.433594 C 302.5625 89.695312 301.355469 83.351562 290.785156 83.351562 C 285.046875 83.351562 282.027344 84.257812 278.703125 85.464844 L 269.039062 140.132812 L 258.773438 140.132812 L 269.039062 81.238281 C 275.082031 78.519531 282.628906 76.707031 292.597656 76.707031 C 309.8125 76.707031 313.132812 86.371094 311.625 95.132812 L 303.773438 139.828125 L 293.804688 139.828125 Z M 293.804688 140.132812 " fill-opacity="1" fill-rule="nonzero"></path>
+                    <path fill="#bed000" d="M 355.417969 154.328125 L 12.929688 154.328125 L 13.234375 152.515625 L 355.71875 152.515625 Z M 355.417969 154.328125 " fill-opacity="1" fill-rule="nonzero"></path>
+                    <g clip-path="url(#28a01fd8dc)">
+                        <path fill="#007eb6" d="M 188.703125 77.3125 C 182.664062 77.3125 179.039062 78.519531 175.414062 80.332031 L 180.851562 50.128906 L 169.675781 56.171875 L 155.480469 136.808594 C 158.804688 139.226562 164.84375 141.339844 173.300781 141.339844 C 191.722656 141.339844 203.804688 128.050781 207.429688 108.117188 C 210.75 89.089844 203.199219 77.3125 188.703125 77.3125 Z M 197.160156 108.417969 C 194.441406 124.125 187.496094 134.695312 174.507812 134.695312 C 171.1875 134.695312 168.167969 134.394531 166.050781 133.183594 L 174.507812 85.464844 C 177.527344 83.957031 180.550781 83.050781 185.078125 83.050781 C 196.859375 83.050781 199.578125 94.828125 197.160156 108.417969 Z M 365.382812 77.917969 L 354.8125 77.917969 L 327.632812 106.609375 L 327.328125 106.609375 L 334.277344 67.34375 C 341.222656 28.6875 299.242188 20.53125 255.449219 27.175781 C 225.550781 31.707031 199.273438 43.488281 199.273438 43.488281 C 199.273438 43.488281 233.703125 31.40625 263.90625 29.59375 C 301.960938 27.480469 331.859375 33.21875 323.101562 73.6875 L 311.625 140.132812 L 321.589844 140.132812 L 327.328125 108.117188 L 327.632812 108.117188 L 345.753906 140.132812 L 357.230469 140.132812 L 336.992188 106.910156 Z M 18.667969 174.863281 L 14.441406 199.628906 L 10.515625 199.628906 L 14.742188 174.863281 L 9.609375 174.863281 L 9.910156 172.445312 L 24.40625 172.445312 L 24.105469 174.863281 Z M 35.582031 199.328125 L 38.300781 184.226562 C 38.601562 182.113281 37.996094 179.996094 34.675781 179.996094 C 33.164062 179.996094 31.65625 180.300781 30.449219 181.207031 L 27.125 199.328125 L 23.5 199.328125 L 28.9375 168.519531 L 32.257812 168.519531 L 30.75 179.394531 C 32.5625 178.488281 34.375 178.183594 35.882812 178.183594 C 41.320312 178.183594 42.226562 181.507812 41.925781 184.527344 L 39.207031 199.628906 L 35.582031 199.628906 Z M 47.359375 189.964844 C 47.058594 194.796875 48.871094 197.210938 52.496094 197.210938 C 54.910156 197.210938 56.722656 196.609375 57.929688 196.003906 L 58.535156 198.421875 C 57.023438 199.328125 54.609375 199.929688 51.890625 199.929688 C 46.453125 199.929688 43.132812 196.304688 44.339844 188.757812 C 45.546875 181.507812 49.777344 177.882812 54.910156 177.882812 C 60.046875 177.882812 62.460938 181.207031 61.253906 188.152344 Z M 54.308594 179.996094 C 51.285156 179.996094 48.570312 182.414062 47.664062 188.152344 L 58.234375 186.640625 C 58.835938 181.808594 57.328125 179.996094 54.308594 179.996094 Z M 83 188.152344 L 81.789062 188.152344 L 79.675781 199.328125 L 76.050781 199.328125 L 80.582031 173.351562 C 82.09375 172.445312 84.808594 171.84375 87.527344 171.84375 C 93.871094 171.84375 96.285156 175.164062 95.382812 179.996094 C 94.777344 184.828125 90.851562 189.058594 83 188.152344 Z M 87.226562 173.957031 C 85.714844 173.957031 84.808594 174.257812 84.207031 174.5625 L 82.09375 186.039062 L 83.300781 186.039062 C 89.039062 186.640625 91.453125 183.921875 92.058594 179.996094 C 92.964844 176.070312 91.453125 173.957031 87.226562 173.957031 Z M 102.628906 199.929688 C 97.191406 199.929688 95.078125 197.515625 95.683594 193.589844 C 96.589844 187.851562 102.328125 186.339844 108.972656 185.734375 L 109.273438 184.527344 C 109.878906 181.207031 108.066406 180.300781 105.347656 180.300781 C 103.234375 180.300781 101.421875 180.902344 99.910156 181.507812 L 99.308594 179.394531 C 100.515625 178.789062 103.234375 177.882812 105.953125 177.882812 C 109.878906 177.882812 113.199219 179.695312 111.992188 184.828125 L 109.574219 198.421875 C 108.066406 199.328125 105.347656 199.929688 102.628906 199.929688 Z M 108.367188 187.246094 C 102.929688 187.851562 99.609375 189.058594 98.703125 193.285156 C 98.097656 196.304688 99.910156 197.515625 102.929688 197.515625 C 104.140625 197.515625 105.648438 197.210938 106.554688 196.910156 Z M 126.1875 199.328125 L 128.90625 184.226562 C 129.207031 182.113281 128.90625 179.996094 125.28125 179.996094 C 123.167969 179.996094 122.261719 180.300781 121.050781 180.601562 L 117.730469 199.328125 L 114.40625 199.328125 L 118.03125 179.089844 C 120.144531 178.183594 122.5625 177.582031 126.1875 177.582031 C 132.226562 177.582031 133.132812 180.902344 132.832031 183.921875 L 130.113281 199.328125 Z M 162.730469 199.328125 L 161.824219 191.171875 L 152.460938 191.171875 L 148.535156 199.328125 L 145.214844 199.328125 L 159.105469 172.144531 L 162.429688 172.144531 L 166.65625 199.328125 Z M 160.3125 178.789062 C 160.011719 176.675781 160.011719 175.46875 160.011719 175.46875 C 160.011719 175.46875 159.710938 176.675781 158.503906 178.789062 L 153.367188 189.058594 L 161.523438 189.058594 Z M 177.527344 180.300781 L 174.207031 199.328125 L 170.582031 199.328125 L 173.90625 180.300781 L 171.488281 180.300781 L 171.789062 178.183594 L 174.207031 178.183594 L 174.8125 175.164062 C 175.414062 170.9375 178.433594 168.21875 183.265625 168.519531 L 182.964844 170.636719 C 180.851562 170.636719 179.039062 171.84375 178.433594 174.863281 L 177.832031 178.183594 L 181.757812 178.183594 L 181.457031 180.300781 Z M 193.535156 180.601562 C 192.027344 179.996094 189.910156 180.300781 188.703125 180.902344 L 185.382812 199.328125 L 181.757812 199.328125 L 185.382812 179.089844 C 187.796875 178.183594 189.910156 177.582031 194.746094 177.582031 Z M 194.746094 199.328125 L 198.367188 178.183594 L 201.691406 178.183594 L 198.066406 199.328125 Z M 201.085938 173.957031 C 199.878906 173.957031 199.273438 173.050781 199.273438 172.144531 C 199.578125 170.9375 200.484375 170.332031 201.691406 170.332031 C 202.898438 170.332031 203.503906 171.238281 203.503906 172.144531 C 203.199219 173.351562 201.992188 173.957031 201.085938 173.957031 Z M 210.75 199.929688 C 206.222656 199.929688 203.503906 195.703125 204.710938 188.757812 C 205.917969 181.808594 210.148438 177.882812 214.675781 177.882812 C 217.394531 177.882812 218.601562 178.789062 219.207031 179.394531 L 218 181.207031 C 217.394531 180.601562 216.488281 180.300781 214.980469 180.300781 C 211.054688 180.300781 208.9375 183.921875 208.03125 188.757812 C 207.125 193.589844 208.335938 197.210938 211.960938 197.210938 C 213.46875 197.210938 214.375 196.609375 215.28125 196.304688 L 215.886719 198.421875 C 214.675781 199.023438 213.167969 199.929688 210.75 199.929688 Z M 226.152344 199.929688 C 220.71875 199.929688 218.601562 197.515625 219.207031 193.589844 C 220.113281 187.851562 225.851562 186.339844 232.496094 185.734375 L 232.796875 184.527344 C 233.402344 181.207031 231.589844 180.300781 228.871094 180.300781 C 226.757812 180.300781 224.945312 180.902344 223.4375 181.507812 L 222.832031 179.394531 C 224.039062 178.789062 226.757812 177.882812 229.476562 177.882812 C 233.402344 177.882812 236.722656 179.695312 235.816406 184.828125 L 233.402344 198.421875 C 231.890625 199.328125 229.175781 199.929688 226.152344 199.929688 Z M 232.195312 187.246094 C 226.757812 187.851562 223.4375 189.058594 222.53125 193.285156 C 221.925781 196.304688 223.738281 197.515625 226.757812 197.515625 C 227.964844 197.515625 229.476562 197.210938 230.382812 196.910156 Z M 250.011719 199.328125 L 252.730469 184.226562 C 253.035156 182.113281 252.730469 179.996094 249.105469 179.996094 C 246.992188 179.996094 246.085938 180.300781 244.878906 180.601562 L 241.554688 199.328125 L 238.234375 199.328125 L 241.859375 179.089844 C 243.972656 178.183594 246.390625 177.582031 250.011719 177.582031 C 256.054688 177.582031 256.960938 180.902344 256.65625 183.921875 L 253.9375 199.328125 Z M 278.402344 199.929688 C 275.382812 199.929688 272.964844 199.328125 271.152344 198.421875 L 275.683594 173.65625 C 277.195312 172.75 279.914062 172.144531 282.933594 172.144531 C 288.972656 172.144531 291.691406 174.863281 290.785156 178.789062 C 290.179688 182.714844 286.859375 184.527344 284.441406 185.132812 C 286.859375 185.734375 290.179688 188.152344 289.578125 192.078125 C 288.671875 197.515625 283.839844 199.929688 278.402344 199.929688 Z M 278.703125 186.039062 L 276.890625 186.039062 L 275.082031 196.910156 C 275.988281 197.210938 277.195312 197.515625 278.703125 197.515625 C 282.328125 197.515625 285.347656 196.003906 285.953125 192.078125 C 286.558594 187.851562 284.441406 186.039062 278.703125 186.039062 Z M 282.628906 173.957031 C 281.121094 173.957031 280.214844 174.257812 279.007812 174.5625 L 277.195312 184.226562 L 279.007812 184.226562 C 284.746094 184.226562 286.859375 182.414062 287.464844 179.089844 C 288.066406 175.769531 286.253906 173.957031 282.628906 173.957031 Z M 299.542969 199.929688 C 294.105469 199.929688 291.992188 197.515625 292.597656 193.589844 C 293.503906 187.851562 299.242188 186.339844 305.886719 185.734375 L 306.1875 184.527344 C 306.792969 181.207031 304.980469 180.300781 302.261719 180.300781 C 300.148438 180.300781 298.035156 180.902344 296.824219 181.507812 L 296.222656 179.394531 C 297.429688 178.789062 300.148438 177.882812 302.867188 177.882812 C 306.792969 177.882812 310.113281 179.695312 309.207031 184.828125 L 306.792969 198.421875 C 304.980469 199.328125 302.261719 199.929688 299.542969 199.929688 Z M 305.28125 187.246094 C 299.84375 187.851562 296.523438 189.058594 295.617188 193.285156 C 295.011719 196.304688 296.824219 197.515625 299.847656 197.515625 C 301.054688 197.515625 302.5625 197.210938 303.46875 196.910156 Z M 323.703125 199.328125 L 326.421875 184.226562 C 326.726562 182.113281 326.421875 179.996094 322.800781 179.996094 C 320.683594 179.996094 319.777344 180.300781 318.570312 180.601562 L 315.25 199.328125 L 311.625 199.328125 L 315.25 179.089844 C 317.363281 178.183594 319.777344 177.582031 323.402344 177.582031 C 329.441406 177.582031 330.347656 180.902344 330.046875 183.921875 L 327.328125 199.328125 Z M 343.636719 199.328125 L 337.597656 188.453125 L 335.785156 199.328125 L 332.464844 199.328125 L 337.898438 168.519531 L 341.222656 168.519531 L 337.898438 188.152344 L 347.261719 178.183594 L 350.886719 178.183594 L 341.222656 188.152344 L 348.167969 199.328125 Z M 343.636719 199.328125 " fill-opacity="1" fill-rule="nonzero"></path>
+                    </g>
+                </svg>
+                Formulaire d'Ouverture de Compte Ecobank</h3>
+        <input type="text" id="bank-account-number" placeholder="Saisir le Numéro de compte ici" />
+        <button type="button" id="btnGenerate">🔍 Chercher</button>
+        <span id="generateMessage"></span>
+    </div>
+
+    <!-- Form Container -->
+    <div class="container" id="printable-area">
+<?php
+// Read original HTML and load form
+$htmlFile = __DIR__ . '/Ecobank Account Opening Form Customer.html';
+if (!file_exists($htmlFile)) {
+    echo "<div style='padding:20px;color:#900'>Fichier source introuvable</div>";
+} else {
+    $html = file_get_contents($htmlFile);
+    echo $html;
+}
+?>
+
+    </div>
+
+    <script>
+    // ============================================
+    // UTILITIES
+    // ============================================
+    function setVal(selector, val) {
+        var el = document.querySelector(selector);
+        if (!el) return false;
+        el.value = val === null || val === undefined ? '' : val;
+        return true;
+    }
+
+    function showMessage(msg, isError) {
+        var sp = document.getElementById('generateMessage');
+        if (!sp) return;
+        sp.textContent = msg;
+        sp.style.color = isError ? '#ff6b6b' : '#51cf66';
+    }
+
+    function showLoader(visible) {
+        var loader = document.getElementById('loader');
+        if (visible) {
+            loader.classList.add('active');
+        } else {
+            loader.classList.remove('active');
+        }
+    }
+
+    // ============================================
+    // FORM FILLING
+    // ============================================
+    function fillFormFromData(data) {
+        if (!data || typeof data !== 'object') return;
+        
+        console.log('FormAutoFiller: Data received', data);
+        console.log('DEBUG - Full API Response:', JSON.stringify(data, null, 2));
+        
+        // IMPORTANT: Remplir les champs critiques EN PREMIER
+        // Ces champs doivent TOUJOURS être remplis, peu importe la source
+        
+        // Numéro de compte - PRIORITE MAXIMALE
+        if (data.account_number) {
+            console.log('Filling account_number: ' + data.account_number);
+            setVal('#form-bank-account-number', data.account_number);
+        }
+        
+        // Identifiant client (customer_id)
+        if (data.customer_id) {
+            console.log('Filling customer_id: ' + data.customer_id);
+            setVal('#customer-id', data.customer_id);
+        }
+        
+        // Numéro de téléphone depuis l'API (priorité: telephone, phone, phoneNo, phone_no)
+        if (data.telephone) {
+            console.log('Filling telephone: ' + data.telephone);
+            setVal('#telephone', data.telephone);
+        } else if (data.phone) {
+            console.log('Filling phone as telephone: ' + data.phone);
+            setVal('#telephone', data.phone);
+        } else if (data.phoneNo) {
+            console.log('Filling phoneNo as telephone: ' + data.phoneNo);
+            setVal('#telephone', data.phoneNo);
+        } else if (data.phone_no) {
+            console.log('Filling phone_no as telephone: ' + data.phone_no);
+            setVal('#telephone', data.phone_no);
+        }
+        
+        // Email depuis l'API (priorité: email, adresse_email, emailID, email_id)
+        if (data.email) {
+            console.log('Filling email: ' + data.email);
+            setVal('#email', data.email);
+        } else if (data.adresse_email) {
+            console.log('Filling adresse_email as email: ' + data.adresse_email);
+            setVal('#email', data.adresse_email);
+        } else if (data.emailID) {
+            console.log('Filling emailID as email: ' + data.emailID);
+            setVal('#email', data.emailID);
+        } else if (data.email_id) {
+            console.log('Filling email_id as email: ' + data.email_id);
+            setVal('#email', data.email_id);
+        }
+        
+        // Branch code depuis l'API
+        if (data.branch_code) {
+            console.log('Filling branch_code: ' + data.branch_code);
+            setVal('#branch-code', data.branch_code);
+        }
+        
+        // Essayer FormAutoFiller si disponible
+        if (typeof FormAutoFiller !== 'undefined' && FormAutoFiller.autoFillForm) {
+            try {
+                FormAutoFiller.autoFillForm(data, { debug: false });
+                console.log('FormAutoFiller: Auto-fill completed');
+                return;
+            } catch (e) {
+                console.error('FormAutoFiller error:', e);
+                // Fall through to legacy method
+            }
+        }
+        
+        // Fallback to legacy method
+        console.log('Using legacy form filling method');
+        
+        var fieldMappings = [
+            'first-name', 'last-name', 'middle-name',
+            'email', 'telephone', 'telephone2',
+            'nationality', 'pob', 'residence-country', 'country',
+            'document-number', 'id-number', 'employer-name',
+            'customer-id', 'father-name', 'mother-name', 'sex', 'address'
+        ];
+        
+        // Try mapped field IDs
+        fieldMappings.forEach(function(fieldId) {
+            if (data[fieldId]) {
+                setVal('#' + fieldId, data[fieldId]);
+            }
+        });
+        
+        // Try form_fields if available (mapped UDF data)
+        if (data.form_fields && typeof data.form_fields === 'object') {
+            Object.keys(data.form_fields).forEach(function(apiField) {
+                var value = data.form_fields[apiField];
+                if (!value) return;
+                
+                // Try to find matching form field by ID
+                var fieldId = apiField.replace(/^(.*)-/, '$1');  // Convert dashes
+                setVal('#' + fieldId, value);
+                
+                // Also try with underscores
+                setVal('#' + apiField.replace(/-/g, '_'), value);
+            });
+        }
+        
+        // Generic fill: try any key as ID or name
+        Object.keys(data).forEach(function(key) {
+            var val = data[key];
+            if (!val || key === 'raw_response' || key === 'raw' || key === 'form_fields' || 
+                key === 'udf_raw' || key === 'account_number' || key === 'customer_id' || 
+                key === 'telephone' || key === 'phone' || key === 'phoneNo' || 
+                typeof val !== 'string') return;
+            
+            var el = document.getElementById(key);
+            if (el && !el.value) {
+                el.value = val;
+                return;
+            }
+            
+            var elByName = document.querySelector('[name="' + key + '"]');
+            if (elByName && !elByName.value) {
+                elByName.value = val;
+                return;
+            }
+        });
+    }
+    
+    // Load FormAutoFiller library asynchronously
+    (function() {
+        var script = document.createElement('script');
+        script.src = '../vendors/js/form_auto_filler.js';
+        script.async = true;
+        script.onload = function() {
+            console.log('FormAutoFiller library loaded');
+        };
+        script.onerror = function() {
+            console.warn('Failed to load FormAutoFiller library');
+        };
+        document.head.appendChild(script);
+    })();
+
+    // ============================================
+    // API CALLS
+    // ============================================
+    function fetchAccountFromFlexcube(accountNumber) {
+        return fetch('fetch_account_flexcube.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'account=' + encodeURIComponent(accountNumber)
+        }).then(function(resp) {
+            return resp.json().then(function(json) {
+                return { status: resp.status, data: json };
+            });
+        }).then(function(result) {
+            if (result.status === 200 && result.data.success) {
+                return result.data.data;
+            } else {
+                throw new Error(result.data.error || 'Compte non trouvé');
+            }
+        });
+    }
+
+    function searchLocalDatabase(q) {
+        return fetch('search_compte.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'q=' + encodeURIComponent(q)
+        }).then(function(resp) {
+            return resp.json();
+        }).then(function(json) {
+            if (json.status === 'ok' && json.data) {
+                return json.data;
+            } else {
+                throw new Error(json.message || 'Compte introuvable');
+            }
+        });
+    }
+
+    // ============================================
+    // MAIN SEARCH
+    // ============================================
+    function handleAccountSearch(accountNumber) {
+        var q = accountNumber.trim();
+        if (!q) { 
+            showMessage('Veuillez saisir un numéro de compte', true); 
+            return; 
+        }
+        
+        showMessage('Recherche...', false);
+        showLoader(true);
+
+        // Try Flexcube first
+        fetchAccountFromFlexcube(q)
+            .then(function(data) {
+                // Ajouter le numéro de compte saisi aux données
+                data.account_number = q;
+                fillFormFromData(data);
+                showMessage('✓ Compte trouvé et formulaire prérempli', false);
+            })
+            .catch(function(err) {
+                // Fallback to local database
+                return searchLocalDatabase(q)
+                    .then(function(data) {
+                        // Ajouter le numéro de compte saisi aux données
+                        data.account_number = q;
+                        fillFormFromData(data);
+                        showMessage('✓ Compte trouvé et formulaire prérempli', false);
+                    });
+            })
+            .catch(function(err) {
+                showMessage('❌ ' + err.message, true);
+            })
+            .finally(function() {
+                showLoader(false);
+            });
+    }
+
+    // ============================================
+    // EVENT LISTENERS
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
+        var btnGenerate = document.getElementById('btnGenerate');
+        var inputAcct = document.getElementById('bank-account-number');
+
+        if (btnGenerate) {
+            btnGenerate.addEventListener('click', function() {
+                handleAccountSearch(inputAcct.value);
+            });
+        }
+
+        if (inputAcct) {
+            inputAcct.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleAccountSearch(this.value);
+                }
+            });
+        }
+
+        // Auto-fill "Personne ayant introduit" with logged-in user
+        var accountOfficerField = document.getElementById('account-officer');
+        if (accountOfficerField) {
+            var loggedInUser = '<?php echo isset($_SESSION['user_fullname']) ? htmlspecialchars($_SESSION['user_fullname'], ENT_QUOTES) : 'Utilisateur'; ?>';
+            accountOfficerField.value = loggedInUser;
+        }
+
+        // NOTE: Email auto-rempli depuis la session a été supprimé
+        // L'email est maintenant rempli depuis l'API Flexcube uniquement
+    });
+
+    // ============================================
+    // SAVE FORM
+    // ============================================
+    (function() {
+        var saveBtn = document.getElementById('floatSaveBtn');
+        if (!saveBtn) return;
+
+        saveBtn.addEventListener('click', function() {
+            saveBtn.disabled = true;
+            var origText = saveBtn.textContent;
+            saveBtn.textContent = '...';
+
+            var form = document.querySelector('form');
+            if (!form) {
+                alert('Formulaire introuvable');
+                saveBtn.disabled = false;
+                saveBtn.textContent = origText;
+                return;
+            }
+
+            var fd = new FormData(form);
+            var payload = {};
+            fd.forEach(function(value, key) {
+                if (payload.hasOwnProperty(key)) {
+                    if (!Array.isArray(payload[key])) payload[key] = [payload[key]];
+                    payload[key].push(value);
+                } else {
+                    payload[key] = value;
+                }
+            });
+
+            // Inclure les inputs sans name mais avec un id
+            var elements = form.querySelectorAll('input, select, textarea');
+            elements.forEach(function(el) {
+                var key = el.name || el.id;
+                if (!key || payload.hasOwnProperty(key)) return;
+                var type = (el.type || '').toLowerCase();
+                if (type === 'checkbox' && !el.checked) return;
+                if (type === 'radio' && !el.checked) return;
+                payload[key] = el.value;
+            });
+
+            // Ajouter l'utilisateur connecté
+            payload['created_by'] = '<?php echo isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email'], ENT_QUOTES) : 'unknown'; ?>';
+
+            console.log('Payload being sent:', payload);
+            console.log('Keys:', Object.keys(payload));
+
+            fetch('save_ecobank_form.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+                body: JSON.stringify(payload)
+            })
+            .then(function(res) {
+                return res.text().then(function(text) {
+                    if (!res.ok) {
+                        throw new Error('Serveur: ' + res.status + ' ' + (text || res.statusText));
+                    }
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('Réponse invalide: ' + text.substring(0, 200));
+                    }
+                });
+            })
+            .then(function(json) {
+                if (json && json.status === 'ok') {
+                    var sid = json.submission_id || json.id;
+                    if (sid) {
+                        alert('✓ Données enregistrées avec succès (ID: ' + sid + ')');
+                    } else {
+                        alert('✓ Données enregistrées avec succès');
+                    }
+                } else {
+                    alert('❌ Erreur: ' + (json && json.message ? json.message : 'Erreur inconnue'));
+                }
+            })
+            .catch(function(err) {
+                alert('❌ Erreur réseau: ' + err.message);
+            })
+            .finally(function() {
+                saveBtn.disabled = false;
+                saveBtn.textContent = origText;
+            });
+        });
+    })();
+    </script>
+
+</body>
+</html>

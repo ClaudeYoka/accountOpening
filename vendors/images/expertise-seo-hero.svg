@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="649.051" height="425.188" viewBox="0 0 649.051 425.188">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="145" height="147" fill="none"/>
+    </clipPath>
+    <filter id="Rectangle_1602" x="0" y="0" width="540" height="423" filterUnits="userSpaceOnUse">
+      <feOffset dx="16" dy="16" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="16" result="blur"/>
+      <feFlood flood-color="#070723" flood-opacity="0.102"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="expertise_seo_hero" transform="translate(304.625 -283.893)">
+    <g id="pc_screen" data-name="pc screen" transform="translate(-264.917 62.982)">
+      <g id="Groupe_1541" data-name="Groupe 1541" transform="translate(-71.693 -63.381)">
+        <g id="Groupe_2884" data-name="Groupe 2884" transform="translate(-1032.015 139.291)">
+          <g id="Pattern_Dot_Vert" data-name="Pattern Dot Vert" transform="translate(1072 156)">
+            <g id="Grille_de_répétition_39" data-name="Grille de répétition 39" clip-path="url(#clip-path)">
+              <g transform="translate(-655 -193)">
+                <circle id="Ellipse_8" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-621 -193)">
+                <circle id="Ellipse_8-2" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-587 -193)">
+                <circle id="Ellipse_8-3" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-553 -193)">
+                <circle id="Ellipse_8-4" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-519 -193)">
+                <circle id="Ellipse_8-5" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-655 -159)">
+                <circle id="Ellipse_8-6" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-621 -159)">
+                <circle id="Ellipse_8-7" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-587 -159)">
+                <circle id="Ellipse_8-8" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-553 -159)">
+                <circle id="Ellipse_8-9" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-519 -159)">
+                <circle id="Ellipse_8-10" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-655 -125)">
+                <circle id="Ellipse_8-11" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-621 -125)">
+                <circle id="Ellipse_8-12" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-587 -125)">
+                <circle id="Ellipse_8-13" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-553 -125)">
+                <circle id="Ellipse_8-14" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-519 -125)">
+                <circle id="Ellipse_8-15" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-655 -91)">
+                <circle id="Ellipse_8-16" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-621 -91)">
+                <circle id="Ellipse_8-17" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-587 -91)">
+                <circle id="Ellipse_8-18" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-553 -91)">
+                <circle id="Ellipse_8-19" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-519 -91)">
+                <circle id="Ellipse_8-20" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-655 -57)">
+                <circle id="Ellipse_8-21" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-621 -57)">
+                <circle id="Ellipse_8-22" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-587 -57)">
+                <circle id="Ellipse_8-23" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-553 -57)">
+                <circle id="Ellipse_8-24" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+              <g transform="translate(-519 -57)">
+                <circle id="Ellipse_8-25" data-name="Ellipse 8" cx="4.5" cy="4.5" r="4.5" transform="translate(655 193)" fill="#5de8c1"/>
+              </g>
+            </g>
+          </g>
+          <g transform="matrix(1, 0, 0, 1, 1064, 145)" filter="url(#Rectangle_1602)">
+            <rect id="Rectangle_1602-2" data-name="Rectangle 1602" width="444" height="327" rx="5" transform="translate(32 32)" fill="#f6f4fe"/>
+          </g>
+          <g id="undraw_Search_re_x5gq" transform="translate(1130 209)">
+            <path id="Tracé_8368" data-name="Tracé 8368" d="M637.606,276.947H296.08a17.548,17.548,0,0,1-17.528-17.528V243.485a17.548,17.548,0,0,1,17.528-17.528H637.606a17.548,17.548,0,0,1,17.528,17.528v15.934A17.548,17.548,0,0,1,637.606,276.947ZM296.08,227.019a16.484,16.484,0,0,0-16.466,16.466v15.934a16.484,16.484,0,0,0,16.466,16.466H637.606a16.484,16.484,0,0,0,16.465-16.466V243.485a16.484,16.484,0,0,0-16.465-16.466Z" transform="translate(-278.552 -225.957)" fill="#3f3d56"/>
+            <rect id="Rectangle_2041" data-name="Rectangle 2041" width="246.983" height="20.184" rx="10.092" transform="translate(33.462 15.403)" fill="#e6e6e6"/>
+            <rect id="Rectangle_2042" data-name="Rectangle 2042" width="246.983" height="20.184" rx="10.092" transform="translate(63.206 103.914)" fill="#572ce8"/>
+            <rect id="Rectangle_2043" data-name="Rectangle 2043" width="246.983" height="20.184" rx="10.092" transform="translate(63.206 168.088)" fill="#e6e6e6"/>
+            <rect id="Rectangle_2044" data-name="Rectangle 2044" width="246.983" height="20.184" rx="10.092" transform="translate(63.206 232.262)" fill="#e6e6e6"/>
+            <path id="Tracé_8369" data-name="Tracé 8369" d="M856.683,282.066a1.59,1.59,0,0,1-2.214.39l-8.672-6.034a1.59,1.59,0,0,1,1.823-2.6l8.672,6.034a1.59,1.59,0,0,1,.39,2.214Z" transform="translate(-513.3 -245.668)" fill="#572ce8"/>
+            <path id="Tracé_8370" data-name="Tracé 8370" d="M833.531,263.837a11.284,11.284,0,1,1-2.771-15.715A11.284,11.284,0,0,1,833.531,263.837Zm-16.176-11.326a8.463,8.463,0,1,0,11.786-2.078,8.463,8.463,0,0,0-11.786,2.078Z" transform="translate(-499.993 -234.295)" fill="#572ce8"/>
+            <path id="Tracé_8371" data-name="Tracé 8371" d="M646.756,453.537H324.881a.531.531,0,0,1,0-1.062H646.756a.531.531,0,1,1,0,1.062Z" transform="translate(-297.527 -319.811)" fill="#3f3d56"/>
+            <path id="Tracé_8372" data-name="Tracé 8372" d="M646.756,563.157H324.881a.531.531,0,1,1,0-1.062H646.756a.531.531,0,0,1,0,1.062Z" transform="translate(-297.527 -365.231)" fill="#3f3d56"/>
+            <path id="Tracé_8373" data-name="Tracé 8373" d="M646.756,672.775H324.881a.531.531,0,1,1,0-1.062H646.756a.531.531,0,0,1,0,1.062Z" transform="translate(-297.527 -410.649)" fill="#3f3d56"/>
+          </g>
+          <g id="undraw_web_search_eetr_1_" data-name="undraw_web_search_eetr (1)" transform="translate(1020.516 103.326)">
+            <path id="Tracé_8374" data-name="Tracé 8374" d="M916.73,348.432c-7.69-13.106-22.9-13.716-22.9-13.716S879,332.8,869.492,352.763c-8.864,18.6-21.1,36.567-1.969,40.923l3.455-10.847,2.14,11.654a74.191,74.191,0,0,0,8.184.141c20.484-.667,39.993.2,39.365-7.219C919.832,377.559,924.129,361.042,916.73,348.432Z" transform="translate(-271.328 -180.9)" fill="#2f2e41"/>
+            <path id="Tracé_8375" data-name="Tracé 8375" d="M821.009,446.712l-6.726,17.19-33.632,31.39s-20.179,14.948-11.211,19.432,17.19-16.442,17.19-16.442L822.5,476.607l7.474-24.663Z" transform="translate(-248.529 -209.206)" fill="#ffb8b8"/>
+            <path id="Tracé_8376" data-name="Tracé 8376" d="M654.068,554.3l6.726,17.19h9.716l-8.221-20.179Z" transform="translate(-70.377 -126.209)" fill="#ffb8b8"/>
+            <path id="Tracé_8377" data-name="Tracé 8377" d="M693.068,564.3l6.726,17.19h9.716l-8.221-20.179Z" transform="translate(-80.229 -128.735)" fill="#ffb8b8"/>
+            <path id="Tracé_8378" data-name="Tracé 8378" d="M873.766,657.117l12.705-2.99-16.442-66.516,5.459-51.181.146-.014s9.342-36.248,1.868-45.964-44.843-5.979-44.843-5.979-14.2,14.2-13.453,46.337,0,59.79,5.232,72.5,20.179,46.337,20.179,46.337l11.958-1.495-12.705-55.306-2.031-48.076c1.617,19.266,4.871,55.8,6.516,58.54C850.6,607.043,873.766,657.117,873.766,657.117Z" transform="translate(-261.674 -218.567)" fill="#2f2e41"/>
+            <path id="Tracé_8379" data-name="Tracé 8379" d="M938.67,467.712,943.9,486.4l23.169,41.853s20.179,17.937,11.958,20.179S958.1,531.986,958.1,531.986l-26.158-36.621-6.726-26.906Z" transform="translate(-288.462 -214.511)" fill="#ffb8b8"/>
+            <circle id="Ellipse_715" data-name="Ellipse 715" cx="18.684" cy="18.684" r="18.684" transform="translate(604.617 162.769)" fill="#ffb8b8"/>
+            <path id="Tracé_8380" data-name="Tracé 8380" d="M890.175,384.712l-4.484,14.2-7.474,16.442,27.653-11.211s-1.495-11.958,0-14.948Z" transform="translate(-276.589 -193.543)" fill="#ffb8b8"/>
+            <path id="Tracé_8381" data-name="Tracé 8381" d="M910.944,418.592l-17.19-14.2-19.432,8.221.761-12.127-20.733,6.622-3.2,1.021L846.67,431.3s-2.99,2.242-5.979,14.948a109.5,109.5,0,0,1-7.474,21.674s32.137-12.705,47.832,4.484c0,0,2.242-1.495,1.495-3.737s6.726-13.453,6.726-13.453,0,2.242,2.989-2.242,5.232-5.232,5.232-5.232Z" transform="translate(-265.221 -197.528)" fill="#5de8c1"/>
+            <path id="Tracé_8382" data-name="Tracé 8382" d="M855.891,412.771l-3.264-2.632s-2.715-1.105-4.957,2.632-13.453,26.905-13.453,26.905L847.67,446.4Z" transform="translate(-265.473 -199.928)" fill="#5de8c1"/>
+            <path id="Tracé_8383" data-name="Tracé 8383" d="M921.449,423.712l10.463.747s5.979,2.99,5.979,7.474,1.495,28.4,1.495,28.4l-16.442,5.232-6.726-20.927Z" transform="translate(-286.188 -203.396)" fill="#5de8c1"/>
+            <path id="Tracé_8384" data-name="Tracé 8384" d="M851.66,721.212l-12.705,5.232s-14.948.747-12.705,8.221,24.663,2.242,24.663,2.242,20.179.747,20.179-4.484-2.99-11.211-5.979-11.211Z" transform="translate(-263.402 -278.552)" fill="#2f2e41"/>
+            <path id="Tracé_8385" data-name="Tracé 8385" d="M889.66,730.212l-12.705,5.232s-14.948.747-12.705,8.221,24.663,2.242,24.663,2.242,20.179.747,20.179-4.484-2.99-11.211-5.979-11.211Z" transform="translate(-273.002 -280.825)" fill="#2f2e41"/>
+            <path id="Tracé_8386" data-name="Tracé 8386" d="M718.542,202.3l-15.03-7.942-20.755,3.249-4.294,19.131,10.69-.414,2.986-7.029v6.913l4.933-.191,2.862-11.19,1.789,11.911,17.536-.361Z" transform="translate(-76.54 -36.036)" fill="#2f2e41"/>
+            <path id="Tracé_8387" data-name="Tracé 8387" d="M730.155,220.268A93.94,93.94,0,1,0,735.481,359L891.042,472.5a8.657,8.657,0,1,0,11.165-13.232L746.646,345.77A93.945,93.945,0,0,0,730.155,220.268Zm-7.428,116.139a70.38,70.38,0,1,1-8.4-99.177,70.38,70.38,0,0,1,8.4,99.177Z" transform="matrix(0.995, -0.105, 0.105, 0.995, -258.039, -45.013)" fill="#3f3d56"/>
+            <path id="Tracé_8388" data-name="Tracé 8388" d="M630.319,367.582a70.384,70.384,0,0,1-11.943-94.614q-2.018,2.033-3.9,4.258A70.38,70.38,0,1,0,722.053,368q1.879-2.228,3.54-4.564a70.384,70.384,0,0,1-95.274,4.145Z" transform="matrix(0.995, -0.105, 0.105, 0.995, -267.152, -66.953)" opacity="0.3"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,72 @@
+/* Style du conteneur principal */
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+
+        /* Style du loader circulaire */
+        .circular-loader {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+        }
+
+        .circular-loader:before {
+            content: "";
+            display: block;
+            padding-top: 100%;
+        }
+
+        .circular-loader .loader-path {
+            fill: none;
+            stroke: #3498db;
+            stroke-width: 5;
+            stroke-linecap: round;
+            animation: loader-rotate 1.5s linear infinite, loader-dash 1.5s ease-in-out infinite;
+            transform-origin: center;
+        }
+
+        /* Animation de rotation */
+        @keyframes loader-rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Animation du tracé */
+        @keyframes loader-dash {
+            0% {
+                stroke-dasharray: 1, 200;
+                stroke-dashoffset: 0;
+            }
+            50% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -35;
+            }
+            100% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -124;
+            }
+        }
+
+        /* Style du pourcentage */
+        .loader-percent {
+            font-family: Arial, sans-serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Style du cercle de fond */
+        .loader-bg {
+            fill: none;
+            stroke: #eee;
+            stroke-width: 5;
+        }

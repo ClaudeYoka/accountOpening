@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecobank Account Opening Form</title>
+    <link rel="stylesheet" type="text/css" href="../vendors/styles/ao_formulaire.css">
+    <style>
+        /* Section Navigation Styles (Hidden on Print) */
+        .section-navigation {
+            display: flex !important;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #efefef 100%);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .section-nav-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .section-nav-item {
+            padding: 12px 25px;
+            background-color: #ffffff;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .section-nav-item:hover {
+            background-color: #f9f9f9;
+            border-color: #007eb6;
+            color: #007eb6;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0,126,182,0.2);
+        }
+
+        .section-nav-item.active {
+            background-color: #007eb6;
+            color: white;
+            border-color: #007eb6;
+            box-shadow: 0 4px 12px rgba(0,126,182,0.3);
+        }
+
+        /* Section Navigation Buttons */
+        .section-nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn-section-nav {
+            padding: 12px 30px;
+            background-color: #007eb6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-section-nav:hover:not(:disabled) {
+            background-color: #005a88;
+            box-shadow: 0 4px 12px rgba(0,90,136,0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-section-nav:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-section-nav.prev {
+            background-color: #6c757d;
+        }
+
+        .btn-section-nav.prev:hover:not(:disabled) {
+            background-color: #5a6268;
+        }
+
+        /* Section Group Styles */
+        .form-section-group {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-number-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 15px 0;
+            border-bottom: 3px solid #007eb6;
+        }
+
+        .section-number {
+            background-color: #007eb6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 18px;
+            min-width: 100px;
+            text-align: center;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .section-title-main {
+            font-size: 22px;
+            color: #007eb6;
+            margin: 0;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        /* Print Styles */
+        @media print {
+            .section-navigation {
+                display: none !important;
+            }
+
+            .section-nav-buttons {
+                display: none !important;
+            }
+
+            .form-section-group {
+                display: block !important;
+                page-break-inside: avoid;
+                margin-bottom: 0;
+            }
+
+            .section-number-header {
+                display: none !important;
+            }
+
+            .section-number {
+                display: none !important;
+            }
+
+            .section-title-main {
+                display: none !important;
+            }
+
+            #floatPrintBtn,
+            #floatSaveBtn,
+            #floatBackBtn,
+            #floatResetBtn {
+                display: none !important;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .section-navigation {
+                gap: 10px;
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .section-nav-container {
+                gap: 8px;
+            }
+
+            .section-nav-item {
+                padding: 10px 15px;
+                font-size: 13px;
+                min-width: 80px;
+            }
+
+            .section-number-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .section-title-main {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="60" zoomAndPan="magnify" viewBox="0 0 375 225" preserveAspectRatio="xMidYMid meet" version="1.0">
+                    <defs>
+                        <clippath id="28a01fd8dc">
+                            <path d="M 9.386719 25.0625 L 365.636719 25.0625 L 365.636719 199.8125 L 9.386719 199.8125 Z M 9.386719 25.0625 " clip-rule="nonzero"></path>
+                        </clippath>
+                    </defs>
+                    <path fill="#007eb6" d="M 65.179688 67.949219 L 66.386719 60.703125 L 35.582031 60.703125 C 32.257812 60.703125 29.238281 63.417969 28.636719 66.441406 L 16.554688 134.089844 C 15.949219 137.414062 18.066406 140.132812 21.386719 140.132812 L 55.210938 140.132812 L 56.421875 132.882812 L 27.425781 132.882812 L 32.863281 102.679688 L 56.421875 102.679688 L 57.628906 95.734375 L 34.070312 95.734375 L 38.902344 67.949219 Z M 80.28125 141.339844 C 66.6875 141.339844 58.835938 129.257812 62.460938 109.023438 C 66.085938 88.488281 78.167969 77.011719 92.058594 77.011719 C 99.609375 77.011719 103.535156 79.425781 105.046875 81.238281 L 101.722656 86.976562 C 100.214844 85.464844 97.496094 83.957031 92.964844 83.957031 C 81.789062 83.957031 75.449219 94.226562 73.03125 108.722656 C 70.011719 123.519531 73.636719 133.789062 83.601562 133.789062 C 87.832031 133.789062 90.851562 132.277344 93.570312 130.769531 L 95.078125 137.109375 C 92.058594 139.226562 87.226562 141.339844 80.28125 141.339844 Z M 123.167969 141.339844 C 106.253906 141.339844 101.421875 127.445312 104.441406 109.023438 C 107.761719 90.601562 117.730469 76.707031 134.339844 76.707031 C 151.554688 76.707031 156.386719 90.296875 153.066406 109.023438 C 149.742188 127.445312 139.777344 141.339844 123.167969 141.339844 Z M 133.132812 83.351562 C 121.355469 83.351562 116.523438 96.640625 114.40625 109.023438 C 112.292969 121.707031 112.597656 134.394531 124.375 134.394531 C 136.152344 134.394531 140.683594 121.707031 142.796875 109.324219 C 144.910156 96.640625 145.214844 83.351562 133.132812 83.351562 Z M 229.476562 141.339844 C 213.46875 141.339844 207.125 134.394531 208.9375 122.917969 C 211.960938 106.304688 228.269531 101.472656 247.898438 99.660156 L 248.503906 95.734375 C 250.316406 86.070312 244.878906 83.351562 237.027344 83.351562 C 230.984375 83.351562 225.246094 85.464844 221.320312 87.277344 L 219.8125 81.238281 C 223.738281 79.425781 230.984375 76.707031 239.746094 76.707031 C 251.222656 76.707031 260.582031 81.539062 257.867188 96.941406 L 250.917969 136.808594 C 245.785156 139.527344 238.234375 141.339844 229.476562 141.339844 Z M 246.992188 104.796875 C 230.984375 106.609375 221.019531 110.230469 218.90625 122.613281 C 217.394531 131.675781 222.226562 135.300781 231.289062 135.300781 C 235.214844 135.300781 239.140625 134.695312 241.859375 133.183594 Z M 293.804688 140.132812 L 301.65625 95.433594 C 302.5625 89.695312 301.355469 83.351562 290.785156 83.351562 C 285.046875 83.351562 282.027344 84.257812 278.703125 85.464844 L 269.039062 140.132812 L 258.773438 140.132812 L 269.039062 81.238281 C 275.082031 78.519531 282.628906 76.707031 292.597656 76.707031 C 309.8125 76.707031 313.132812 86.371094 311.625 95.132812 L 303.773438 139.828125 L 293.804688 139.828125 Z M 293.804688 140.132812 " fill-opacity="1" fill-rule="nonzero"></path>
+                    <path fill="#bed000" d="M 355.417969 154.328125 L 12.929688 154.328125 L 13.234375 152.515625 L 355.71875 152.515625 Z M 355.417969 154.328125 " fill-opacity="1" fill-rule="nonzero"></path>
+                    <g clip-path="url(#28a01fd8dc)">
+                        <path fill="#007eb6" d="M 188.703125 77.3125 C 182.664062 77.3125 179.039062 78.519531 175.414062 80.332031 L 180.851562 50.128906 L 169.675781 56.171875 L 155.480469 136.808594 C 158.804688 139.226562 164.84375 141.339844 173.300781 141.339844 C 191.722656 141.339844 203.804688 128.050781 207.429688 108.117188 C 210.75 89.089844 203.199219 77.3125 188.703125 77.3125 Z M 197.160156 108.417969 C 194.441406 124.125 187.496094 134.695312 174.507812 134.695312 C 171.1875 134.695312 168.167969 134.394531 166.050781 133.183594 L 174.507812 85.464844 C 177.527344 83.957031 180.550781 83.050781 185.078125 83.050781 C 196.859375 83.050781 199.578125 94.828125 197.160156 108.417969 Z M 365.382812 77.917969 L 354.8125 77.917969 L 327.632812 106.609375 L 327.328125 106.609375 L 334.277344 67.34375 C 341.222656 28.6875 299.242188 20.53125 255.449219 27.175781 C 225.550781 31.707031 199.273438 43.488281 199.273438 43.488281 C 199.273438 43.488281 233.703125 31.40625 263.90625 29.59375 C 301.960938 27.480469 331.859375 33.21875 323.101562 73.6875 L 311.625 140.132812 L 321.589844 140.132812 L 327.328125 108.117188 L 327.632812 108.117188 L 345.753906 140.132812 L 357.230469 140.132812 L 336.992188 106.910156 Z M 18.667969 174.863281 L 14.441406 199.628906 L 10.515625 199.628906 L 14.742188 174.863281 L 9.609375 174.863281 L 9.910156 172.445312 L 24.40625 172.445312 L 24.105469 174.863281 Z M 35.582031 199.328125 L 38.300781 184.226562 C 38.601562 182.113281 37.996094 179.996094 34.675781 179.996094 C 33.164062 179.996094 31.65625 180.300781 30.449219 181.207031 L 27.125 199.328125 L 23.5 199.328125 L 28.9375 168.519531 L 32.257812 168.519531 L 30.75 179.394531 C 32.5625 178.488281 34.375 178.183594 35.882812 178.183594 C 41.320312 178.183594 42.226562 181.507812 41.925781 184.527344 L 39.207031 199.628906 L 35.582031 199.628906 Z M 47.359375 189.964844 C 47.058594 194.796875 48.871094 197.210938 52.496094 197.210938 C 54.910156 197.210938 56.722656 196.609375 57.929688 196.003906 L 58.535156 198.421875 C 57.023438 199.328125 54.609375 199.929688 51.890625 199.929688 C 46.453125 199.929688 43.132812 196.304688 44.339844 188.757812 C 45.546875 181.507812 49.777344 177.882812 54.910156 177.882812 C 60.046875 177.882812 62.460938 181.207031 61.253906 188.152344 Z M 54.308594 179.996094 C 51.285156 179.996094 48.570312 182.414062 47.664062 188.152344 L 58.234375 186.640625 C 58.835938 181.808594 57.328125 179.996094 54.308594 179.996094 Z M 83 188.152344 L 81.789062 188.152344 L 79.675781 199.328125 L 76.050781 199.328125 L 80.582031 173.351562 C 82.09375 172.445312 84.808594 171.84375 87.527344 171.84375 C 93.871094 171.84375 96.285156 175.164062 95.382812 179.996094 C 94.777344 184.828125 90.851562 189.058594 83 188.152344 Z M 87.226562 173.957031 C 85.714844 173.957031 84.808594 174.257812 84.207031 174.5625 L 82.09375 186.039062 L 83.300781 186.039062 C 89.039062 186.640625 91.453125 183.921875 92.058594 179.996094 C 92.964844 176.070312 91.453125 173.957031 87.226562 173.957031 Z M 102.628906 199.929688 C 97.191406 199.929688 95.078125 197.515625 95.683594 193.589844 C 96.589844 187.851562 102.328125 186.339844 108.972656 185.734375 L 109.273438 184.527344 C 109.878906 181.207031 108.066406 180.300781 105.347656 180.300781 C 103.234375 180.300781 101.421875 180.902344 99.910156 181.507812 L 99.308594 179.394531 C 100.515625 178.789062 103.234375 177.882812 105.953125 177.882812 C 109.878906 177.882812 113.199219 179.695312 111.992188 184.828125 L 109.574219 198.421875 C 108.066406 199.328125 105.347656 199.929688 102.628906 199.929688 Z M 108.367188 187.246094 C 102.929688 187.851562 99.609375 189.058594 98.703125 193.285156 C 98.097656 196.304688 99.910156 197.515625 102.929688 197.515625 C 104.140625 197.515625 105.648438 197.210938 106.554688 196.910156 Z M 126.1875 199.328125 L 128.90625 184.226562 C 129.207031 182.113281 128.90625 179.996094 125.28125 179.996094 C 123.167969 179.996094 122.261719 180.300781 121.050781 180.601562 L 117.730469 199.328125 L 114.40625 199.328125 L 118.03125 179.089844 C 120.144531 178.183594 122.5625 177.582031 126.1875 177.582031 C 132.226562 177.582031 133.132812 180.902344 132.832031 183.921875 L 130.113281 199.328125 Z M 162.730469 199.328125 L 161.824219 191.171875 L 152.460938 191.171875 L 148.535156 199.328125 L 145.214844 199.328125 L 159.105469 172.144531 L 162.429688 172.144531 L 166.65625 199.328125 Z M 160.3125 178.789062 C 160.011719 176.675781 160.011719 175.46875 160.011719 175.46875 C 160.011719 175.46875 159.710938 176.675781 158.503906 178.789062 L 153.367188 189.058594 L 161.523438 189.058594 Z M 177.527344 180.300781 L 174.207031 199.328125 L 170.582031 199.328125 L 173.90625 180.300781 L 171.488281 180.300781 L 171.789062 178.183594 L 174.207031 178.183594 L 174.8125 175.164062 C 175.414062 170.9375 178.433594 168.21875 183.265625 168.519531 L 182.964844 170.636719 C 180.851562 170.636719 179.039062 171.84375 178.433594 174.863281 L 177.832031 178.183594 L 181.757812 178.183594 L 181.457031 180.300781 Z M 193.535156 180.601562 C 192.027344 179.996094 189.910156 180.300781 188.703125 180.902344 L 185.382812 199.328125 L 181.757812 199.328125 L 185.382812 179.089844 C 187.796875 178.183594 189.910156 177.582031 194.746094 177.582031 Z M 194.746094 199.328125 L 198.367188 178.183594 L 201.691406 178.183594 L 198.066406 199.328125 Z M 201.085938 173.957031 C 199.878906 173.957031 199.273438 173.050781 199.273438 172.144531 C 199.578125 170.9375 200.484375 170.332031 201.691406 170.332031 C 202.898438 170.332031 203.503906 171.238281 203.503906 172.144531 C 203.199219 173.351562 201.992188 173.957031 201.085938 173.957031 Z M 210.75 199.929688 C 206.222656 199.929688 203.503906 195.703125 204.710938 188.757812 C 205.917969 181.808594 210.148438 177.882812 214.675781 177.882812 C 217.394531 177.882812 218.601562 178.789062 219.207031 179.394531 L 218 181.207031 C 217.394531 180.601562 216.488281 180.300781 214.980469 180.300781 C 211.054688 180.300781 208.9375 183.921875 208.03125 188.757812 C 207.125 193.589844 208.335938 197.210938 211.960938 197.210938 C 213.46875 197.210938 214.375 196.609375 215.28125 196.304688 L 215.886719 198.421875 C 214.675781 199.023438 213.167969 199.929688 210.75 199.929688 Z M 226.152344 199.929688 C 220.71875 199.929688 218.601562 197.515625 219.207031 193.589844 C 220.113281 187.851562 225.851562 186.339844 232.496094 185.734375 L 232.796875 184.527344 C 233.402344 181.207031 231.589844 180.300781 228.871094 180.300781 C 226.757812 180.300781 224.945312 180.902344 223.4375 181.507812 L 222.832031 179.394531 C 224.039062 178.789062 226.757812 177.882812 229.476562 177.882812 C 233.402344 177.882812 236.722656 179.695312 235.816406 184.828125 L 233.402344 198.421875 C 231.890625 199.328125 229.175781 199.929688 226.152344 199.929688 Z M 232.195312 187.246094 C 226.757812 187.851562 223.4375 189.058594 222.53125 193.285156 C 221.925781 196.304688 223.738281 197.515625 226.757812 197.515625 C 227.964844 197.515625 229.476562 197.210938 230.382812 196.910156 Z M 250.011719 199.328125 L 252.730469 184.226562 C 253.035156 182.113281 252.730469 179.996094 249.105469 179.996094 C 246.992188 179.996094 246.085938 180.300781 244.878906 180.601562 L 241.554688 199.328125 L 238.234375 199.328125 L 241.859375 179.089844 C 243.972656 178.183594 246.390625 177.582031 250.011719 177.582031 C 256.054688 177.582031 256.960938 180.902344 256.65625 183.921875 L 253.9375 199.328125 Z M 278.402344 199.929688 C 275.382812 199.929688 272.964844 199.328125 271.152344 198.421875 L 275.683594 173.65625 C 277.195312 172.75 279.914062 172.144531 282.933594 172.144531 C 288.972656 172.144531 291.691406 174.863281 290.785156 178.789062 C 290.179688 182.714844 286.859375 184.527344 284.441406 185.132812 C 286.859375 185.734375 290.179688 188.152344 289.578125 192.078125 C 288.671875 197.515625 283.839844 199.929688 278.402344 199.929688 Z M 278.703125 186.039062 L 276.890625 186.039062 L 275.082031 196.910156 C 275.988281 197.210938 277.195312 197.515625 278.703125 197.515625 C 282.328125 197.515625 285.347656 196.003906 285.953125 192.078125 C 286.558594 187.851562 284.441406 186.039062 278.703125 186.039062 Z M 282.628906 173.957031 C 281.121094 173.957031 280.214844 174.257812 279.007812 174.5625 L 277.195312 184.226562 L 279.007812 184.226562 C 284.746094 184.226562 286.859375 182.414062 287.464844 179.089844 C 288.066406 175.769531 286.253906 173.957031 282.628906 173.957031 Z M 299.542969 199.929688 C 294.105469 199.929688 291.992188 197.515625 292.597656 193.589844 C 293.503906 187.851562 299.242188 186.339844 305.886719 185.734375 L 306.1875 184.527344 C 306.792969 181.207031 304.980469 180.300781 302.261719 180.300781 C 300.148438 180.300781 298.035156 180.902344 296.824219 181.507812 L 296.222656 179.394531 C 297.429688 178.789062 300.148438 177.882812 302.867188 177.882812 C 306.792969 177.882812 310.113281 179.695312 309.207031 184.828125 L 306.792969 198.421875 C 304.980469 199.328125 302.261719 199.929688 299.542969 199.929688 Z M 305.28125 187.246094 C 299.84375 187.851562 296.523438 189.058594 295.617188 193.285156 C 295.011719 196.304688 296.824219 197.515625 299.847656 197.515625 C 301.054688 197.515625 302.5625 197.210938 303.46875 196.910156 Z M 323.703125 199.328125 L 326.421875 184.226562 C 326.726562 182.113281 326.421875 179.996094 322.800781 179.996094 C 320.683594 179.996094 319.777344 180.300781 318.570312 180.601562 L 315.25 199.328125 L 311.625 199.328125 L 315.25 179.089844 C 317.363281 178.183594 319.777344 177.582031 323.402344 177.582031 C 329.441406 177.582031 330.347656 180.902344 330.046875 183.921875 L 327.328125 199.328125 Z M 343.636719 199.328125 L 337.597656 188.453125 L 335.785156 199.328125 L 332.464844 199.328125 L 337.898438 168.519531 L 341.222656 168.519531 L 337.898438 188.152344 L 347.261719 178.183594 L 350.886719 178.183594 L 341.222656 188.152344 L 348.167969 199.328125 Z M 343.636719 199.328125 " fill-opacity="1" fill-rule="nonzero"></path>
+                    </g>
+                </svg>
+            </div>
+            <div class="form-title">
+                <h1>Your Banking, Your Way</h1>
+                <p>Personal / Business - <b>Account Opening</b></p>
+            </div>
+        </div>
+
+        <form>
+            <!-- Section Navigation (Print Hidden) -->
+            <div id="section-navigation" class="section-navigation">
+                <div class="section-nav-container">
+                    <div class="section-nav-item active" data-section="1">Section 1</div>
+                    <div class="section-nav-item" data-section="2">Section 2</div>
+                    <div class="section-nav-item" data-section="3">Section 3</div>
+                    <div class="section-nav-item" data-section="4">Section 4</div>
+                </div>
+            </div>
+
+            <!-- Section 1: Banking Needs -->
+            <div class="form-section-group" id="form-section-1" data-section="1">
+                <div class="section-number-header">
+                    <h2 class="section-number">Section 1</h2>
+                    <h3 class="section-title-main">Vos besoins bancaires</h3>
+                </div>
+
+            <div class="form-section compact-section">
+                <div class="section-header">Aidez-nous à personnaliser votre expérience bancaire</div>
+                <div class="section-content">
+                    <div class="section-title">Quels services financiers vous intéressent ?</div>
+
+                    <div class="form-row compact-margin">
+
+                        <div class="access-checkbox-row compact">
+                            <div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="assurance-checkbox" value="Assurance">
+                                    <label for="assurance-checkbox">Assurance</label>
+                                </div>
+                                            <!-- Always‐visible page‐count options -->
+
+                                <!-- <div class="sub-options" data-for="assurance" style="margin-left: 20px; margin-top: 4px;">
+                                <div class="checkbox-item" style="margin-bottom: 4px;">
+                                    <input type="checkbox" id="assurance-accident" value="Assurance Accident Corporel">
+                                    <label style="font-size: 9px;" for="assurance-accident">Assurance Accident Corporel</label>
+                                </div>
+                                <div class="checkbox-item" style="margin-bottom: 4px;">
+                                    <input type="checkbox" id="assurance-protection" value="Assurance Protection du Revenu">
+                                    <label style="font-size: 9px;" for="assurance-protection">Assurance Protection du Revenu</label>
+                                </div>
+                                </div> -->
+                            </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="branch" value="Épargne & Investissements">
+                                    <label for="branch">Épargne & Investissements</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <label style="margin-right:14px; display:inline-flex; align-items:center;">
+                                        <input type="checkbox" id="ussd-banking" name="services[]" value="Paiements" style="margin-right:6px;" />
+                                        Paiements
+                                    </label>
+
+                                    <label style="margin-right:14px; display:inline-flex; align-items:center;">
+                                        <input type="checkbox" id="mobile-app" name="services[]" value="Prêts" style="margin-right:6px;" />
+                                        Prêts
+                                    </label>
+                                </div>
+                                
+                            
+                    </div>
+
+                    <!-- Other Services Input -->
+                    <!-- <div class="other-services-row"> -->
+                        <div class="other-services-input">
+                            <input type="checkbox" id="other-service" value="Autres services susceptibles de vous">
+                            <label for="other-service" style="margin-left: 4px; margin-right: 5px;">Autres services :</label>
+                            <input type="text">
+                        </div>
+                    <!-- </div> -->
+
+                    <!-- DISCLAIMER -->
+                        <div class="access-disclaimer" style="margin-top:10px; font-size:1.0em; color:#555;">
+                            <strong>NB:</strong> En choisissant l'un des services d'assurance, nous vous inscrirons aux polices d’assurances y relatives.
+                        </div>
+                    <div class="access-break">
+                        <!-- Access Methods Section -->
+
+
+                        <div class="section-title">Quel type de compte vous conviendra le mieux ?</div>
+                        <div class="secondary-options">
+                            <div class="form-row">
+                                <div class="multi-column" style="margin-top: 3px;">
+
+                                    <div class="column" style="min-width:260px;">
+                                
+                                        <div class="checkbox-group">
+                                            <label style="margin-right:14px; display:inline-flex; align-items:center;">
+                                                <input type="checkbox" id="account-type-courant" name="account_type[]" value="Compte courant" style="margin-right:6px;" />
+                                                Compte courant
+                                            </label>
+                                            <label style="margin-right:14px; display:inline-flex; align-items:center;">
+                                                <input type="checkbox" id="account-type-epargne" name="account_type[]" value="Compte épargne" style="margin-right:6px;" />
+                                                Compte épargne
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Account Purpose Column -->
+                                    <div class="column">
+                                        <p>Objectif Principal du Compte :</p>
+                                        <div class="checkbox-group">
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="salary-purpose" name="account-purpose" value="Salaire"
+                                                    checked>
+                                                <label for="salary-purpose">Salaire</label>
+                                            </div>
+
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="business-purpose" name="account-purpose" value="Entreprise">
+                                                <label for="business-purpose">Entreprise</label>
+                                            </div>
+
+                                            <div class="checkbox-item currency-input">
+                                                <input type="checkbox" id="other-purpose-option" name="account-purpose" value="Autre">
+                                                <label for="other-purpose-option"
+                                                    style="margin-right: 5px;">Autre:</label>
+                                                <input type="text" id="other-purpose" >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="column">
+                                        <p>Devise préférée :</p>
+                                        <div class="checkbox-group">
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="kes-currency" name="currency" value="Franc CFA (XAF)" checked>
+                                                <label for="kes-currency">Franc CFA (XAF)</label>
+                                            </div>
+
+                                            <div class="checkbox-item currency-input">
+                                                <input type="checkbox" id="other-currency-option" name="currency" value="Autre">
+                                                <label for="other-purpose-option" style="margin-right: 5px;">Autre:</label>
+                                                <input type="text" id="other-currency">
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="access-methods">
+                            <div class="section-title">Comment préféreriez-vous accéder aux services bancaires ?</div>
+                            <div class="access-checkbox-row compact">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="debit-card" value="Carte de débit">
+                                    <label for="debit-card">Carte de débit (Type: </label>
+                                    <input type="text" id="debit-card-type" style="width:80px; height:18px; margin-left:6px;">
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="prepaid-card" value="Carte prépayée">
+                                    <label for="prepaid-card">Carte prépayée</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="app-mobile" value="Application mobile">
+                                    <label for="app-mobile">Application mobile</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="web-banking" value="Banque par internet">
+                                    <label for="web-banking">Banque par internet</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="mobile-money" value="Mobile money">
+                                    <label for="mobile-money">Mobile money</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="e-statement" value="E-Statement">
+                                    <label for="e-statement">E-Statement</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="e-alert" value="E-Alert">
+                                    <label for="e-alert">E-Alert</label>
+                                </div> 
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="sms-alert" value="SMS Alert">
+                                    <label for="sms-alert">SMS Alert</label>
+                                </div> 
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="standing-order" value="Virement permanent">
+                                    <label for="standing-order">Virement permanent</label>
+                                </div>
+                                <div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="chequier-checkbox" value="Chéquier">
+                                    <label for="chequier-checkbox">Chéquier</label>
+                                </div>
+                                <!-- Always‐visible page‐count options -->
+
+                                <!-- <div class="sub-options" data-for="chequier" style="margin-left: 20px; margin-top: 2px;">
+                                <div class="checkbox-item" style="margin-bottom: 4px;">
+                                    <input type="checkbox" id="chequier-25" value="25 feuilles">
+                                    <label style="font-size: 9px;" for="chequier-25">25 feuilles</label>
+                                </div>
+                                <div class="checkbox-item" style="margin-bottom: 4px;">
+                                    <input type="checkbox" id="chequier-50" value="50 feuilles">
+                                    <label style="font-size: 9px;" for="chequier-50">50 feuilles</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="chequier-100" value="100 feuilles">
+                                    <label for="chequier-100" style="font-size: 9px;">100 feuilles</label>
+                                </div>
+                                </div> -->
+                            </div>
+                            </div>
+                    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Navigation Buttons Section 1 -->
+            <div class="section-nav-buttons" id="nav-section-1">
+                <button type="button" class="btn-section-nav" onclick="window.nextSection()">
+                    Suivant (Section 2) →
+                </button>
+            </div>
+            <!-- End Section 1 -->
+
+            <!-- Section 2: About You -->
+            <div class="form-section-group" id="form-section-2" data-section="2" style="display: none;">
+                <div class="section-number-header">
+                    <h2 class="section-number">Section 2</h2>
+                    <h3 class="section-title-main">Informations personnelles</h3>
+                </div>
+
+                    <div class="section-header">A propos de vous</div>
+                    <div class="section-content">
+                        <!-- <div class="section-title">About yourself</div> -->
+                        <div class="form-row">
+                            <div class="multi-column">
+
+                                <div class="column">
+                                    <label>
+                                        <M>Genre:</strong>
+                                    </label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="radio" id="male" name="gender" value="Masculin">
+                                            <label for="male">Masculin</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="radio" id="female" name="gender" value="Féminin">
+                                            <label for="female">Féminin</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                  
+                                        <label>
+                                            <M>Titre:</strong>
+                                        </label>
+                                        <div class="checkbox-group">
+                                            <div class="checkbox-item">
+                                                <input type="radio" id="mr" name="title" value="M.">
+                                                <label for="mr">M.</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="radio" id="mrs" name="title" value="Mme.">
+                                                <label for="mrs">Mme.</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="radio" id="ms" name="title" value="Mlle.">
+                                                <label for="ms">Mlle.</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="radio" id="dr" name="title" value="Dr.">
+                                                <label for="dr">Dr.</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="radio" id="prof" name="title" value="Prof.">
+                                                <label for="prof">Prof.</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="other-title">
+                                                <label for="other-title">Autre:</label>
+                                                <input type="text" style="width: 60px; height: 18px; margin-left: 3px;">
+                                            </div>
+                                        </div>
+                                
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Name fields in a row -->
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="first-name">
+                                        <M>Prénom:</strong>
+                                    </label>
+                                    <input type="text" id="first-name" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="middle-name">
+                                        <M>Deuxième prénom:</strong>
+                                    </label>
+                                    <input type="text" id="middle-name" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="last-name">
+                                        <M>Nom de famille:</strong>
+                                    </label>
+                                    <input type="text" id="last-name" style="height: 20px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Parents information -->
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="father-name"><strong>Nom du père:</strong></label>
+                                    <input type="text" id="father-name" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="mother-name"><strong>Nom de la mère:</strong></label>
+                                    <input type="text" id="mother-name" style="height: 20px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gender and Marital Status in a row -->
+                        <div class="form-row">
+                            <div class="multi-column">
+
+                                <div class="column">
+                                    <label for="nationality">
+                                        <M>Nationalité:</strong>
+                                    </label>
+                                    <input type="text" id="nationality" style="height: 20px;">
+                                </div>
+
+                                <!-- <div class="column">
+                                <label for="pob"><strong>Place of birth:</strong></label>
+                                <input type="text" id="pob" style="height: 20px;">
+                            </div> -->
+                                <div class="column">
+                                    <label for="residence-country">
+                                        <M>Pays de résidence:</strong>
+                                    </label>
+                                    <input type="text" id="residence-country" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="date-of-birth">
+                                        <M>Date de naissance (JJ/MM/AA):</strong>
+                                    </label>
+                                    <div class="date-container">
+                                        <input type="date" id="date-of-birth" name="date-of-birth" style="height:22px; width:100%;">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Birth information and residence -->
+                        <div class="form-row">
+                            <div class="multi-column">
+
+                                <div class="column">
+                                    <label>
+                                        <M>Pièce d’identité:</strong>
+                                    </label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="national-id">
+                                            <label for="national-id">Carte d’identité nationale</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="passport">
+                                            <label for="passport">Passeport</label>
+                                        </div>
+                                        <!-- <div class="checkbox-item">
+                                            <input type="checkbox" id="birth-certificate">
+                                            <label for="birth-certificate">Birth Certificate</label>
+                                        </div> -->
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="alien-registration">
+                                            <label for="alien-registration">Carte de séjour</label>
+                                        </div>
+                                        <div class="checkbox-item currency-input">
+                                                <input type="checkbox" id="other-currency-option" name="currency">
+                                                <label for="other-currency-option"
+                                                    style="margin-right: 5px;">Autre:</label>
+                                                <input type="text" id="other-currency">
+                                            </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- ID document selection -->
+
+
+                        <!-- Document information -->
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="document-number">
+                                        <M>Numéro du document:</strong>
+                                    </label>
+                                    <input type="text" id="document-number" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="document-issue-date">
+                                        <N>Date de délivrance :(JJ/MM/AA)</strong>
+                                    </label>
+                                    <div class="date-container">
+                                        <input type="date" id="document-issue-date" name="document-issue-date" style="height:22px; width:100%;">
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <label for="document-expiry-date">
+                                        <M>Date d’expiration: (JJ/MM/AA)</strong>
+                                    </label>
+                                    <div class="date-container">
+                                        <input type="date" id="document-expiry-date" name="document-expiry-date" style="height:22px; width:100%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Document information -->
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <!-- <div class="column">
+                                    <label>
+                                        <M>Are you registered with any
+                                            taxation authority?</strong>
+                                    </label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item" style="margin-right: 20px;">
+                                            <input type="checkbox" id="tax-yes" name="tax-registration">
+                                            <label for="tax-yes">Yes</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="tax-no" name="tax-registration">
+                                            <label for="tax-no">No</label>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="column">
+                                    <label for="pob">Informations fiscales:</strong></label>
+                                    <input type="text" id="pob" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="pob">
+                                        <N>NIP/NIF/SSN:</strong>
+                                    </label>
+                                    <input type="text" id="pob" style="height: 20px;">
+                                </div>
+
+                            </div>
+                        </div>
+                </div>
+
+                <!-- Contact Information Section (moved to Section 2) -->
+                <div class="form-section compact-section" style="margin-top: 20px;">
+                    <div class="section-header">Comment rester en contact avec vous ?</div>
+                    <div class="section-content">
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="telephone">Numéro de téléphone mobile principal:</label>
+                                    <input type="tel" id="telephone" class="compact-input">
+                                </div>
+                                <div class="column">
+                                    <label for="telephone2">Deuxième numéro de téléphone Mobile:</label>
+                                    <input type="tel" id="telephone2" class="compact-input">
+                                </div>
+                                <div class="column">
+                                    <label for="email">Adresse électronique:</label>
+                                    <input type="email" id="email" class="compact-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="BP">BP:</label>
+                                    <input type="text" id="BP" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="postal-code">Code Postal:</label>
+                                    <input type="text" id="postal-code" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="city">Ville:</label>
+                                    <input type="text" id="city" style="height: 20px;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="contact_adress">Adresse résidentielle (Rue/Avenue):</label>
+                                    <input type="text" id="contact_adress" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="autre">Autres Informations:</label>
+                                    <input type="text" id="autre" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="pays">Pays:</label>
+                                    <input type="text" id="pays" style="height: 20px;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="personnecontacte">Personne à contacter en cas d'urgence (Nom complet):</label>
+                                    <input type="text" id="personnecontacte" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="lparente">Lien de parenté:</label>
+                                    <input type="text" id="lparente" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="ltel">Numéro(s) de téléphone mobile:</label>
+                                    <input type="number" id="ltel" style="height: 20px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons Section 2 -->
+                <div class="section-nav-buttons" id="nav-section-2">
+                    <button type="button" class="btn-section-nav prev" onclick="window.prevSection()">
+                        ← Précédent (Section 1)
+                    </button>
+                    <button type="button" class="btn-section-nav" onclick="window.nextSection()">
+                        Suivant (Section 3) →
+                    </button>
+                </div>
+                <!-- End Section 2 -->
+
+                <!-- Section 3: Employment & Activity -->
+                <div class="form-section-group" id="form-section-3" data-section="3" style="display: none;">
+                    <div class="section-number-header">
+                        <h2 class="section-number">Section 3</h2>
+                        <h3 class="section-title-main">Votre activité professionnelle</h3>
+                    </div>
+
+                <!-- Contact Information Section -->
+                <div class="form-section compact-section" style="margin-bottom: 5px;">
+                    <div class="section-header">Comment rester en contact avec vous ?</div>
+                    <div class="section-content">
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="telephone">Numéro de téléphone mobile principal:</label>
+                                    <input type="tel" id="telephone" class="compact-input">
+                                </div>
+                                <div class="column">
+                                    <label for="telephone2">Deuxième numéro de téléphone Mobile:</label>
+                                    <input type="tel" id="telephone2" class="compact-input">
+                                </div>
+                                <div class="column">
+                                    <label for="email">Adresse électronique:</label>
+                                    <input type="email" id="email" class="compact-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="BP">BP:</label>
+                                    <input type="text" id="BP" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="postal-code">Code Postal:</label>
+                                    <input type="text" id="postal-code" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="country">Ville:</label>
+                                    <input type="text" id="country" style="height: 20px;">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="contact_adress">Adresse résidentielle (Rue/Avenue):</label>
+                                    <input type="text" id="contact_adress" style="height: 20px;">
+                                </div>
+
+                                <div class="column">
+                                    <label for="autre">Autres Informations:</label>
+                                    <input type="text" id="autre" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="country">Pays:</label>
+                                    <input type="text" id="pays" style="height: 20px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="personnecontacte">Personne à contacter en cas d’urgence (Nom complet):</label>
+                                    <input type="text" id="personnecontacte" style="height: 20px;">
+                                </div>
+
+                                <div class="column">
+                                    <label for="lparente">Lien de parenté:</label>
+                                    <input type="text" id="lparente" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="ltel">Numéro(s) de téléphone mobile:</label>
+                                    <input type="number" id="ltel" style="height: 20px;">
+                                </div>
+                                
+                            </div>
+                        </div>
+                </div>
+
+                <div class="form-section compact-section" style="margin-top: 15px;">
+                    <div class="section-header">Parlez-nous de votre activité</div>
+                    <div class="section-content">
+                        <div class="services-row">
+                                <!-- Employed Service Box -->
+                                <div class="service-box" style="margin-left: 10px;">
+                                    <div class="service-header" style="border-bottom: 2px solid #007eb6;">
+                                        <label for="type-employed">Salarié</label>
+                                        <input type="checkbox" id="type-employed" name="employment-type">
+                                    </div>
+                                    <div class="service-products">
+                                        <div style="padding: 8px;">
+                                            <div style="margin-bottom: 5px;">
+                                                <label style="font-size: 9px;" for="employer-name">Nom de l'employeur:</label>
+                                                <input type="text" id="employer-name"
+                                                    style="height: 22px; width: 100%;">
+                                            </div>
+                                            <div style="margin-bottom: 5px;">
+                                                <label style="font-size: 9px;">Conditions d'emploi:</label>
+                                                <div class="checkbox-group" style="margin: 2px 0 2px 5px;">
+                                                    <div class="checkbox-item" style="margin-bottom: 2px;">
+                                                        <input type="checkbox" id="permanent-salaried"
+                                                            name="salaried-terms">
+                                                        <label style="font-size: 9px;"
+                                                            for="permanent-salaried">CDI</label>
+                                                    </div>
+                                                    <div class="checkbox-item">
+                                                        <input type="checkbox" id="contract-salaried"
+                                                            name="salaried-terms">
+                                                        <label style="font-size: 9px;"
+                                                            for="contract-salaried">Contrat</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="margin-bottom: 5px;">
+                                                <label style="font-size: 9px;"
+                                                    for="salaried-occupation">Désignation:</label>
+                                                <input type="text" id="salaried-occupation"
+                                                    style="height: 22px; width: 100%;">
+                                            </div>
+                                            <div style="margin-bottom: 5px;">
+                                                <label style="font-size: 9px;" for="salaried-industry">Secteur:</label>
+                                                <input type="text" id="salaried-industry"
+                                                    style="height: 22px; width: 100%;">
+                                            </div>
+                                            <div>
+                                                <label style="font-size: 9px;">Fourchette de revenu mensuel brut:</label>
+                                                <div class="checkbox-group"
+                                                    style="margin: 3px 0; display: flex; flex-wrap: wrap;">
+                                                    <div class="checkbox-item"
+                                                        style="margin-right: 10px; margin-bottom: 2px;">
+                                                        <input type="checkbox" id="gross-below150k"
+                                                            name="gross-income-range">
+                                                        <label for="gross-below150k">Inférieur à 150 000 FCFA</label>
+                                                    </div>
+                                                    <div class="checkbox-item"
+                                                        style="margin-right: 10px; margin-bottom: 2px;">
+                                                        <input type="checkbox" id="gross-150k-300k"
+                                                            name="gross-income-range">
+                                                        <label for="gross-150k-300k">150 000 – 500 000 FCFA</label>
+                                                    </div>
+                                                    <div class="checkbox-item" style="margin-bottom: 2px;">
+                                                        <input type="checkbox" id="gross-above300k"
+                                                            name="gross-income-range">
+                                                        <label for="gross-above300k">Supérieur à 500 000 FCFA</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Sole Proprietor Service Box -->
+                                <div class="service-box">
+                                    <div class="service-header" style="border-bottom: 2px solid #007eb6;">
+                                        <label for="type-business">Entreprise</label>
+                                        <input type="checkbox" id="type-business" name="employment-type">
+                                        <label for="type-business" style=" margin-left: 10px ;">ONG</label>
+                                        <input type="checkbox" id="type-ong" name="employment-type">
+                                    </div>
+                                    <div class="service-products">
+                                        <div style="padding: 8px;">
+                                            <div style="margin-bottom: 5px;">
+                                                <label style="font-size: 9px;" for="business-name">Raison sociale:</label>
+                                                <input type="text" id="business-name"
+                                                    style="height: 22px; width: 100%;">
+                                            </div>
+                                            <div style="margin-bottom: 5px;">
+                                                <label style="font-size: 9px;" for="business-registration">Forme juridique:</label>
+                                                <input type="text" id="business-registration"
+                                                    style="height: 22px; width: 100%;">
+                                            </div>
+                                            <div style="margin-bottom: 5px;">
+                                                <label style="font-size: 9px;" for="business-kra-pin">N° RCCM:</label>
+                                                <input type="text" id="business-kra-pin"
+                                                    style="height: 22px; width: 100%;">
+                                            </div>
+                                            <div style="margin-bottom: 5px;">
+                                                <label style="font-size: 9px;" for="business-nature">N° NIF:</label>
+                                                <input type="text" id="business-nature"
+                                                    style="height: 22px; width: 100%;">
+                                            </div>
+                                            <div>
+                                                <label style="font-size: 9px;" for="turnover-range">Nature des activités:</label>
+                                                <div class="checkbox-group"
+                                                    style="margin: 3px 0; display: flex; flex-wrap: wrap;">
+                                                    <div class="checkbox-item"
+                                                        style="margin-right: 10px; margin-bottom: 2px;">
+                                                        <input type="checkbox" id="turnover-below1m"
+                                                            name="turnover-range">
+                                                        <label for="turnover-below1m">Inférieur à 500 000 FCFA</label>
+                                                    </div>
+                                                    <div class="checkbox-item"
+                                                        style="margin-right: 10px; margin-bottom: 2px;">
+                                                        <input type="checkbox" id="turnover-1m-5m"
+                                                            name="turnover-range">
+                                                        <label for="turnover-1m-5m">500 000 – 1 million FCFA</label>
+                                                    </div>
+                                                    <div class="checkbox-item" style="margin-bottom: 2px;">
+                                                        <input type="checkbox" id="turnover-above5m"
+                                                            name="turnover-range">
+                                                        <label for="turnover-above5m">Supérieur à 1 million FCFA</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- Student Service Box -->
+                                <div class="service-box" style="margin-right: 10px;">
+                                    <div class="service-header" style="border-bottom: 2px solid #007eb6;">
+                                        <label for="type-student">Étudiant</label>
+                                        <input type="checkbox" id="type-student" name="employment-type">
+                                    </div>
+                                    <div class="service-products">
+                                        <div style="padding: 8px;">
+                                            <div style="margin-bottom: 5px;">
+                                                <label style="font-size: 9px;" for="institution-name">Nom de l’établissement:</label>
+                                                <input type="text" id="institution-name"
+                                                    style="height: 39px; width: 100%;">
+                                            </div>
+                                            <div>
+                                                <label style="font-size: 9px;" for="student-id">Identifiant étudiant:</label>
+                                                <input type="text" id="student-id" style="height: 22px; width: 100%;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="service-header" style="border-bottom: 2px solid #007eb6;">
+                                        <label for="type-other">Autre</label>
+                                        <input type="checkbox" id="type-other" name="employment-type" value="Autre">
+                                    </div>
+                                    <div class="service-products">
+                                        <div style="padding: 3px;">
+                                            <div style="margin-bottom: 0px;">
+                                                <label style="font-size: 9px; " for="institution-name">Précisez:</label>
+                                                <input type="text" id="institution-name"
+                                                    style="height: 22px; width: 100%;">
+                                            </div>
+                                            <!-- <div>
+                                                <label style="font-size: 9px;" for="student-id">Student ID:</label>
+                                                <input type="text" id="student-id" style="height: 22px; width: 100%;">
+                                            </div> -->
+                                            <div style="margin-top: 3px;">
+                                                <label style="font-size: 9px; margin-top: 5px;">Fourchette du chiffre d'affaires mensuel brut:</label>
+                                                <div class="checkbox-group"
+                                                    style="margin: 3px 0; display: flex; flex-wrap: wrap;">
+                                                    <div class="checkbox-item"
+                                                        style="margin-right: 10px; margin-bottom: 2px;">
+                                                        <input type="checkbox" id="gross-below150k"
+                                                            name="gross-income-range">
+                                                        <label for="gross-below150k">Inférieur à 150 000 FCFA</label>
+                                                    </div>
+                                                    <div class="checkbox-item"
+                                                        style="margin-right: 10px; margin-bottom: 2px;">
+                                                        <input type="checkbox" id="gross-150k-300k"
+                                                            name="gross-income-range">
+                                                        <label for="gross-150k-300k">150 000 – 500 000 FCFA</label>
+                                                    </div>
+                                                    <div class="checkbox-item" style="margin-bottom: 2px;">
+                                                        <input type="checkbox" id="gross-above300k"
+                                                            name="gross-income-range">
+                                                        <label for="gross-above300k">Supérieur à 500 000 FCFA</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Navigation Buttons Section 3 -->
+                <div class="section-nav-buttons" id="nav-section-3">
+                    <button type="button" class="btn-section-nav prev" onclick="window.prevSection()">
+                        ← Précédent (Section 2)
+                    </button>
+                    <button type="button" class="btn-section-nav" onclick="window.nextSection()">
+                        Suivant (Section 4) →
+                    </button>
+                </div>
+                <!-- End Section 3 -->
+                </div>
+
+                <!-- Section 4: Agreements & Bank Use -->
+                <div class="form-section-group" id="form-section-4" data-section="4" style="display: none;">
+                    <div class="section-number-header">
+                        <h2 class="section-number">Section 4</h2>
+                        <h3 class="section-title-main">Signatures et informations bancaires</h3>
+                    </div>
+
+                <!-- Employment Status Section with compact styling -->
+                <div class="form-section compact-section">
+                    <div class="section-header">Engagement</div>
+                    <div class="section-content">
+                        <div class="declaration engagement-content">
+                            <ul style="list-style-type: none; color: #007fb6a4;">
+                                <li style="font-size: smaller;">J'atteste / Nous attestons que les informations fournies dans le présent document sont correctes et sont d'actualité à la date d'ouverture du compte. J'ai / Nous avons également pris connaissance des termes et conditions de compte Ecobank stipulées au verso 'Conditions Générales de Compte' ainsi que des clauses contenues dans la brochure jointe au présent formulaire, si la présence d'une telle brochure est applicable. Je m'engage / Nous nous engageons / à respecter les termes et conditions correspondants aux services bancaires auxquels j'ai / nous avons souscrits. je demande / Nous demandons par conséquent l'ouverture d'un compte et la fourniture des services ci-dessus sélectionnés accompagnés des informations correspondantes.
+                                </li>
+                        
+                            </ul>
+                        </div></div>
+                        <div class="section-header">Conditions générales de compte</div>
+                        <div class="section-content">
+                        <div class="declaration engagement-content">
+                            <ul style="list-style-type: none; color: #007fb6a4;">
+                                <li style="font-size: smaller;"><b>A. TERMES / CHAMP D'APPLICATION</b><br>Les informations contenues dans cette page aussi bien que celes contenues dans les instructions et conditions additionnelles qui pourront être édictées de temps en temps par la Banque, servent de convention de compte entre le Client et Ecobank. Lorsque ce chèque et de tels chèques pourraient par conséquent vous être retournés impayés. formulaire est signé, il est réputé avoir été accepté comme liant le client et le bureau de\ représentation ou la filiale Ecobank où le compte est ouvert. Ces conditions s'appliquent à chaque compte ouvert par le biais du formulaire d'ouverture du compte ou par tout autre moyen acceptable.
+                                </li>
+                                <li style="font-size: smaller;"> Les présentes conditions sont complétées et / ou modifiées pour les comptes ouverts dans certains pays ou territoires par des conditions locales (Les 'Conditions Locales') qui seront fournies au Client par Ecobank et lieront le Client et Ecobank. Lorsqu'il existera une contradiction entre les présentes conditions et les Conditions Locales, les Conditions Locales prévaudront. Aussi, lorsqu'il existera une contradiction entre les présentes conditions ou les Conditions Locales et tout autre accord relatif à un service ou produit fourni au Client (un 'Service'), cet accord prévaudra.</li>
+                                <li style="font-size: smaller;">À la requête de Ecobank; le Client lui fournira tous les documents et autres informationjugés raisonnables en rapport avec son compte ou le service fourni. </li>
+                                <li style="font-size: smaller;"><b>B. VOTRE COMPTE</b><br>Le Client assume l'entière responsabilité de l'authenticité, de la véracité, et de la validitédes informations et signatures apparaissant sur tous les chèques, ordres d'opérations,factures, notices, reçus et instruments négociables, ou tout autre instrument de paiementdéposé sur son compte. </li>
+                                <li style="font-size: smaller;">La Banque décline toute responsabilité quant à la perte des fonds causée par toute décision gouvernementale, loi, impôt, taxes, embargo, moratoire, restriction de change ou tout autre événement au-delà de son contrôle. Votre compte sera débité de tous les frais et charges qui seront fixés par la Banque périodiquement. </li>
+                                <li style="font-size: smaller;">Tous les avis ou lettres vous seront délivrés à l'adresse physique, postale ou électronique que vous avez communiquée, et seront dúment considérés comme délivrés etréceptionnés au moment de la livraison ou sept jours à compter de leur envoi.</li>
+                                <li style="font-size: smaller;">La Banque décline toute responsabilité quant aux fonds remis à son personnel autre que les caissiers dans les locaux de la Banque, étant entendu que cette remise devra être matérialisée par un bordereau de versement. Toute anomalie constatée sur vos relevés de compte doit être portée à l'attention de la Banque dans les 30 jours suivant la date portée sur ledit relevé, et à défaut de fournir de telles informations, vous dégagez la Banque de toute obligation émanant de cette omission.</li>
+                                <li style="font-size: smaller;">La Banque pourait exercer son droit de rétention ou tout autre droit similaire dont le dispose, y compris la compensation et la consolidation de tout ou partie des soldesde vos différents comptes et le droit de prélever ou transférer toute somme due au crédit d'un ou plusieurs de ces comptes au remboursement de tout autre engagement contracté dans d'autres comptes.</li>
+                                <li style="font-size: smaller;"><b>C. INSTRUCTIONS</b><br>Ecobank pourra se fier à l'autorité conférée à chaque personne désignée (dans la forme acceptable pour la Banque) par le Client pour émettre les ordres ou accomplir toute autre tâche relevant de son mandat jusqu'à ce qu'Ecobank reçoive un avis par écrit ou par tout autre moyen acceptable de la personne dument autorisée à condition qu'Ecobank ait eu un temps raisonnable pour agir (après lequel elle pourrait tenir compte dudit changement).Le Client et Ecobank se conformeront à certaines procédures de sécurité convenues (les 'Procédures') mises en place pour vérifier l'origine et l'authenticité des Instructions entres les deux parties notamment l e s demandes de renseignements, les avis et les ordres.</li>
+                                <li style="font-size: smaller;">Ecobank se conformera strictement aux procédures pour vérifier les pouvoirs et l'identité de la personne qui envoie une Instruction. Ecobank n'est pas responsable des erreursou omissions commises par le Client ou l a duplication de toute Instruction par le Client et pourrait exécuter toute Instruction par référence au numéro de compte seulement, même si l'intitulé du compte est fourni. Ecobank pourrait exécuter une Instruction si ele croit raisonnablement que l'Instruction contient des informations suffisantes.</li>
+                                <li style="font-size: smaller;">Ecobank pourrait décider de ne pas exécuter une Instruction lorsqu'elle a des raisons légitimes de douter de son contenu, son authenticité, son origine ou sa conformité aux Procédures et informera rapidement le Client (par téléphone si possible) de sa décision. Si le Client informe Ecobank qu'il souhaite rappeler, annuler ou modifier une Instruction, Ecobank usera de tous les moyens disponibles pour se conformer à l'instruction.</li>
+                                <li style="font-size: smaller;">intervention manuelle (notamment par téléphone, télex, fax, message électronique ou disque envoyé par porteur) et si Ecobank agit dans le respect des Procédures, le Client sera responsable de toute perte qu'Ecobank pourrait subir dans l'exécution de cette Instruction.</li>
+                                <li style="font-size: smaller;"><b>D. LES CHÈQUES</b><br>La Banque n'a nullement l'obligation d'honorer un chèque tiré sur votre compte à moins qu'il y ait une provision suffisante sur le compte concerné pour couvrir le montant dudit chèque et de tels chèques pourraient par conséquent vous être retournés impayés.</li>
+                                <li style="font-size: smaller;">
+                                    Tout chèque ou ordre signé par vous (individuellement ou conjointement pour un
+                                    compte joint) peut être honoré par la Banque et votre compte pourra ainsi être débité
+                                    du montant de ce chèque, que le compte concerné soit à ce moment créditeur ou débiteur,
+                                    ou puisse se retrouver débiteur suite au traitement d'une telle opération.
+                                </li>
+
+                                <li style="font-size: smaller;">
+                                    La Banque se réserve le droit, à sa discrétion, de vous autoriser à effectuer les retraits
+                                    sur la base de chèques en cours d'encaissement sans attendre l'avis de sort définitif
+                                    desdits chèques. Dans le cas où le / les chèques en question seraient retournés impayés,
+                                    la Banque se réserve le droit de retenir lesdits chèques et engager les actions qu'elle
+                                    jugera appropriées pour le recouvrement de la valeur de ces chèques.
+                                </li>
+
+                                <li style="font-size: smaller;">
+                                    La Banque se réserve le droit, lorsqu'elle le juge approprié, de faire confirmer l'émission
+                                    de chèque tiré sur le compte courant du Client et à défaut de confirmation par le Client
+                                    dans un délai raisonnable, ledit chèque sera retourné avec la mention « confirmation de
+                                    l'émetteur requise ».
+                                </li>
+
+                                <li style="font-size: smaller;">
+                                    Vous devez vous assurer que votre chéquier est conservé dans un endroit sécurisé afin
+                                    d'en empêcher l'accès à toute personne non autorisée et la défaillance à une telle
+                                    précaution pourrait entraîner des pertes qui seront en conséquence imputées sur votre
+                                    compte.
+                                </li>
+
+                                <li style="font-size: smaller;">
+                                    Au cas où votre chéquier serait égaré, manquant ou volé, vous devez immédiatement en
+                                    aviser la Banque. La Banque ne sera tenue responsable d'aucune utilisation frauduleuse
+                                    de votre chéquier dans le cas où cette perte ne lui serait pas immédiatement notifiée.
+                                </li>
+
+                                <li style="font-size: smaller;">
+                                    Ecobank pourra fournir au Client des chèques, instruments de paiement et tout autre
+                                    document lié à son compte et le Client s'engage à mettre tout en œuvre pour éviter les
+                                    fraudes, pertes, vols, mauvais usage ou utilisation anormale de ces documents.
+                                </li>
+
+                                <li style="font-size: smaller;">
+                                    Le Client s'engage à informer Ecobank immédiatement et par écrit, de toute perte ou
+                                    vol de tout chèque ou instrument de paiement et s'engage à retourner à Ecobank ou
+                                    détruire tout chèque non utilisé, les instruments de paiement et tout autre document
+                                    lorsque son compte sera clôturé.
+                                </li>
+                                <li tyle="font-size: smaller;"><b>E. LES DÉCOUVERTS</b><br>Les découverts peuvent être octroyés aux clients suite à un accord conclu avec la Banque.
+                                    Si vous ne disposez pas d'un tel accord, la Banque peut toutefois, à sa discrétion, honorer
+                                    vos chèques même si le compte devient par la suite débiteur. Dans u n tel cas, vous
+                                    acceptez de rembourser le découvert dans un délai de 7 jours et supporter des frais et
+                                    intérêts supplémentaires appliqués aux emprunts non autorisés pour la période pendant
+                                    laquelle votre compte est resté débiteur et ce, au taux en vigueur. Si votre compte
+                                    n'a pas suffisamment de provision pour couvrir le montant de votre retrait, nous nous
+                                    réservons le droit de vous retourner le chèque impayé.
+                                </li>
+                                <li style="font-size: smaller;">
+                                    La Banque se réserve le droit d'utiliser le solde créditeur de votre compte courant pour
+                                    couvrir le débit de tout ou partie de vos comptes.
+                                </li>
+                                <li style="font-size: smaller;"><b>F. RELEVÉS ET AVIS</b><br> avis et relevés peuvent être délivrés au Client physiquement, par la poste ou par
+                                    voie électronique (e-Statement et e-Alert).
+                                    Sur votre demande, la Banque peut vous fournir les relevés électroniques ou messages
+                                    d'alerte ou tout autre service similaire afin de vous donner des informations sur les
+                                    transactions intervenues sur votre compte. Le service est fourni dans la mesure de sa
+                                    disponibilité et la Banque ne garantit pas qu'il sera conforme à vos attentes spécifiques.
+                                </li>
+                                <li style="font-size: smaller;">
+                                    Aussi, la Banque ne garantit pas que ce service sera fourni de façon continue sans
+                                    aucune interruption ou que les informations données seront toujours précises et à
+                                    jour au moment où elles seront reçues. La Banque décline toute responsabilité pour le
+                                    service fourni par un tiers fournisseur d'accès internet ou pour les défaillances du service
+                                    relevant de cas de force majeure ou cas fortuit.
+                                </li>
+
+                                <li style="font-size: smaller;">
+                                    Indépendamment du canal utilisé pour délivrer les relevés et avis, le Client s'engage à
+                                    informer Ecobank immédiatement par écrit, de toute anomalie, inexactitude ou erreur
+                                    constatée dans un relevé ou un avis et dans tous les cas dans les 30 jours à compter de
+                                    la date d'envoi du relevé ou avis.
+                                </li>
+                                <li tyle="font-size: smaller;"><b>H. FORCE MAJEURE</b><br>Ni le Client ni Ecobank ne sera tenu responsable de défaillances dans l'exécution de ses
+                                    obligations relatives au compte du Client s'il résultait qu'une telle exécution aura pour
+                                    conséquence une violation de la loi, de la réglementation o u d'exigences édictées par le
+                                    gouvernement ou par d'autres autorités auxquelles le Client ou Ecobank est obligé de se
+                                    conformer ou si cette exécution est empêchée, gênée o u retardée par un cas de Force
+                                    Majeure. Dans une telle situation, les obligations seront suspendues aussi longtemps
+                                    que persiste le cas de Force Majeure (pour ce qui est d'Ecobank, aucune autre filiale ou
+                                    bureau de représentation ne sera tenu responsable de cete défaillance).
+                                </li>
+                                <li style="font-size: smaller;">
+    Le cas de Force Majeure signifie tout événement dû à une cause au-delà du contrôle
+    raisonnable d'une Partie telles que les restrictions sur la conversion et le transfert des
+    fonds ou toutes autres valeurs, réquisition, transferts involontaires, non disponibilité
+    de tout système, sabotage, incendie, inondation, explosion, catastrophes naturelles,
+    insurrection civile, grèves ou lock out de tout genre, les émeutes, insurrection, guerres
+    ou décisions gouvernementales.
+</li>
+
+<li style="font-size: smaller;">
+    <b>I. PARTAGE DES INFORMATIONS RELATIVES AU CLIENT</b><br>
+    Ecobank traitera les informations relatives au Client comme confidentielles, toutefois
+    (à moins que le consentement ne soit prohibé par la loi) le Client accepte le transfert
+    et la divulgation par Ecobank de toute information le concernant aux Bureaux de
+    représentation, aux filiales et aux mandataires d'Ecobank ainsi qu'aux Tiers qui seront
+    choisis par l'un d'entre eux, peu importe leur lieu de résidence, pour une utilisation
+    confidentielle (notamment en relation avec la fourniture de tout Service et pour le
+    traitement de données à des fins d'analyse de risques et statistiques).
+</li>
+
+<li style="font-size: smaller;">
+    Ecobank, ses Bureaux de représentation, ses Filiales, ses Mandataires et les Tiers
+    peuvent transférer et divulguer de telles informations lorsqu'elles sont exigées par la
+    loi, le tribunal, les autorités de régulation ou les procédures judiciaires.
+</li>
+
+<li style="font-size: smaller;">
+    <b>J. CONTRÔLE OU ENREGISTREMENT ÉLECTRONIQUE</b><br>
+    Le Client et Ecobank donnent leurs consentements au contrôle et à l'enregistrement
+    téléphonique et électronique pour des raisons de sécurité et de qualité de service
+    et acceptent que chacun d'eux puisse produire les enregistrements téléphoniques
+    ou électroniques comme preuve dans toute procédure judiciaire en relation avec les
+    présentes conditions, les Conditions Locales ou accords particuliers.
+</li>
+
+<li style="font-size: smaller;">
+    <b>K. CHANGEMENT DE DIRECTION</b><br>
+    Le Client doit immédiatement informer la Banque de tout changement d'adresse,
+    d'administrateurs, de membres du Comité de Direction, Gérant et membres désignés.
+    Toute modification du changement des signataires du compte doit être faite par les
+    personnes autorisées en fonction à la date de la modification et accompagnée d'une
+    résolution à cet effet si nécessaire.
+</li>
+
+<li style="font-size: smaller;">
+    <b>L. RÉSILIATION</b><br>
+    Chacune des parties à cet accord peut à tout moment (sous réserve du respect des
+    exigences légales telles que le préavis) le résilier par notification écrite à l'autre partie.
+    À la clôture d'un compte pour quelque raison que ce soit, la résiliation devient effective
+    après que tous les chèques tirés sur le compte ou les débits en compte aient été réglés,
+    que tous les chéquiers et les cartes remis aient été retournés à la Banque, et que toutes
+    les informations et équipements fournis par Ecobank aient été retournés.
+</li>
+
+<li style="font-size: smaller;">
+    Si la résiliation émane de la Banque et que votre compte est débiteur, vous devez,
+    en plus de la restitution des instruments de paiement et documents, régler
+    tous les montants portés au débit du compte. À défaut, la Banque se verra dans
+    l'obligation de prendre les actions légales appropriées pour le recouvrement des
+    sommes dues.
+</li>
+
+<li style="font-size: smaller;">
+    Toute la documentation requise pour l'ouverture du compte devra être complétée
+    dans les trois (3) mois suivants l'ouverture du compte. Dans le cas où les documents
+    ne parviennent pas à la Banque dans ce délai, votre compte sera automatiquement
+    clôturé après notification écrite.
+</li>
+
+<li style="font-size: smaller;">
+    <b>M. JURIDICTION COMPÉTENTE</b><br>
+    Les présentes conditions, ainsi que les Conditions Locales et accords particuliers,
+    sont régis par la loi du pays ou territoire dans lequel le compte est ouvert.
+</li>
+
+<li style="font-size: smaller;">
+    <b>N. CLAUSE DE DÉCHARGE DE RESPONSABILITÉ</b><br>
+    La Banque décline toute responsabilité quant aux fonds ou biens déposés par vous,
+    qui se révéleraient par la suite provenir de sources ou d'activités illégales.
+    Vous confirmez que les fonds ou biens déposés à la Banque ne proviennent pas
+    de sources illégales.
+</li>
+
+                            </ul>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                            
+                                </div>
+                                <div class="column">
+                                    <div style="display: flex; align-items: flex-end; gap: 10px;">
+                                        <label style="color: #333;">Lu et approuvé:</label>
+                                        <div style="border-bottom: 1px solid #333; width: 300px; height: 30px; display: inline-block;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Juridique Section -->
+
+                <div class="form-section compact-section" style="padding-bottom: 0px;">
+                    <div class="section-header">Confirmation pour les demandes assistées</div>
+                    <div class="section-content">
+                        <div class="form-row">
+                            <p style="font-size: 8px; margin-bottom: 2px;">J'accepte de respecter les termes du présent accord et reconnait qu'il m'a été lu et expliqué de manière claire et audible par un interprète conseiller clientèle</p>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="client-fingerprint">Empreinte digitale du client: </label>
+                                    <input type="text" id="client-fingerprint" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="magistrat-name">Magistrat/commissaire à l'assermentation:</label>
+                                    <input type="text" id="magistrat-name" style="height: 20px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="agent-name">Nom de l’agent clientèle:</label>
+                                    <input type="text" id="agent-name" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="interpreterAddress">Signature:</label>
+                                    <div class="signature-area" style="height: 50px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row" style="page-break-inside: avoid !important;">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="approval-date">Date d'approbation: (Jour/Mois/Année)</label>
+                                    <div class="date-container">
+                                        <div class="date-box" title="JJ"></div>
+                                        <div class="date-separator">/</div>
+                                        <div class="date-box" title="MM"></div>
+                                        <div class="date-separator">/</div>
+                                        <div class="date-box year" title="AAAA"></div>
+                                    </div>
+                                    <p class="form-note" style="margin-top:6px;">Écrivez la date au stylo dans le format JJ / MM / AAAA</p>
+                                </div>
+                                
+                                <div class="column" style="flex:0 0 auto;">
+                                    <label>Photo - à agrafer ici</label>
+                                    <div class="photo-staple">Agrafer la photo ici (45mm x 60mm)</div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                </div>
+
+                <!-- For Bank Use Only Section -->
+                <div class="form-section ">
+                    <div class="section-header">A l’usage exclusif de la Banque (Vérification et traitement)</div>
+                    <div class="section-content">
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="form-bank-account-number">Numéro de compte:</label>
+                                    <input type="text" id="form-bank-account-number" name="account_number" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="customer-id">Identifiant client:</label>
+                                    <input type="number" id="customer-id" name="customer_id" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="branch-code">Code Agence:</label>
+                                    <input type="text" id="branch-code" name="branch_code" style="height: 20px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="risk-rating">Code Guichet:</label>
+                                    <input type="text" id="emergency-contact-name" style="height: 20px; width: 100%;">
+                                </div>
+                                <div class="column">
+                                    <label for="account-officer">Personne ayant introduit:</label>
+                                    <input type="text" id="account-officer" style="height: 20px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label for="branch-code">Chargé de clientèle:</label>
+                                    <input type="text" id="branch-code" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="account-handler">Chargé de compte:</label>
+                                    <input type="text" id="account-handler" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="approved-by">Approuvé par:</label>
+                                    <input type="text" id="approved-by" style="height: 24px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Navigation Buttons Section 4 -->
+                <div class="section-nav-buttons" id="nav-section-4">
+                    <button type="button" class="btn-section-nav prev" onclick="window.prevSection()">
+                        ← Précédent (Section 3)
+                    </button>
+                    <button type="button" class="btn-section-nav" onclick="window.printForm()">
+                        ✓ Terminer & Imprimer
+                    </button>
+                </div>
+                <!-- End Section 4 -->
+                </div>
+            <!-- End All Form Sections -->
+
+                <!-- Navigation Buttons -->
+            
+
+                <!-- Add this script at the end of your document before the closing body tag -->
+                <script>
+                    // Section Navigation System
+                    (function() {
+                        let currentSection = 1;
+                        const maxSection = 4;
+                        
+                        // Initialize on page load
+                        window.addEventListener('DOMContentLoaded', function() {
+                            // Show first section by default
+                            showSection(1);
+                        });
+
+                        function showSection(sectionNum) {
+                            if (sectionNum < 1 || sectionNum > maxSection) return;
+                            
+                            // Hide all sections
+                            for (let i = 1; i <= maxSection; i++) {
+                                const el = document.getElementById('form-section-' + i);
+                                if (el) el.style.display = 'none';
+                            }
+                            
+                            // Show selected section
+                            const section = document.getElementById('form-section-' + sectionNum);
+                            if (section) {
+                                section.style.display = 'block';
+                                // Scroll to section
+                                setTimeout(() => {
+                                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }, 50);
+                            }
+                            
+                            // Update nav indicators
+                            document.querySelectorAll('.section-nav-item').forEach(item => {
+                                item.classList.remove('active');
+                                if (parseInt(item.dataset.section) === sectionNum) {
+                                    item.classList.add('active');
+                                }
+                            });
+                            
+                            currentSection = sectionNum;
+                        }
+
+                        function nextSection() {
+                            if (currentSection < maxSection) {
+                                showSection(currentSection + 1);
+                            }
+                        }
+
+                        function prevSection() {
+                            if (currentSection > 1) {
+                                showSection(currentSection - 1);
+                            }
+                        }
+
+                        // Expose to global scope
+                        window.showSection = showSection;
+                        window.nextSection = nextSection;
+                        window.prevSection = prevSection;
+                        window.currentFormSection = function() { return currentSection; };
+
+                        // Add click handlers to nav items
+                        document.addEventListener('click', function(e) {
+                            if (e.target.classList.contains('section-nav-item')) {
+                                const sectionNum = parseInt(e.target.dataset.section);
+                                showSection(sectionNum);
+                            }
+                        });
+
+                        // Handle print event
+                        window.addEventListener('beforeprint', function() {
+                            // Show all sections for printing
+                            for (let i = 1; i <= maxSection; i++) {
+                                const el = document.getElementById('form-section-' + i);
+                                if (el) el.style.display = 'block';
+                            }
+                            const nav = document.getElementById('section-navigation');
+                            if (nav) nav.style.display = 'none';
+                        });
+
+                        window.addEventListener('afterprint', function() {
+                            // Restore section view after printing
+                            showSection(currentSection);
+                            const nav = document.getElementById('section-navigation');
+                            if (nav) nav.style.display = 'flex';
+                        });
+
+                        // Also listen for print media query
+                        if (window.matchMedia) {
+                            const printMQ = window.matchMedia('print');
+                            printMQ.addEventListener('change', function(mq) {
+                                if (mq.matches) {
+                                    // Print mode
+                                    for (let i = 1; i <= maxSection; i++) {
+                                        const el = document.getElementById('form-section-' + i);
+                                        if (el) el.style.display = 'block';
+                                    }
+                                    const nav = document.getElementById('section-navigation');
+                                    if (nav) nav.style.display = 'none';
+                                } else {
+                                    // Normal mode after print
+                                    showSection(currentSection);
+                                    const nav = document.getElementById('section-navigation');
+                                    if (nav) nav.style.display = 'flex';
+                                }
+                            });
+                        }
+                    })();
+
+                    function printForm() {
+                        // Show printing indicator
+                        const printButton = document.getElementById('print-button');
+                        const originalText = printButton.innerHTML;
+                        printButton.innerHTML = '<span>Preparing...</span>';
+                        printButton.disabled = true;
+                        // Use AJAX to prepare the print version
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('POST', 'prepare-print.php', true); // Replace with your actual endpoint
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onload = function () {
+                            if (this.status >= 200 && this.status < 300) {
+                                try {
+                                    // If you want to handle a response from the server
+                                    const response = JSON.parse(xhr.responseText);
+                                    console.log('Print preparation successful:', response);
+                                    // Call the print function
+                                    window.print();
+                                    // Restore button state after printing
+                                    setTimeout(function () {
+                                        printButton.innerHTML = originalText;
+                                        printButton.disabled = false;
+                                    }, 500);
+                                } catch (e) {
+                                    console.error('Error parsing response:', e);
+                                    // Call print anyway
+                                    window.print();
+                                    printButton.innerHTML = originalText;
+                                    printButton.disabled = false;
+                                }
+                            } else {
+                                console.error('Print preparation failed');
+                                // Fallback to direct printing
+                                window.print();
+                                printButton.innerHTML = originalText;
+                                printButton.disabled = false;
+                            }
+                        };
+                        xhr.onerror = function () {
+                            console.error('Network error during print preparation');
+                            // Fallback to direct printing
+                            window.print();
+                            printButton.innerHTML = originalText;
+                            printButton.disabled = false;
+                        };
+                        // Collect form data to send to server
+                        const formData = new FormData(document.querySelector('form'));
+                        const searchParams = new URLSearchParams();
+                        for (const pair of formData) {
+                            searchParams.append(pair[0], pair[1]);
+                        }
+                        // Send the request
+                        xhr.send(searchParams.toString());
+                    }
+                    // Add print event listeners for clean up
+                    window.addEventListener('beforeprint', function () {
+                        // Prepare form for printing
+                        document.body.classList.add('printing');
+                    });
+                    window.addEventListener('afterprint', function () {
+                        // Clean up after printing
+                        document.body.classList.remove('printing');
+                    });
+                </script>
+
+                <!-- Add these additional styles for print button -->
+                <style>
+                    .btn-print {
+                        background-color: #a4c400 !important;
+                        /* Ecobank green */
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .btn-print:hover {
+                        background-color: #8ca500 !important;
+                    }
+
+                    /* Print mode styling */
+
+                    /* @media print {
+                        .button-container {
+                            display: none !important;
+                        }
+
+                        body.printing .container {
+                            box-shadow: none;
+                        }
+                    } */
+                </style>
+        </form>
+        <!-- Floating buttons (Print / Save / Back / Reset) -->
+        <button id="floatPrintBtn" class="btn btn-print btn-print-floating" onclick="printForm()" title="Imprimer"><span class="icon">🖨️</span> Imprimer</button>
+        <button id="floatSaveBtn" class="btn btn-save btn-save-floating" title="Enregistrer" type="button"><span class="icon">💾 </span>  Save</button>
+        <button id="floatBackBtn" class="btn btn-back btn-back-floating" title="Retour" type="button"><span class="icon">↩️ </span>  Back</button>
+        <button id="floatResetBtn" class="btn btn-reset btn-reset-floating" title="Réinitialiser" type="button"><span class="icon">🔄 </span>  Reset</button>
+        
+
+        <script>
+        // Floating buttons behavior for standalone HTML (and when included via PHP)
+        (function(){
+            // Back
+            var back = document.getElementById('floatBackBtn');
+            if(back){ back.addEventListener('click', function(){ if(window.history && window.history.length > 1) window.history.back(); else window.location.href = '/'; }); }
+            // Reset
+            var rst = document.getElementById('floatResetBtn');
+            if(rst){ rst.addEventListener('click', function(){ var f = document.querySelector('form'); if(f) f.reset(); var slog = document.getElementById('ecobank-save-log'); if(slog) slog.innerHTML = ''; var errs = document.querySelectorAll('.validation-error'); errs.forEach(function(n){ n.innerHTML = ''; }); }); }
+            // Save: forward to existing save handler if present (floatSave handler may be bound elsewhere)
+            var sv = document.getElementById('floatSaveBtn');
+            if(sv && !sv._bound){ sv.addEventListener('click', function(){ sv.dispatchEvent(new Event('click_internal')); }); sv._bound = true; }
+        })();
+
+        // Print helpers: try to keep printed document <= maxPages by reducing root font-size
+        (function(){
+            var maxPages = 5; // maximum pages allowed for print
+            var originalFontSize = null;
+
+            function mmToPx(mm){
+                var el = document.createElement('div');
+                el.style.height = mm + 'mm';
+                el.style.position = 'absolute';
+                el.style.visibility = 'hidden';
+                document.body.appendChild(el);
+                var px = el.getBoundingClientRect().height;
+                document.body.removeChild(el);
+                return px;
+            }
+
+            function computePages(){
+                var container = document.querySelector('.container');
+                if(!container) return 1;
+                var contentHeight = container.scrollHeight;
+                var pageHeight = mmToPx(297) - (2 * mmToPx(8)); // use 8mm margins
+                var pages = Math.ceil(contentHeight / pageHeight);
+                return pages;
+            }
+
+            function adjustForPrint(){
+                var docEl = document.documentElement;
+                var computed = window.getComputedStyle(docEl).fontSize;
+                var current = parseFloat(computed);
+                if(!originalFontSize) originalFontSize = current + 'px';
+
+                // try shrinking stepwise until it fits or min reached
+                var attempt = 0;
+                var pages = computePages();
+                while(pages > maxPages && attempt < 20 && current > 8){
+                    current = current * 0.95; // shrink by 5%
+                    docEl.style.fontSize = current + 'px';
+                    pages = computePages();
+                    attempt++;
+                }
+
+                return pages;
+            }
+
+            function restoreAfterPrint(){
+                if(originalFontSize){
+                    document.documentElement.style.fontSize = originalFontSize;
+                    originalFontSize = null;
+                }
+            }
+
+            // For manual print button
+            window.printForm = function(){
+                var pages = adjustForPrint();
+                if(pages > maxPages){
+                    var c = confirm('Le document occupera '+pages+' pages à l\'impression (max '+maxPages+'). Continuer malgré tout ?');
+                    if(!c){ restoreAfterPrint(); return; }
+                }
+                setTimeout(function(){ window.print(); }, 50);
+            };
+
+            // also bind to beforeprint/afterprint events where available
+            if('onbeforeprint' in window){
+                window.onbeforeprint = function(){ adjustForPrint(); };
+            }
+            if('onafterprint' in window){
+                window.onafterprint = function(){ restoreAfterPrint(); };
+            }
+            // matchMedia listener for browsers that support it
+            try{
+                var m = window.matchMedia('print');
+                if(m && m.addListener){
+                    m.addListener(function(mq){ if(mq.matches){ adjustForPrint(); } else { restoreAfterPrint(); } });
+                }
+            }catch(e){/* ignore */}
+        })();
+        </script>
+
+        <!-- <div class="footer">
+            <p>© 2025 Ecobank. All rights reserved.</p>
+        </div> -->
+    </div>
+</body>
+
+</html>

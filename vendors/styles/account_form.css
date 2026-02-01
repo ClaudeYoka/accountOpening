@@ -1,0 +1,536 @@
+
+        /* Consolidated Ecobank Form Styles - Optimized for Print and Screen */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+        /* Base & Reset Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', 'Montserrat', Calibri, Arial, sans-serif;
+            font-size: 9px;
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 0;
+            width: 100%;
+            margin: 0;
+        }
+
+        .container {
+            width: 210mm;
+            /* A4 width */
+            min-height: 297mm;
+            /* A4 height */
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            padding: 0;
+        }
+        form-section,
+      .section-header,
+      .section-header + .section-content,
+      .declaration {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+        /* Print Optimization */
+        @page {
+            size: A4 portrait;
+            margin: 0; /* restored original: no extra margin to preserve original print layout */
+        }
+
+        @media print {
+             .section-header,
+            .section-header + .section-content {
+                page-break-before: avoid !important;
+                page-break-after: avoid !important;
+                break-after: avoid-page !important;
+                break-before: avoid-page !important;
+            }
+            }
+
+            @media screen {
+  /* undo the mm-width on screen */
+                html, body {
+                    width: auto;
+                    height: auto;
+                }
+                /* make the container fluid up to 210mm, and center it */
+                .container {
+                    width: 100%;
+                    max-width: 210mm;
+                    margin: 0 auto;
+                }
+                }
+
+            html,
+
+            /* Keep critical elements together */
+            .section-header,
+            .section-header+.section-content {
+                page-break-inside: avoid;
+            }
+
+            /* Ensure headers are properly colored */
+            .section-header {
+                background-color: #007eb6 !important;
+                color: white !important;
+            }
+
+            .service-header {
+                background-color: #f0f7fc !important;
+            }
+
+            .btn {
+                background-color: #007eb6 !important;
+                color: white !important;
+            }
+
+            /* Ensure borders are visible */
+            input,
+            select,
+            textarea {
+                border: 1px solid #ccc !important;
+            }
+
+            /* Preserve backgrounds */
+            div[style*="background-color: #f0f7fc"],
+            .service-header {
+                background-color: #f0f7fc !important;
+            }
+
+            /* Hide print button when printing */
+            .button-container {
+                display: none !important;
+            }
+
+            /* Optimize for seamless flow */
+            .form-row,
+            .multi-column,
+            .services-row {
+                break-inside: avoid;
+            }
+        /* } */
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+        }
+
+        .logo-container svg {
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-title {
+            text-align: right;
+            color: #007eb6;
+        }
+
+        .form-title h1 {
+            font-size: 18px;
+            margin-bottom: 3px;
+            color: #333;
+        }
+
+        .form-title p {
+            font-style: italic;
+            color: #666;
+        }
+
+        /* Form Section Styles */
+        .form-section {
+            margin-bottom: 0;
+            border-bottom: 1px solid #ddd;
+            width: 100%;
+        }
+
+        .section-header {
+            background-color: #007fb6a4;
+            color: white;
+            padding: 6px 10px;
+            font-weight: bold;
+            font-size: 11px;
+            width: 100%;
+            /* border-bottom: 2px solid #a4c400; */
+        }
+
+        .section-content {
+            padding: 8px 10px;
+            background-color: white;
+            width: 100%;
+        }
+
+        /* Form Layout Elements */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 5px;
+            width: 100%;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 120px;
+            margin-bottom: 5px;
+            padding-right: 10px;
+        }
+
+        .form-group-small {
+            width: auto;
+            margin-right: 10px;
+            margin-bottom: 5px;
+        }
+
+        /* Form Controls */
+        label {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 10px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 4px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            font-size: 10px;
+            height: 22px;
+        }
+
+        /* Checkbox and Radio Styling */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            margin-bottom: 5px;
+        }
+
+        .checkbox-item input[type="checkbox"],
+        .checkbox-item input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #ccc;
+            margin-right: 4px;
+            background-color: white;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked::after,
+        .checkbox-item input[type="radio"]:checked::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            color: #007eb6;
+        }
+
+        .checkbox-item input[type="radio"] {
+            border-radius: 50%;
+        }
+
+        .checkbox-item input[type="radio"]:checked::after {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background-color: #007eb6;
+            border-radius: 50%;
+        }
+
+        .checkbox-item label {
+            display: inline;
+            margin: 0;
+            line-height: 14px;
+            vertical-align: middle;
+        }
+
+        /* Button Styles */
+        .button-container {
+            text-align: center;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+        }
+
+        .btn {
+            background-color: #007eb6;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            font-size: 11px;
+            cursor: pointer;
+            border-radius: 2px;
+            margin: 0 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #006699;
+        }
+
+        .btn-print {
+            background-color: #a4c400 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-print:hover {
+            background-color: #8ca500 !important;
+        }
+
+        /* Footer Styles */
+        .footer {
+            padding: 8px;
+            text-align: center;
+            background-color: #f0f0f0;
+            font-size: 9px;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Special Form Elements */
+        .account-number {
+            display: flex;
+        }
+
+        /* Sub-options (e.g., chéquier page counts, assurance choices) - default layout restored with slide animation */
+        .sub-options {
+            margin-left: 20px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 260ms ease, opacity 200ms ease;
+        }
+        .sub-options.open {
+            opacity: 1;
+            max-height: 400px; /* enough to contain inner options */
+        }
+
+        /* Make access checkbox rows compact and denser */
+        .access-checkbox-row.compact {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 12px;
+            align-items: center;
+        }
+        .access-checkbox-row.compact .checkbox-item {
+            margin-bottom: 4px;
+        }
+        .access-checkbox-row.compact .checkbox-item label {
+            line-height: 1.1;
+            font-size: 10px;
+        }
+
+        /* Improved print rules: readability for Engagement / Conditions and slight right shift to avoid left-edge clipping */
+        @media print {
+            /* Shift the form slightly to the right to avoid clipping at the extreme left */
+            .container { margin-left: 2mm !important; box-shadow: none !important; }
+
+            /* Slight font-size adjustment to help the form fit within ~4 pages while staying readable */
+            html, body, .container { font-size: 10px !important; }
+
+            /* Improve readability for declaration/engagement and conditions */
+            .engagement-content { color: #000 !important; font-size: 11px !important; line-height: 1.5 !important; }
+            .section-header { font-size: 13px !important; padding: 8px 10px !important; }
+            .section-content { font-size: 11px !important; line-height: 1.45 !important; }
+            .section-content li { font-size: 11px !important; line-height: 1.45 !important; margin-bottom: 6px !important; color: #000 !important; }
+
+            /* Make inputs uniform and prevent them from splitting across pages */
+            input, select, textarea { font-size: 11px !important; height: auto !important; padding: 3px !important; }
+            .form-row, .multi-column, .form-section, .section-content, .declaration, .form-group { page-break-inside: avoid !important; break-inside: avoid !important; }
+            input, textarea, select { page-break-inside: avoid !important; break-inside: avoid !important; }
+            p, li { widows: 3; orphans: 3; }
+
+            /* Ensure sub-options (chéquier/assurance) are visible in print */
+            .sub-options { display: block !important; max-height: none !important; opacity: 1 !important; }
+
+            /* keep the floating print button hidden during print */
+            .btn-print-floating { display: none !important; }
+        }
+
+        .number-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+            margin-right: 1px;
+            text-align: center;
+            line-height: 20px;
+        }
+
+        .date-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .date-box {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            text-align: center;
+            line-height: 18px;
+            margin-right: 1px;
+        }
+
+        .date-separator {
+            margin: 0 1px;
+            font-size: 10px;
+        }
+
+        .signature-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.signature-container label {
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.signature-area {
+    flex: 1;
+    height: 30px;
+}
+/* Floating print button (visible on screen, hidden on print) */
+.btn-print-floating {
+    position: fixed;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 9999;
+    padding: 10px 12px;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+    background-color: #a4c400;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-print-floating:hover {
+    box-shadow: 0 6px 14px rgba(0,0,0,0.22);
+}
+
+.btn-print-floating .icon {
+    font-size: 14px;
+}
+
+/* Save floating button (icon only by default) */
+.btn-save-floating {
+    position: fixed;
+    right: 14px;
+    top: calc(50% + 56px); /* below print button */
+    transform: translateY(-50%);
+    z-index: 9999;
+    width: 44px;
+    height: 44px;
+    padding: 8px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    background-color: #007eb6;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-save-floating:hover { box-shadow: 0 6px 14px rgba(0,0,0,0.22); }
+
+@media print {
+    .btn-save-floating { display: none !important; }
+}
+
+/* Back & Reset floating buttons */
+.btn-back-floating {
+    position: fixed;
+    right: 14px;
+    top: calc(50% - 56px); /* above print button */
+    transform: translateY(-50%);
+    z-index: 9999;
+    width: 44px;
+    height: 44px;
+    padding: 8px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    background-color: #8e44ad; /* violet distinct */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-back-floating:hover { box-shadow: 0 6px 14px rgba(0,0,0,0.22); }
+
+.btn-reset-floating {
+    position: fixed;
+    right: 14px;
+    top: calc(50% + 112px); /* below save button */
+    transform: translateY(-50%);
+    z-index: 9999;
+    width: 44px;
+    height: 44px;
+    padding: 8px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    background-color: #e67e22; /* orange distinct */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-reset-floating:hover { box-shadow: 0 6px 14px rgba(0,0,0,0.22); }
+
+@media print {
+    /* hide floating print button in print */
+    .btn-print-floating { display: none !important; }
+    .btn-back-floating, .btn-reset-floating, .btn-save-floating { display: none !important; }
+}

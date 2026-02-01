@@ -1,0 +1,699 @@
+
+        /* Consolidated Ecobank Form Styles - Optimized for Print and Screen */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+        /* Base & Reset Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', 'Montserrat', Calibri, Arial, sans-serif;
+            font-size: 9px;
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 0;
+            width: 100%;
+            margin: 0;
+        }
+
+        .container {
+            width: 210mm;
+            /* A4 width */
+            min-height: 297mm;
+            /* A4 height */
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            padding: 0;
+        }
+        form-section,
+        .section-header,
+        .section-header + .section-content,
+        .declaration {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* Print Optimization: better margins, readable text and page-fit controls */
+        @page {
+            size: A4 portrait;
+            margin: 8mm; /* preserve current left/right margins */
+        }
+
+        @media print {
+            /* Keep headings and section content together */
+            .section-header,
+            .section-header + .section-content {
+                page-break-before: avoid !important;
+                page-break-after: avoid !important;
+                break-after: avoid-page !important;
+                break-before: avoid-page !important;
+            }
+
+            /* Default: improve legibility for most content */
+            html, body, .container {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                background: #fff !important;
+                font-size: 12px !important; /* larger for readability */
+                line-height: 1.3 !important;
+            }
+
+            /* Keep 'Engagement' and 'Conditions générales' as-is for readability */
+            .engagement-content,
+            .engagement-content * {
+                font-size: 11px !important;
+                line-height: 1.5 !important;
+            }
+
+            /* Section headers slightly larger and bold */
+            .section-header { font-size: 13px !important; font-weight: 700 !important; }
+
+            /* Make content areas and labels more readable */
+            .section-content, .form-row, label, .form-section { font-size: 12px !important; }
+
+            /* Reduce visual spacing slightly to help fit pages without degrading readability */
+            .header { padding: 8px !important; }
+            .form-section { margin-bottom: 6px !important; }
+            .section-content { padding: 8px 10px !important; }
+            .form-row { margin-bottom: 6px !important; }
+
+            /* Inputs: keep compact but legible */
+            input, textarea, select { font-size: 12px !important; height: 24px !important; padding: 6px !important; }
+
+            /* Ensure Bank signature is large and clearly visible (For Bank Use Only) */
+            #approved-signature, input#approved-signature {
+                height: 140px !important;
+                min-height: 140px !important;
+                font-size: 12px !important;
+                padding: 8px !important;
+                border: 1px solid #111 !important;
+                box-sizing: border-box !important;
+            }
+
+            /* Also ensure generic signature areas are larger */
+            .signature-area { height: 140px !important; min-height: 140px !important; }
+            /* Approval date input printed larger */
+            #approval-date { height: 40px !important; width: 220px !important; font-size: 14px !important; padding:6px !important; box-sizing: border-box !important; }
+            .signature-container { page-break-inside: avoid !important; }
+
+            /* Photo staple: keep with bank-use section; avoid page breaks and align to the right */
+            .photo-staple { page-break-inside: avoid !important; display: inline-block !important; vertical-align: top !important; margin: 0 6mm !important; float: right !important; }
+
+            /* Enlarge approval date boxes for printing (handwriting) */
+            .date-box { width: 48px !important; height: 48px !important; line-height: 48px !important; font-size: 16px !important; margin-right: 6px !important; box-sizing: border-box !important; }
+            .date-box.year { width: 88px !important; }
+
+            /* Hide interactive UI elements */
+            .button-container, .btn-print-floating, .btn-save-floating { display: none !important; }
+
+            /* Avoid breaking table rows across pages */
+            tr { page-break-inside: avoid !important; }
+            table { page-break-inside: avoid !important; }
+        }
+
+            @media screen {
+  /* undo the mm-width on screen */
+                html, body {
+                    width: auto;
+                    height: auto;
+                }
+                /* make the container fluid up to 210mm, and center it */
+                .container {
+                    width: 100%;
+                    max-width: 210mm;
+                    margin: 0 auto;
+                }
+                }
+
+            html,
+            /* body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0 !important;
+    padding: 0 !important;
+                background-color: white;
+            } */
+
+            /* .container {
+                width: 100%;
+                min-height: 100%;
+            margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+            } */
+
+            /* Keep critical elements together */
+            .section-header,
+            .section-header+.section-content {
+                page-break-inside: avoid;
+            } */
+
+            /* Ensure headers are properly colored */
+            .section-header {
+                background-color: #007eb6 !important;
+                color: white !important;
+            }
+
+            .service-header {
+                background-color: #f0f7fc !important;
+            }
+
+            .btn {
+                background-color: #007eb6 !important;
+                color: white !important;
+            }
+
+            /* Ensure borders are visible */
+            input,
+            select,
+            textarea {
+                border: 1px solid #ccc !important;
+            }
+
+            /* Preserve backgrounds */
+            div[style*="background-color: #f0f7fc"],
+            .service-header {
+                background-color: #f0f7fc !important;
+            }
+
+            /* Hide print button when printing */
+            .button-container {
+                display: none !important;
+            }
+
+            /* Optimize for seamless flow */
+            .form-row,
+            .multi-column,
+            .services-row {
+                break-inside: avoid;
+            }
+        /* } */
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+        }
+
+        .logo-container svg {
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-title {
+            text-align: right;
+            color: #007eb6;
+        }
+
+        .form-title h1 {
+            font-size: 18px;
+            margin-bottom: 3px;
+            color: #333;
+        }
+
+        .form-title p {
+            font-style: italic;
+            color: #666;
+        }
+
+        /* Form Section Styles */
+        .form-section {
+            margin-bottom: 0;
+            border-bottom: 1px solid #ddd;
+            width: 100%;
+        }
+
+        .section-header {
+            background-color: #007fb6a4;
+            color: white;
+            padding: 6px 10px;
+            font-weight: bold;
+            font-size: 11px;
+            width: 100%;
+            /* border-bottom: 2px solid #a4c400; */
+        }
+
+        .section-content {
+            padding: 8px 10px;
+            background-color: white;
+            width: 100%;
+        }
+
+        /* Form Layout Elements */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 5px;
+            width: 100%;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 120px;
+            margin-bottom: 5px;
+            padding-right: 10px;
+        }
+
+        .form-group-small {
+            width: auto;
+            margin-right: 10px;
+            margin-bottom: 5px;
+        }
+
+        /* Form Controls */
+        label {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 10px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 4px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            font-size: 10px;
+            height: 22px;
+        }
+
+        /* compact input used in print layout to save space */
+        .compact-input { height: 20px !important; font-size: 10.5px !important; padding: 3px !important; }
+
+        /* Checkbox and Radio Styling */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            margin-bottom: 5px;
+        }
+
+        .checkbox-item input[type="checkbox"],
+        .checkbox-item input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #ccc;
+            margin-right: 4px;
+            background-color: white;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked::after,
+        .checkbox-item input[type="radio"]:checked::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            color: #007eb6;
+        }
+
+        .checkbox-item input[type="radio"] {
+            border-radius: 50%;
+        }
+
+        .checkbox-item input[type="radio"]:checked::after {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background-color: #007eb6;
+            border-radius: 50%;
+        }
+
+        .checkbox-item label {
+            display: inline;
+            margin: 0;
+            line-height: 14px;
+            vertical-align: middle;
+        }
+
+        /* Button Styles */
+        .button-container {
+            text-align: center;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+        }
+
+        .btn {
+            background-color: #007eb6;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            font-size: 11px;
+            cursor: pointer;
+            border-radius: 2px;
+            margin: 0 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #006699;
+        }
+
+        .btn-print {
+            background-color: #a4c400 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-save {
+            background-color: #0d556b !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-back {
+            background-color: #0d556b !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-reset {
+            background-color: #0d556b !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-print:hover {
+            background-color: #8ca500 !important;
+        }
+
+        /* Footer Styles */
+        .footer {
+            padding: 8px;
+            text-align: center;
+            background-color: #f0f0f0;
+            font-size: 9px;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Special Form Elements */
+        .account-number {
+            display: flex;
+        }
+
+        .number-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+            margin-right: 1px;
+            text-align: center;
+            line-height: 20px;
+        }
+
+        .date-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .date-box {
+            width: 30px;
+            height: 34px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            text-align: center;
+            line-height: 34px;
+            margin-right: 4px;
+        }
+
+        /* Photo placeholder to staple customer's photo */
+        .photo-staple {
+            width: 45mm;
+            height: 60mm;
+            border: 2px dashed #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 12px;
+            text-align: center;
+            page-break-inside: avoid;
+            background: #fff;
+        }
+
+        .date-separator {
+            margin: 0 1px;
+            font-size: 10px;
+        }
+
+        .signature-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.signature-container label {
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.signature-area {
+    flex: 1;
+    height: 30px;
+    border: 1px solid #ccc;
+}
+
+        /* Text Formatting */
+        .declaration {
+            font-size: 9px;
+            line-height: 1.3;
+            margin-bottom: 10px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .declaration ol {
+            padding-left: 12px;
+        }
+
+        .declaration li {
+            margin-bottom: 1px;
+        }
+
+        .form-note {
+            font-size: 8px;
+            font-style: italic;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        /* Layout Columns */
+        .multi-column {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .column {
+            flex: 1;
+            min-width: 150px;
+            padding-right: 15px;
+            margin-bottom: 5px;
+        }
+
+        .personal-info-section .column {
+            min-width: 180px;
+        }
+
+        .compact-section .section-content {
+            padding: 4px 10px;
+        }
+
+        .compact-margin {
+            margin-bottom: 5px;
+        }
+
+        /* Field Layout Helpers */
+        .field-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .field-label {
+            width: 120px;
+            flex-shrink: 0;
+            font-size: 10px;
+        }
+
+        .field-input {
+            flex: 1;
+        }
+
+        /* Branding Styles */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #007eb6;
+        }
+
+        strong,
+        label strong,
+        .section-content label strong {
+            color: #06151b;
+            font-weight: bold;
+        }
+
+        label.highlight {
+            color: #007eb6;
+            font-weight: bold;
+        }
+
+        /* Employment Section Styling */
+        div[style*="background-color: #f0f7fc"] h3 {
+            color: #007eb6;
+            border-bottom: 1px solid #a4c400;
+            padding-bottom: 4px;
+        }
+
+        /* Services Styling */
+        .section-title {
+            font-weight: bold;
+            font-size: 10px;
+            margin-bottom: 8px;
+            color: #007eb6;
+        }
+
+        /* Services Row */
+        .services-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .service-box {
+            flex: 1;
+            min-width: 150px;
+            /* Reduced from 180px for better space usage */
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .service-header {
+            background-color: #f0f7fc;
+            padding: 5px 8px;
+            border-bottom: 2px solid #007eb6;
+            display: flex;
+            align-items: center;
+        }
+
+        .service-header label {
+            font-weight: 400;
+            font-size: 10px;
+            color: black;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .service-header {
+            background-color: #ffffff !important;
+        }
+
+        .service-products {
+            padding: 5px 8px;
+        }
+
+        /* Optimize vertical space in product lists */
+        .service-products .checkbox-item {
+            margin-bottom: 2px;
+            padding-left: 3px;
+        }
+
+        /* Other Services */
+        .other-services-row {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .other-services-input {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .other-services-input input[type="text"] {
+            height: 20px;
+            padding: 4px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            font-size: 9px;
+            margin-left: 5px;
+            max-width: 200px;
+        }
+
+        /* Access Methods */
+        .access-methods {
+            margin-top: 10px;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 8px;
+        }
+
+        .access-break {
+            margin-top: 5px;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 8px;
+        }
+
+        .access-checkbox-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 5px;
+        }
+        .header {
+    page-break-after: avoid;
+}
+        .section-header {
+    page-break-after: avoid;
+}
