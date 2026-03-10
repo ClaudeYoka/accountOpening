@@ -45,12 +45,12 @@
 							<div class="select-role">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn">
-                                        <input type="radio" name="options" id="cso" value="cso" required>
+                                        <input type="radio" name="options" id="cso" value="cso" checked>
                                         <div class="icon"><img src="vendors/images/person.svg" class="svg" alt=""></div>
                                         <span>Je suis</span>CSO
                                     </label>
                                     <label class="btn">
-                                        <input type="radio" name="options" id="CI" value="CI" required>
+                                        <input type="radio" name="options" id="CI" value="CI" >
                                         <div class="icon"><img src="vendors/images/briefcase.svg" class="svg" alt=""></div>
                                         <span>Je suis</span>CI
                                     </label>

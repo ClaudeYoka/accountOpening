@@ -48,12 +48,12 @@
 					// Définir les agences avec leurs infos
 					$agencies = array(
 						array('code' => 'T31', 'name' => 'Agence T31 - SIEGE', 'icon' => 'fa-building', 'color' => '#D32F2F'),
-						array('code' => 'T32', 'name' => 'Agence T32 - LUMUMBA', 'icon' => 'fa-user-tie', 'color' => '#1976D2'),
-						array('code' => 'T33', 'name' => 'Agence T33 - ATLANTIC', 'icon' => 'fa-cogs', 'color' => '#0aadb3'),
-						array('code' => 'T34', 'name' => 'Agence T34 - POTO-POTO', 'icon' => 'fa-users', 'color' => '#F57C00'),
-						array('code' => 'T38', 'name' => 'Agence T38 - DOLISIE', 'icon' => 'fa-cogs', 'color' => '#f8cd0f'),
-						array('code' => 'T39', 'name' => 'Agence T39 - OUESSO', 'icon' => 'fa-cogs', 'color' => '#7B1FA2'),
-						array('code' => 'T41', 'name' => 'Agence T41 - BACONGO', 'icon' => 'fa-briefcase', 'color' => '#388E3C'),
+						array('code' => 'T32', 'name' => 'Agence T32 - LUMUMBA', 'icon' => 'fa-building', 'color' => '#1976D2'),
+						array('code' => 'T33', 'name' => 'Agence T33 - ATLANTIC', 'icon' => 'fa-building', 'color' => '#0aadb3'),
+						array('code' => 'T34', 'name' => 'Agence T34 - POTO-POTO', 'icon' => 'fa-building', 'color' => '#F57C00'),
+						array('code' => 'T38', 'name' => 'Agence T38 - DOLISIE', 'icon' => 'fa-building', 'color' => '#f8cd0f'),
+						array('code' => 'T39', 'name' => 'Agence T39 - OUESSO', 'icon' => 'fa-building', 'color' => '#7B1FA2'),
+						array('code' => 'T41', 'name' => 'Agence T41 - BACONGO', 'icon' => 'fa-building', 'color' => '#388E3C'),
 
 					);
 
@@ -72,6 +72,34 @@
 							<div class="widget-icon">
 								<div class="icon" style="background: linear-gradient(135deg, <?php echo $agency['color']; ?>20 0%, <?php echo $agency['color']; ?>10 100%); border-radius: 12px; padding: 15px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
 									<i class="icon-copy fa <?php echo $agency['icon']; ?>" style="font-size: 24px; color: <?php echo $agency['color']; ?>;"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php } ?>
+			</div>
+
+			<div class="title pb-20" style="margin-top: 30px;">
+				<h2 class="h3 mb-0">DEMANDES DE CHÉQUIERS PAR AGENCE</h2>
+			</div>
+			<div class="row pb-10">
+				<?php
+					foreach ($agencies as $agency) {
+						$chequier_query = mysqli_query($conn, "SELECT COUNT(*) AS chequier_count FROM tblcompte WHERE branch_code = '" . $agency['code'] . "'");
+						$chequier_result = mysqli_fetch_assoc($chequier_query);
+						$chequier_count = $chequier_result['chequier_count'];
+				?>
+				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
+					<div class="card-box height-100-p widget-style1 agency-card" style="border-top: 4px solid <?php echo $agency['color']; ?>; transition: all 0.3s ease; opacity: 0.85;">
+						<div class="d-flex flex-wrap align-items-center justify-content-between">
+							<div class="widget-data">
+								<div class="h4 mb-0" style="color: <?php echo $agency['color']; ?>; font-weight: 700; font-size: 28px;"><?php echo $chequier_count; ?></div>
+								<div class="weight-600 font-14" style="color: #666;"><?php echo $agency['name']; ?> - Chéquiers</div>
+							</div>
+							<div class="widget-icon">
+								<div class="icon" style="background: linear-gradient(135deg, <?php echo $agency['color']; ?>20 0%, <?php echo $agency['color']; ?>10 100%); border-radius: 12px; padding: 15px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+									<i class="icon-copy fa fa-file-text" style="font-size: 24px; color: <?php echo $agency['color']; ?>;"></i>
 								</div>
 							</div>
 						</div>

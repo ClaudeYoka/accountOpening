@@ -97,7 +97,7 @@ function extract_chequier_info($input) {
 function create_notification($conn, $emp_id_recipient, $message, $type = 'info') {
     $timestamp = date('Y-m-d H:i:s');
     $insert_query = "INSERT INTO tblnotification (emp_id, message, type, created_at, is_read)
-                     VALUES ('$emp_id_recipient', '$message', '$type', '$timestamp', 0)";
+                        VALUES ('$emp_id_recipient', '$message', '$type', '$timestamp', 0)";
     return mysqli_query($conn, $insert_query);
 }
 

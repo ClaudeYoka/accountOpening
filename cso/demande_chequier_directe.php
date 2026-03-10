@@ -85,6 +85,22 @@
                                 </div>
                             </div>
 
+                            <!-- NUMÉRO DE TÉLÉPHONE -->
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Numéro de Téléphone <span style="color: red;">*</span></label>
+                                    <input type="tel" id="phone_number" name="phone_number" class="form-control" required placeholder="Ex: +242 06 123 45 67" autocomplete="off">
+                                </div>
+                            </div>
+
+                            <!-- EMAIL -->
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Email <span style="color: red;">*</span></label>
+                                    <input type="email" id="email" name="email" class="form-control" required placeholder="Ex: client@example.com" autocomplete="off">
+                                </div>
+                            </div>
+
                             <!-- NOMBRE DE FEUILLES (CHÉQUIERS) -->
                             <div class="col-md-12 col-sm-12">
                                 <div class="form-group">
@@ -128,7 +144,7 @@
                                         </div>
                                         <div class="col-md-6 col-sm-12">
                                             <input type="number" id="manual_quantity" name="manual_quantity" class="form-control" min="1" placeholder="Saisir une quantité " autocomplete="off">
-                                            <small class="form-text text-muted"><i class="fa fa-info-circle"></i> Laissez vide si la quantité est d'un chéquier </small>
+                                            <small class="form-text text-muted"><i class="fa fa-info-circle"></i> Laissez vide si la quantité est d'un seul chéquier </small>
                                         </div>
                                     </div>
                                 </div>
@@ -163,12 +179,17 @@
         // Mettre à jour la quantité automatique
         function updateQuantity() {
             const chequerChecked = Array.from(document.querySelectorAll('input[name="chequier"]:checked')).length;
-            document.getElementById('autoQuantity').textContent = chequerChecked;
+            const manualQuantity = document.getElementById('manual_quantity').value;
+            const displayQuantity = manualQuantity ? parseInt(manualQuantity) : chequerChecked;
+            document.getElementById('autoQuantity').textContent = displayQuantity;
         }
 
         document.querySelectorAll('.chequier-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', updateQuantity);
         });
+
+        // Écouter les changements de quantité manuelle
+        document.getElementById('manual_quantity').addEventListener('input', updateQuantity);
 
         // Soumettre le formulaire
         document.getElementById('chequerForm').addEventListener('submit', function(e) {
@@ -195,11 +216,14 @@
                 account_number: document.getElementById('account_number').value,
                 rib_key: document.getElementById('rib_key').value,
                 address: document.getElementById('address').value,
+                phone_number: document.getElementById('phone_number').value,
+                email: document.getElementById('email').value,
                 chequier: chequerChecked,
-                quantity: quantityToUse
+                quantity: quantityToUse,
+                status: 'En Cours'
             };
 
-            if (!confirm('✓ Êtes-vous sûr de vouloir soumettre cette demande de chéquier ?\n\nClient: ' + formData.client_name + '\nCompte: ' + formData.account_number + '\nQuantité: ' + quantityToUse)) {
+            if (!confirm('✓ Êtes-vous sûr de vouloir soumettre cette demande de chéquier ?\n\nClient: ' + formData.client_name + '\nTéléphone: ' + formData.phone_number + '\nEmail: ' + formData.email + '\nCompte: ' + formData.account_number + '\nQuantité: ' + quantityToUse)) {
                 return;
             }
 

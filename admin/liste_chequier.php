@@ -1,20 +1,6 @@
 <?php include('includes/header.php')?>
 <?php include('../includes/session.php')?>
 
-<?php
-	if (isset($_GET['delete'])) {
-		$delete = $_GET['delete'];
-		$sql = "DELETE FROM tblemployees where emp_id = ".$delete;
-		$result = mysqli_query($conn, $sql);
-		if ($result) {
-			echo "<script>alert('staff Supprimé avec succès');</script>";
-			echo "<script type='text/javascript'> document.location = 'staff.php'; </script>";
-			
-		}
-	}
-
-?>
-
 <body>
 
 	<div class="pre-loader">
@@ -40,47 +26,37 @@
 
 	<div class="main-container">
 		<div class="pd-ltr-20">
-			<div class="title pb-20">
-				<h2 class="h3 mb-0">NOMBRE DE COMPTES PAR AGENCE</h2>
+			<div class="page-header">
+				<div class="row">
+					<div class="col-md-6 col-sm-12">
+						<div class="title">
+							<h4>Demandes de Chéquiers</h4>
+						</div>
+						<nav aria-label="breadcrumb" role="navigation">
+							<ol class="breadcrumb">
+								<li class="breadcrumb-item"><a href="index">Dashboard</a></li>
+								<li class="breadcrumb-item active" aria-current="page">Liste des Demandes de Chéquiers</li>
+							</ol>
+						</nav>
+					</div>
+				</div>
 			</div>
-			<div class="row pb-10">
-				<?php
+
+            <?php
 					// Définir les agences avec leurs infos
 					$agencies = array(
 						array('code' => 'T31', 'name' => 'Agence T31 - SIEGE', 'icon' => 'fa-building', 'color' => '#D32F2F'),
-						array('code' => 'T32', 'name' => 'Agence T32 - LUMUMBA', 'icon' => 'fa-user-tie', 'color' => '#1976D2'),
-						array('code' => 'T33', 'name' => 'Agence T33 - ATLANTIC', 'icon' => 'fa-cogs', 'color' => '#0aadb3'),
-						array('code' => 'T34', 'name' => 'Agence T34 - POTO-POTO', 'icon' => 'fa-users', 'color' => '#F57C00'),
-						array('code' => 'T38', 'name' => 'Agence T38 - DOLISIE', 'icon' => 'fa-cogs', 'color' => '#f8cd0f'),
-						array('code' => 'T39', 'name' => 'Agence T39 - OUESSO', 'icon' => 'fa-cogs', 'color' => '#7B1FA2'),
-						array('code' => 'T41', 'name' => 'Agence T41 - BACONGO', 'icon' => 'fa-briefcase', 'color' => '#388E3C'),
+						array('code' => 'T32', 'name' => 'Agence T32 - LUMUMBA', 'icon' => 'fa-building', 'color' => '#1976D2'),
+						array('code' => 'T33', 'name' => 'Agence T33 - ATLANTIC', 'icon' => 'fa-building', 'color' => '#0aadb3'),
+						array('code' => 'T34', 'name' => 'Agence T34 - POTO-POTO', 'icon' => 'fa-building', 'color' => '#F57C00'),
+						array('code' => 'T38', 'name' => 'Agence T38 - DOLISIE', 'icon' => 'fa-building', 'color' => '#f8cd0f'),
+						array('code' => 'T39', 'name' => 'Agence T39 - OUESSO', 'icon' => 'fa-building', 'color' => '#7B1FA2'),
+						array('code' => 'T41', 'name' => 'Agence T41 - BACONGO', 'icon' => 'fa-building', 'color' => '#388E3C'),
 
 					);
-
-					foreach ($agencies as $agency) {
-						$query = mysqli_query($conn, "SELECT COUNT(*) AS account_number FROM ecobank_form_submissions WHERE branch_code = '" . $agency['code'] . "'");
-						$result = mysqli_fetch_assoc($query);
-						$count = $result['account_number'];
 				?>
-				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-					<div class="card-box height-100-p widget-style1 agency-card" style="border-top: 4px solid <?php echo $agency['color']; ?>; transition: all 0.3s ease;">
-						<div class="d-flex flex-wrap align-items-center justify-content-between">
-							<div class="widget-data">
-								<div class="h4 mb-0" style="color: <?php echo $agency['color']; ?>; font-weight: 700; font-size: 28px;"><?php echo $count; ?></div>
-								<div class="weight-600 font-14" style="color: #666;"><?php echo $agency['name']; ?></div>
-							</div>
-							<div class="widget-icon">
-								<div class="icon" style="background: linear-gradient(135deg, <?php echo $agency['color']; ?>20 0%, <?php echo $agency['color']; ?>10 100%); border-radius: 12px; padding: 15px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-									<i class="icon-copy fa <?php echo $agency['icon']; ?>" style="font-size: 24px; color: <?php echo $agency['color']; ?>;"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<?php } ?>
-			</div>
 
-			<div class="title pb-20" style="margin-top: 30px;">
+            <div class="title pb-20" style="margin-top: 30px;">
 				<h2 class="h3 mb-0">DEMANDES DE CHÉQUIERS PAR AGENCE</h2>
 			</div>
 			<div class="row pb-10">
@@ -95,7 +71,7 @@
 						<div class="d-flex flex-wrap align-items-center justify-content-between">
 							<div class="widget-data">
 								<div class="h4 mb-0" style="color: <?php echo $agency['color']; ?>; font-weight: 700; font-size: 28px;"><?php echo $chequier_count; ?></div>
-								<div class="weight-600 font-14" style="color: #666;"><?php echo $agency['name']; ?> - Chéquiers</div>
+								<div class="weight-600 font-14" style="color: #666;"><?php echo $agency['name']; ?></div>
 							</div>
 							<div class="widget-icon">
 								<div class="icon" style="background: linear-gradient(135deg, <?php echo $agency['color']; ?>20 0%, <?php echo $agency['color']; ?>10 100%); border-radius: 12px; padding: 15px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
@@ -144,10 +120,10 @@
 					</div>
 				</div>
 				<div class="pb-20">
-					<table class="data-table table stripe hover nowrap">
+					<table class="table hover multiple-select-row data-table-export nowrap">
 						<thead>
 							<tr>
-								<th class="table-plus">AGENCE</th>
+                                <th class="table-plus">AGENCE</th>
 								<th>NOM DU CLIENT</th>
 								<th>CSO</th>
 								<th>TYPES DE CHÉQUIERS</th>
@@ -156,7 +132,7 @@
 								<th>DATE</th>
 							</tr>
 						</thead>
-						<tbody id="cso-table-body">
+						<tbody id="chequier-table-body">
 							<?php
 								$current_year = date('Y');
 								$current_month = date('m');
@@ -238,9 +214,9 @@
 										<?php echo htmlspecialchars($row['access']); ?>
 									</span>
 								</td>
-								<td><?php echo date('d/m/Y', strtotime($row['date_enregistrement'])); ?></td>
+								<td><?php echo date('d/m/Y H:i', strtotime($row['date_enregistrement'])); ?></td>
 							</tr>
-							<?php } ?>
+							<?php } ?>  
 						</tbody>
 					</table>
 				</div>
@@ -308,19 +284,6 @@
 			});
 			filterYear.addEventListener('keypress', function(e) {
 				if (e.key === 'Enter') filterBtn.click();
-			});
-
-			// Ajouter la classe d'animation hover aux cartes
-			const agencyCards = document.querySelectorAll('.agency-card');
-			agencyCards.forEach(card => {
-				card.addEventListener('mouseenter', function() {
-					this.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.12)';
-					this.style.transform = 'translateY(-4px)';
-				});
-				card.addEventListener('mouseleave', function() {
-					this.style.boxShadow = '';
-					this.style.transform = '';
-				});
 			});
 		});
 	</script>

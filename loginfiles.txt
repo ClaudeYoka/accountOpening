@@ -1,5 +1,0 @@
-Email 						Password	ROLE
-
-gafa3@gmail.com					bridget    	staff
-knath@gmail.com				      	richard    	HOD
-admin@gmial.com					admin123   	ADMIN/REGISTRA

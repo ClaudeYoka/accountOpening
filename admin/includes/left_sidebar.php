@@ -20,11 +20,11 @@
 
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle menu-item-ecobank">
-							<span class="micon fa fa-user-o"></span><span class="mtext">Personnels</span>
+							<span class="micon fa fa-user-o"></span><span class="mtext">Utilisateurs</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="add_staff">Ajouter un personnel</a></li>
-							<li><a href="staff">Gestion du personnel</a></li>
+							<li><a href="add_staff">Add user</a></li>
+							<li><a href="staff">Gestion user</a></li>
 						</ul>
 					</li>
 
@@ -43,12 +43,17 @@
 					<li>
 						<div class="dropdown-divider"></div>
 					</li>
-					
-					<li>
-						<a href="historique" class="dropdown-toggle no-arrow menu-item-ecobank">
-							<span class="micon fi-calendar"></span><span class="mtext">Historique Comptes</span>
+
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle menu-item-ecobank">
+							<span class="micon fa fa-book"></span><span class="mtext">Historique</span>
 						</a>
+						<ul class="submenu">
+							<li><a href="ecobank_submissions_list">Liste Comptes</a></li>
+							<li><a href="liste_chequier">Liste Chéquiers</a></li>
+						</ul>
 					</li>
+					
 
 					<li>
 						<div class="dropdown-divider"></div>

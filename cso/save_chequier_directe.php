@@ -34,12 +34,15 @@ try {
     $account_number = $data['account_number'] ?? '';
     $rib_key = $data['rib_key'] ?? '';
     $address = $data['address'] ?? '';
+    $phone_number = $data['phone_number'] ?? '';
+    $email = $data['email'] ?? '';
     $chequier = $data['chequier'] ?? array();
+    $status = $data['status'] ?? 'En Cours';
     $manual_quantity = $data['quantity'] ?? null;
     $emp_id = $_SESSION['emp_id'];
 
     // Validations
-    if (empty($client_name) || empty($branch_code) || empty($account_number) || empty($rib_key) || empty($address) || empty($chequier)) {
+    if (empty($client_name) || empty($branch_code) || empty($account_number) || empty($rib_key) || empty($address) || empty($phone_number) || empty($email) || empty($chequier)) {
         throw new Exception('Tous les champs sont obligatoires');
     }
 
@@ -75,17 +78,19 @@ try {
         branch_code,
         nip,
         etabliss,
+        access,
         date_enregistrement
     ) VALUES (
         '" . mysqli_real_escape_string($conn, $emp_id) . "',
         '" . mysqli_real_escape_string($conn, $client_name) . "',
         '" . mysqli_real_escape_string($conn, $type_compte) . "',
-        '" . mysqli_real_escape_string($conn, $account_number) . "',
-        '" . mysqli_real_escape_string($conn, $account_number . '@ecobank.cg') . "',
+        '" . mysqli_real_escape_string($conn, $phone_number) . "',
+        '" . mysqli_real_escape_string($conn, $email) . "',
         '" . mysqli_real_escape_string($conn, $address) . "',
         '" . mysqli_real_escape_string($conn, $branch_code) . "',
         '" . mysqli_real_escape_string($conn, $rib_key) . "',
         '" . intval($quantity) . "',
+        '" . mysqli_real_escape_string($conn, $status) . "',
         NOW()
     )";
 
