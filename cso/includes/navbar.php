@@ -25,7 +25,7 @@
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="staff_profile"><i class="dw dw-user1"></i> Profil</a>
 						<a class="dropdown-item" href="change_password"><i class="dw dw-help"></i> Reset Password</a>
-						<a class="dropdown-item" href="../logout"><i class="dw dw-logout"></i> Déconnexion</a>
+						<a class="dropdown-item text-danger" href="../logout"><i class="dw dw-logout"></i> Déconnexion</a>
 					</div>
 				</div>
 			</div>
@@ -38,7 +38,7 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="documentsModalLabel">Impression</h5>
+				<h5 class="modal-title" id="documentsModalLabel">Impression Formulaires</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -46,9 +46,10 @@
 			<div class="modal-body text-center">
 				<p>Choisir le formulaire à Imprimer</p>
 				<div class="mb-3">
-					<a href="formulaire_ouverture_compte_tuteur.html" class="btn btn-primary btn-block" role="button">Formulaire Ouverture Compte Mineur</a>
-					<a href="formulaire_produits" class="btn btn-primary btn-block" role="button">Formulaire Autres Produits</a>
-					<a href="rib" class="btn btn-primary btn-block" role="button">RIB</a>
+					<a href="formulaire_ouverture_compte_tuteur.html" class="btn btn-primary btn-block" role="button">Formulaire Tuteur (Compte Mineur)</a>
+					<a href="formulaire_produits" class="btn btn-primary btn-block" role="button">Formulaire Produits</a>
+					<a href="bic_personne_physique" class="btn btn-primary btn-block" role="button">Formulaire BIC Personne Physique</a>
+					<a href="rib" class="btn btn-primary btn-block" role="button">Relevé Identité Bancaire (RIB)</a>
 				</div>
 			</div>
 			<div class="modal-footer justify-content-center">

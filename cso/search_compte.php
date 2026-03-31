@@ -3,6 +3,7 @@
 // Returns JSON
 include('../includes/config.php');
 include('../includes/session.php');
+include('../includes/flexcube_helpers.php');
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -18,22 +19,41 @@ if (!$term) {
     exit;
 }
 
-// Allow searching by account_number in addition to id, id_num and nip
+// First try Flexcube API
+$flexcube_result = fetchAccountFromFlexcube($term);
+if ($flexcube_result) {
+    echo json_encode([
+        'status' => 'ok',
+        'source' => 'flexcube',
+        'data' => $flexcube_result
+    ]);
+    exit;
+}
+
+// Fallback to local database (ecobank_form_submissions)
+$db_result = fetchAccountWithFallback($term, $conn);
+if ($db_result && isset($db_result['data']) && $db_result['data']) {
+    echo json_encode([
+        'status' => 'ok',
+        'source' => $db_result['source'],
+        'data' => $db_result['data']
+    ]);
+    exit;
+}
+
+// Try legacy tblCompte table as last resort
 $columns = ['id','account_number','id_num','nip'];
-$intColumns = ['id']; // treat as integers when the search term is numeric
+$intColumns = ['id'];
 $found = false;
-$response = ['status' => 'not_found', 'message' => "Compte n'existe pas ou  pas encore enregistré dans IBPS."];
 
 foreach ($columns as $col) {
     $sql = "SELECT * FROM tblCompte WHERE $col = ? LIMIT 1";
     if ($stmt = mysqli_prepare($conn, $sql)) {
-        // Choose bind type according to column and input
         if (in_array($col, $intColumns, true) && ctype_digit($term)) {
             $bindType = 'i';
             $param = (int)$term;
         } else {
             $bindType = 's';
-            // sanitize string input minimally; prepared statements will protect SQL injection
             $param = filter_var($term, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         }
 
@@ -42,15 +62,15 @@ foreach ($columns as $col) {
         $res = mysqli_stmt_get_result($stmt);
         if ($res && $row = mysqli_fetch_assoc($res)) {
             $found = true;
-            // Return the row as JSON
-            $response = ['status' => 'ok', 'data' => $row];
+            echo json_encode(['status' => 'ok', 'source' => 'tblcompte', 'data' => $row]);
             mysqli_stmt_close($stmt);
-            break;
+            exit;
         }
         mysqli_stmt_close($stmt);
     }
 }
 
-echo json_encode($response);
+// Not found anywhere
+echo json_encode(['status' => 'not_found', 'message' => "Compte n'existe pas ou pas encore enregistré dans IBPS."]);
 exit;
 ?>

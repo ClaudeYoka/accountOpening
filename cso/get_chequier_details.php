@@ -15,7 +15,8 @@ $query = "SELECT
             tc.id,
             tc.firstname as client_name,
             tc.branch_code,
-            tc.mobile1 as account_number,
+            tc.account_number as account_number,
+            tc.mobile1 as phone,
             tc.email,
             tc.type_compte,
             tc.adr_rue as address,
@@ -23,6 +24,10 @@ $query = "SELECT
             tc.etabliss as quantity,
             tc.access as status,
             tc.date_enregistrement as created_at,
+            tc.titre as has_card,
+            tc.objectif as fees,
+            tc.devise_pref as enrolled,
+            tc.ident_etud as serial_number,
             tb.DepartmentName as agency_name
         FROM tblcompte tc
         LEFT JOIN tbldepartments tb ON tc.branch_code COLLATE utf8mb4_general_ci = tb.DepartmentShortName COLLATE utf8mb4_general_ci

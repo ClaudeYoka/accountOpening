@@ -94,9 +94,14 @@
 								<option value="">Tous</option>
 								<?php 
 									$current_month = date('m');
+									$month_names = [
+										1 => 'janvier', 2 => 'février', 3 => 'mars', 4 => 'avril',
+										5 => 'mai', 6 => 'juin', 7 => 'juillet', 8 => 'août',
+										9 => 'septembre', 10 => 'octobre', 11 => 'novembre', 12 => 'décembre'
+									];
 									for ($m = 1; $m <= 12; $m++) {
 										$selected = ($m == $current_month) ? 'selected' : '';
-										echo '<option value="' . str_pad($m, 2, '0', STR_PAD_LEFT) . '" ' . $selected . '>' . strftime('%B', mktime(0, 0, 0, $m, 1)) . '</option>';
+										echo '<option value="' . str_pad($m, 2, '0', STR_PAD_LEFT) . '" ' . $selected . '>' . $month_names[$m] . '</option>';
 									}
 								?>
 							</select>

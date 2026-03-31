@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Formulaire d'ouverture de compte (Information Tuteur) - HTML Reproduction</title>
+<title>Formulaire d'ouverture de compte (Information Tuteur)</title>
 <style>
   :root {
     --brand-blue: #106aa2;
@@ -88,7 +88,7 @@
     /* Ensure SVG/logo color prints correctly where supported */
     svg { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   }
-</style> 
+</style>
 </head>
 <body>
   <div class="page">
@@ -110,7 +110,7 @@
       </div>
       <div class="title">
         <h1>FORMULAIRE D’OUVERTURE DE COMPTE</h1>
-        <h2>( INFORMATION TUTEUR )</h2>
+        <h2>( INFORMATIONS TUTEUR )</h2>
       </div>
     </header>
 
@@ -121,41 +121,40 @@
         <div class="field">
           <label>TITRE</label>
           <div class="inline-checks">
-            <label><input type="checkbox"> Mr.</label>
-            <label><input type="checkbox"> Mme.</label>
-            <label><input type="checkbox"> Mlle.</label>
-            <label><input type="checkbox"> Dr.</label>
-            <label><input type="checkbox"> Prof.</label>
-            <label><input type="checkbox"> AUTRES</label>
+            <label><input type="checkbox" name="titre[]" value="Mr"> Mr.</label>
+            <label><input type="checkbox" name="titre[]" value="Mme"> Mme.</label>
+            <label><input type="checkbox" name="titre[]" value="Dr"> Dr.</label>
+            <label><input type="checkbox" name="titre[]" value="Prof"> Prof.</label>
+            <label><input type="checkbox" name="titre[]" value="AUTRES"> AUTRES</label>
           </div>
         </div>
 
         <div class="grid-3">
-          <div class="field"><label>NOM(S)</label><input type="text"></div>
-          <div class="field"><label>PRENOM(S)</label><input type="text"></div>
-          <div class="field"><label>AUTRES (PRENOMS)</label><input type="text"></div>
+          <div class="field"><label>NOM(S)</label><input type="text" name="noms"></div>
+          <div class="field"><label>PRENOM(S)</label><input type="text" name="prenoms"></div>
+          <div class="field"><label>AUTRES (PRENOMS)</label><input type="text" name="autresprenoms"></div>
         </div>
 
         <div class="grid-3">
-          <div class="field"><label>NATIONALITE</label><input type="text"></div>
-          <div class="field"><label>LIEU DE NAISSANCE</label><input type="text"></div>
-          <div class="field"><label>PAYS</label><input type="text"></div>
+          <div class="field"><label>NATIONALITE</label><input type="text" name="nationalite"></div>
+          <div class="field"><label>LIEU DE NAISSANCE</label><input type="text" name="lieudenaissance"></div>
+          <div class="field"><label>PAYS</label><input type="text" name="pays"></div>
         </div>
 
         <div class="grid-3">
-          <div class="field"><label>DATE DE NAISSANCE</label><input type="date"></div>
+          <div class="field"><label>DATE DE NAISSANCE</label><input type="date" name="datedenaissance"></div>
           <div class="field"><label>GENRE</label>
             <div class="inline-checks">
-              <label><input type="checkbox"> ♂</label>
-              <label><input type="checkbox"> ♀</label>
+              <label><input type="checkbox" name="genre[]" value="Homme">Homme</label>
+              <label><input type="checkbox" name="genre[]" value="Femme">Femme</label>
             </div>
           </div>
           <div class="field"><label>SITUATION MATRIMONIALE</label>
             <div class="inline-checks">
-              <label><input type="checkbox"> CELIBATAIRE</label>
-              <label><input type="checkbox"> MARIE(E)</label>
-              <label><input type="checkbox"> AUTRES</label>
-              <input type="text" placeholder="(veuillez préciser)" style="width: 180px;">
+              <label><input type="checkbox" name="situationmatrimoniale[]" value="CELIBATAIRE"> CELIBATAIRE</label>
+              <label><input type="checkbox" name="situationmatrimoniale[]" value="MARIE(E)"> MARIE(E)</label>
+              <label><input type="checkbox" name="situationmatrimoniale[]" value="AUTRES"> AUTRES</label>
+              <input type="text" name="situationmatrimoniale_1" placeholder="(veuillez préciser)" style="width: 180px;">
             </div>
           </div>
         </div>
@@ -163,21 +162,21 @@
         <div class="grid-3">
           <div class="field"><label>TYPE DE PIECE</label>
             <div class="inline-checks">
-              <label><input type="checkbox"> PASSEPORT</label>
-              <label><input type="checkbox"> CNI</label>
-              <label><input type="checkbox"> ACTE DE NAISSANCE</label>
-              <label><input type="checkbox"> AUTRES</label>
-              <input type="text" placeholder="(veuillez préciser)" style="width: 180px;">
+              <label><input type="checkbox" name="typedepiece[]" value="PASSEPORT"> PASSEPORT</label>
+              <label><input type="checkbox" name="typedepiece[]" value="CNI"> CNI</label>
+              <label><input type="checkbox" name="typedepiece[]" value="ACTE DE NAISSANCE"> ACTE DE NAISSANCE</label>
+              <label><input type="checkbox" name="typedepiece[]" value="AUTRES"> AUTRES</label>
+              <input type="text" name="type_piece_autres" placeholder="(veuillez préciser)" style="width: 180px;">
             </div>
           </div>
-          <div class="field"><label>N° PIECE</label><input type="text"></div>
-          <div class="field"><label>N° IDENTIFICATION FISCALE</label><input type="text"></div>
+          <div class="field"><label>N° PIECE</label><input type="text" name="npiece"></div>
+          <div class="field"><label>N° IDENTIFICATION FISCALE</label><input type="text" name="nidentificationfiscale"></div>
         </div>
 
         <div class="grid-3">
-          <div class="field"><label>DATE DE DELIVRANCE</label><input type="date" name="date_delivrance"></div>
-          <div class="field"><label>DATE D’EXPIRATION</label><input type="date" name="date_expiration"></div>
-          <div class="field"><label>NUMÉRO DE RÉFÉRENCE (OPTIONNEL)</label><input type="text" name="reference" placeholder="(optionnel)"></div>
+          <div class="field"><label>DATE DE DELIVRANCE</label><input type="date" name="datededelivrance"></div>
+          <div class="field"><label>DATE D’EXPIRATION</label><input type="date" name="dateexpiration"></div>
+          <div class="field"><label>NUMÉRO DE RÉFÉRENCE (OPTIONNEL)</label><input type="text" name="numero_de_referenceoptionnel" placeholder="(optionnel)"></div>
         </div>
       </div>
     </section>
@@ -187,19 +186,19 @@
       <div class="section-title">CORDONNES</div>
       <div class="section-body">
         <div class="grid-3">
-          <div class="field"><label>TELEPHONE</label><input type="text"></div>
-          <div class="field"><label>DEUXIEME TELEPHONE</label><input type="text"></div>
-          <div class="field"><label>ADRESSE MAIL</label><input type="email"></div>
+          <div class="field"><label>TELEPHONE</label><input type="text" name="telephone"></div>
+          <div class="field"><label>DEUXIEME TELEPHONE</label><input type="text" name="deuxiemetelephone"></div>
+          <div class="field"><label>ADRESSE MAIL</label><input type="email" name="adressemail"></div>
         </div>
         <div class="grid-3">
-          <div class="field"><label>NATIONALITE</label><input type="text"></div>
-          <div class="field"><label>CODE POSTAL</label><input type="text"></div>
-          <div class="field"><label>VILLE</label><input type="text"></div>
+          <div class="field"><label>NATIONALITE</label><input type="text" name="nationalite_1"></div>
+          <div class="field"><label>CODE POSTAL</label><input type="text" name="codepostal"></div>
+          <div class="field"><label>VILLE</label><input type="text" name="ville_1"></div>
         </div>
         <div class="grid-3">
-          <div class="field"><label>ADRESSE LEGALE</label><input type="text"></div>
-          <div class="field"><label>VILLE</label><input type="text"></div>
-          <div class="field"><label>PAYS</label><input type="text"></div>
+          <div class="field"><label>ADRESSE LEGALE</label><input type="text" name="adresselegale"></div>
+          <div class="field"><label>VILLE</label><input type="text" name="ville_2"></div>
+          <div class="field"><label>PAYS</label><input type="text" name="pays_2"></div>
         </div>
       </div>
     </section>
@@ -210,21 +209,21 @@
       <div class="section-body kyc">
         <!-- SALARIE -->
         <div class="card">
-          <div class="card-head"><input type="checkbox"/> SALARIE</div>
+          <div class="card-head"><input type="checkbox" name="salarie" value="1"/> SALARIE</div>
           <div class="card-body">
-            <div class="field"><label>NOM DE L’EMPLOYEUR</label><input type="text"></div>
+            <div class="field"><label>NOM DE L’EMPLOYEUR</label><input type="text" name="nomdelemployeur"></div>
             <div class="field"><label>TYPE DE CONTRAT</label>
               <div class="inline-checks">
-                <label><input type="checkbox"> PERMANENT</label>
-                <label><input type="checkbox"> CONTRATIQUE</label>
+                <label><input type="checkbox" name="typecontrat[]" value="PERMANENT"> PERMANENT</label>
+                <label><input type="checkbox" name="typecontrat[]" value="CONTRATIQUE"> CONTRATIQUE</label>
               </div>
             </div>
-            <div class="field"><label>FONCTION</label><input type="text"></div>
+            <div class="field"><label>FONCTION</label><input type="text" name="fonction"></div>
             <div class="field"><label>ESTIMATION REVENU MENSUEL</label>
               <div class="range-checks">
-                <label><input type="checkbox"> MOINS DE 200 000 XAF</label>
-                <label><input type="checkbox"> 200 000 XAF – 500 000 XAF</label>
-                <label><input type="checkbox"> SUPERIEURE A 500 000 XAF</label>
+                <label><input type="checkbox" name="estimation_revenu_salarie[]" value="MOINS DE 200 000 XAF"> MOINS DE 200 000 XAF</label>
+                <label><input type="checkbox" name="estimation_revenu_salarie[]" value="200 000 XAF – 500 000 XAF"> 200 000 XAF – 500 000 XAF</label>
+                <label><input type="checkbox" name="estimation_revenu_salarie[]" value="SUPERIEURE A 500 000 XAF"> SUPERIEURE A 500 000 XAF</label>
               </div>
             </div>
           </div>
@@ -232,16 +231,16 @@
 
         <!-- ENTREPRISE -->
         <div class="card">
-          <div class="card-head"><input type="checkbox"/> ENTREPRISE</div>
+          <div class="card-head"><input type="checkbox" name="entreprise" value="1"/> ENTREPRISE</div>
           <div class="card-body">
-            <div class="field"><label>NOM DE L’ENTREPRISE</label><input type="text"></div>
-            <div class="field"><label>N° RCCM</label><input type="text"></div>
-            <div class="field"><label>NATURE DE L’ACTIVITE</label><input type="text"></div>
+            <div class="field"><label>NOM DE L’ENTREPRISE</label><input type="text" name="nomentreprise"></div>
+            <div class="field"><label>N° RCCM</label><input type="text" name="rccm"></div>
+            <div class="field"><label>NATURE DE L’ACTIVITE</label><input type="text" name="natureactivite"></div>
             <div class="field"><label>ESTIMATION REVENU MENSUEL</label>
               <div class="range-checks">
-                <label><input type="checkbox"> MOINS DE 500 000 XAF</label>
-                <label><input type="checkbox"> 500 000 XAF – 1 000 000 XAF</label>
-                <label><input type="checkbox"> SUPERIEURE A 1 000 000 XAF</label>
+                <label><input type="checkbox" name="estimation_revenu_entreprise[]" value="MOINS DE 500 000 XAF"> MOINS DE 500 000 XAF</label>
+                <label><input type="checkbox" name="estimation_revenu_entreprise[]" value="500 000 XAF – 1 000 000 XAF"> 500 000 XAF – 1 000 000 XAF</label>
+                <label><input type="checkbox" name="estimation_revenu_entreprise[]" value="SUPERIEURE A 1 000 000 XAF"> SUPERIEURE A 1 000 000 XAF</label>
               </div>
             </div>
           </div>
@@ -249,17 +248,17 @@
 
         <!-- ETUDIANTE / AUTRES -->
         <div class="card">
-          <div class="card-head"><input type="checkbox"/> ETUDIANTE</div>
+          <div class="card-head"><input type="checkbox" name="etudiante" value="1"/> ETUDIANTE</div>
           <div class="card-body">
-            <div class="field"><label>NOM DE L INSTRUCTION</label><input type="text"></div>
-            <div class="field"><label>N° CARTE ETUDIANT</label><input type="text"></div>
+            <div class="field"><label>NOM DE L INSTRUCTION</label><input type="text" name="nomdelinstruction"></div>
+            <div class="field"><label>N° CARTE ETUDIANT</label><input type="text" name="ncarteetudiant"></div>
             <hr style="border:0;border-top:1px solid #e3e8ee;margin:12px 0">
-            <div class="field"><label>AUTRES</label><input type="text" placeholder="PRECISER L’ACTIVITE"></div>
+            <div class="field"><label>AUTRES</label><input type="text" name="autres_1" placeholder="PRECISER L’ACTIVITE"></div>
             <div class="field"><label>ESTIMATION REVENU MENSUEL</label>
               <div class="range-checks">
-                <label><input type="checkbox"> MOINS DE 500 000 XAF</label>
-                <label><input type="checkbox"> 500 000 XAF – 1 000 000 XAF</label>
-                <label><input type="checkbox"> SUPERIEURE A 1 000 000 XAF</label>
+                <label><input type="checkbox" name="estimation_revenu_etudiante[]" value="MOINS DE 500 000 XAF"> MOINS DE 500 000 XAF</label>
+                <label><input type="checkbox" name="estimation_revenu_etudiante[]" value="500 000 XAF – 1 000 000 XAF"> 500 000 XAF – 1 000 000 XAF</label>
+                <label><input type="checkbox" name="estimation_revenu_etudiante[]" value="SUPERIEURE A 1 000 000 XAF"> SUPERIEURE A 1 000 000 XAF</label>
               </div>
             </div>
           </div>
@@ -267,14 +266,47 @@
       </div>
     </section>
 
-</form> <br>
+  <!-- PERSONNE A CONTACTER EN CAS DE BESOIN -->
+  <section class="section">
+      <div class="section-title">PERSONNE À CONTACTER EN CAS DE BESOIN</div>
+      <div class="section-body">
+          <div class="grid-2">
+              <div class="field"><label>NOM(S) ET PRÉNOM(S)</label><input type="text" id="contact_name" /></div>
+              <div class="field"><label>ADRESSE</label><input type="text" id="contact_address" /></div>
+          </div>
+          <div class="grid-3">
+              <div class="field"><label>LIEN DE PARENTÉ</label><input type="text" id="contact_relationship" /></div>
+              <div class="field"><label>N° TÉL</label><input type="text" id="contact_phone" /></div>
+              <div class="field"><label>EMAIL</label><input type="email" id="contact_email" /></div>
+          </div>
+          <div class="grid-2">
+              <div class="field"><label>FLUX DE REVENU</label><input type="text" id="contact_income_source" /></div>
+              <div class="field"><label>AVEZ-VOUS UN COMPTE DANS UNE AUTRE BANQUE ?</label>
+                  <div class="inline-checks">
+                      <label><input type="radio" name="has_other_bank_account" value="1" /> OUI</label>
+                      <label><input type="radio" name="has_other_bank_account" value="0" checked /> NON</label>
+                  </div>
+              </div>
+          </div>
+          <div class="grid-2">
+              <div class="field"><label>VEUILLEZ DONNER LES INFORMATIONS SUR LA/LES PERSONNES QUI VOUS A/ONT INTRODUIT</label><input type="text" id="other_bank_person_name" /></div>
+              <div class="field"><label>ADRESSE</label><input type="text" id="other_bank_person_address" /></div>
+          </div>
+          <div class="field"><label>PRIEZ D'INDIQUER LE NOM DE VOS AUTRES BANQUES</label><input type="text" id="other_bank_details" /></div>
+      </div>
+  </section>
+
+<section class="section">
     <div class="disclaimer">
-      <strong>  DECLARATION ET CONSENTEMENT DU TUTEUR :</strong><br>
-      Je soussigné(e) ___________________________________________________________, certifie que les informations fournies dans ce formulaire sont exactes et complètes à ma connaissance.
+      <strong>  DECLARATION ET CONSENTEMENT DU TUTEUR :</strong><br> <br>
+      Je soussigné(e) ______________________________________________________________________, certifie que les informations fournies dans ce formulaire sont exactes et complètes à ma connaissance
+      à la date d'ouverture du compte. J'ai également pris connaissance des termes et conditions de compte ainsi que les clauses contenues dans "Conditions Générales de Compte" du formulaire d'ouverture de compte.
       Je comprends que toute fausse déclaration peut entraîner le refus de l'ouverture du compte ou la fermeture ultérieure de celui-ci.
       J'autorise la vérification des informations fournies et accepte les termes et conditions de la banque concernant l'ouverture et l'utilisation du compte.
     </div>
+</section>
 
+</form>
   <div class="fab-container no-print" aria-hidden="true">
     <button id="save-btn" class="fab save">Enregistrer</button>
     <button id="print-btn" class="fab print">🖨️ Imprimer</button>
@@ -288,6 +320,19 @@
 
       function collectFormData(){
         var obj = {};
+
+        // champs ajoutés pour contact d'urgence
+        obj.contact_name = document.getElementById('contact_name')?.value || '';
+        obj.contact_address = document.getElementById('contact_address')?.value || '';
+        obj.contact_relationship = document.getElementById('contact_relationship')?.value || '';
+        obj.contact_phone = document.getElementById('contact_phone')?.value || '';
+        obj.contact_email = document.getElementById('contact_email')?.value || '';
+        obj.contact_income_source = document.getElementById('contact_income_source')?.value || '';
+        obj.has_other_bank_account = document.querySelector('input[name="has_other_bank_account"]:checked')?.value || '0';
+        obj.other_bank_person_name = document.getElementById('other_bank_person_name')?.value || '';
+        obj.other_bank_person_address = document.getElementById('other_bank_person_address')?.value || '';
+        obj.other_bank_details = document.getElementById('other_bank_details')?.value || '';
+
         // iterate over each field container
         document.querySelectorAll('.section-body .field').forEach(function(field){
           var labelEl = field.querySelector('label');

@@ -1,0 +1,26 @@
+# Fichiers sensibles
+credentials.php
+*.log
+debug.log
+save_ecobank_form_debug.log
+uploads/
+vendor/
+node_modules/
+.idea/
+*.tmp
+*.bak
+# Autres
+.env
+.env.local
+config.local.php
+db/*.sql
+db/LOGINFILES.txt
+docs/private/
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+# OS
+.DS_Store
+Thumbs.db

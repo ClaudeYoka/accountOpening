@@ -3,17 +3,38 @@
 <?php
 if(isset($_POST['new_update']))
 {
+    // Validation du mot de passe
+    $newpassword = $_POST['newpassword'];
+    $errors = [];
+
+    // Validation du mot de passe
+    if (empty($newpassword)) {
+        $errors[] = "Le mot de passe est requis";
+    } elseif (strlen($newpassword) < 8) {
+        $errors[] = "Le mot de passe doit contenir au moins 8 caractères";
+    } elseif (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/", $newpassword)) {
+        $errors[] = "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule et un chiffre";
+    }
+
+    if (!empty($errors)) {
+        echo "<script>alert('" . implode("\\n", $errors) . "');</script>";
+        return;
+    }
+
 	$empid=$session_id;
-	$hashePassword=md5($_POST['newpassword']); 
+	$hashePassword=password_hash($newpassword, PASSWORD_DEFAULT);
 
 
-    $result = mysqli_query($conn,"UPDATE tblemployees set Password='$hashePassword' where emp_id='$session_id'         
-		")or die(mysqli_error());
+    $stmt = mysqli_prepare($conn, "UPDATE tblemployees SET Password=? WHERE emp_id=?");
+    mysqli_stmt_bind_param($stmt, "ss", $hashePassword, $session_id);
+    $result = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
     if ($result) {
      	echo "<script>alert('Mot de passe modifer avec succès');</script>";
      	echo "<script type='text/javascript'> document.location = 'staff_profile.php'; </script>";
 	} else{
-	  die(mysqli_error());
+	  die(mysqli_error($conn));
    }
 
 }
@@ -30,13 +51,16 @@ if (isset($_POST["update_image"])) {
 		echo "<script>alert('Please Select Picture to Update');</script>";
 	}
 
-    $result = mysqli_query($conn,"update tblemployees set location='$location' where emp_id='$session_id'         
-		")or die(mysqli_error());
+    $stmt = mysqli_prepare($conn, "UPDATE tblemployees SET location=? WHERE emp_id=?");
+    mysqli_stmt_bind_param($stmt, "ss", $location, $session_id);
+    $result = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
     if ($result) {
      	echo "<script>alert('Photo de profil Modifier avec succès');</script>";
      	echo "<script type='text/javascript'> document.location = 'staff_profile.php'; </script>";
 	} else{
-	  die(mysqli_error());
+	  die(mysqli_error($conn));
    }
 }
 
@@ -88,8 +112,13 @@ if (isset($_POST["update_image"])) {
 					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
 						<div class="pd-20 card-box height-100-p">
 
-							<?php $query= mysqli_query($conn,"SELECT * from tblemployees LEFT JOIN tbldepartments ON tblemployees.Department = tbldepartments.DepartmentShortName where emp_id = '$session_id'")or die(mysqli_error());
+							<?php
+								$stmt = mysqli_prepare($conn, "SELECT * FROM tblemployees LEFT JOIN tbldepartments ON tblemployees.Department = tbldepartments.DepartmentShortName WHERE emp_id = ?");
+								mysqli_stmt_bind_param($stmt, "s", $session_id);
+								mysqli_stmt_execute($stmt);
+								$query = mysqli_stmt_get_result($stmt);
 								$row = mysqli_fetch_array($query);
+								mysqli_stmt_close($stmt);
 							?>
 
 							<div class="profile-photo">
@@ -116,14 +145,14 @@ if (isset($_POST["update_image"])) {
 									</div>
 								</form>
 							</div>
-							<h5 class="text-center h5 mb-0"><?php echo $row['FirstName']. " " .$row['LastName']; ?></h5>
-							<p class="text-center text-muted font-14"><?php echo $row['DepartmentName']; ?></p>
+							<h5 class="text-center h5 mb-0"><?php echo htmlspecialchars($row['FirstName'], ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($row['LastName'], ENT_QUOTES, 'UTF-8'); ?></h5>
+							<p class="text-center text-muted font-14"><?php echo htmlspecialchars($row['DepartmentName'], ENT_QUOTES, 'UTF-8'); ?></p>
 							<div class="profile-info">
 								<h5 class="mb-20 h5 text-blue">Informations Personnels</h5>
 								<ul>
 									<li>
 										<span>Email :</span>
-										<?php echo $row['EmailId']; ?>
+										<?php echo htmlspecialchars($row['EmailId'], ENT_QUOTES, 'UTF-8'); ?>
 									</li>
 
 								</ul>
@@ -149,8 +178,12 @@ if (isset($_POST["update_image"])) {
 														<div class="col-md-12"><h4 class="text-blue h5 mb-20">Modifier vos infos personnelles</h4></div>
 
 														<?php
-                                                            $query = mysqli_query($conn,"select * from tblemployees where emp_id = '$session_id' ");
+                                                            $stmt = mysqli_prepare($conn, "SELECT * FROM tblemployees WHERE emp_id = ?");
+                                                            mysqli_stmt_bind_param($stmt, "s", $session_id);
+                                                            mysqli_stmt_execute($stmt);
+                                                            $query = mysqli_stmt_get_result($stmt);
                                                             $row = mysqli_fetch_array($query);
+                                                            mysqli_stmt_close($stmt);
 														?>
 
 														<div class="col-md-6 col-sm-12">

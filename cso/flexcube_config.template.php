@@ -105,7 +105,7 @@ define('FLEXCUBE_FALLBACK_TO_LOCAL_DB', true);
 if (!function_exists('init_flexcube')) {
     function init_flexcube() {
         // Inclure le service
-        $flexcube_path = __DIR__ . '/includes/flexcube_helpers.php';
+        $flexcube_path = __DIR__ . '/../includes/flexcube_helpers.php';
         if (file_exists($flexcube_path)) {
             include_once($flexcube_path);
             

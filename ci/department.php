@@ -17,18 +17,54 @@
 <?php
  if(isset($_POST['add']))
 {
-	 $deptname=$_POST['departmentname'];
-	$deptshortname=$_POST['departmentshortname'];
+    // Validation des données de département
+    $deptname = trim($_POST['departmentname']);
+    $deptshortname = trim($_POST['departmentshortname']);
 
-     $query = mysqli_query($conn,"select * from tbldepartments where DepartmentName = '$deptname'");
-	 $count = mysqli_num_rows($query);
-     
-     if ($count > 0){ 
+    $errors = [];
+
+    // Validation du nom de département
+    if (empty($deptname)) {
+        $errors[] = "Le nom du département est requis";
+    } elseif (strlen($deptname) < 2 || strlen($deptname) > 100) {
+        $errors[] = "Le nom du département doit contenir entre 2 et 100 caractères";
+    } elseif (!preg_match("/^[a-zA-ZÀ-ÿ0-9\s\-&]+$/", $deptname)) {
+        $errors[] = "Le nom du département contient des caractères invalides";
+    }
+
+    // Validation du nom court de département
+    if (empty($deptshortname)) {
+        $errors[] = "Le nom court du département est requis";
+    } elseif (strlen($deptshortname) < 2 || strlen($deptshortname) > 10) {
+        $errors[] = "Le nom court doit contenir entre 2 et 10 caractères";
+    } elseif (!preg_match("/^[A-Z0-9\-]+$/", $deptshortname)) {
+        $errors[] = "Le nom court ne peut contenir que des lettres majuscules, chiffres et tirets";
+    }
+
+    if (!empty($errors)) {
+        echo "<script>alert('" . implode("\\n", $errors) . "');</script>";
+        return;
+    }
+
+    // Échapper les données pour l'affichage HTML
+    $deptname = htmlspecialchars($deptname, ENT_QUOTES, 'UTF-8');
+    $deptshortname = htmlspecialchars(strtoupper($deptshortname), ENT_QUOTES, 'UTF-8');
+
+    $stmt = mysqli_prepare($conn, "SELECT * FROM tbldepartments WHERE DepartmentName = ?");
+    mysqli_stmt_bind_param($stmt, "s", $deptname);
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
+    $count = mysqli_num_rows($query);
+    mysqli_stmt_close($stmt);
+
+     if ($count > 0){
      	echo "<script>alert('Ce Division existe déjà dans la base de donnée');</script>";
       }
       else{
-        $query = mysqli_query($conn,"INSERT into tbldepartments (DepartmentName, DepartmentShortName)
-  		 values ('$deptname', '$deptshortname') ") ; 
+        $stmt = mysqli_prepare($conn, "INSERT INTO tbldepartments (DepartmentName, DepartmentShortName) VALUES (?, ?)");
+        mysqli_stmt_bind_param($stmt, "ss", $deptname, $deptshortname);
+        $query = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
 
 		if ($query) {
 			echo "<script>alert('Division ajouté avec succès');</script>";

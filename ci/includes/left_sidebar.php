@@ -38,10 +38,14 @@
 						<div class="dropdown-divider"></div>
 					</li>
 					
-					<li>
-						<a href="demande_chequier" class="dropdown-toggle no-arrow menu-item-ecobank">
-							<span class="micon fa fa-check-square-o"></span><span class="mtext">Demande chèques</span>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle menu-item-ecobank">
+							<span class="micon fa fa-check-square-o"></span><span class="mtext">Chequiers</span>
 						</a>
+						<ul class="submenu">
+							<li><a href="demande_chequier">Demandes chèques</a></li>
+							<li><a href="historique_demande_chequier">Historique Demandes</a></li>
+						</ul>
 					</li>
 
 					<li>

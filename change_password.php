@@ -1,20 +1,47 @@
 <?php
 session_start();
 include('includes/config.php');
+include('includes/audit_logger.php');
+include('includes/flash.php');
 
 if(isset($_POST['change_password'])) {
+    // Validation du mot de passe
     $new_password = $_POST['new_password'];
+
+    $errors = [];
+
+    // Validation du mot de passe
+    if (empty($new_password)) {
+        $errors[] = "Le mot de passe est requis";
+    } elseif (strlen($new_password) < 8) {
+        $errors[] = "Le mot de passe doit contenir au moins 8 caractères";
+    } elseif (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/", $new_password)) {
+        $errors[] = "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule et un chiffre";
+    }
+
+    if (!empty($errors)) {
+        set_flash_message(implode("<br>", $errors), 'error');
+        header('Location: change_password.php');
+        exit;
+    }
+
     $emp_id = $_SESSION['alogin'];
 
     // Hasher le mot de passe avec password_hash
     $hashedPassword = password_hash($new_password, PASSWORD_DEFAULT);
 
     // Mettre à jour le mot de passe et le statut
-    $sql = "UPDATE tblemployees SET Password='$hashedPassword', password_changed=1 WHERE emp_id='$emp_id'";
-    mysqli_query($conn, $sql);
+    $stmt = mysqli_prepare($conn, "UPDATE tblemployees SET Password=?, password_changed=1 WHERE emp_id=?");
+    mysqli_stmt_bind_param($stmt, "ss", $hashedPassword, $emp_id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
 
-    echo "<script>alert('Mot de passe changé avec succès.');</script>";
-    echo "<script type='text/javascript'> document.location = 'index.php'; </script>";
+    // Log password change
+    audit_log_user_action($conn, 'password_changed', $emp_id);
+
+    set_flash_message('Mot de passe changé avec succès.', 'success');
+    header('Location: index.php');
+    exit;
 } 
 ?>
 
@@ -26,9 +53,9 @@ if(isset($_POST['change_password'])) {
 	<title>Changer Mot de passe</title>
 
 	<!-- Site favicon -->
-	<link rel="logo1" sizes="180x180" href="vendors/images/logo1.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="vendors/images/logo1.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="vendors/images/logo1.png">
+	<link rel="ecobank-bg" sizes="180x180" href="vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="vendors/images/ecobank-bg.png">
 
 	<!-- Mobile Specific Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -67,6 +94,7 @@ if(isset($_POST['change_password'])) {
 		</div>
 	</div>
 
+    <?php render_flash_message(); ?>
     <div class="login-wrap d-flex align-items-center flex-wrap justify-content-center">
 		<div class="container">
 			<div class="row align-items-center">

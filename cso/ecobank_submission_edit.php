@@ -2,6 +2,7 @@
 // ecobank_submission_edit.php
 include('../includes/session.php');
 include('../includes/config.php');
+include('../includes/audit_helpers.php');
 
 function debug_log_local($msg){
     $path = __DIR__ . '/save_ecobank_form_debug.log';
@@ -107,8 +108,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($bind as $k => $v) $tmp[$k] = &$bind[$k];
             call_user_func_array([$stmt, 'bind_param'], $tmp);
             $ok = mysqli_stmt_execute($stmt);
-            if ($ok) $messages[] = 'Mise à jour enregistrée.';
-            else $messages[] = 'Erreur lors de la mise à jour: ' . mysqli_stmt_error($stmt);
+            if ($ok) {
+                $messages[] = 'Mise à jour enregistrée.';
+                // Audit logging for ecobank form edit
+                log_admin_action('edit_ecobank_submission', $id, [
+                    'updated_fields' => array_keys($candidates),
+                    'old_data' => $data,
+                    'new_data' => $updatedData
+                ]);
+            } else $messages[] = 'Erreur lors de la mise à jour: ' . mysqli_stmt_error($stmt);
             mysqli_stmt_close($stmt);
         } else {
             $messages[] = 'Préparation de la mise à jour impossible: ' . mysqli_error($conn);
@@ -145,7 +153,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($row['data'])) { $dec = json_decode($row['data'], true); if ($dec !== null) $data = $dec; }
 }
 
-?><!doctype html>
+?>
+<!doctype html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">

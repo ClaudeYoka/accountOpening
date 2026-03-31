@@ -11,6 +11,9 @@
     width: 100%;
 }
 
+.notification-icon { width:36px; display:flex; align-items:center; justify-content:center; }
+.notification-list ul li { display:flex; align-items:center; gap:8px; }
+
 .notification-list ul li .delete-notification {
     position: relative; /* Garder le positionnement relatif */
     margin-left: 10px; /* Espacement à gauche */
@@ -32,12 +35,13 @@
 .notification-content {
     flex: 1;
     margin-left: 10px;
-    font-size: 10px; /* Réduction de la taille de la police */
+    font-size: 12px;
 }
 
 .notification-content h3 {
-    font-size: 14px; /* Taille de police pour le titre de la notification */
+    font-size: 13px; /* Taille de police pour le titre de la notification */
     margin: 0; /* Supprimer la marge par défaut */
+    font-weight:600;
 }
 
 .notification-content span {

@@ -119,7 +119,10 @@ if (!$linkedCompte && !empty($row['mobile'])) {
         <p style="margin-top:12px;">Compte lié trouvé: <a class="btn btn-sm btn-primary" href="view_compte.php?id=<?php echo $linkedCompte; ?>">Voir le compte #<?php echo $linkedCompte; ?></a></p>
     <?php endif; ?>
 
-    <p style="margin-top:20px;"><a class="btn" href="ecobank_submissions_list.php">Retour à la liste</a> &nbsp; <a class="btn" href="ecobank_submission_edit.php?id=<?php echo $row['id']; ?>">Éditer (si autorisé)</a></p>
+    <p style="margin-top:20px;">
+        <a class="btn" href="ecobank_submissions_list.php">Retour à la liste</a> &nbsp;
+        <!-- <a class="btn" href="ecobank_submission_edit.php?id=<?php echo $row['id']; ?>">Éditer (si autorisé)</a> -->
+    </p>
 </div>
 <?php include('includes/scripts.php'); ?>
 </body>

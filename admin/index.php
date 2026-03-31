@@ -1,15 +1,24 @@
 <?php include('includes/header.php')?>
 <?php include('../includes/session.php')?>
+<?php include('../includes/audit_logger.php')?>
+<?php include('../includes/audit_helpers.php')?>
+<?php include('monitoring_notification.php')?>
 
 <?php
+	// Initialize audit logging for admin dashboard
+	init_admin_audit_logging($conn, 'admin_dashboard');
+
 	if (isset($_GET['delete'])) {
 		$delete = $_GET['delete'];
 		$sql = "DELETE FROM tblemployees where emp_id = ".$delete;
 		$result = mysqli_query($conn, $sql);
 		if ($result) {
+			// Log user deletion 
+			log_admin_user_management($conn, 'deleted', $delete);
+
 			echo "<script>alert('staff Supprimé avec succès');</script>";
 			echo "<script type='text/javascript'> document.location = 'staff.php'; </script>";
-			
+
 		}
 	}
 
@@ -58,16 +67,16 @@
 					);
 
 					foreach ($agencies as $agency) {
-						$query = mysqli_query($conn, "SELECT COUNT(*) AS account_number FROM ecobank_form_submissions WHERE branch_code = '" . $agency['code'] . "'");
+						$query = mysqli_query($conn, "SELECT COUNT(*) AS account_number FROM ecobank_form_submissions WHERE branch_code = '" . $agency['code'] . "' AND YEAR(created_at) = YEAR(CURDATE())");
 						$result = mysqli_fetch_assoc($query);
 						$count = $result['account_number'];
 				?>
 				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-					<div class="card-box height-100-p widget-style1 agency-card" style="border-top: 4px solid <?php echo $agency['color']; ?>; transition: all 0.3s ease;">
+					<div class="card-box height-100-p widget-style1 agency-card" style="border-top: 4px solid <?php echo htmlspecialchars($agency['color'], ENT_QUOTES, 'UTF-8'); ?>; transition: all 0.3s ease;">
 						<div class="d-flex flex-wrap align-items-center justify-content-between">
 							<div class="widget-data">
-								<div class="h4 mb-0" style="color: <?php echo $agency['color']; ?>; font-weight: 700; font-size: 28px;"><?php echo $count; ?></div>
-								<div class="weight-600 font-14" style="color: #666;"><?php echo $agency['name']; ?></div>
+								<div class="h4 mb-0" style="color: <?php echo htmlspecialchars($agency['color'], ENT_QUOTES, 'UTF-8'); ?>; font-weight: 700; font-size: 28px;"><?php echo $count; ?></div>
+								<div class="weight-600 font-14" style="color: #666;"><?php echo htmlspecialchars($agency['name'], ENT_QUOTES, 'UTF-8'); ?></div>
 							</div>
 							<div class="widget-icon">
 								<div class="icon" style="background: linear-gradient(135deg, <?php echo $agency['color']; ?>20 0%, <?php echo $agency['color']; ?>10 100%); border-radius: 12px; padding: 15px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
@@ -78,6 +87,76 @@
 					</div>
 				</div>
 				<?php } ?>
+			</div>
+
+			<!-- Widget de Monitoring Rapide -->
+			<div class="title pb-20" style="margin-top: 30px;">
+				<h2 class="h3 mb-0">📊 MONITORING SYSTÈME</h2>
+			</div>
+			<div class="row pb-10">
+				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
+					<div class="card-box height-100-p widget-style1" style="border-top: 4px solid #28a745; cursor: pointer;" onclick="window.open('monitoring', '_blank')">
+						<div class="d-flex flex-wrap align-items-center justify-content-between">
+							<div class="widget-data">
+								<div class="h4 mb-0" style="color: #28a745; font-weight: 700;">ACTIF</div>
+								<div class="weight-600 font-14" style="color: #666;">Statut Application</div>
+							</div>
+							<div class="widget-icon">
+								<div class="icon" style="background: linear-gradient(135deg, #28a74520 0%, #28a74510 100%); border-radius: 12px; padding: 15px;">
+									<i class="icon-copy fa fa-server" style="font-size: 24px; color: #28a745;"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
+					<div class="card-box height-100-p widget-style1" style="border-top: 4px solid #007bff; cursor: pointer;" onclick="window.open('monitoring', '_blank')">
+						<div class="d-flex flex-wrap align-items-center justify-content-between">
+							<div class="widget-data">
+								<div class="h4 mb-0" id="monitoring-users" style="color: #007bff; font-weight: 700;">-</div>
+								<div class="weight-600 font-14" style="color: #666;">Utilisateurs actifs</div>
+							</div>
+							<div class="widget-icon">
+								<div class="icon" style="background: linear-gradient(135deg, #007bff20 0%, #007bff10 100%); border-radius: 12px; padding: 15px;">
+									<i class="icon-copy fa fa-users" style="font-size: 24px; color: #007bff;"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
+					<div class="card-box height-100-p widget-style1" style="border-top: 4px solid #ffc107; cursor: pointer;" onclick="window.open('monitoring', '_blank')">
+						<div class="d-flex flex-wrap align-items-center justify-content-between">
+							<div class="widget-data">
+								<div class="h4 mb-0" id="monitoring-accounts" style="color: #ffc107; font-weight: 700;">-</div>
+								<div class="weight-600 font-14" style="color: #666;">Total comptes</div>
+							</div>
+							<div class="widget-icon">
+								<div class="icon" style="background: linear-gradient(135deg, #ffc10720 0%, #ffc10710 100%); border-radius: 12px; padding: 15px;">
+									<i class="icon-copy fa fa-database" style="font-size: 24px; color: #ffc107;"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
+					<div class="card-box height-100-p widget-style1" style="border-top: 4px solid #dc3545; cursor: pointer;" onclick="window.open('monitoring', '_blank')">
+						<div class="d-flex flex-wrap align-items-center justify-content-between">
+							<div class="widget-data">
+								<div class="h4 mb-0" id="monitoring-errors" style="color: #dc3545; font-weight: 700;">-</div>
+								<div class="weight-600 font-14" style="color: #666;">Erreurs récentes</div>
+							</div>
+							<div class="widget-icon">
+								<div class="icon" style="background: linear-gradient(135deg, #dc354520 0%, #dc354510 100%); border-radius: 12px; padding: 15px;">
+									<i class="icon-copy fa fa-exclamation-triangle" style="font-size: 24px; color: #dc3545;"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="title pb-20" style="margin-top: 30px;">
@@ -118,9 +197,14 @@
 								<option value="">Tous</option>
 								<?php 
 									$current_month = date('m');
+									$month_names = [
+										1 => 'janvier', 2 => 'février', 3 => 'mars', 4 => 'avril',
+										5 => 'mai', 6 => 'juin', 7 => 'juillet', 8 => 'août',
+										9 => 'septembre', 10 => 'octobre', 11 => 'novembre', 12 => 'décembre'
+									];
 									for ($m = 1; $m <= 12; $m++) {
 										$selected = ($m == $current_month) ? 'selected' : '';
-										echo '<option value="' . str_pad($m, 2, '0', STR_PAD_LEFT) . '" ' . $selected . '>' . strftime('%B', mktime(0, 0, 0, $m, 1)) . '</option>';
+										echo '<option value="' . str_pad($m, 2, '0', STR_PAD_LEFT) . '" ' . $selected . '>' . $month_names[$m] . '</option>';
 									}
 								?>
 							</select>

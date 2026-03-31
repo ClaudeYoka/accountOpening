@@ -1,6 +1,7 @@
 <?php
 include('../includes/session.php');
 include('../includes/config.php');
+include('../includes/audit_helpers.php');
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -21,6 +22,11 @@ $update = "UPDATE notifications SET is_read = 1 WHERE id = $notification_id AND 
 $result = mysqli_query($conn, $update);
 
 if ($result) {
+    // Audit logging for notification read
+    log_admin_action('mark_notification_read', $notification_id, [
+        'action' => 'mark_read',
+        'table' => 'notifications'
+    ]);
     echo json_encode(['status' => 'success', 'message' => 'Notification marquée comme lue']);
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Erreur lors de la mise à jour']);

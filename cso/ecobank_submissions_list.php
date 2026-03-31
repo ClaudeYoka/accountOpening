@@ -1,6 +1,6 @@
 <?php include('includes/header.php')?>
 <?php include('../includes/session.php')?>
-<?php include('includes/flexcube_helpers.php')?>
+<?php include('../includes/flexcube_helpers.php')?>
 <?php
 // Helper to safely escape output and avoid passing null to htmlspecialchars (PHP 8.1+ deprecation)
 function safe_h($s){ return htmlspecialchars((string)($s ?? ''), ENT_QUOTES, 'UTF-8'); }
@@ -31,7 +31,7 @@ $use_flexcube_fallback = false; // DISABLED: Fallback vers Flexcube si données 
                             </div>
                             <nav aria-label="breadcrumb" role="navigation">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index"></a>Dashboard</li>
+                                    <li class="breadcrumb-item"><a href="index">Dashboard</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">LISTE DE COMPTE</li>
                                 </ol>
                             </nav>
@@ -61,7 +61,7 @@ $use_flexcube_fallback = false; // DISABLED: Fallback vers Flexcube si données 
 							<thead>
 								<tr>
 									<th class="table-plus datatable-nosort">#</th>
-									<th>ACCOUNT</th>
+									<th>COMPTE</th>
 									<th>NOM</th>
 									<th>TYPE COMPTE</th>
 									<th>DATE</th>
@@ -72,15 +72,36 @@ $use_flexcube_fallback = false; // DISABLED: Fallback vers Flexcube si données 
 							<?php
                                 $q = isset($_GET['q']) ? trim($_GET['q']) : '';
                                 $escq = mysqli_real_escape_string($conn, $q);
+
+                                // Utiliser les nouvelles tables normalisées
                                 $where = '';
+                                $params = [];
+                                $types = '';
+
                                 if ($escq !== '') {
-                                    $where = "WHERE account_number LIKE '%".$escq."%' OR customer_name LIKE '%".$escq."%'";
+                                    $where = "WHERE (a.account_number LIKE ? OR a.bank_account_number LIKE ? OR
+                                               c.customer_name LIKE ? OR CONCAT(c.first_name, ' ', c.last_name) LIKE ?)";
+                                    $search_term = '%' . $escq . '%';
+                                    $params = [$search_term, $search_term, $search_term, $search_term];
+                                    $types = 'ssss';
                                 }
-                                $sql = "SELECT id, customer_id, account_number, customer_name, account_type, email, created_at FROM ecobank_form_submissions " . $where . " ORDER BY created_at DESC LIMIT 100";
-                                $res = mysqli_query($conn, $sql);
+
+                                $sql = "SELECT id, customer_id, account_number, customer_name, account_type, email, created_at
+                                        FROM ecobank_form_submissions
+                                        $where
+                                        ORDER BY created_at DESC
+                                        LIMIT 100";
+
+                                $stmt = mysqli_prepare($conn, $sql);
+                                if (!empty($params)) {
+                                    mysqli_stmt_bind_param($stmt, $types, ...$params);
+                                }
+                                mysqli_stmt_execute($stmt);
+                                $res = mysqli_stmt_get_result($stmt);
+
                                 if ($res) {
 								while($r = mysqli_fetch_assoc($res)){
-                                    
+
                                     // Enrichir avec Flexcube si activé
                                     $row_data = $r;
                                     if ($use_flexcube_fallback && !empty($r['account_number'])) {
@@ -96,7 +117,7 @@ $use_flexcube_fallback = false; // DISABLED: Fallback vers Flexcube si données 
 										<td>
 											<div class="table-actions">
 												<a title="VIEW" href="ecobank_submission_view?id=<?php echo (int)$row_data['id']; ?>" data-color="#265ed7"><i class="icon-copy dw dw-eye"></i></a>
-												<a title="EDIT" href="ecobank_submission_edit?id=<?php echo (int)$row_data['id']; ?>" data-color="#265ed7"><i class="icon-copy dw dw-edit2"></i></a>
+												<!-- <a title="EDIT" href="ecobank_submission_edit?id=<?php echo (int)$row_data['id']; ?>" data-color="#265ed7"><i class="icon-copy dw dw-edit2"></i></a> -->
 											</div>
 										</td>
 									</tr>

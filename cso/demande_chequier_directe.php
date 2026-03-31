@@ -64,8 +64,30 @@
                             <!-- NUMÉRO DE COMPTE -->
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    <label>Numéro de Compte <span style="color: red;">*</span></label>
-                                    <input type="text" id="account_number" name="account_number" class="form-control" required placeholder="Numéro de compte" autocomplete="off">
+                                    <label>Numéro Compte <span style="color: red;">*</span></label>
+                                    <input type="text" id="account_number" name="account_number" class="form-control" required placeholder="Numéro de compte client" autocomplete="off">
+                                </div>
+                            </div>
+
+                            <!-- TYPE DE COMPTE -->
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <label>Type de Compte <span style="color: red;">*</span></label>
+                                    <div style="display:flex; gap:10px; align-items:center;">
+                                        <label style="margin:0"><input type="checkbox" name="account_type" value="COURANT" id="acct_courant"> Courant</label>
+                                        <label style="margin:0"><input type="checkbox" name="account_type" value="EPARGNE" id="acct_epargne"> Épargne</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CARTE ? -->
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <label>CLient a une Carte ? <span style="color: red;">*</span></label>
+                                    <div style="display:flex; gap:10px; align-items:center;">
+                                        <label style="margin:0"><input type="checkbox" name="carte" value="OUI" id="acct_courant"> OUI</label>
+                                        <label style="margin:0"><input type="checkbox" name="carte" value="NON" id="acct_epargne"> NON</label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -73,7 +95,53 @@
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label>RIB<span style="color: red;">*</span></label>
-                                    <input type="text" id="rib_key" name="rib_key" class="form-control" required placeholder="RIB du client" maxlength="2" autocomplete="off">
+                                    <input type="text" id="rib_key" name="rib_key" class="form-control" required placeholder="RIB du client" autocomplete="off">
+                                </div>
+                            </div>
+
+                            
+                            <!-- FRAIS ? -->
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <label>Frais Prélevé ? <span style="color: red;">*</span></label>
+                                    <div style="display:flex; gap:10px; align-items:center;">
+                                        <label style="margin:0"><input type="checkbox" name="frais" value="OUI" id="acct_courant"> OUI</label>
+                                        <label style="margin:0"><input type="checkbox" name="frais" value="NON" id="acct_epargne"> NON</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <label>Client Enrollé ? <span style="color: red;">*</span></label>
+                                    <div style="display:flex; gap:10px; align-items:center;">
+                                        <label style="margin:0"><input type="checkbox" name="enrolled" value="OUI" id="acct_courant"> OUI</label>
+                                        <label style="margin:0"><input type="checkbox" name="enrolled" value="NON" id="acct_epargne"> NON</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- NUMÉRO DE TÉLÉPHONE -->
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Numéro de Téléphone <span style="color: red;">*</span></label>
+                                    <input type="tel" id="phone_number" name="phone_number" class="form-control" required placeholder="Téléphone du client" autocomplete="off">
+                                </div>
+                            </div>
+                            <!-- NUMÉRO DE SÉRIE -->
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Numéro de Série</label>
+                                    <input type="text" id="serial_number" name="serial_number" class="form-control" placeholder="Numéro de série carte" autocomplete="off">
+                                </div>
+                            </div>
+
+                            <!-- EMAIL -->
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Email <span style="color: red;">*</span></label>
+                                    <input type="email" id="email" name="email" class="form-control" required placeholder="Adresse Mail du client" autocomplete="off">
                                 </div>
                             </div>
 
@@ -85,21 +153,6 @@
                                 </div>
                             </div>
 
-                            <!-- NUMÉRO DE TÉLÉPHONE -->
-                            <div class="col-md-6 col-sm-12">
-                                <div class="form-group">
-                                    <label>Numéro de Téléphone <span style="color: red;">*</span></label>
-                                    <input type="tel" id="phone_number" name="phone_number" class="form-control" required placeholder="Ex: +242 06 123 45 67" autocomplete="off">
-                                </div>
-                            </div>
-
-                            <!-- EMAIL -->
-                            <div class="col-md-6 col-sm-12">
-                                <div class="form-group">
-                                    <label>Email <span style="color: red;">*</span></label>
-                                    <input type="email" id="email" name="email" class="form-control" required placeholder="Ex: client@example.com" autocomplete="off">
-                                </div>
-                            </div>
 
                             <!-- NOMBRE DE FEUILLES (CHÉQUIERS) -->
                             <div class="col-md-12 col-sm-12">
@@ -116,12 +169,6 @@
                                             <input type="checkbox" class="custom-control-input chequier-checkbox" id="chequier_50" name="chequier" value="50">
                                             <label class="custom-control-label" for="chequier_50">
                                                 <strong>50 Feuilles</strong>
-                                            </label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox mb-2">
-                                            <input type="checkbox" class="custom-control-input chequier-checkbox" id="chequier_100" name="chequier" value="100">
-                                            <label class="custom-control-label" for="chequier_100">
-                                                <strong>100 Feuilles</strong>
                                             </label>
                                         </div>
                                         <small class="form-text text-muted"><i class="fa fa-info-circle"></i> Au moins un chéquier doit être sélectionné</small>
@@ -142,7 +189,7 @@
                                                 </h3>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-sm-12">
+                                        <div class="col-md-6 col-sm-6">
                                             <input type="number" id="manual_quantity" name="manual_quantity" class="form-control" min="1" placeholder="Saisir une quantité " autocomplete="off">
                                             <small class="form-text text-muted"><i class="fa fa-info-circle"></i> Laissez vide si la quantité est d'un seul chéquier </small>
                                         </div>
@@ -214,13 +261,18 @@
                 client_name: document.getElementById('client_name').value,
                 branch_code: document.getElementById('branch_code').value,
                 account_number: document.getElementById('account_number').value,
+                account_type: Array.from(document.querySelectorAll('input[name="account_type"]:checked')).map(cb => cb.value),
+                carte: Array.from(document.querySelectorAll('input[name="carte"]:checked')).map(cb => cb.value),
+                frais: Array.from(document.querySelectorAll('input[name="frais"]:checked')).map(cb => cb.value),
+                enrolled: Array.from(document.querySelectorAll('input[name="enrolled"]:checked')).map(cb => cb.value),
+                serial_number: document.getElementById('serial_number')?.value || '',
                 rib_key: document.getElementById('rib_key').value,
                 address: document.getElementById('address').value,
                 phone_number: document.getElementById('phone_number').value,
                 email: document.getElementById('email').value,
                 chequier: chequerChecked,
                 quantity: quantityToUse,
-                status: 'En Cours'
+                status: 'encours'
             };
 
             if (!confirm('✓ Êtes-vous sûr de vouloir soumettre cette demande de chéquier ?\n\nClient: ' + formData.client_name + '\nTéléphone: ' + formData.phone_number + '\nEmail: ' + formData.email + '\nCompte: ' + formData.account_number + '\nQuantité: ' + quantityToUse)) {
@@ -234,8 +286,24 @@
                 },
                 body: JSON.stringify(formData)
             })
-            .then(response => response.json())
-            .then(data => {
+            .then(response => response.text())
+            .then(text => {
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (parseErr) {
+                    console.error('Response not JSON:', text);
+                    let msg = '✗ Erreur de communication avec le serveur.';
+                    if (!text || text.trim() === '') {
+                        msg += '\nAucune donnée retournée (vide).';
+                    } else if (text.match(/<\/?html|<\/?script/i)) {
+                        msg += '\nLe serveur renvoie une page HTML (possiblement une redirection de session). Veuillez vérifier que vous êtes toujours connecté.';
+                    } else {
+                        msg += '\nRéponse inattendue: ' + text.substring(0, 400);
+                    }
+                    alert(msg);
+                    return;
+                }
                 if (data.status === 'success') {
                     alert('✓ Demande enregistrée avec succès !\n\nID: ' + data.submission_id);
                     setTimeout(() => {

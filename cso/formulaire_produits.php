@@ -30,17 +30,17 @@
 
                     <form id="digital-form" class="mt-20">
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Numéro de compte</label>
+                            <label class="col-sm-2 col-form-label">Numéro de compte :</label>
                             <div class="col-sm-6">
-                                <input type="text" id="account-number" name="account" class="form-control" placeholder="Ex: 37155023802" required>
+                                <input type="text" id="account-number" name="account" class="form-control" autocomplete="off" placeholder="Saisir le numéro de compte ici" required>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Code Agence</label>
                             <div class="col-sm-2">
                                 <input type="text" id="branch-code" name="branch" class="form-control" placeholder="Optionnel">
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="form-group row">
                             <div class="col-sm-8">
@@ -57,17 +57,17 @@
                             form.addEventListener('submit', function(ev){
                                 ev.preventDefault();
                                 var acct = document.getElementById('account-number').value.trim();
-                                var branch = document.getElementById('branch-code').value.trim();
+                                // var branch = document.getElementById('branch-code').value.trim();
                                 if(!acct){
                                     alert('Veuillez saisir un numéro de compte.');
                                     return;
                                 }
-                                var url = 'formulaire_produits.html?account=' + encodeURIComponent(acct) + '&branch=' + encodeURIComponent(branch);
+                                var url = 'formulaire_produits.html?account=' + encodeURIComponent(acct) ;
                                 window.location = url;
                             });
                             clear.addEventListener('click', function(){
                                 document.getElementById('account-number').value = '';
-                                document.getElementById('branch-code').value = '';
+                                // document.getElementById('branch-code').value = '';
                             });
                         })();
                     </script>

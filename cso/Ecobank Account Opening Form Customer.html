@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecobank Account Opening Form</title>
     <link rel="stylesheet" type="text/css" href="../vendors/styles/ao_formulaire.css">
-    <link rel="logo1" sizes="180x180" href="../vendors/images/logo1.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="../vendors/images/logo1.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="../vendors/images/logo1.png">
+    <link rel="ecobank-bg" sizes="180x180" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../vendors/images/ecobank-bg.png">
     <style>
         /* Section Navigation Styles (Hidden on Print) */
         .section-navigation {
@@ -232,9 +232,10 @@
                     </g>
                 </svg>
             </div>
+            
             <div class="form-title">
-                <h1>Your Banking, Your Way</h1>
-                <p>Personal / Business - <b>Account Opening</b></p>
+                <h1>Vos services bancaires, à votre façon</h1>
+                <p>Particuliers / Entreprises - <b>Formulaire Ouverture de Compte</b></p>
             </div>
         </div>
 
@@ -321,9 +322,7 @@
                         <div class="section-title">Quel type de compte vous conviendra le mieux ?</div>
                         <div class="secondary-options">
                             <div class="form-row">
-                                <div class="multi-column" style="margin-top: 3px;">
-
-                                    <div class="column" style="min-width:260px;">
+                                <div class="column" style="min-width:260px;">
                                 
                                         <div class="checkbox-group">
                                             <label style="margin-right:14px; display:inline-flex; align-items:center;">
@@ -338,8 +337,15 @@
                                                 <input type="checkbox" id="account-type-epargne" name="account_type[]" value="Compte mineur" style="margin-right:6px;" />
                                                 Compte Mineur
                                             </label>
+                                            <label style="margin-right:14px; display:inline-flex; align-items:center;">
+                                                <input type="checkbox" id="account-type-entreprise" name="account_type[]" value="Compte entreprise" style="margin-right:6px;" />
+                                                Compte Entreprise
+                                            </label>
                                         </div>
                                     </div>
+                                <div class="multi-column" style="margin-top: 3px;">
+
+                                    
 
                                     <!-- Account Purpose Column -->
                                     <div class="column">
@@ -442,10 +448,6 @@
                                 <div class="checkbox-item" style="margin-bottom: 4px;">
                                     <input type="checkbox" id="chequier-50" value="50 feuilles">
                                     <label style="font-size: 9px;" for="chequier-50">50 feuilles</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="chequier-100" value="100 feuilles">
-                                    <label for="chequier-100" style="font-size: 9px;">100 feuilles</label>
                                 </div>
                                 </div> -->
                             </div>
@@ -589,20 +591,20 @@
                         <div class="form-row">
                             <div class="multi-column">
                                 <div class="column">
-                                    <label for="father-name"><strong>Nom du père:</strong></label>
+                                    <label for="father-name">Nom du père:</label>
                                     <input type="text" id="father-name" style="height: 20px;" placeholder="Nom du père" required>
                                 </div>
                                 <div class="column">
-                                    <label for="father-name2"><strong>Prénom du père:</strong></label>
+                                    <label for="father-name2">Prénom du père:</label>
                                     <input type="text" id="father-name2" style="height: 20px;" placeholder="Prénom du père" required>
                                 </div>
 
                                 <div class="column">
-                                    <label for="mother-name"><strong>Nom de la mère:</strong></label>
+                                    <label for="mother-name">Nom de la mère:</label>
                                     <input type="text" id="mother-name" style="height: 20px; " placeholder="Nom de la mère" required>
                                 </div>
                                 <div class="column">
-                                    <label for="mother-name2"><strong>Prénom de la mère:</strong></label>
+                                    <label for="mother-name2">Prénom de la mère:</label>
                                     <input type="text" id="mother-name2" style="height: 20px; " placeholder="Prénom de la mère" required>
                                 </div>
                             </div>
@@ -710,9 +712,9 @@
                         </div>
 
                         <!-- Document information -->
-                        <div class="form-row">
+                        <!-- <div class="form-row">
                             <div class="multi-column">
-                                <!-- <div class="column">
+                                <div class="column">
                                     <label>
                                         <M>Are you registered with any
                                             taxation authority?</strong>
@@ -727,20 +729,10 @@
                                             <label for="tax-no">No</label>
                                         </div>
                                     </div>
-                                </div> -->
-                                <div class="column">
-                                    <label for="pob">Informations fiscales:</strong></label>
-                                    <input type="text" id="pob" style="height: 20px;">
                                 </div>
-                                <div class="column">
-                                    <label for="pob">
-                                        <N>NIP/NIF/SSN:</strong>
-                                    </label>
-                                    <input type="text" id="pob" style="height: 20px;">
-                                </div>
-
+                                
                             </div>
-                        </div>
+                        </div> -->
                 </div>
 
                 <div class="form-section compact-section" style="margin-bottom: 5px;">
@@ -765,36 +757,40 @@
                         <div class="form-row">
                             <div class="multi-column">
                                 <div class="column">
-                                    <label for="BP">BP:</label>
+                                    <label for="BP">Adresse Postale:</label>
                                     <input type="text" id="BP" style="height: 20px;">
                                 </div>
                                 <div class="column">
-                                    <label for="postal-code">Code Postal:</label>
-                                    <input type="text" id="postal-code" style="height: 20px;">
+                                    <label for="pob">
+                                        <N>NIP/NIF/SSN:</strong>
+                                    </label>
+                                    <input type="text" id="pob" style="height: 20px;">
                                 </div>
                                 <div class="column">
-                                    <label for="country">Ville:</label>
-                                    <input type="text" id="country" style="height: 20px;">
+                                    <label for="pob">Informations fiscales:</strong></label>
+                                    <input type="text" id="pob" style="height: 20px;">
                                 </div>
-
+                                
                             </div>
                         </div>
+
                         <div class="form-row">
+
                             <div class="multi-column">
                                 <div class="column">
                                     <label for="contact_adress">Adresse résidentielle (Rue/Avenue):</label>
                                     <input type="text" id="contact_adress" style="height: 20px;">
                                 </div>
-
                                 <div class="column">
-                                    <label for="autre">Autres Informations:</label>
-                                    <input type="text" id="autre" style="height: 20px;">
+                                    <label for="country">Ville:</label>
+                                    <input type="text" id="country" style="height: 20px;">
                                 </div>
                                 <div class="column">
                                     <label for="country">Pays:</label>
                                     <input type="text" id="pays" style="height: 20px;">
                                 </div>
                             </div>
+
                         </div>
 
                         <div class="form-row">
@@ -819,12 +815,11 @@
                 </div>
                 </div>
                 <!-- Navigation Buttons Section 2 -->
-              
 
                 <!-- Section 3: Employment & Activity -->
                 <div class="form-section-group" id="form-section-3" data-section="3" style="display: none;">
                     <div class="section-number-header">
-                        <h2 class="section-number">Section 4</h2>
+                        <h2 class="section-number">Section 3</h2>
                         <h3 class="section-title-main">Votre activité professionnelle</h3>
                     </div>
 
@@ -1025,7 +1020,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                
+                    </div>
                 <!-- End Section 3 -->
 
                 <!-- Section 4: Agreements & Bank Use -->
@@ -1154,91 +1149,90 @@
                                     bureau de représentation ne sera tenu responsable de cete défaillance).
                                 </li>
                                 <li style="font-size: smaller;">
-    Le cas de Force Majeure signifie tout événement dû à une cause au-delà du contrôle
-    raisonnable d'une Partie telles que les restrictions sur la conversion et le transfert des
-    fonds ou toutes autres valeurs, réquisition, transferts involontaires, non disponibilité
-    de tout système, sabotage, incendie, inondation, explosion, catastrophes naturelles,
-    insurrection civile, grèves ou lock out de tout genre, les émeutes, insurrection, guerres
-    ou décisions gouvernementales.
-</li>
+                                    Le cas de Force Majeure signifie tout événement dû à une cause au-delà du contrôle
+                                    raisonnable d'une Partie telles que les restrictions sur la conversion et le transfert des
+                                    fonds ou toutes autres valeurs, réquisition, transferts involontaires, non disponibilité
+                                    de tout système, sabotage, incendie, inondation, explosion, catastrophes naturelles,
+                                    insurrection civile, grèves ou lock out de tout genre, les émeutes, insurrection, guerres
+                                    ou décisions gouvernementales.
+                                </li>
 
-<li style="font-size: smaller;">
-    <b>I. PARTAGE DES INFORMATIONS RELATIVES AU CLIENT</b><br>
-    Ecobank traitera les informations relatives au Client comme confidentielles, toutefois
-    (à moins que le consentement ne soit prohibé par la loi) le Client accepte le transfert
-    et la divulgation par Ecobank de toute information le concernant aux Bureaux de
-    représentation, aux filiales et aux mandataires d'Ecobank ainsi qu'aux Tiers qui seront
-    choisis par l'un d'entre eux, peu importe leur lieu de résidence, pour une utilisation
-    confidentielle (notamment en relation avec la fourniture de tout Service et pour le
-    traitement de données à des fins d'analyse de risques et statistiques).
-</li>
+                                <li style="font-size: smaller;">
+                                    <b>I. PARTAGE DES INFORMATIONS RELATIVES AU CLIENT</b><br>
+                                    Ecobank traitera les informations relatives au Client comme confidentielles, toutefois
+                                    (à moins que le consentement ne soit prohibé par la loi) le Client accepte le transfert
+                                    et la divulgation par Ecobank de toute information le concernant aux Bureaux de
+                                    représentation, aux filiales et aux mandataires d'Ecobank ainsi qu'aux Tiers qui seront
+                                    choisis par l'un d'entre eux, peu importe leur lieu de résidence, pour une utilisation
+                                    confidentielle (notamment en relation avec la fourniture de tout Service et pour le
+                                    traitement de données à des fins d'analyse de risques et statistiques).
+                                </li>
 
-<li style="font-size: smaller;">
-    Ecobank, ses Bureaux de représentation, ses Filiales, ses Mandataires et les Tiers
-    peuvent transférer et divulguer de telles informations lorsqu'elles sont exigées par la
-    loi, le tribunal, les autorités de régulation ou les procédures judiciaires.
-</li>
+                                <li style="font-size: smaller;">
+                                    Ecobank, ses Bureaux de représentation, ses Filiales, ses Mandataires et les Tiers
+                                    peuvent transférer et divulguer de telles informations lorsqu'elles sont exigées par la
+                                    loi, le tribunal, les autorités de régulation ou les procédures judiciaires.
+                                </li>
 
-<li style="font-size: smaller;">
-    <b>J. CONTRÔLE OU ENREGISTREMENT ÉLECTRONIQUE</b><br>
-    Le Client et Ecobank donnent leurs consentements au contrôle et à l'enregistrement
-    téléphonique et électronique pour des raisons de sécurité et de qualité de service
-    et acceptent que chacun d'eux puisse produire les enregistrements téléphoniques
-    ou électroniques comme preuve dans toute procédure judiciaire en relation avec les
-    présentes conditions, les Conditions Locales ou accords particuliers.
-</li>
+                                <li style="font-size: smaller;">
+                                    <b>J. CONTRÔLE OU ENREGISTREMENT ÉLECTRONIQUE</b><br>
+                                    Le Client et Ecobank donnent leurs consentements au contrôle et à l'enregistrement
+                                    téléphonique et électronique pour des raisons de sécurité et de qualité de service
+                                    et acceptent que chacun d'eux puisse produire les enregistrements téléphoniques
+                                    ou électroniques comme preuve dans toute procédure judiciaire en relation avec les
+                                    présentes conditions, les Conditions Locales ou accords particuliers.
+                                </li>
 
-<li style="font-size: smaller;">
-    <b>K. CHANGEMENT DE DIRECTION</b><br>
-    Le Client doit immédiatement informer la Banque de tout changement d'adresse,
-    d'administrateurs, de membres du Comité de Direction, Gérant et membres désignés.
-    Toute modification du changement des signataires du compte doit être faite par les
-    personnes autorisées en fonction à la date de la modification et accompagnée d'une
-    résolution à cet effet si nécessaire.
-</li>
+                                <li style="font-size: smaller;">
+                                    <b>K. CHANGEMENT DE DIRECTION</b><br>
+                                    Le Client doit immédiatement informer la Banque de tout changement d'adresse,
+                                    d'administrateurs, de membres du Comité de Direction, Gérant et membres désignés.
+                                    Toute modification du changement des signataires du compte doit être faite par les
+                                    personnes autorisées en fonction à la date de la modification et accompagnée d'une
+                                    résolution à cet effet si nécessaire.
+                                </li>
 
-<li style="font-size: smaller;">
-    <b>L. RÉSILIATION</b><br>
-    Chacune des parties à cet accord peut à tout moment (sous réserve du respect des
-    exigences légales telles que le préavis) le résilier par notification écrite à l'autre partie.
-    À la clôture d'un compte pour quelque raison que ce soit, la résiliation devient effective
-    après que tous les chèques tirés sur le compte ou les débits en compte aient été réglés,
-    que tous les chéquiers et les cartes remis aient été retournés à la Banque, et que toutes
-    les informations et équipements fournis par Ecobank aient été retournés.
-</li>
+                                <li style="font-size: smaller;">
+                                    <b>L. RÉSILIATION</b><br>
+                                    Chacune des parties à cet accord peut à tout moment (sous réserve du respect des
+                                    exigences légales telles que le préavis) le résilier par notification écrite à l'autre partie.
+                                    À la clôture d'un compte pour quelque raison que ce soit, la résiliation devient effective
+                                    après que tous les chèques tirés sur le compte ou les débits en compte aient été réglés,
+                                    que tous les chéquiers et les cartes remis aient été retournés à la Banque, et que toutes
+                                    les informations et équipements fournis par Ecobank aient été retournés.
+                                </li>
 
-<li style="font-size: smaller;">
-    Si la résiliation émane de la Banque et que votre compte est débiteur, vous devez,
-    en plus de la restitution des instruments de paiement et documents, régler
-    tous les montants portés au débit du compte. À défaut, la Banque se verra dans
-    l'obligation de prendre les actions légales appropriées pour le recouvrement des
-    sommes dues.
-</li>
+                                <li style="font-size: smaller;">
+                                    Si la résiliation émane de la Banque et que votre compte est débiteur, vous devez,
+                                    en plus de la restitution des instruments de paiement et documents, régler
+                                    tous les montants portés au débit du compte. À défaut, la Banque se verra dans
+                                    l'obligation de prendre les actions légales appropriées pour le recouvrement des
+                                    sommes dues.
+                                </li>
 
-<li style="font-size: smaller;">
-    Toute la documentation requise pour l'ouverture du compte devra être complétée
-    dans les trois (3) mois suivants l'ouverture du compte. Dans le cas où les documents
-    ne parviennent pas à la Banque dans ce délai, votre compte sera automatiquement
-    clôturé après notification écrite.
-</li>
+                                <li style="font-size: smaller;">
+                                    Toute la documentation requise pour l'ouverture du compte devra être complétée
+                                    dans les trois (3) mois suivants l'ouverture du compte. Dans le cas où les documents
+                                    ne parviennent pas à la Banque dans ce délai, votre compte sera automatiquement
+                                    clôturé après notification écrite.
+                                </li>
 
-<li style="font-size: smaller;">
-    <b>M. JURIDICTION COMPÉTENTE</b><br>
-    Les présentes conditions, ainsi que les Conditions Locales et accords particuliers,
-    sont régis par la loi du pays ou territoire dans lequel le compte est ouvert.
-</li>
+                                <li style="font-size: smaller;">
+                                    <b>M. JURIDICTION COMPÉTENTE</b><br>
+                                    Les présentes conditions, ainsi que les Conditions Locales et accords particuliers,
+                                    sont régis par la loi du pays ou territoire dans lequel le compte est ouvert.
+                                </li>
 
-<li style="font-size: smaller;">
-    <b>N. CLAUSE DE DÉCHARGE DE RESPONSABILITÉ</b><br>
-    La Banque décline toute responsabilité quant aux fonds ou biens déposés par vous,
-    qui se révéleraient par la suite provenir de sources ou d'activités illégales.
-    Vous confirmez que les fonds ou biens déposés à la Banque ne proviennent pas
-    de sources illégales.
-</li>
+                                <li style="font-size: smaller;">
+                                    <b>N. CLAUSE DE DÉCHARGE DE RESPONSABILITÉ</b><br>
+                                    La Banque décline toute responsabilité quant aux fonds ou biens déposés par vous,
+                                    qui se révéleraient par la suite provenir de sources ou d'activités illégales.
+                                    Vous confirmez que les fonds ou biens déposés à la Banque ne proviennent pas
+                                    de sources illégales.
+                                </li>
 
                             </ul>
                         </div>
-
 
                         <div class="form-row">
                             <div class="multi-column">
@@ -1374,7 +1368,6 @@
                 </div>
                 <!-- Navigation Buttons Section 4 -->
                 <div class="section-nav-buttons" id="nav-section-4">
-                    
                     <button type="button" class="btn-section-nav" onclick="window.printForm()">
                         <span class="icon">🖨️</span>Terminer & Imprimer
                     </button>
@@ -1588,15 +1581,18 @@
                 </style>
         </form>
         <!-- Floating buttons (Print / Save / Back / Reset) -->
-        <button id="floatPrintBtn" class="btn btn-print btn-print-floating" onclick="printForm()" title="Imprimer"><span class="icon">🖨️</span> Imprimer</button>
+        <button id="floatBicBtn" class="btn btn-print btn-print-floating"  title="bic"><span class="icon">📋</span> BIC</button>
         <button id="floatSaveBtn" class="btn btn-save btn-save-floating" title="Enregistrer" type="button"><span class="icon">💾 </span>  Save</button>
         <button id="floatBackBtn" class="btn btn-back btn-back-floating" title="Retour" type="button"><span class="icon">↩️ </span>  Back</button>
         <button id="floatResetBtn" class="btn btn-reset btn-reset-floating" title="Réinitialiser" type="button"><span class="icon">🔄 </span>  Reset</button>
-        
+
 
         <script>
         // Floating buttons behavior for standalone HTML (and when included via PHP)
         (function(){
+             // BIC
+            var bic = document.getElementById('floatBicBtn');
+            if(bic){ bic.addEventListener('click', function(){ window.location.href = 'bic_personne_physique'; }); }
             // Back
             var back = document.getElementById('floatBackBtn');
             if(back){ back.addEventListener('click', function(){ window.location.href = '.'; }); }

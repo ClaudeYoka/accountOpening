@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../includes/config.php');
+include('../includes/audit_helpers.php');
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -41,6 +42,11 @@ if ($ok) {
         mysqli_stmt_execute($stmt_update);
         mysqli_stmt_close($stmt_update);
     }
+    // Audit logging for chequier status update
+    log_admin_action('update_chequier_status', $request_id, [
+        'new_status' => $status,
+        'table' => 'tblcompte'
+    ]);
     echo json_encode(['status'=>'success']);
 } else {
     echo json_encode(['status'=>'error','message'=>mysqli_stmt_error($stmt)]);

@@ -8,7 +8,7 @@
 
 include('../includes/config.php');
 include('../includes/session.php');
-include('includes/flexcube_helpers.php');
+include('../includes/flexcube_helpers.php');
 
 header('Content-Type: application/json; charset=utf-8');
 

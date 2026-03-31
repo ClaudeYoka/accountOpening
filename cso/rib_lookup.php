@@ -1,16 +1,18 @@
 <?php
-
-@include('../includes/config.php');
-@include('../includes/session.php');
-@include('includes/FlexcubeAPI.php');
-@include('includes/flexcube_helpers.php');
-
+// Éviter les redirects pendant le traitement JSON
 header('Content-Type: application/json; charset=utf-8');
 error_reporting(E_ALL);
-ini_set('display_errors', 0);
+ini_set('display_errors', 0);  // Ne pas afficher les erreurs directement
+
+try {
+    @include('../includes/config.php');
+    @include('../includes/FlexcubeAPI.php');
+    @include('../includes/flexcube_helpers.php');
 
 $account = isset($_GET['account']) ? trim($_GET['account']) : '';
 $rib_key = isset($_GET['rib_key']) ? trim($_GET['rib_key']) : '';
+
+error_log("rib_lookup.php called with account: '$account' (length: " . strlen($account) . ")");
 
 if(!$account){
     echo json_encode(['status'=>'error','message'=>'Numéro de compte manquant']);
@@ -21,6 +23,8 @@ $row = null;
 
 // PRIORITY 1: Try FLEXCUBE API first (using real FlexcubeAPI class)
 try {
+    // Timeout plus court pour éviter les blocages
+    set_time_limit(5); // 5 secondes maximum pour cette opération
     $flexcube_api = new FlexcubeAPI();
     $flexcube_response = $flexcube_api->getAccountInfo($account);
     
@@ -64,9 +68,9 @@ if(!$row){
         $row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
     }
 
-    // PRIORITY 4: If still not found, try tblCompte
+    // PRIORITY 4: If still not found, try tblcompte
     if(!$row){
-        $q = mysqli_prepare($conn, "SELECT id, account_number, noms, mobile1, email FROM tblCompte WHERE account_number = ? LIMIT 1");
+        $q = mysqli_prepare($conn, "SELECT id, account_number, noms, mobile1, email FROM tblcompte WHERE account_number = ? LIMIT 1");
         if($q){
             mysqli_stmt_bind_param($q, 's', $account);
             mysqli_stmt_execute($q);
@@ -216,5 +220,10 @@ echo json_encode([
 ]);
 
 exit;
+
+} catch (Exception $e) {
+    echo json_encode(['status'=>'error','message'=>'Erreur interne: ' . $e->getMessage()]);
+    exit;
+}
 
 ?>

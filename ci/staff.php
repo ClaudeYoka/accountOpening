@@ -16,7 +16,7 @@
 			$error_msg = mysqli_error($conn);
 		}
 
-		if ($ok && mysqli_query($conn, "DELETE FROM tblnotifications WHERE emp_id = $delete") === false) {
+		if ($ok && mysqli_query($conn, "DELETE FROM tblnotification WHERE emp_id = $delete") === false) {
 			$ok = false;
 			$error_msg = mysqli_error($conn);
 		}
@@ -105,13 +105,13 @@
 											<img src="<?php echo (!empty($row['location'])) ? '../uploads/'.$row['location'] : '../uploads/NO-IMAGE-AVAILABLE.jpg'; ?>" class="border-radius-100 shadow" width="40" height="40" alt="">
 										</div>
 										<div class="txt">
-											<div class="weight-600"><?php echo $row['FirstName'] . " " . $row['LastName']; ?></div>
+											<div class="weight-600"><?php echo htmlspecialchars($row['FirstName'], ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($row['LastName'], ENT_QUOTES, 'UTF-8'); ?></div>
 										</div>
 									</div>
 								</td>
-								<td><?php echo $row['EmailId']; ?></td>
-	                            <td><?php echo $row['DepartmentName']; ?></td>
-								<td><?php echo $row['AgenceShortName']; ?></td>
+								<td><?php echo htmlspecialchars($row['EmailId'], ENT_QUOTES, 'UTF-8'); ?></td>
+	                            <td><?php echo htmlspecialchars($row['DepartmentName'], ENT_QUOTES, 'UTF-8'); ?></td>
+								<td><?php echo htmlspecialchars($row['AgenceShortName'], ENT_QUOTES, 'UTF-8'); ?></td>
 								<td>
 									<div class="dropdown">
 										<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">

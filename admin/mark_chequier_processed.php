@@ -1,6 +1,7 @@
 <?php
 include('../includes/session.php');
 include('../includes/config.php');
+include('../includes/audit_helpers.php');
 
 // Récupérer les données POST
 $data = json_decode(file_get_contents('php://input'), true);
@@ -46,6 +47,12 @@ if ($check && mysqli_num_rows($check) > 0) {
 }
 
 if ($result) {
+    // Audit logging for chequier processing
+    log_admin_action('mark_chequier_processed', $request_id, [
+        'status' => 'processed',
+        'table' => 'chequier_requests'
+    ]);
+    
     // Récupérer les infos du client et du CSO pour envoyer les notifications
     $query = "SELECT efs.id, efs.customer_name, efs.account_number, efs.emp_id, efs.email, te.EmailId
               FROM ecobank_form_submissions efs

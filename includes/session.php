@@ -1,5 +1,48 @@
 <?php
- session_start(); 
+// Headers de sécurité
+header("X-Frame-Options: DENY");
+header("X-Content-Type-Options: nosniff");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'");
+
+// Configuration de session sécurisée
+ini_set('session.use_strict_mode', '1');
+ini_set('session.use_only_cookies', '1');
+ini_set('session.cookie_httponly', '1');
+ini_set('session.cookie_secure', '0'); // 0 pour développement local, 1 en production HTTPS
+ini_set('session.cookie_samesite', 'Strict');
+ini_set('session.gc_maxlifetime', 3600); // 1 heure
+
+session_name('ACCOUNT_OPENING_SESSION');
+session_start();
+
+// Timeout de session pour inactivité
+$timeout = 3600; // 1 heure
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
+    session_destroy();
+    header('Location: ../index.php');
+    exit;
+}
+$_SESSION['last_activity'] = time();
+
+// Générer token CSRF si pas présent
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// Fonctions helper pour CSRF
+function get_csrf_token() {
+    return $_SESSION['csrf_token'];
+}
+
+function verify_csrf_token() {
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die("Erreur de validation CSRF");
+    }
+}
+
 //Check whether the session variable SESS_MEMBER_ID is present or not
 if (!isset($_SESSION['alogin']) || (trim($_SESSION['alogin']) == '')) { ?>
 <script>

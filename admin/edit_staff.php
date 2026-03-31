@@ -1,23 +1,99 @@
 <?php include('includes/header.php')?>
 <?php include('../includes/session.php')?>
+<?php include('../includes/audit_logger.php')?>
 <?php $get_id = $_GET['edit']; ?>
 <?php
 	if(isset($_POST['add_staff']))
 	{
-	
-	$fname=$_POST['firstname'];
-	$lname=$_POST['lastname'];
-	$email=$_POST['email'];
-	$department=$_POST['department'];
-	$user_role=$_POST['user_role'];
-	$phonenumber=$_POST['phonenumber'];
-	$phonenumber2=$_POST['phonenumber2'];
-	$Position=$_POST['Position'];
-	$staff_id=$_POST['staff_id'];
+    // Validation des données du personnel
+    $fname = trim($_POST['firstname']);
+    $lname = trim($_POST['lastname']);
+    $email = trim($_POST['email']);
+    $department = trim($_POST['department']);
+    $user_role = trim($_POST['user_role']);
+    $phonenumber = trim($_POST['phonenumber']);
+    $phonenumber2 = trim($_POST['phonenumber2']);
+    $Position = trim($_POST['Position']);
+    $staff_id = trim($_POST['staff_id']);
 
-	$result = mysqli_query($conn,"UPDATE tblemployees set FirstName='$fname', LastName='$lname', EmailId='$email', Department='$department', role='$user_role', Phonenumber='$phonenumber', Phonenumber2='$phonenumber2', Position='$Position' where emp_id='$get_id'         
-		");
+    $errors = [];
+
+    // Validation du prénom
+    if (empty($fname)) {
+        $errors[] = "Le prénom est requis";
+    } elseif (strlen($fname) < 2 || strlen($fname) > 50) {
+        $errors[] = "Le prénom doit contenir entre 2 et 50 caractères";
+    } elseif (!preg_match("/^[a-zA-ZÀ-ÿ\s\-]+$/", $fname)) {
+        $errors[] = "Le prénom contient des caractères invalides";
+    }
+
+    // Validation du nom
+    if (empty($lname)) {
+        $errors[] = "Le nom est requis";
+    } elseif (strlen($lname) < 2 || strlen($lname) > 50) {
+        $errors[] = "Le nom doit contenir entre 2 et 50 caractères";
+    } elseif (!preg_match("/^[a-zA-ZÀ-ÿ\s\-]+$/", $lname)) {
+        $errors[] = "Le nom contient des caractères invalides";
+    }
+
+    // Validation de l'email
+    if (empty($email)) {
+        $errors[] = "L'adresse email est requise";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "L'adresse email n'est pas valide";
+    }
+
+    // Validation du numéro de téléphone
+    if (!empty($phonenumber) && !preg_match("/^[0-9+\-\s()]{9,15}$/", $phonenumber)) {
+        $errors[] = "Le numéro de téléphone n'est pas valide";
+    }
+
+    // Validation du deuxième numéro de téléphone
+    if (!empty($phonenumber2) && !preg_match("/^[0-9+\-\s()]{9,15}$/", $phonenumber2)) {
+        $errors[] = "Le deuxième numéro de téléphone n'est pas valide";
+    }
+
+    // Validation du poste
+    if (empty($Position)) {
+        $errors[] = "Le poste est requis";
+    } elseif (strlen($Position) < 2 || strlen($Position) > 100) {
+        $errors[] = "Le poste doit contenir entre 2 et 100 caractères";
+    }
+
+    // Validation du rôle
+    $valid_roles = ['Admin', 'CI', 'CSO'];
+    if (empty($user_role) || !in_array($user_role, $valid_roles)) {
+        $errors[] = "Le rôle sélectionné n'est pas valide";
+    }
+
+    if (!empty($errors)) {
+        echo "<script>alert('" . implode("\\n", $errors) . "');</script>";
+        return;
+    }
+
+    // Échapper les données pour l'affichage HTML
+    $fname = htmlspecialchars($fname, ENT_QUOTES, 'UTF-8');
+    $lname = htmlspecialchars($lname, ENT_QUOTES, 'UTF-8');
+    $email = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+    $department = htmlspecialchars($department, ENT_QUOTES, 'UTF-8');
+    $user_role = htmlspecialchars($user_role, ENT_QUOTES, 'UTF-8');
+    $phonenumber = htmlspecialchars($phonenumber, ENT_QUOTES, 'UTF-8');
+    $phonenumber2 = htmlspecialchars($phonenumber2, ENT_QUOTES, 'UTF-8');
+    $Position = htmlspecialchars($Position, ENT_QUOTES, 'UTF-8');
+    $staff_id = htmlspecialchars($staff_id, ENT_QUOTES, 'UTF-8');
+
+    $stmt = mysqli_prepare($conn, "UPDATE tblemployees SET FirstName=?, LastName=?, EmailId=?, Department=?, role=?, Phonenumber=?, Phonenumber2=?, Position=? WHERE emp_id=?");
+    mysqli_stmt_bind_param($stmt, "sssssssss", $fname, $lname, $email, $department, $user_role, $phonenumber, $phonenumber2, $Position, $get_id);
+    $result = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
 	if ($result) {
+		// Log successful staff update
+		audit_log_user_action($conn, 'updated', $_SESSION['alogin'], [
+			'updated_user_id' => $get_id,
+			'updated_fields' => ['FirstName', 'LastName', 'EmailId', 'Department', 'role', 'Phonenumber', 'Phonenumber2', 'Position']
+		]);
+
 		echo "<script>alert('Record Successfully Updated');</script>";
 		echo "<script type='text/javascript'> document.location = 'staff.php'; </script>";
 	} else{

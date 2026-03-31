@@ -24,7 +24,7 @@
 						?>
 
 						<h4 class="font-20 weight-500 mb-10 text-capitalize">
-							BIENVENUE <div class="weight-600 font-30 text-blue"><?php echo $row['FirstName']. " " .$row['LastName']; ?>,</div>
+							BIENVENUE <div class="weight-600 font-30 text-blue"><?php echo htmlspecialchars($row['FirstName'], ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($row['LastName'], ENT_QUOTES, 'UTF-8'); ?>,</div>
 						</h4>
 						<p class="font-18 max-width-600">Vous êtes sur l'application d'ouverture de Compte d'Ecobank .</p>
 					</div>
@@ -75,7 +75,8 @@
 									$cnt++;
 									} 
 								} else {
-									echo "<tr><td colspan='7' style='text-align: center; vertical-align: middle;'><div style='display: inline-block;'><img src='../vendors/images/expertise-seo-hero.svg' alt='Aucune Demande pour le moment' style='max-width: 250px; width: 100%; height: auto; display: block; margin: 0 auto;'/></div></td></tr>";
+									echo "<tr><td colspan='7' style='text-align: center; vertical-align: middle;'><div style='display: inline-block;'>
+									<img src='../vendors/images/expertise-seo-hero.svg' alt='Aucune Demande pour le moment' style='max-width: 250px; width: 100%; height: auto; display: block; margin: 0 auto;'/></div></td></tr>";
 									}
 							?>
 						</tbody>
@@ -86,7 +87,7 @@
 		</div>
 	</div>
 
-	 <?php include('includes/footer.php')?>
+	<?php include('includes/footer.php')?>
 	<!-- js -->
 
 	<?php include('includes/scriptJs.php')?>

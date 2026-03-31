@@ -125,14 +125,7 @@
                                 <div class="section-title">À propos de Vous</div>
                                 <div class="sub-section">
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <label class="field-label">Titre :</label>
-                                            <div>
-                                                <label class="mr-1"><input type="radio" name="titre" value="Mr"> Mr</label>
-                                                <label class="mr-1"><input type="radio" name="titre" value="Mme"> Mme</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label class="field-label">Nom(s) :</label>
                                             <input type="text" name="noms" class="form-control" />
                                         </div>
@@ -158,18 +151,11 @@
                                     </div>
 
                                     <div class="row form-row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label class="field-label">Date de naissance :</label>
                                             <input type="date" name="dob" class="form-control" />
                                         </div>
-                                        <div class="col-md-4">
-                                            <label class="field-label">Genre :</label>
-                                            <div>
-                                                <label class="mr-2"><input type="radio" name="genre" value="M"> Masculin</label>
-                                                <label class="mr-2"><input type="radio" name="genre" value="F"> Féminin</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label class="field-label">Situation matrimoniale :</label>
                                                 <select name="situation" class="form-control">
                                                     <option value="">--Selectionner----</option>
@@ -215,9 +201,8 @@
                                 <div class="section-title">Comment rester en contact avec vous ?</div>
                                 <div class="sub-section">
                                     <div class="row form-row">
-                                        <div class="col-md-4"><label class="field-label">Numéro mobile principal :</label><input type="number" name="mobile1" class="form-control" /></div>
-                                        <div class="col-md-4"><label class="field-label">Numéro mobile alternatif :</label><input type="number" name="mobile2" class="form-control" /></div>
-                                        <div class="col-md-4"><label class="field-label">Courriel :</label><input type="email" name="email" class="form-control" /></div>
+                                        <div class="col-md-6"><label class="field-label">Numéro mobile principal :</label><input type="number" name="mobile1" class="form-control" /></div>
+                                        <div class="col-md-6"><label class="field-label">Numéro mobile alternatif :</label><input type="number" name="mobile2" class="form-control" /></div>
                                     </div>
                                     <div class="row form-row">
                                         <div class="col-md-6"><label class="field-label">Adresse résidentielle (Rue/Avenue):</label><input type="text" name="adr_rue" class="form-control" /></div>
@@ -296,18 +281,12 @@ $(document).ready(function(){
             if (resp && resp.status === 'ok' && resp.data) {
                 var data = resp.data;
                 // fill relevant fields if present
-                $('input[name="titre"]').prop('checked', false);
-                if (data.titre) $('input[name="titre"][value="' + data.titre + '"]').prop('checked', true);
                 if (data.noms) $('input[name="noms"]').val(data.noms);
                 if (data.prenom2) $('input[name="prenom2"]').val(data.prenom2);
                 if (data.nationalite) $('input[name="nationalite"]').val(data.nationalite);
                 if (data.lieu_naiss) $('input[name="lieu_naiss"]').val(data.lieu_naiss);
                 if (data.pays) $('input[name="pays"]').val(data.pays);
                 if (data.dob) $('input[name="dob"]').val(data.dob);
-                if (data.genre) {
-                    $('input[name="genre"]').prop('checked', false);
-                    $('input[name="genre"][value="' + data.genre + '"]').prop('checked', true);
-                }
                 if (data.situation) $('select[name="situation"]').val(data.situation);
                 if (data.id_num) $('input[name="id_num"]').val(data.id_num);
                 if (data.date_deliv) $('input[name="date_deliv"]').val(data.date_deliv);
@@ -316,7 +295,6 @@ $(document).ready(function(){
                 if (data.nip) $('input[name="nip"]').val(data.nip);
                 if (data.mobile1) $('input[name="mobile1"]').val(data.mobile1);
                 if (data.mobile2) $('input[name="mobile2"]').val(data.mobile2);
-                if (data.email) $('input[name="email"]').val(data.email);
                 if (data.adr_rue) $('input[name="adr_rue"]').val(data.adr_rue);
                 if (data.ville) $('input[name="ville"]').val(data.ville);
                 if (data.adr_pays) $('input[name="adr_pays"]').val(data.adr_pays);

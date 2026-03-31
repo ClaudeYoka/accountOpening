@@ -120,10 +120,7 @@
 										<span>Email :</span>
 										<?php echo $row['EmailId']; ?>
 									</li>
-									<li>
-										<span>Téléphone :</span>
-										<?php echo $row['Phonenumber']; ?>
-									</li>
+									
 									<li>
 										<span>Poste:</span>
 										<?php echo $row['Position']; ?>
@@ -172,23 +169,6 @@
 															<div class="form-group">
 																<label>Email</label>
 																<input name="email" class="form-control form-control-lg" type="text" placeholder="" readonly  autocomplete="off" value="<?php echo $row['EmailId']; ?>">
-															</div>
-														</div>
-														<div class="weight-500 col-md-6">
-															<div class="form-group">
-																<label>Téléphone</label>
-																<input name="phonenumber" class="form-control form-control-lg" type="text" placeholder="" required="true" autocomplete="off" value="<?php echo $row['Phonenumber']; ?>">
-															</div>
-														</div>
-														
-														<div class="weight-500 col-md-6">
-															<div class="form-group">
-																<label>Genre</label>
-																<select name="gender" class="custom-select form-control" required="true" autocomplete="off">
-																<option value="<?php echo $row['Gender']; ?>"><?php echo $row['Gender']; ?></option>
-																	<option value="Homme">Homme</option>
-																	<option value="Femme">Femme</option>
-																</select>
 															</div>
 														</div>
 														

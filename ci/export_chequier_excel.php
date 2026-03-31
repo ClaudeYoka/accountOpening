@@ -7,7 +7,8 @@ $query = "SELECT
             tc.id,
             tc.firstname as customer_name,
             tc.branch_code,
-            tc.mobile1 as account_number,
+            tc.account_number as account_number,
+            tc.mobile1 as phone_number,
             tc.email,
             tc.type_compte,
             tc.adr_rue as address,
@@ -15,15 +16,19 @@ $query = "SELECT
             tc.etabliss as quantity,
             tc.date_enregistrement as created_at,
             tc.emp_id,
-            tb.DepartmentName as agency_name,
+            tc.titre as has_card,
+            tc.objectif as fees,
+            tc.devise_pref as enrolled,
+            tc.ident_etud as serial_number,
+            COALESCE(tb.DepartmentName, tc.branch_code) as agency_name,
             te.FirstName,
             te.LastName,
             te.EmailId as cso_email
         FROM tblcompte tc
         LEFT JOIN tbldepartments tb ON tc.branch_code COLLATE utf8mb4_general_ci = tb.DepartmentShortName COLLATE utf8mb4_general_ci
         LEFT JOIN tblemployees te ON tc.emp_id = te.emp_id
-        WHERE tc.type_compte LIKE '%Feuilles%'
-        ORDER BY tc.date_enregistrement DESC";
+        WHERE tc.type_compte IS NOT NULL AND tc.type_compte != ''
+        ORDER BY tc.date_enregistrement DESC";;
 
 $result = mysqli_query($conn, $query);
 
@@ -63,7 +68,7 @@ function extract_first_feuille($type_compte) {
 <body>
 <table width="100%">
     <tr>
-        <td colspan="12" style="border:none; font-size:16px; font-weight:bold;">COMMANDE DES CHEQUIERS</td>
+        <td colspan="13" style="border:none; font-size:16px; font-weight:bold;">COMMANDE DES CHEQUIERS</td>
         <td style="border:none; text-align:right;"><?php echo date('d-m-Y'); ?></td>
     </tr>
 </table>
@@ -71,6 +76,7 @@ function extract_first_feuille($type_compte) {
 <table>
     <tr>
         <th style="width:30px;">N°</th>
+        <th style="width:200px;">AGENCE</th>
         <th style="width:220px;">RIB</th>
         <th style="width:300px;">INTITULE DE COMPTE</th>
         <th style="width:300px;">ADRESSE</th>
@@ -87,22 +93,27 @@ function extract_first_feuille($type_compte) {
 <?php
 $i = 1;
 foreach ($rows as $r) {
+    $agence = htmlspecialchars($r['agency_name'] ?? '');
     $rib = htmlspecialchars($r['rib_key'] ?? '');
     $client = htmlspecialchars($r['customer_name'] ?? '');
     $address = htmlspecialchars($r['address'] ?? '');
     $ref = !empty($r['account_number']) ? 'Ref Int ' . htmlspecialchars($r['account_number']) : '';
     $nb_carnets = 1;
-    $nb_feuilles = extract_first_feuille($r['type_compte']);
-    if ($nb_feuilles === '') $nb_feuilles = '50';
-    // Defaults/empty values for series and others
-    $serie_de = '';
+    $nb_feuilles = '';
+    // Fill with actual data from new columns
+    $serie_de = htmlspecialchars($r['serial_number'] ?? '');
     $serie_a = '';
     $date_retrait = '';
-    $frais = '';
-    $has_card = '';
-    $enrolled = '';
+    $frais = htmlspecialchars($r['fees'] ?? '');
+    $has_card = htmlspecialchars($r['has_card'] ?? '');
+    $enrolled = htmlspecialchars($r['enrolled'] ?? '');
     echo "<tr>\n";
+    // compute feuilles display from type_compte
+    // Afficher directement la valeur de type_compte sans transformation
+    $nb_feuilles = $r['type_compte'] ?? '';
+
     echo "<td class=\"center\">{$i}</td>\n";
+    echo "<td>" . $agence . "</td>\n";
     echo "<td>" . $rib . "</td>\n";
     echo "<td>" . $client . "</td>\n";
     echo "<td>" . $address . "</td>\n";

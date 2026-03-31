@@ -1,6 +1,6 @@
 <?php include('includes/header.php')?>
 <?php include('../includes/session.php')?>
-<?php include('includes/flexcube_helpers.php')?>
+<?php include('../includes/flexcube_helpers.php')?>
 <?php
 // Helper to safely escape output and avoid passing null to htmlspecialchars (PHP 8.1+ deprecation)
 function safe_h($s){ return htmlspecialchars((string)($s ?? ''), ENT_QUOTES, 'UTF-8'); }

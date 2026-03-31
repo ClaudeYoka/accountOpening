@@ -2,11 +2,32 @@
 <?php include('../includes/session.php')?>
 <?php
 if (isset($_POST['new_update'])) {
-    $empid = $session_id;
+    // Validation du mot de passe
     $newPassword = $_POST['newpassword'];
+
+    $errors = [];
+
+    // Validation du mot de passe
+    if (empty($newPassword)) {
+        $errors[] = "Le mot de passe est requis";
+    } elseif (strlen($newPassword) < 8) {
+        $errors[] = "Le mot de passe doit contenir au moins 8 caractères";
+    } elseif (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/", $newPassword)) {
+        $errors[] = "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule et un chiffre";
+    }
+
+    if (!empty($errors)) {
+        echo "<script>alert('" . implode("\\n", $errors) . "');</script>";
+        return;
+    }
+
+    $empid = $session_id;
     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-    $result = mysqli_query($conn, "UPDATE tblemployees SET Password='$hashedPassword' WHERE emp_id='$session_id'") or die(mysqli_error($conn));
+    $stmt = mysqli_prepare($conn, "UPDATE tblemployees SET Password=? WHERE emp_id=?");
+    mysqli_stmt_bind_param($stmt, "ss", $hashedPassword, $session_id);
+    $result = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
     
     if ($result) {
         echo "<script>alert('Mot de passe modifié avec succès');</script>";
@@ -26,7 +47,10 @@ if (isset($_POST["update_image"])) {
         echo "<script>alert('Please Select Picture to Update');</script>";
     }
 
-    $result = mysqli_query($conn, "UPDATE tblemployees SET location='$location' WHERE emp_id='$session_id'") or die(mysqli_error($conn));
+    $stmt = mysqli_prepare($conn, "UPDATE tblemployees SET location=? WHERE emp_id=?");
+    mysqli_stmt_bind_param($stmt, "ss", $location, $session_id);
+    $result = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
     
     if ($result) {
         echo "<script>alert('Photo de profil modifiée avec succès');</script>";
@@ -83,8 +107,13 @@ if (isset($_POST["update_image"])) {
 					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
 						<div class="pd-20 card-box height-100-p">
 
-							<?php $query= mysqli_query($conn,"SELECT * from tblemployees LEFT JOIN tbldepartments ON tblemployees.Department = tbldepartments.DepartmentShortName where emp_id = '$session_id'");
+							<?php
+								$stmt = mysqli_prepare($conn, "SELECT * FROM tblemployees LEFT JOIN tbldepartments ON tblemployees.Department = tbldepartments.DepartmentShortName WHERE emp_id = ?");
+								mysqli_stmt_bind_param($stmt, "s", $session_id);
+								mysqli_stmt_execute($stmt);
+								$query = mysqli_stmt_get_result($stmt);
 								$row = mysqli_fetch_array($query);
+								mysqli_stmt_close($stmt);
 							?>
 
 							<div class="profile-photo">
@@ -98,7 +127,7 @@ if (isset($_POST["update_image"])) {
 													<div class="form-group">
 														<div class="custom-file">
 															<input name="image" id="file" type="file" class="custom-file-input" accept="image/*" onchange="validateImage('file')">
-															<label class="custom-file-label" for="file" id="selector">Choisir Image</label>		
+															<label class="custom-file-label" for="file" id="selector">Choisir Image</label>
 														</div>
 													</div>
 												</div>
@@ -111,14 +140,14 @@ if (isset($_POST["update_image"])) {
 									</div>
 								</form>
 							</div>
-							<h5 class="text-center h5 mb-0"><?php echo $row['FirstName']. " " .$row['LastName']; ?></h5>
-							<p class="text-center text-muted font-14"><?php echo $row['DepartmentName']; ?></p>
+							<h5 class="text-center h5 mb-0"><?php echo htmlspecialchars($row['FirstName'], ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($row['LastName'], ENT_QUOTES, 'UTF-8'); ?></h5>
+							<p class="text-center text-muted font-14"><?php echo htmlspecialchars($row['DepartmentName'], ENT_QUOTES, 'UTF-8'); ?></p>
 							<div class="profile-info">
 								<h5 class="mb-20 h5 text-blue">Informations Personnels</h5>
 								<ul>
 									<li>
 										<span>Email :</span>
-										<?php echo $row['EmailId']; ?>
+										<?php echo htmlspecialchars($row['EmailId'], ENT_QUOTES, 'UTF-8'); ?>
 									</li>
 
 								</ul>
@@ -131,7 +160,7 @@ if (isset($_POST["update_image"])) {
 								<div class="tab height-100-p">
 									<ul class="nav nav-tabs customtab" role="tablist">
 										<li class="nav-item">
-											<a class="nav-link" data-toggle="tab" href="#setting" role="tab">Mot de Passe</a>
+											<a class="nav-link" data-toggle="tab" href="#setting" role="tab">Modifier le Mot de Passe</a>
 										</li>
 									</ul>
 									<div class="tab-content">
@@ -144,8 +173,12 @@ if (isset($_POST["update_image"])) {
 														<div class="col-md-12"><h4 class="text-blue h5 mb-20">Modifier votre mot de passe</h4></div>
 
 														<?php
-                                                            $query = mysqli_query($conn,"select * from tblemployees where emp_id = '$session_id' ");
+                                                            $stmt = mysqli_prepare($conn, "SELECT * FROM tblemployees WHERE emp_id = ?");
+                                                            mysqli_stmt_bind_param($stmt, "s", $session_id);
+                                                            mysqli_stmt_execute($stmt);
+                                                            $query = mysqli_stmt_get_result($stmt);
                                                             $row = mysqli_fetch_array($query);
+                                                            mysqli_stmt_close($stmt);
 														?>
 
 														<div class="col-md-6 col-sm-12">

@@ -3,20 +3,30 @@
 
 <?php
 // Récupérer les demandes de chéquier à partir de tblcompte
-function get_chequier_requests($conn, $account_search = '') {
-    $where = "tc.type_compte LIKE '%Feuilles%'";
+function get_chequier_requests($conn, $account_search = '', $filter_month = '', $filter_year = '') {
+    $where = "tc.type_compte IS NOT NULL AND tc.type_compte != ''";
     
     // Si recherche par numéro de compte
     if (!empty($account_search)) {
         $account_search = mysqli_real_escape_string($conn, $account_search);
-        $where .= " AND tc.mobile1 = '$account_search'";
+        $where .= " AND tc.account_number = '$account_search'";
+    }
+    
+    // Filtre par mois et année
+    if (!empty($filter_month)) {
+        $where .= " AND MONTH(tc.date_enregistrement) = '" . intval($filter_month) . "'";
+    }
+    
+    if (!empty($filter_year)) {
+        $where .= " AND YEAR(tc.date_enregistrement) = '" . intval($filter_year) . "'";
     }
     
     $query = "SELECT
                 tc.id,
                 tc.firstname as client_name,
                 tc.branch_code,
-                tc.mobile1 as account_number,
+                tc.account_number as account_number,
+                tc.mobile1 as phone_number,
                 tc.email,
                 tc.type_compte,
                 tc.adr_rue as address,
@@ -25,6 +35,10 @@ function get_chequier_requests($conn, $account_search = '') {
                 tc.access as status,
                 tc.date_enregistrement as created_at,
                 tc.emp_id,
+                tc.titre as has_card,
+                tc.objectif as fees,
+                tc.devise_pref as enrolled,
+                tc.ident_etud as serial_number,
                 tb.DepartmentName as agency_name,
                 te.FirstName,
                 te.LastName,
@@ -43,11 +57,11 @@ function extract_chequier_info($row) {
     
     $chequier_info = array('requested' => false, 'types' => array(), 'quantity' => 0);
     
-    // type_compte contient "25, 50, 100 Feuilles" ou "25 Feuilles, 50 Feuilles, 100 Feuilles"
-    if (strpos($row['type_compte'], 'Feuilles') !== false) {
+    // type_compte contient "25, 50, 100"
+    if (!empty($row['type_compte'])) {
         $chequier_info['requested'] = true;
         // Parser les feuilles
-        if (preg_match_all('/(\d+)\s+Feuilles/', $row['type_compte'], $matches)) {
+        if (preg_match_all('/(\d+)\s*(?:Feuilles)?/', $row['type_compte'], $matches)) {
             foreach ($matches[1] as $value) {
                 $chequier_info['types'][] = $value . ' Feuilles';
             }
@@ -55,7 +69,8 @@ function extract_chequier_info($row) {
     }
     
     if (!empty($chequier_info['types'])) {
-        $chequier_info['quantity'] = count($chequier_info['types']);
+        // Utiliser la quantité depuis la base de données (colonne etabliss)
+        $chequier_info['quantity'] = isset($row['quantity']) ? (int)$row['quantity'] : count($chequier_info['types']);
     }
     
     return $chequier_info;
@@ -72,18 +87,50 @@ function create_notification($conn, $emp_id_recipient, $message, $type = 'info',
 
 // Traiter les demandes de chéquier
 $account_search = '';
+$filter_month = '';
+$filter_year = '';
+
 if (isset($_GET['search']) && !empty($_GET['search'])) {
     $account_search = trim($_GET['search']);
 }
 
-$result = get_chequier_requests($conn, $account_search);
+if (isset($_GET['filter_month']) && !empty($_GET['filter_month'])) {
+    $filter_month = $_GET['filter_month'];
+}
+
+if (isset($_GET['filter_year']) && !empty($_GET['filter_year'])) {
+    $filter_year = $_GET['filter_year'];
+}
+
+$result = get_chequier_requests($conn, $account_search, $filter_month, $filter_year);
 $chequier_requests = array();
+
+// Ensure status table exists
+$sql_ensure = "CREATE TABLE IF NOT EXISTS chequier_status (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    request_id INT NOT NULL,
+    status VARCHAR(100) NOT NULL,
+    changed_by INT DEFAULT NULL,
+    changed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX(request_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+mysqli_query($conn, $sql_ensure);
 
 if ($result && mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
         $chequier_info = extract_chequier_info($row);
         if ($chequier_info && $chequier_info['requested']) {
             $row['chequier_info'] = $chequier_info;
+            
+            // Fetch last status change date
+            $status_q = mysqli_query($conn, "SELECT changed_at FROM chequier_status WHERE request_id = " . intval($row['id']) . " ORDER BY changed_at DESC LIMIT 1");
+            if ($status_q && mysqli_num_rows($status_q) > 0) {
+                $srow = mysqli_fetch_assoc($status_q);
+                $row['status_changed_at'] = $srow['changed_at'];
+            } else {
+                $row['status_changed_at'] = null;
+            }
+            
             $chequier_requests[] = $row;
 
             // Envoyer une notification au CSO responsable si nécessaire
@@ -121,16 +168,49 @@ if ($result && mysqli_num_rows($result) > 0) {
 
             <div class="card-box mb-30">
                 <div class="pd-20">
-                    <!-- Barre de recherche par numéro de compte -->
-                    <!-- <div class="mb-20" style="display: flex; gap: 10px; align-items: center;">
-                        <form method="GET" style="display: flex; gap: 10px;">
-                            <input type="text" name="search" placeholder="Rechercher par numéro de compte..." value="<?php echo htmlspecialchars($account_search); ?>" class="form-control" style="width: 300px;">
-                            <button type="submit" class="btn btn-sm btn-primary">Rechercher</button>
-                            <?php if (!empty($account_search)): ?>
+                    <!-- Barre de recherche et filtres -->
+                    <div class="mb-20" style="display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap;">
+                        <form method="GET" style="display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap;">
+                            <div>
+                                <label style="font-weight: 600; font-size: 12px; color: #666; display: block; margin-bottom: 4px;">Rechercher par N°</label>
+                                <input type="text" name="search" placeholder="N° de compte" value="<?php echo htmlspecialchars($account_search); ?>" class="form-control" style="width: 150px;">
+                            </div>
+                            
+                            <div>
+                                <label style="font-weight: 600; font-size: 12px; color: #666; display: block; margin-bottom: 4px;">Mois :</label>
+                                <select id="filter_month" name="filter_month" class="form-control" style="width: 100px;">
+                                    <option value="">Tous</option>
+                                    <?php 
+                                        for ($m = 1; $m <= 12; $m++) {
+                                            $selected = ($m == $filter_month) ? 'selected' : '';
+                                            $month_name = date('F', mktime(0, 0, 0, $m, 1));
+                                            echo '<option value="' . str_pad($m, 2, '0', STR_PAD_LEFT) . '" ' . $selected . '>' . $month_name . '</option>';
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label style="font-weight: 600; font-size: 12px; color: #666; display: block; margin-bottom: 4px;">Année :</label>
+                                <select id="filter_year" name="filter_year" class="form-control" style="width: 100px;">
+                                    <option value="">Toutes</option>
+                                    <?php 
+                                        $current_year = date('Y');
+                                        for ($y = $current_year; $y >= $current_year - 5; $y--) {
+                                            $selected = ($y == $filter_year) ? 'selected' : '';
+                                            echo '<option value="' . $y . '" ' . $selected . '>' . $y . '</option>';
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-sm btn-primary">Appliquer</button>
+                            
+                            <?php if (!empty($account_search) || !empty($filter_month) || !empty($filter_year)): ?>
                                 <a href="?" class="btn btn-sm btn-secondary">Réinitialiser</a>
                             <?php endif; ?>
                         </form>
-                    </div> -->
+                    </div>
 
                     <?php if (empty($chequier_requests)): ?>
                         <div style="text-align: center; padding: 40px;">
@@ -173,7 +253,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                                             <!-- <td><strong><?php echo $req['chequier_info']['quantity']; ?></strong></td> -->
                                             <td>
                                                 <span style="display: inline-block; padding: 6px 12px; background-color: <?php echo $badgeStyle['bg']; ?>; color: <?php echo $badgeStyle['color']; ?>; border-radius: 4px; font-weight: 500; font-size: 12px;">
-                                                    <?php echo $badgeStyle['label']; ?>
+                                                    <?php echo htmlspecialchars($badgeStyle['label'], ENT_QUOTES, 'UTF-8'); ?>
                                                 </span>
                                                 <div class="dropdown" style="display: inline-block; margin-left: 5px;">
                                                     <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" title="Modifier le statut">
@@ -184,7 +264,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td><small><?php echo date('d/m/Y', strtotime($req['created_at'])); ?></small></td>
+                                            <td><small><?php echo date('d/m/Y', strtotime($req['status_changed_at'] ?? $req['created_at'])); ?></small></td>
                                             <!-- <td><?php echo htmlspecialchars(($req['FirstName'] ?? '') . ' ' . ($req['LastName'] ?? '')); ?></td> -->
                                         </tr>
                                     <?php endforeach; ?>
@@ -256,40 +336,37 @@ if ($result && mysqli_num_rows($result) > 0) {
                         const req = data.request;
                         let html = `
                             <div class="mb-3">
-                                <label class="font-weight-600">Agence :</label>
-                                <p>${escapeHtml(req.branch_code)} - ${escapeHtml(req.agency_name || 'N/A')}</p>
+                                <label class="font-weight-600">Agence : ${escapeHtml(req.branch_code)}</label>
+                                
                             </div>
                             <div class="mb-3">
-                                <label class="font-weight-600">Nom du Client :</label>
-                                <p>${escapeHtml(req.client_name)}</p>
+                                <label class="font-weight-600">Nom du Client : ${escapeHtml(req.client_name)}</label>
                             </div>
                             <div class="mb-3">
-                                <label class="font-weight-600">Numéro de Compte :</label>
-                                <p><code>${escapeHtml(req.account_number)}</code></p>
-                            </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Email :</label>
-                                <p>${escapeHtml(req.email || 'N/A')}</p>
-                            </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Type de Chéquier :</label>
-                                <p>${escapeHtml(req.type_compte)}</p>
-                            </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Adresse :</label>
-                                <p>${escapeHtml(req.address || 'N/A')}</p>
-                            </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Statut :</label>
+                                <label class="font-weight-600">Numéro de Compte et Téléphone :</label>
                                 <p>
-                                    <span style="display: inline-block; padding: 6px 12px; background-color: ${getStatusColor(req.status).bg}; color: ${getStatusColor(req.status).color}; border-radius: 4px; font-weight: 500;">
-                                        ${getStatusLabel(req.status)}
-                                    </span>
+                                    <strong>Tél :</strong> ${escapeHtml(req.phone || req.mobile1 || 'N/A')}<br>
+                                    <strong>Compte :</strong> <code>${escapeHtml(req.account_number || 'N/A')}</code>
                                 </p>
                             </div>
                             <div class="mb-3">
-                                <label class="font-weight-600">Date de Demande :</label>
-                                <p>${new Date(req.created_at).toLocaleString('fr-FR')}</p>
+                                <label class="font-weight-600">Email : ${escapeHtml(req.email || 'N/A')}</label>
+                            </div>
+                            <div class="mb-3">
+                                <label class="font-weight-600">Type de Chéquier : ${escapeHtml(req.type_compte)} Feuilles</label>
+                            </div>
+                            <div class="mb-3">
+                                <label class="font-weight-600">Quantité : ${escapeHtml(req.quantity|| 'N/A')}</label>
+                            </div>
+                            <div class="mb-3">
+                                <label class="font-weight-600">Statut :
+                                    <span style="display: inline-block; padding: 6px 12px; background-color: ${getStatusColor(req.status).bg}; color: ${getStatusColor(req.status).color}; border-radius: 4px; font-weight: 500;">
+                                        ${getStatusLabel(req.status)}
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="mb-3">
+                                <label class="font-weight-600">Date de Demande Client: ${new Date(req.created_at).toLocaleString('fr-FR')}</label>
                             </div>
                         `;
                         document.getElementById('detailsContent').innerHTML = html;

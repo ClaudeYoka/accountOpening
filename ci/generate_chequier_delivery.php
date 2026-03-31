@@ -37,7 +37,7 @@ $row = mysqli_fetch_assoc($result);
 // Extraire les infos de chéquier du JSON
 $data = json_decode($row['data'], true);
 $chequier_types = array();
-$chequier_fields = array('25 Feuilles', '50 Feuilles', '100 Feuilles');
+$chequier_fields = array('25 Feuilles', '50 Feuilles');
 
 foreach ($chequier_fields as $type) {
     if (isset($data[$type]) && ($data[$type] === 'on' || $data[$type] === true)) {

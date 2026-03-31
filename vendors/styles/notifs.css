@@ -1,0 +1,61 @@
+.notification-list ul li {
+    padding: 2px; /* Réduction de la marge intérieure */
+    border-bottom: 1px solid #eee;
+    transition: all 0.5s ease; /* Transition plus longue */
+}
+.notification-list ul li a {
+    display: flex;
+    align-items: center;
+    color: #333;
+    width: 100%;
+}
+
+.notification-icon { width:36px; display:flex; align-items:center; justify-content:center; }
+.notification-list ul li { display:flex; align-items:center; gap:8px; }
+
+.notification-list ul li .delete-notification {
+    position: relative; /* Garder le positionnement relatif */
+    margin-left: 10px; /* Espacement à gauche */
+    color: #ff5252;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.2s; /* Transition plus longue avec délai */
+    align-self: center; /* Centrer verticalement */
+}
+
+.notification-list ul li:hover {
+    background-color: #f9f9f9; /* Effet de survol plus visible */
+}
+
+.notification-list ul li:hover .delete-notification {
+    opacity: 1; /* Rendre visible au survol */
+    transition: opacity 0.3s ease; /* Apparition rapide */
+}
+
+.notification-content {
+    margin-left: 6px;
+    font-size: 2px;
+}
+
+.notification-content h3 {
+    font-size: 13px; /* Taille de police pour le titre de la notification */
+    margin: 0; /* Supprimer la marge par défaut */
+    font-weight:600;
+}
+
+.notification-content span {
+    font-size: 10px; /* Réduction de la taille de la police pour la date */
+    color: #888;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.notification-header .clear-all {
+    font-size: 12px;
+    color: #ff5252;
+    cursor: pointer;
+}

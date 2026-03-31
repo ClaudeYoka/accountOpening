@@ -17,15 +17,49 @@
 <?php
  if(isset($_POST['edit']))
 {
-	 $deptname=$_POST['departmentname'];
-	 $deptshortname=$_POST['departmentshortname'];
+    // Validation des données de département
+    $deptname = trim($_POST['departmentname']);
+    $deptshortname = trim($_POST['departmentshortname']);
 
-    $result = mysqli_query($conn,"update tbldepartments set DepartmentName = '$deptname' , DepartmentShortName ='$deptshortname' where id = '$get_id' ");
+    $errors = [];
+
+    // Validation du nom de département
+    if (empty($deptname)) {
+        $errors[] = "Le nom du département est requis";
+    } elseif (strlen($deptname) < 2 || strlen($deptname) > 100) {
+        $errors[] = "Le nom du département doit contenir entre 2 et 100 caractères";
+    } elseif (!preg_match("/^[a-zA-ZÀ-ÿ0-9\s\-&]+$/", $deptname)) {
+        $errors[] = "Le nom du département contient des caractères invalides";
+    }
+
+    // Validation du nom court de département
+    if (empty($deptshortname)) {
+        $errors[] = "Le nom court du département est requis";
+    } elseif (strlen($deptshortname) < 2 || strlen($deptshortname) > 10) {
+        $errors[] = "Le nom court doit contenir entre 2 et 10 caractères";
+    } elseif (!preg_match("/^[A-Z0-9\-]+$/", $deptshortname)) {
+        $errors[] = "Le nom court ne peut contenir que des lettres majuscules, chiffres et tirets";
+    }
+
+    if (!empty($errors)) {
+        echo "<script>alert('" . implode("\\n", $errors) . "');</script>";
+        return;
+    }
+
+    // Échapper les données pour l'affichage HTML
+    $deptname = htmlspecialchars($deptname, ENT_QUOTES, 'UTF-8');
+    $deptshortname = htmlspecialchars(strtoupper($deptshortname), ENT_QUOTES, 'UTF-8');
+
+    $stmt = mysqli_prepare($conn, "UPDATE tbldepartments SET DepartmentName=?, DepartmentShortName=? WHERE id=?");
+    mysqli_stmt_bind_param($stmt, "sss", $deptname, $deptshortname, $get_id);
+    $result = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
     if ($result) {
      	echo "<script>alert('Record Successfully Updated');</script>";
      	echo "<script type='text/javascript'> document.location = 'department.php'; </script>";
 	} else{
-	  die(mysqli_error());
+	  die(mysqli_error($conn));
    }
 }
 
@@ -77,7 +111,7 @@
 								<h2 class="mb-30 h4">Edit Department</h2>
 								<section>
 									<?php
-									$query = mysqli_query($conn,"SELECT * from tbldepartments where id = '$get_id'")or die(mysqli_error());
+									$query = mysqli_query($conn,"SELECT * from tbldepartments where id = '$get_id'")or die(mysqli_error($conn));
 									$row = mysqli_fetch_array($query);
 									?>
 
@@ -86,7 +120,7 @@
 										<div class="col-md-12">
 											<div class="form-group">
 												<label >Department Name</label>
-												<input name="departmentname" type="text" class="form-control" required="true" autocomplete="off" value="<?php echo $row['DepartmentName']; ?>">
+												<input name="departmentname" type="text" class="form-control" required="true" autocomplete="off" value="<?php echo htmlspecialchars($row['DepartmentName'], ENT_QUOTES, 'UTF-8'); ?>">
 											</div>
 										</div>
 									</div>
@@ -94,7 +128,7 @@
 										<div class="col-md-12">
 											<div class="form-group">
 												<label>Department Short Name</label>
-												<input name="departmentshortname" type="text" class="form-control" required="true" autocomplete="off" style="text-transform:uppercase" value="<?php echo $row['DepartmentShortName']; ?>">
+												<input name="departmentshortname" type="text" class="form-control" required="true" autocomplete="off" style="text-transform:uppercase" value="<?php echo htmlspecialchars($row['DepartmentShortName'], ENT_QUOTES, 'UTF-8'); ?>">
 											</div>
 										</div>
 									</div>
@@ -103,7 +137,7 @@
 										   <input class="btn btn-primary" type="submit" value="UPDATE" name="edit" id="edit">
 									    </div>
 									</div>
-								   </form>
+								</form>
 							    </section>
 							</div>
 						</div>

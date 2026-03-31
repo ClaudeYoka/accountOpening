@@ -3,7 +3,7 @@
 		<div class="brand-logo">
 			<a href="index">
 				<img src="../vendors/images/ecobank-bg3.png" alt="" class="dark-logo">
-				<img src="../vendors/images/deskapp-logo-white-svg.png" alt="" class="light-logo">
+				<img src="../vendors/images/ecobank-bg3.png" alt="" class="light-logo">
 			</a>
 			<div class="close-sidebar" data-toggle="left-sidebar-close">
 				<i class="ion-close-round"></i>
@@ -24,7 +24,7 @@
 
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon fa fa-street-view"></span><span class="mtext">Ouverture Compte</span>
+							<span class="micon fa fa-user-plus"></span><span class="mtext">Ouverture Compte</span>
 						</a>
 						<ul class="submenu">
 							<li><a href="ecobank_account_form">Personne Physique</a></li>
@@ -33,17 +33,10 @@
 					</li>
 
 					<li class="dropdown">
-						<a href="ecobank_submissions_list" class="dropdown-toggle no-arrow">
-							<span class="micon fa fa-credit-card-alt"></span><span class="mtext">Comptes </span>
-						</a>
-					</li>
-					
-					<li class="dropdown">
 						<a href="demande_chequier" class="dropdown-toggle no-arrow">
 							<span class="micon fi-page-multiple"></span><span class="mtext">Demande Chéquier</span>
 						</a>
 					</li>
-
 
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle no-arrow" data-toggle="modal" data-target="#documentsModal">
@@ -51,6 +44,11 @@
 						</a>
 					</li>
 
+					<li class="dropdown">
+						<a href="ecobank_submissions_list" class="dropdown-toggle no-arrow">
+							<span class="micon fa fa-vcard"></span><span class="mtext">Comptes </span>
+						</a>
+					</li>
 
 					<!-- <li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">

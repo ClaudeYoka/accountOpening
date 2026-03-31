@@ -4,6 +4,7 @@
 // include session while capturing any unintended output (prevent HTML redirect from being sent)
 ob_start();
 include('../includes/session.php');
+include('../includes/audit_logger.php');
 $__sess_out = ob_get_clean();
 // if session include emitted a redirect script, treat as unauthorized
 if ($__sess_out && (stripos($__sess_out, 'window.location') !== false || stripos($__sess_out, '<script') !== false)){
@@ -559,7 +560,7 @@ if ($submissions_ok) {
 if ($insertId && $submissions_ok) {
     // Vérifier s'il y a une demande de chéquier dans les données
     $chequier_requested = false;
-    $chequier_fields = array('25 Feuilles', '50 Feuilles', '100 Feuilles');
+    $chequier_fields = array('25 Feuilles', '50 Feuilles');
     
     foreach ($chequier_fields as $field) {
         if (isset($data[$field]) && ($data[$field] === 'on' || $data[$field] === true)) {
@@ -616,6 +617,16 @@ if ($insertId && $submissions_ok) {
 
 $response = ['status' => 'ok', 'message' => 'Données enregistrées', 'submission_stored' => $submissions_ok];
 if($insertId) $response['submission_id'] = $insertId;
+
+// Log successful form submission
+if ($submissions_ok && $insertId) {
+    audit_log_form_submission($conn, 'ecobank_account_opening', $insertId, [
+        'customer_name' => $customer_name,
+        'account_number' => $account_number,
+        'account_type' => $account_type,
+        'branch_code' => $branch_code
+    ]);
+}
 
 debug_log_local('Response: ' . json_encode($response));
 echo json_encode($response);

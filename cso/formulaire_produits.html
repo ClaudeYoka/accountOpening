@@ -145,6 +145,118 @@
         z-index:9999;
     }
 
+    /* Declaration Page Styles */
+    .page-declaration {
+        margin-bottom: 20px;
+    }
+
+    .declaration-header {
+        background: #0066cc;
+        color: white;
+        padding: 10px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .declaration-title {
+        background: #e6f2f9;
+        padding: 8px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        border-left: 4px solid #0066cc;
+    }
+
+    .declaration-content {
+        line-height: 1.6;
+        text-align: justify;
+        margin-bottom: 10px;
+        font-size: 11px;
+    }
+
+    .article {
+        margin-bottom: 12px;
+    }
+
+    .article-title {
+        font-weight: bold;
+        color: #0066cc;
+        margin-bottom: 5px;
+    }
+
+    .article-content {
+        margin-left: 10px;
+        text-align: justify;
+        line-height: 1.5;
+    }
+
+    .declaration-signature {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #999;
+    }
+
+    .signature-box {
+        flex: 1;
+        text-align: center;
+    }
+
+    .signature-line {
+        height: 40px;
+        border-bottom: 1px solid #333;
+        margin-bottom: 5px;
+    }
+
+    /* Page Navigation */
+    .page-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        gap: 10px;
+    }
+
+    .page-nav-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .page-nav-btn:hover {
+        transform: scale(1.05);
+    }
+
+    .page-nav-prev {
+        background: #666;
+        color: white;
+    }
+
+    .page-nav-next {
+        background: #007db8;
+        color: white;
+    }
+
+    .page-nav-prev:disabled,
+    .page-nav-next:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .page-hidden {
+        display: none;
+    }
+
+    .page-counter {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 12px;
+        color: #666;
+    }
+
     /* Loader (reused from RIB) */
     #form-loader {
         display: flex;
@@ -274,14 +386,15 @@
         .page{
             width: 190mm !important;
             max-width: 190mm !important;
-            height: 277mm !important;
+            height: auto !important;
             margin: 0 !important;
             padding: 10mm !important;
             border: none !important;
             box-shadow: none !important;
             box-sizing: border-box !important;
-            overflow: hidden !important;
+            overflow: visible !important;
             font-size: 13px !important;
+            page-break-after: always !important;
         }
 
         .header { padding: 8px !important; }
@@ -291,6 +404,11 @@
         .small { font-size: 11.5px !important; }
         .logo-container svg { width: 120px !important; height: auto !important; }
         .fab-container { display: none !important; }
+        .page-navigation { display: none !important; }
+        .page-counter { display: none !important; }
+        .page-hidden { display: block !important; }
+        .page.hidden { display: block !important; }
+        .article { page-break-inside: avoid !important; }
         tr { page-break-inside: avoid !important; }
         table { page-break-inside: avoid !important; }
     }
@@ -306,7 +424,7 @@
     </div>
 </div>
 
-<div class="page hidden">
+<div class="page hidden" id="page-1">
 
         <div class="header">
             <div class="logo-container">
@@ -324,8 +442,8 @@
                 </svg>
             </div>
             <div class="form-title">
-                <h1>Your Banking, Your Way</h1>
-                <p>Personal / Business - <b>Account Opening</b></p>
+                <h1>Vos services bancaires, à votre façon</h1>
+                <p>Particuliers / Entreprises - <b> Ouverture de compte</b></p>
             </div>
         </div>
 
@@ -348,8 +466,8 @@
     <table>
         <tr>
             <td class="sub">1. CLASSIC</td>
-            <td><input type="checkbox" class="chk"> OUI</td>
-            <td><input type="checkbox" class="chk"> NON</td>
+            <td><input type="checkbox" class="chk" name="card_classic" id="card_classic_yes"> OUI</td>
+            <td><input type="checkbox" class="chk" name="card_classic_no" id="card_classic_no"> NON</td>
             <td class="small">
                 Frais de souscription : 20 000 FCFA HT<br>
                 Frais mensuels : 3 325 FCFA HT
@@ -358,15 +476,15 @@
         </tr>
         <tr>
             <td class="sub">2. GOLD</td>
-            <td><input type="checkbox" class="chk"> OUI</td>
-            <td><input type="checkbox" class="chk"> NON</td>
+            <td><input type="checkbox" class="chk" name="card_gold" id="card_gold_yes"> OUI</td>
+            <td><input type="checkbox" class="chk" name="card_gold_no" id="card_gold_no"> NON</td>
             <td class="small">Frais de souscription : 90 000 FCFA HT</td>
             <td class="small">Redevance annuelle : 90 000 FCFA HT</td>
         </tr>
         <tr>
             <td class="sub">3. PLATINUM</td>
-            <td><input type="checkbox" class="chk"> OUI</td>
-            <td><input type="checkbox" class="chk"> NON</td>
+            <td><input type="checkbox" class="chk" name="card_platinum" id="card_platinum_yes"> OUI</td>
+            <td><input type="checkbox" class="chk" name="card_platinum_no" id="card_platinum_no"> NON</td>
             <td class="small">Frais de souscription : 120 000 FCFA HT</td>
             <td class="small">Redevance annuelle : 120 000 FCFA HT</td>
         </tr>
@@ -378,18 +496,18 @@
     <table>
         <tr>
             <td>
-                <input type="checkbox" class="chk"> ECOBANK MOBILE<br><br>
-                <input type="checkbox" class="chk"> AIRTEL MONEY &nbsp; N° TEL
-                <input type="text">
+                <input type="checkbox" class="chk" name="srv_ecobank_app" id="srv_ecobank_app"> ECOBANK MOBILE APP<br><br>
+                <input type="checkbox" class="chk" name="srv_airtel_money" id="srv_airtel_money"> AIRTEL MONEY &nbsp; N° TEL
+                <input type="text" id="airtel_phone" name="airtel_phone">
             </td>
             <td>
-                <input type="checkbox" class="chk"> ASSURANCE MONÉTIQUE (CLASSIQUE : 4 025 FCFA TTC / 6 mois)<br><br>
-                <input type="checkbox" class="chk"> MOBILE MONEY &nbsp; N° TEL
-                <input type="text">
+                <input type="checkbox" class="chk" name="srv_insurance" id="srv_insurance"> ASSURANCE MONÉTIQUE (CLASSIQUE : 4 025 FCFA TTC / 6 mois)<br><br>
+                <input type="checkbox" class="chk" name="srv_mobile_money" id="srv_mobile_money"> MOBILE MONEY &nbsp; N° TEL
+                <input type="text" id="mobilemoney_phone" name="mobilemoney_phone">
             </td>
             <td>
-                <input type="checkbox" class="chk"> E-STATEMENT<br><br>
-                <input type="checkbox" class="chk"> SMS ALERT
+                <input type="checkbox" class="chk" name="srv_estatement" id="srv_estatement"> E-STATEMENT<br><br>
+                <input type="checkbox" class="chk" name="srv_sms_alert" id="srv_sms_alert"> SMS ALERT
             </td>
         </tr>
     </table>
@@ -398,9 +516,9 @@
     <table>
         <tr class="sub">
             <td colspan="5">
-                ECOBANK ONLINE
-                <input type="checkbox" class="chk"> Activer les virements
-                <input type="checkbox" class="chk"> Activer Western Union
+                ECOBANK ONLINE  :
+                Activer les virements <input type="checkbox" class="chk" name="online_transfer" id="online_transfer">
+                Activer Western Union <input type="checkbox" class="chk" name="online_western_union" id="online_western_union">
             </td>
         </tr>
         <tr>
@@ -433,7 +551,6 @@
         <tr>
             <td><input type="checkbox" id="chequier_25" name="chequier" value="25"> 25 Feuilles</td>
             <td><input type="checkbox" id="chequier_50" name="chequier" value="50"> 50 Feuilles</td>
-            <td><input type="checkbox" id="chequier_100" name="chequier" value="100"> 100 Feuilles</td>
         </tr>
     </table>
 
@@ -455,20 +572,306 @@
     <table>
         <tr>
             <td>GESTIONNAIRE DE COMPTE :</td>
-            <td><input type="text" id="gestionnaire"></td>
+            <td><input type="text" size="40" id="gestionnaire"></td>
         </tr>
         <tr>
-            <td>SCC :</td>
-            <td><input type="text" id="gestionnaire"></td>
+            <td>CSO :</td>
+            <td><input type="text" size="40" id="gestionnaire"></td>
         </tr>
         <tr>
             <td>CHEF D'AGENCE :</td>
-            <td><input type="text" id="chef_agence"></td>
+            <td><input type="text" size="40" id="chef_agence"></td>
         </tr>
         <tr>
             <td class="signature"> SIGNATURE: </td>
             <td class="signature">DATE D'OUVERTURE : <input type="date" id="date_ouverture"></td>
         </tr>
+    </table>
+
+</div>
+
+<!-- PAGE 2: DECLARATION - Convention Banque par Internet ECOBANK CONGO -->
+<div class="page page-hidden" id="page-2">
+
+    <div class="header">
+        <div class="logo-container">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="60" zoomAndPan="magnify" viewBox="0 0 375 225" preserveAspectRatio="xMidYMid meet" version="1.0">
+                <defs>
+                    <clippath id="28a01fd8dc">
+                        <path d="M 9.386719 25.0625 L 365.636719 25.0625 L 365.636719 199.8125 L 9.386719 199.8125 Z M 9.386719 25.0625 " clip-rule="nonzero"></path>
+                    </clippath>
+                </defs>
+                <path fill="#007eb6" d="M 65.179688 67.949219 L 66.386719 60.703125 L 35.582031 60.703125 C 32.257812 60.703125 29.238281 63.417969 28.636719 66.441406 L 16.554688 134.089844 C 15.949219 137.414062 18.066406 140.132812 21.386719 140.132812 L 55.210938 140.132812 L 56.421875 132.882812 L 27.425781 132.882812 L 32.863281 102.679688 L 56.421875 102.679688 L 57.628906 95.734375 L 34.070312 95.734375 L 38.902344 67.949219 Z M 80.28125 141.339844 C 66.6875 141.339844 58.835938 129.257812 62.460938 109.023438 C 66.085938 88.488281 78.167969 77.011719 92.058594 77.011719 C 99.609375 77.011719 103.535156 79.425781 105.046875 81.238281 L 101.722656 86.976562 C 100.214844 85.464844 97.496094 83.957031 92.964844 83.957031 C 81.789062 83.957031 75.449219 94.226562 73.03125 108.722656 C 70.011719 123.519531 73.636719 133.789062 83.601562 133.789062 C 87.832031 133.789062 90.851562 132.277344 93.570312 130.769531 L 95.078125 137.109375 C 92.058594 139.226562 87.226562 141.339844 80.28125 141.339844 Z M 123.167969 141.339844 C 106.253906 141.339844 101.421875 127.445312 104.441406 109.023438 C 107.761719 90.601562 117.730469 76.707031 134.339844 76.707031 C 151.554688 76.707031 156.386719 90.296875 153.066406 109.023438 C 149.742188 127.445312 139.777344 141.339844 123.167969 141.339844 Z M 133.132812 83.351562 C 121.355469 83.351562 116.523438 96.640625 114.40625 109.023438 C 112.292969 121.707031 112.597656 134.394531 124.375 134.394531 C 136.152344 134.394531 140.683594 121.707031 142.796875 109.324219 C 144.910156 96.640625 145.214844 83.351562 133.132812 83.351562 Z M 229.476562 141.339844 C 213.46875 141.339844 207.125 134.394531 208.9375 122.917969 C 211.960938 106.304688 228.269531 101.472656 247.898438 99.660156 L 248.503906 95.734375 C 250.316406 86.070312 244.878906 83.351562 237.027344 83.351562 C 230.984375 83.351562 225.246094 85.464844 221.320312 87.277344 L 219.8125 81.238281 C 223.738281 79.425781 230.984375 76.707031 239.746094 76.707031 C 251.222656 76.707031 260.582031 81.539062 257.867188 96.941406 L 250.917969 136.808594 C 245.785156 139.527344 238.234375 141.339844 229.476562 141.339844 Z M 246.992188 104.796875 C 230.984375 106.609375 221.019531 110.230469 218.90625 122.613281 C 217.394531 131.675781 222.226562 135.300781 231.289062 135.300781 C 235.214844 135.300781 239.140625 134.695312 241.859375 133.183594 Z M 293.804688 140.132812 L 301.65625 95.433594 C 302.5625 89.695312 301.355469 83.351562 290.785156 83.351562 C 285.046875 83.351562 282.027344 84.257812 278.703125 85.464844 L 269.039062 140.132812 L 258.773438 140.132812 L 269.039062 81.238281 C 275.082031 78.519531 282.628906 76.707031 292.597656 76.707031 C 309.8125 76.707031 313.132812 86.371094 311.625 95.132812 L 303.773438 139.828125 L 293.804688 139.828125 Z M 293.804688 140.132812 " fill-opacity="1" fill-rule="nonzero"></path>
+                <path fill="#bed000" d="M 355.417969 154.328125 L 12.929688 154.328125 L 13.234375 152.515625 L 355.71875 152.515625 Z M 355.417969 154.328125 " fill-opacity="1" fill-rule="nonzero"></path>
+                <g clip-path="url(#28a01fd8dc)">
+                    <path fill="#007eb6" d="M 188.703125 77.3125 C 182.664062 77.3125 179.039062 78.519531 175.414062 80.332031 L 180.851562 50.128906 L 169.675781 56.171875 L 155.480469 136.808594 C 158.804688 139.226562 164.84375 141.339844 173.300781 141.339844 C 191.722656 141.339844 203.804688 128.050781 207.429688 108.117188 C 210.75 89.089844 203.199219 77.3125 188.703125 77.3125 Z M 197.160156 108.417969 C 194.441406 124.125 187.496094 134.695312 174.507812 134.695312 C 171.1875 134.695312 168.167969 134.394531 166.050781 133.183594 L 174.507812 85.464844 C 177.527344 83.957031 180.550781 83.050781 185.078125 83.050781 C 196.859375 83.050781 199.578125 94.828125 197.160156 108.417969 Z M 365.382812 77.917969 L 354.8125 77.917969 L 327.632812 106.609375 L 327.328125 106.609375 L 334.277344 67.34375 C 341.222656 28.6875 299.242188 20.53125 255.449219 27.175781 C 225.550781 31.707031 199.273438 43.488281 199.273438 43.488281 C 199.273438 43.488281 233.703125 31.40625 263.90625 29.59375 C 301.960938 27.480469 331.859375 33.21875 323.101562 73.6875 L 311.625 140.132812 L 321.589844 140.132812 L 327.328125 108.117188 L 327.632812 108.117188 L 345.753906 140.132812 L 357.230469 140.132812 L 336.992188 106.910156 Z M 18.667969 174.863281 L 14.441406 199.628906 L 10.515625 199.628906 L 14.742188 174.863281 L 9.609375 174.863281 L 9.910156 172.445312 L 24.40625 172.445312 L 24.105469 174.863281 Z M 35.582031 199.328125 L 38.300781 184.226562 C 38.601562 182.113281 37.996094 179.996094 34.675781 179.996094 C 33.164062 179.996094 31.65625 180.300781 30.449219 181.207031 L 27.125 199.328125 L 23.5 199.328125 L 28.9375 168.519531 L 32.257812 168.519531 L 30.75 179.394531 C 32.5625 178.488281 34.375 178.183594 35.882812 178.183594 C 41.320312 178.183594 42.226562 181.507812 41.925781 184.527344 L 39.207031 199.628906 L 35.582031 199.628906 Z M 47.359375 189.964844 C 47.058594 194.796875 48.871094 197.210938 52.496094 197.210938 C 54.910156 197.210938 56.722656 196.609375 57.929688 196.003906 L 58.535156 198.421875 C 57.023438 199.328125 54.609375 199.929688 51.890625 199.929688 C 46.453125 199.929688 43.132812 196.304688 44.339844 188.757812 C 45.546875 181.507812 49.777344 177.882812 54.910156 177.882812 C 60.046875 177.882812 62.460938 181.207031 61.253906 188.152344 Z M 54.308594 179.996094 C 51.285156 179.996094 48.570312 182.414062 47.664062 188.152344 L 58.234375 186.640625 C 58.835938 181.808594 57.328125 179.996094 54.308594 179.996094 Z M 83 188.152344 L 81.789062 188.152344 L 79.675781 199.328125 L 76.050781 199.328125 L 80.582031 173.351562 C 82.09375 172.445312 84.808594 171.84375 87.527344 171.84375 C 93.871094 171.84375 96.285156 175.164062 95.382812 179.996094 C 94.777344 184.828125 90.851562 189.058594 83 188.152344 Z M 87.226562 173.957031 C 85.714844 173.957031 84.808594 174.257812 84.207031 174.5625 L 82.09375 186.039062 L 83.300781 186.039062 C 89.039062 186.640625 91.453125 183.921875 92.058594 179.996094 C 92.964844 176.070312 91.453125 173.957031 87.226562 173.957031 Z M 102.628906 199.929688 C 97.191406 199.929688 95.078125 197.515625 95.683594 193.589844 C 96.589844 187.851562 102.328125 186.339844 108.972656 185.734375 L 109.273438 184.527344 C 109.878906 181.207031 108.066406 180.300781 105.347656 180.300781 C 103.234375 180.300781 101.421875 180.902344 99.910156 181.507812 L 99.308594 179.394531 C 100.515625 178.789062 103.234375 177.882812 105.953125 177.882812 C 109.878906 177.882812 113.199219 179.695312 111.992188 184.828125 L 109.574219 198.421875 C 108.066406 199.328125 105.347656 199.929688 102.628906 199.929688 Z M 108.367188 187.246094 C 102.929688 187.851562 99.609375 189.058594 98.703125 193.285156 C 98.097656 196.304688 99.910156 197.515625 102.929688 197.515625 C 104.140625 197.515625 105.648438 197.210938 106.554688 196.910156 Z M 126.1875 199.328125 L 128.90625 184.226562 C 129.207031 182.113281 128.90625 179.996094 125.28125 179.996094 C 123.167969 179.996094 122.261719 180.300781 121.050781 180.601562 L 117.730469 199.328125 L 114.40625 199.328125 L 118.03125 179.089844 C 120.144531 178.183594 122.5625 177.582031 126.1875 177.582031 C 132.226562 177.582031 133.132812 180.902344 132.832031 183.921875 L 130.113281 199.328125 Z M 162.730469 199.328125 L 161.824219 191.171875 L 152.460938 191.171875 L 148.535156 199.328125 L 145.214844 199.328125 L 159.105469 172.144531 L 162.429688 172.144531 L 166.65625 199.328125 Z M 160.3125 178.789062 C 160.011719 176.675781 160.011719 175.46875 160.011719 175.46875 C 160.011719 175.46875 159.710938 176.675781 158.503906 178.789062 L 153.367188 189.058594 L 161.523438 189.058594 Z M 177.527344 180.300781 L 174.207031 199.328125 L 170.582031 199.328125 L 173.90625 180.300781 L 171.488281 180.300781 L 171.789062 178.183594 L 174.207031 178.183594 L 174.8125 175.164062 C 175.414062 170.9375 178.433594 168.21875 183.265625 168.519531 L 182.964844 170.636719 C 180.851562 170.636719 179.039062 171.84375 178.433594 174.863281 L 177.832031 178.183594 L 181.757812 178.183594 L 181.457031 180.300781 Z M 193.535156 180.601562 C 192.027344 179.996094 189.910156 180.300781 188.703125 180.902344 L 185.382812 199.328125 L 181.757812 199.328125 L 185.382812 179.089844 C 187.796875 178.183594 189.910156 177.582031 194.746094 177.582031 Z M 194.746094 199.328125 L 198.367188 178.183594 L 201.691406 178.183594 L 198.066406 199.328125 Z M 201.085938 173.957031 C 199.878906 173.957031 199.273438 173.050781 199.273438 172.144531 C 199.578125 170.9375 200.484375 170.332031 201.691406 170.332031 C 202.898438 170.332031 203.503906 171.238281 203.503906 172.144531 C 203.199219 173.351562 201.992188 173.957031 201.085938 173.957031 Z M 210.75 199.929688 C 206.222656 199.929688 203.503906 195.703125 204.710938 188.757812 C 205.917969 181.808594 210.148438 177.882812 214.675781 177.882812 C 217.394531 177.882812 218.601562 178.789062 219.207031 179.394531 L 218 181.207031 C 217.394531 180.601562 216.488281 180.300781 214.980469 180.300781 C 211.054688 180.300781 208.9375 183.921875 208.03125 188.757812 C 207.125 193.589844 208.335938 197.210938 211.960938 197.210938 C 213.46875 197.210938 214.375 196.609375 215.28125 196.304688 L 215.886719 198.421875 C 214.675781 199.023438 213.167969 199.929688 210.75 199.929688 Z M 226.152344 199.929688 C 220.71875 199.929688 218.601562 197.515625 219.207031 193.589844 C 220.113281 187.851562 225.851562 186.339844 232.496094 185.734375 L 232.796875 184.527344 C 233.402344 181.207031 231.589844 180.300781 228.871094 180.300781 C 226.757812 180.300781 224.945312 180.902344 223.4375 181.507812 L 222.832031 179.394531 C 224.039062 178.789062 226.757812 177.882812 229.476562 177.882812 C 233.402344 177.882812 236.722656 179.695312 235.816406 184.828125 L 233.402344 198.421875 C 231.890625 199.328125 229.175781 199.929688 226.152344 199.929688 Z M 232.195312 187.246094 C 226.757812 187.851562 223.4375 189.058594 222.53125 193.285156 C 221.925781 196.304688 223.738281 197.515625 226.757812 197.515625 C 227.964844 197.515625 229.476562 197.210938 230.382812 196.910156 Z M 250.011719 199.328125 L 252.730469 184.226562 C 253.035156 182.113281 252.730469 179.996094 249.105469 179.996094 C 246.992188 179.996094 246.085938 180.300781 244.878906 180.601562 L 241.554688 199.328125 L 238.234375 199.328125 L 241.859375 179.089844 C 243.972656 178.183594 246.390625 177.582031 250.011719 177.582031 C 256.054688 177.582031 256.960938 180.902344 256.65625 183.921875 L 253.9375 199.328125 Z M 278.402344 199.929688 C 275.382812 199.929688 272.964844 199.328125 271.152344 198.421875 L 275.683594 173.65625 C 277.195312 172.75 279.914062 172.144531 282.933594 172.144531 C 288.972656 172.144531 291.691406 174.863281 290.785156 178.789062 C 290.179688 182.714844 286.859375 184.527344 284.441406 185.132812 C 286.859375 185.734375 290.179688 188.152344 289.578125 192.078125 C 288.671875 197.515625 283.839844 199.929688 278.402344 199.929688 Z M 278.703125 186.039062 L 276.890625 186.039062 L 275.082031 196.910156 C 275.988281 197.210938 277.195312 197.515625 278.703125 197.515625 C 282.328125 197.515625 285.347656 196.003906 285.953125 192.078125 C 286.558594 187.851562 284.441406 186.039062 278.703125 186.039062 Z M 282.628906 173.957031 C 281.121094 173.957031 280.214844 174.257812 279.007812 174.5625 L 277.195312 184.226562 L 279.007812 184.226562 C 284.746094 184.226562 286.859375 182.414062 287.464844 179.089844 C 288.066406 175.769531 286.253906 173.957031 282.628906 173.957031 Z M 299.542969 199.929688 C 294.105469 199.929688 291.992188 197.515625 292.597656 193.589844 C 293.503906 187.851562 299.242188 186.339844 305.886719 185.734375 L 306.1875 184.527344 C 306.792969 181.207031 304.980469 180.300781 302.261719 180.300781 C 300.148438 180.300781 298.035156 180.902344 296.824219 181.507812 L 296.222656 179.394531 C 297.429688 178.789062 300.148438 177.882812 302.867188 177.882812 C 306.792969 177.882812 310.113281 179.695312 309.207031 184.828125 L 306.792969 198.421875 C 304.980469 199.328125 302.261719 199.929688 299.542969 199.929688 Z M 305.28125 187.246094 C 299.84375 187.851562 296.523438 189.058594 295.617188 193.285156 C 295.011719 196.304688 296.824219 197.515625 299.847656 197.515625 C 301.054688 197.515625 302.5625 197.210938 303.46875 196.910156 Z M 323.703125 199.328125 L 326.421875 184.226562 C 326.726562 182.113281 326.421875 179.996094 322.800781 179.996094 C 320.683594 179.996094 319.777344 180.300781 318.570312 180.601562 L 315.25 199.328125 L 311.625 199.328125 L 315.25 179.089844 C 317.363281 178.183594 319.777344 177.582031 323.402344 177.582031 C 329.441406 177.582031 330.347656 180.902344 330.046875 183.921875 L 327.328125 199.328125 Z M 343.636719 199.328125 L 337.597656 188.453125 L 335.785156 199.328125 L 332.464844 199.328125 L 337.898438 168.519531 L 341.222656 168.519531 L 337.898438 188.152344 L 347.261719 178.183594 L 350.886719 178.183594 L 341.222656 188.152344 L 348.167969 199.328125 Z M 343.636719 199.328125 " fill-opacity="1" fill-rule="nonzero"></path>
+                </g>
+            </svg>
+        </div>
+        <div class="form-title">
+            <h1>Your Banking, Your Way</h1>
+            <p>Personal / Business - <b>Convention de Service</b></p>
+        </div>
+    </div>
+
+    <div class="declaration-header">DÉCLARATION</div>
+
+    <div class="declaration-title">2. CONVENTION BANQUE PAR INTERNET ECOBANK CONGO</div>
+
+    <div class="page-declaration">
+        <div class="article">
+            <div class="article-title">ARTICLE 1 : OBJET</div>
+            <div style="font-size: smaller;">
+                Présente convention est de définir les conditions et modalités suivant lesquelles ECOBANK (ci-disposition de son client souhaitant l'accès ECOBANK par Internet.
+                ECOBANK par internet est un produit de paiement, accessible par le réseau internet.<br>
+                ECOBANK par Internet pourra également être accessible, compte dure.
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-title">ARTICLE 2</div>
+            <div style="font-size: smaller;">
+                Manière exhaustive les comptes pour lesquels il dient la fourniture des services.
+                La détermination des pouvoirs à cette fin est fonction des instructions de la banque ou par instructions ultérieures dûment entregistrées par la banque.
+                Distincts suivant des modules nommés « Bleu », « Argent », « Or », « Platinum » dont les fonctionnalités diffèrent. L'abonné bénéficit lors de la souscription de son abonnement le module souhaité.
+                Les comptes bénéficient automatiquement, au sur à mesure de leur mise à disposition, de toutes les fonctionnalités offertes sous le module considéré, ce en fonction de la nature du compte concerné.
+            </div>
+        </div>
+
+        <div class="article">
+                <div class="article-title">ARTICLE 3 : IDENTIFICATION, ACCÈS, CONFIDENTIALITÉ</div>
+                <div style="font-size: smaller;">
+                Le code secret est transmis par la Banque à l'Abonné.
+                Il est conseillé de le garder hors de la portée de toute personne. L'Abonné est responsable de la confidentialité de son code secret.
+                ECOBANK garantit que la circulation de ce code sur Internet est protégée par une licence SSL de la société VeriSign.
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-title">ARTICLE 4 : REFUS D'ACCÈS</div>
+            <div style="font-size: smaller;">
+                ECOBANK peut suspendre l'accès à ECOBANK par Internet au cas où il existe des faits laissant présumer une utilisation frauduleuse. L'Abonné en est informé par tout moyen.
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-title">ARTICLE 5 : TARIFICATION</div>
+            <div style="font-size: smaller;">
+                Tarification mensuelle indivisible payable par avance par le débit de l'Abonné.<br>
+                Les tarifs varient suivant les modules choisis et sont communiqués à l'Abonné.
+                L'entrée en vigueur des modifications tarifaires vaut déclaration de celle-ci par l'Abonné.
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-title">ARTICLE 6 : RESPONSABILITÉ DE LA BANQUE</div>
+            <div style="font-size: smaller;">
+                La Banque garantit la confidentialité des informations communiquées. Toutefois, ECOBANK ne saurait être responsable du mauvais fonctionnement dû à des événements hors de son contrôle :<br>
+                • transport des données
+                • défaillance des matériels ou réseau
+                • erreurs des gestionnaires de réseau
+                • interruptions de service (cas de force majeure, conflits sociaux, défaut de fourniture électrique, etc.)
+                • mauvais fonctionnement du matériel de l'Abonné
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-title">ARTICLE 7 : RESPONSABILITÉ DE L'ABONNÉ</div>
+            <div style="font-size: smaller;">
+                L'abonné est responsable de la conservation et de l'utilisation de son code secret.
+                En cas d'abonnement joint, les co-abonnés sont solidairement responsables.
+                Toute opération précédée de la frappe du numéro d'abonné et du code secret est réputée émaner de l'Abonné ou des co-abonnés.
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-title">ARTICLE 8 : FORCE PROBANTE DES LIVRES DE LA BANQUE</div>
+            <div style="font-size: smaller;">
+                Toutes les opérations passées font l'objet d'un relevé mensuel ou trimestriel.
+                Passé un délai de trois mois, l'Abonné est réputé avoir approuvé les opérations à aucune réclamation.
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-title">ARTICLE 9 : RÉSILIATION</div>
+            <div style="font-size: smaller;">
+                La durée de l'abonnement est d'une durée lors de la souscription. En cas de clôture du compte, l'abonnement est considéré comme éteint.
+                Chaque partie peut résilier l'abonnement avec un préavis de quinze (15) jours.
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-title">ARTICLE 10 : DONNÉES PERSONNELLES</div>
+            <div style="font-size: smaller;">
+                Les données recueillies sont utilisées uniquement pour la gestion du service et le respect des obligations légales.
+                L'Abonné autorise la Banque à communiquer ces données aux entreprises sous-traitantes.
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-title">ARTICLE 11 : DOCUMENTS CONTRACTUELS ET LOI APPLICABLE</div>
+            <div style="font-size: smaller;">
+                La convention comprend le texte, le bulletin de souscription et les formulaires en usage.<br>
+                Elle est soumise au droit congolais.
+                Les tribunaux congolais sont compétents pour toute question relative à son interprétation ou exécution, à défaut d'accord amiable.
+            </div>
+        </div>
+    </div>
+
+    <div class="page-counter">
+        <span>Page <span id="current-page">2</span> de <span id="total-pages">3</span></span>
+        <br>
+        <label><input type="checkbox" id="accept-declaration"> J'accepte les termes et conditions de cette convention</label>
+    </div>
+
+</div>
+
+<!-- PAGE 3: ENGAGEMENT AIRTEL MONEY + BULLETIN D'ADHESION -->
+<div class="page page-hidden" id="page-3">
+
+    <div class="header">
+        <div class="logo-container">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="60" zoomAndPan="magnify" viewBox="0 0 375 225" preserveAspectRatio="xMidYMid meet" version="1.0">
+                <defs>
+                    <clippath id="28a01fd8dc">
+                        <path d="M 9.386719 25.0625 L 365.636719 25.0625 L 365.636719 199.8125 L 9.386719 199.8125 Z M 9.386719 25.0625 " clip-rule="nonzero"></path>
+                    </clippath>
+                </defs>
+                <path fill="#007eb6" d="M 65.179688 67.949219 L 66.386719 60.703125 L 35.582031 60.703125 C 32.257812 60.703125 29.238281 63.417969 28.636719 66.441406 L 16.554688 134.089844 C 15.949219 137.414062 18.066406 140.132812 21.386719 140.132812 L 55.210938 140.132812 L 56.421875 132.882812 L 27.425781 132.882812 L 32.863281 102.679688 L 56.421875 102.679688 L 57.628906 95.734375 L 34.070312 95.734375 L 38.902344 67.949219 Z M 80.28125 141.339844 C 66.6875 141.339844 58.835938 129.257812 62.460938 109.023438 C 66.085938 88.488281 78.167969 77.011719 92.058594 77.011719 C 99.609375 77.011719 103.535156 79.425781 105.046875 81.238281 L 101.722656 86.976562 C 100.214844 85.464844 97.496094 83.957031 92.964844 83.957031 C 81.789062 83.957031 75.449219 94.226562 73.03125 108.722656 C 70.011719 123.519531 73.636719 133.789062 83.601562 133.789062 C 87.832031 133.789062 90.851562 132.277344 93.570312 130.769531 L 95.078125 137.109375 C 92.058594 139.226562 87.226562 141.339844 80.28125 141.339844 Z M 123.167969 141.339844 C 106.253906 141.339844 101.421875 127.445312 104.441406 109.023438 C 107.761719 90.601562 117.730469 76.707031 134.339844 76.707031 C 151.554688 76.707031 156.386719 90.296875 153.066406 109.023438 C 149.742188 127.445312 139.777344 141.339844 123.167969 141.339844 Z M 133.132812 83.351562 C 121.355469 83.351562 116.523438 96.640625 114.40625 109.023438 C 112.292969 121.707031 112.597656 134.394531 124.375 134.394531 C 136.152344 134.394531 140.683594 121.707031 142.796875 109.324219 C 144.910156 96.640625 145.214844 83.351562 133.132812 83.351562 Z M 229.476562 141.339844 C 213.46875 141.339844 207.125 134.394531 208.9375 122.917969 C 211.960938 106.304688 228.269531 101.472656 247.898438 99.660156 L 248.503906 95.734375 C 250.316406 86.070312 244.878906 83.351562 237.027344 83.351562 C 230.984375 83.351562 225.246094 85.464844 221.320312 87.277344 L 219.8125 81.238281 C 223.738281 79.425781 230.984375 76.707031 239.746094 76.707031 C 251.222656 76.707031 260.582031 81.539062 257.867188 96.941406 L 250.917969 136.808594 C 245.785156 139.527344 238.234375 141.339844 229.476562 141.339844 Z M 246.992188 104.796875 C 230.984375 106.609375 221.019531 110.230469 218.90625 122.613281 C 217.394531 131.675781 222.226562 135.300781 231.289062 135.300781 C 235.214844 135.300781 239.140625 134.695312 241.859375 133.183594 Z M 293.804688 140.132812 L 301.65625 95.433594 C 302.5625 89.695312 301.355469 83.351562 290.785156 83.351562 C 285.046875 83.351562 282.027344 84.257812 278.703125 85.464844 L 269.039062 140.132812 L 258.773438 140.132812 L 269.039062 81.238281 C 275.082031 78.519531 282.628906 76.707031 292.597656 76.707031 C 309.8125 76.707031 313.132812 86.371094 311.625 95.132812 L 303.773438 139.828125 L 293.804688 139.828125 Z M 293.804688 140.132812 " fill-opacity="1" fill-rule="nonzero"></path>
+                <path fill="#bed000" d="M 355.417969 154.328125 L 12.929688 154.328125 L 13.234375 152.515625 L 355.71875 152.515625 Z M 355.417969 154.328125 " fill-opacity="1" fill-rule="nonzero"></path>
+                <g clip-path="url(#28a01fd8dc)">
+                    <path fill="#007eb6" d="M 188.703125 77.3125 C 182.664062 77.3125 179.039062 78.519531 175.414062 80.332031 L 180.851562 50.128906 L 169.675781 56.171875 L 155.480469 136.808594 C 158.804688 139.226562 164.84375 141.339844 173.300781 141.339844 C 191.722656 141.339844 203.804688 128.050781 207.429688 108.117188 C 210.75 89.089844 203.199219 77.3125 188.703125 77.3125 Z M 197.160156 108.417969 C 194.441406 124.125 187.496094 134.695312 174.507812 134.695312 C 171.1875 134.695312 168.167969 134.394531 166.050781 133.183594 L 174.507812 85.464844 C 177.527344 83.957031 180.550781 83.050781 185.078125 83.050781 C 196.859375 83.050781 199.578125 94.828125 197.160156 108.417969 Z M 365.382812 77.917969 L 354.8125 77.917969 L 327.632812 106.609375 L 327.328125 106.609375 L 334.277344 67.34375 C 341.222656 28.6875 299.242188 20.53125 255.449219 27.175781 C 225.550781 31.707031 199.273438 43.488281 199.273438 43.488281 C 199.273438 43.488281 233.703125 31.40625 263.90625 29.59375 C 301.960938 27.480469 331.859375 33.21875 323.101562 73.6875 L 311.625 140.132812 L 321.589844 140.132812 L 327.328125 108.117188 L 327.632812 108.117188 L 345.753906 140.132812 L 357.230469 140.132812 L 336.992188 106.910156 Z M 18.667969 174.863281 L 14.441406 199.628906 L 10.515625 199.628906 L 14.742188 174.863281 L 9.609375 174.863281 L 9.910156 172.445312 L 24.40625 172.445312 L 24.105469 174.863281 Z M 35.582031 199.328125 L 38.300781 184.226562 C 38.601562 182.113281 37.996094 179.996094 34.675781 179.996094 C 33.164062 179.996094 31.65625 180.300781 30.449219 181.207031 L 27.125 199.328125 L 23.5 199.328125 L 28.9375 168.519531 L 32.257812 168.519531 L 30.75 179.394531 C 32.5625 178.488281 34.375 178.183594 35.882812 178.183594 C 41.320312 178.183594 42.226562 181.507812 41.925781 184.527344 L 39.207031 199.628906 L 35.582031 199.628906 Z M 47.359375 189.964844 C 47.058594 194.796875 48.871094 197.210938 52.496094 197.210938 C 54.910156 197.210938 56.722656 196.609375 57.929688 196.003906 L 58.535156 198.421875 C 57.023438 199.328125 54.609375 199.929688 51.890625 199.929688 C 46.453125 199.929688 43.132812 196.304688 44.339844 188.757812 C 45.546875 181.507812 49.777344 177.882812 54.910156 177.882812 C 60.046875 177.882812 62.460938 181.207031 61.253906 188.152344 Z M 54.308594 179.996094 C 51.285156 179.996094 48.570312 182.414062 47.664062 188.152344 L 58.234375 186.640625 C 58.835938 181.808594 57.328125 179.996094 54.308594 179.996094 Z M 83 188.152344 L 81.789062 188.152344 L 79.675781 199.328125 L 76.050781 199.328125 L 80.582031 173.351562 C 82.09375 172.445312 84.808594 171.84375 87.527344 171.84375 C 93.871094 171.84375 96.285156 175.164062 95.382812 179.996094 C 94.777344 184.828125 90.851562 189.058594 83 188.152344 Z M 87.226562 173.957031 C 85.714844 173.957031 84.808594 174.257812 84.207031 174.5625 L 82.09375 186.039062 L 83.300781 186.039062 C 89.039062 186.640625 91.453125 183.921875 92.058594 179.996094 C 92.964844 176.070312 91.453125 173.957031 87.226562 173.957031 Z M 102.628906 199.929688 C 97.191406 199.929688 95.078125 197.515625 95.683594 193.589844 C 96.589844 187.851562 102.328125 186.339844 108.972656 185.734375 L 109.273438 184.527344 C 109.878906 181.207031 108.066406 180.300781 105.347656 180.300781 C 103.234375 180.300781 101.421875 180.902344 99.910156 181.507812 L 99.308594 179.394531 C 100.515625 178.789062 103.234375 177.882812 105.953125 177.882812 C 109.878906 177.882812 113.199219 179.695312 111.992188 184.828125 L 109.574219 198.421875 C 108.066406 199.328125 105.347656 199.929688 102.628906 199.929688 Z M 108.367188 187.246094 C 102.929688 187.851562 99.609375 189.058594 98.703125 193.285156 C 98.097656 196.304688 99.910156 197.515625 102.929688 197.515625 C 104.140625 197.515625 105.648438 197.210938 106.554688 196.910156 Z M 126.1875 199.328125 L 128.90625 184.226562 C 129.207031 182.113281 128.90625 179.996094 125.28125 179.996094 C 123.167969 179.996094 122.261719 180.300781 121.050781 180.601562 L 117.730469 199.328125 L 114.40625 199.328125 L 118.03125 179.089844 C 120.144531 178.183594 122.5625 177.582031 126.1875 177.582031 C 132.226562 177.582031 133.132812 180.902344 132.832031 183.921875 L 130.113281 199.328125 Z M 162.730469 199.328125 L 161.824219 191.171875 L 152.460938 191.171875 L 148.535156 199.328125 L 145.214844 199.328125 L 159.105469 172.144531 L 162.429688 172.144531 L 166.65625 199.328125 Z M 160.3125 178.789062 C 160.011719 176.675781 160.011719 175.46875 160.011719 175.46875 C 160.011719 175.46875 159.710938 176.675781 158.503906 178.789062 L 153.367188 189.058594 L 161.523438 189.058594 Z M 177.527344 180.300781 L 174.207031 199.328125 L 170.582031 199.328125 L 173.90625 180.300781 L 171.488281 180.300781 L 171.789062 178.183594 L 174.207031 178.183594 L 174.8125 175.164062 C 175.414062 170.9375 178.433594 168.21875 183.265625 168.519531 L 182.964844 170.636719 C 180.851562 170.636719 179.039062 171.84375 178.433594 174.863281 L 177.832031 178.183594 L 181.757812 178.183594 L 181.457031 180.300781 Z M 193.535156 180.601562 C 192.027344 179.996094 189.910156 180.300781 188.703125 180.902344 L 185.382812 199.328125 L 181.757812 199.328125 L 185.382812 179.089844 C 187.796875 178.183594 189.910156 177.582031 194.746094 177.582031 Z M 194.746094 199.328125 L 198.367188 178.183594 L 201.691406 178.183594 L 198.066406 199.328125 Z M 201.085938 173.957031 C 199.878906 173.957031 199.273438 173.050781 199.273438 172.144531 C 199.578125 170.9375 200.484375 170.332031 201.691406 170.332031 C 202.898438 170.332031 203.503906 171.238281 203.503906 172.144531 C 203.199219 173.351562 201.992188 173.957031 201.085938 173.957031 Z M 210.75 199.929688 C 206.222656 199.929688 203.503906 195.703125 204.710938 188.757812 C 205.917969 181.808594 210.148438 177.882812 214.675781 177.882812 C 217.394531 177.882812 218.601562 178.789062 219.207031 179.394531 L 218 181.207031 C 217.394531 180.601562 216.488281 180.300781 214.980469 180.300781 C 211.054688 180.300781 208.9375 183.921875 208.03125 188.757812 C 207.125 193.589844 208.335938 197.210938 211.960938 197.210938 C 213.46875 197.210938 214.375 196.609375 215.28125 196.304688 L 215.886719 198.421875 C 214.675781 199.023438 213.167969 199.929688 210.75 199.929688 Z M 226.152344 199.929688 C 220.71875 199.929688 218.601562 197.515625 219.207031 193.589844 C 220.113281 187.851562 225.851562 186.339844 232.496094 185.734375 L 232.796875 184.527344 C 233.402344 181.207031 231.589844 180.300781 228.871094 180.300781 C 226.757812 180.300781 224.945312 180.902344 223.4375 181.507812 L 222.832031 179.394531 C 224.039062 178.789062 226.757812 177.882812 229.476562 177.882812 C 233.402344 177.882812 236.722656 179.695312 235.816406 184.828125 L 233.402344 198.421875 C 231.890625 199.328125 229.175781 199.929688 226.152344 199.929688 Z M 232.195312 187.246094 C 226.757812 187.851562 223.4375 189.058594 222.53125 193.285156 C 221.925781 196.304688 223.738281 197.515625 226.757812 197.515625 C 227.964844 197.515625 229.476562 197.210938 230.382812 196.910156 Z M 250.011719 199.328125 L 252.730469 184.226562 C 253.035156 182.113281 252.730469 179.996094 249.105469 179.996094 C 246.992188 179.996094 246.085938 180.300781 244.878906 180.601562 L 241.554688 199.328125 L 238.234375 199.328125 L 241.859375 179.089844 C 243.972656 178.183594 246.390625 177.582031 250.011719 177.582031 C 256.054688 177.582031 256.960938 180.902344 256.65625 183.921875 L 253.9375 199.328125 Z M 278.402344 199.929688 C 275.382812 199.929688 272.964844 199.328125 271.152344 198.421875 L 275.683594 173.65625 C 277.195312 172.75 279.914062 172.144531 282.933594 172.144531 C 288.972656 172.144531 291.691406 174.863281 290.785156 178.789062 C 290.179688 182.714844 286.859375 184.527344 284.441406 185.132812 C 286.859375 185.734375 290.179688 188.152344 289.578125 192.078125 C 288.671875 197.515625 283.839844 199.929688 278.402344 199.929688 Z M 278.703125 186.039062 L 276.890625 186.039062 L 275.082031 196.910156 C 275.988281 197.210938 277.195312 197.515625 278.703125 197.515625 C 282.328125 197.515625 285.347656 196.003906 285.953125 192.078125 C 286.558594 187.851562 284.441406 186.039062 278.703125 186.039062 Z M 282.628906 173.957031 C 281.121094 173.957031 280.214844 174.257812 279.007812 174.5625 L 277.195312 184.226562 L 279.007812 184.226562 C 284.746094 184.226562 286.859375 182.414062 287.464844 179.089844 C 288.066406 175.769531 286.253906 173.957031 282.628906 173.957031 Z M 299.542969 199.929688 C 294.105469 199.929688 291.992188 197.515625 292.597656 193.589844 C 293.503906 187.851562 299.242188 186.339844 305.886719 185.734375 L 306.1875 184.527344 C 306.792969 181.207031 304.980469 180.300781 302.261719 180.300781 C 300.148438 180.300781 298.035156 180.902344 296.824219 181.507812 L 296.222656 179.394531 C 297.429688 178.789062 300.148438 177.882812 302.867188 177.882812 C 306.792969 177.882812 310.113281 179.695312 309.207031 184.828125 L 306.792969 198.421875 C 304.980469 199.328125 302.261719 199.929688 299.542969 199.929688 Z M 305.28125 187.246094 C 299.84375 187.851562 296.523438 189.058594 295.617188 193.285156 C 295.011719 196.304688 296.824219 197.515625 299.847656 197.515625 C 301.054688 197.515625 302.5625 197.210938 303.46875 196.910156 Z M 323.703125 199.328125 L 326.421875 184.226562 C 326.726562 182.113281 326.421875 179.996094 322.800781 179.996094 C 320.683594 179.996094 319.777344 180.300781 318.570312 180.601562 L 315.25 199.328125 L 311.625 199.328125 L 315.25 179.089844 C 317.363281 178.183594 319.777344 177.582031 323.402344 177.582031 C 329.441406 177.582031 330.347656 180.902344 330.046875 183.921875 L 327.328125 199.328125 Z M 343.636719 199.328125 L 337.597656 188.453125 L 335.785156 199.328125 L 332.464844 199.328125 L 337.898438 168.519531 L 341.222656 168.519531 L 337.898438 188.152344 L 347.261719 178.183594 L 350.886719 178.183594 L 341.222656 188.152344 L 348.167969 199.328125 Z M 343.636719 199.328125 " fill-opacity="1" fill-rule="nonzero"></path>
+                </g>
+            </svg>
+        </div>
+        <div class="form-title">
+            <h1>Your Banking, Your Way</h1>
+            <p>Personal / Business - <b>Convention de Service</b></p>
+        </div>
+    </div>
+
+    <div class="declaration-header">3. ENGAGEMENT AIRTEL MONEY</div>
+
+    <div class="page-declaration">
+        <div class="article">
+            <div class="article-content">
+                Je soussigné(e) .......................................................................................................
+                titulaire du compte Ecobank N° ............................., 
+                Certifie que toutes les informations ci-dessus sont correctes et je souhaite m'enregistrer pour bénéficier des services Airtel Money
+                fournis par ECOBANK CONGO en partenariat avec AIRTEL MONEY SA conformément aux conditions d'utilisation des clients Airtel Money.
+            </div>
+        </div>
+        
+        <div class="article">
+            <div style="font-size: smaller;">
+                J'autorise Ecobank Congo à considérer le numéro de téléphone AIRTEL indiqué plus haut comme l'un de mes contacts téléphoniques si celui-ci est différent du contact préalablement enregistré lors de l'ouverture du compte.
+            </div>
+        </div>
+
+        <div class="article">
+            <div style="font-size: smaller;">
+                Le présent formulaire de demande de rattachement des comptes Ecobank et Airtel Money constitue un accord officiel.
+            </div>
+        </div>
+
+        <div class="declaration-header">4. BULLETIN D'ADHESION ASSURANCE MONETIQUE (1/2)</div>
+
+        <div class="article">
+            <div class="article-title">NOTICE D'INFORMATION</div>
+            <div class="article-content">
+                <strong>1. Définitions au sens des contrats souscrits</strong><br>
+                <div style="font-size: smaller;"> ASSURE : vous-même, nommément désigné sur votre bulletin d'adhésion, titulaire ou co-titulaire du compte courant (les mandataires ne peuvent être assurés), en qualité de simple particulier agissant dans le cadre de votre vie privée (en dehors de toute participation à une activité professionnelle, à la gestion ou à l'administration d'une association ou d'une société civile ou commerciale).
+                Compte courant : votre compte ouvert à Société Générale Congo, dont les références figurent sur votre bulletin d'adhésion, étant précisé, qu'en cas de transfert dudit compte dans une autre agence de Société Générale Congo, vous êtes toujours assuré.
+                Moyens de paiement   et/ou retrait : Vos cartes de paiement et vos carnets de chèques attachés à votre compte courant et émis par la Société Générale Congo.
+                Papiers : Votre Carte Nationale d'Identité ou Attestation d’Identité, votre permis de conduire et votre passeport.
+                Tiers : Toute personne autre que vous, votre conjoint, vos ascendants ou vos descendants. </div>
+
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-content">
+                <strong>LES GARANTIES</strong><br>
+            <div style="font-size: smaller;"> Sécurité financière. Remboursement des pertes pécuniaires subies à la suite de retraits effectués avec usage frauduleux de la carte perdue ou volée avant et intervenus entre la date de constat et la date de demande d'opposition ou de déclaration de perte.<br>
+                Sécurité Papiers. Remboursement des frais de réfection de papiers administratifs perdus ou volés au cours de la période d'adhésion et en même temps que l’effet de paiement. 
+                Assistance Voyages : Assister l’assuré en cas de survenance d’un incident ou d’une maladie durant son séjour à l’étranger. <br>
+                Individuelle Accident. Couvre les lésions corporelles (accident mortel ou incapacité et frais médicaux) subies par le client à la suite d’un accident ou d’une agression ayant entrainé la perte ou le vol de son effet de paiement. </div> <br>
+                <strong>Territorialité </strong>  <br>
+                <div style="font-size: smaller;">  La garantie "Assistance Voyages" ne couvre qu'au cours des déplacements à l'étranger dans la limite de 92 jours consécutifs. Toutes les autres garanties s'exercent en tout temps et en tous lieux dans le MONDE ENTIER.
+                Contrat d'assurance N°2023-70-0174184  </div> <br>
+                <strong> Exclusions</strong><br>
+                <div style="font-size: smaller;">Faute intentionnelle ou dolosive de votre part ou effectuée avec votre complicité, ou de la part d'un de vos proches
+                (conjoint, ascendant, descendant ou préposés à votre service), <br>
+                Vols et pertes opérés suite à la perte ou au vol d’une carte conservée avec son code secret <br>
+                Guerre civile ou étrangère, <br>
+                Embargo, confiscation, capture ou destruction, par ordre d'un gouvernement ou d'une autorité publique,- Désintégration du noyau atomique ou rayonnement ionisant. </div>
+
+            </div>
+        </div>
+
+        <div class="article">
+                <strong>Déclaration de sinistre</strong> <br>
+            <div style="font-size: smaller;">
+            En cas de sinistre, le Bénéficiaire a l’obligation de contacter l’Assureur dans un délai de 5 jours ouvrés dès qu'il a eu connaissance du Sinistre.
+            La déclaration peut se faire auprès de la banque ou directement auprès de SUNU Assurances IARD Congo.
+            La déclaration d'un sinistre peut être envoyée directement par lettre recommandée avec accusé de réception, à l’adresse du siège de SUNU Assurances IARD Congo,. <br>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-content">
+                <strong>DISPOSITIONS DIVERSES</strong><br> <br>
+            </div>
+        </div>
+
+        <div class="article">
+                <strong>A) PRIME</strong><br>
+                <div style="font-size: smaller;"> Votre cotisation annuelle Toutes Taxes Comprises due à chaque date anniversaire de votre adhésion,
+                est automatiquement prélevée par la Banque sur votre compte courant à cette date. <br> </div>
+            </div>
+        </div>
+
+        <div class="article">
+            <div style="font-size: smaller;">
+                <strong>B) DELAI DE CARENCE </strong><br>
+            <div style="font-size: smaller;"> Aucun sinistre ne peut donner lieu à indemnisation s'il survient dans les huit (8) premiers jours à partir de la date d'effet de votre adhésion à l'assurance. <br> </div>
+            </div>
+        </div>
+
+        <div class="article">
+                <strong>C) PAIEMENT DES INDEMNITES </strong><br>
+                <div style="font-size: smaller;"> Les indemnités versées au titre des garantie au bulletin sont payées dans les quinze (15) jours qui suivent la réception, par SUNU Assurances IARD Congo, de l'ensemble des pièces justificatives du sinistre ou,
+                en cas d'expertise ou d'enquête, du rapport de l'expert ou de l'enquêteur. <br>
+                Contrat d'assurance N°2023-70-0174184
+            </div>
+        </div>
+
+        <div class="article">
+                <strong>D) EFFET ET DUREE DE VOTRE ADHESION </strong><br>
+            <div style="font-size: smaller;"> Votre adhésion, subordonnée au paiement intégral de la prime, prend effet : <br>
+                - Le jour de la signature de votre bulletin d'adhésion en cas d'adhésion au guichet, <br>
+                -Le jour où vous adressez par porteur ou par lettre recommandée votre bulletin d'adhésion à la Banque qui vous signe une décharge, en cas d'adhésion ultérieure.
+                L’adhérent dispose d’un délai de huit (8) jours après réception de la présente notice pour dénoncer l’adhésion à l’assurance. <br>
+                Elle dure jusqu'au jour de l'échéance annuelle de l'adhésion (date anniversaire) et est ensuite renouvelée par tacite reconduction annuelle sauf résiliation dans les conditions prévues au paragraphe "Résiliation de votre adhésion" de la présente notice
+            </div>
+        </div>
+
+        <div class="article">
+                <strong>E) RESILIATION DE VOTRE ADHESION </strong><br>
+            <div style="font-size: smaller;"> <br>PAR VOUS : chaque année à l'échéance annuelle de votre adhésion (par lettre au porteur ou par lettre recommandée adressée, au plus tard 1 mois avant la date de l'échéance, à SUNU Assurances IARD Congo : 17 Rue de l’hôtel de ville ; BP 340 Pointe-Noire, la résiliation prenant effet à la date de l'échéance annuelle. <br> <br>
+            Par SUNU Assurances IARD Congo : chaque année au jour de l'échéance annuelle de l'adhésion (date anniversaire), SUNU Assurances IARD Congo devant vous en informer par lettre au porteur ou par lettre recommandée au plus tard 2 mois avant la date de l'échéance) ou en cas de non-paiement des primes (article 13 du Code CIMA). <br> <br>
+            DE PLEIN DROIT : en cas de clôture de votre compte courant (sauf s'il s'agit d'un transfert de compte dans une autre agence de la Banque ou en cas de résiliation du contrat souscrit par la Banque (tel qu'il est référencé en en-tête de la présente notice). 
+            Dans ce dernier cas, la Banque vous en informera par écrit au plus tard 2 mois avant le jour de l'échéance annuelle de votre adhésion (date anniversaire). <br> <br>
+            Les délais de résiliation ci-dessus sont décomptés à partir de la date de décharge de la lettre au porteur ou de la lettre recommandée.
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
     </table>
 
 </div>
@@ -517,16 +920,48 @@
             .then(r => r.json())
             .then(data => {
                 if (data && data.status === 'ok') {
-                    document.getElementById('customer-name').value = data.account?.account_title || data.customer?.customer_name || '';
+                    // Remplir le nom client : concaténer prénom + nom si disponibles, sinon customer_name, sinon account_title
+                    (function(){
+                        var nameVal = '';
+                        try {
+                            if (data.customer) {
+                                var fn = (data.customer.first_name || data.customer.form_fields?.['first-name'] || '').trim();
+                                var ln = (data.customer.last_name || data.customer.form_fields?.['last-name'] || '').trim();
+                                if (fn || ln) {
+                                    nameVal = (fn + ' ' + ln).trim();
+                                } else if (data.customer.customer_name) {
+                                    nameVal = data.customer.customer_name;
+                                }
+                            }
+                        } catch (e) { /* silent */ }
+                        if (!nameVal) nameVal = data.account?.account_title || '';
+                        document.getElementById('customer-name').value = nameVal;
+                    })();
                     document.getElementById('oe-account-1').textContent = data.account?.account_number || '';
                     document.getElementById('oe-type-1').textContent = data.account?.account_type || '';
                     document.getElementById('oe-currency-1').textContent = data.account?.currency || '';
                     document.getElementById('oe-branch-1').textContent = data.account?.branch_code || '';
                     document.getElementById('oe-branch-office-1').textContent = data.bank?.name || '';
 
+                    // Remplir les téléphones si disponibles
+                    try {
+                        var phoneVal = data.customer?.mobile || data.account?.phone || '';
+                        if (phoneVal) {
+                            var airtel = document.getElementById('airtel_phone');
+                            var mm = document.getElementById('mobilemoney_phone');
+                            if (airtel && !airtel.value) airtel.value = phoneVal;
+                            if (mm && !mm.value) mm.value = phoneVal;
+                        }
+                    } catch (e) { /* silent */ }
+
                     // Montrer le formulaire et masquer le loader
-                    document.querySelector('.page').classList.remove('hidden');
+                    document.querySelectorAll('.page').forEach(p => p.classList.remove('hidden'));
                     hideLoader();
+                    
+                    // Initialiser la navigation des pages
+                    if (typeof showPage === 'function') {
+                        showPage(1);
+                    }
                 } else {
                     hideLoader();
                     alert('Compte introuvable. Le formulaire restera masqué.');
@@ -545,24 +980,48 @@
         const url_params = getUrlParams();
         const form_data = {};
         
-        // Capturer les checkboxes cochées
+        // Capturer les checkboxes de chéquier
         const chequier_checked = Array.from(document.querySelectorAll('input[name="chequier"]:checked')).map(cb => cb.value);
         if (chequier_checked.length > 0) {
             form_data['chequier'] = chequier_checked;
         }
         
+        // Capturer les checkboxes de dépôt
         const depot_checked = Array.from(document.querySelectorAll('input[name="depot"]:checked')).map(cb => cb.value);
         if (depot_checked.length > 0) {
             form_data['depot'] = depot_checked;
         }
         
+        // Capturer les cartes monétiques
+        form_data['card_classic'] = document.getElementById('card_classic_yes')?.checked || false;
+        form_data['card_gold'] = document.getElementById('card_gold_yes')?.checked || false;
+        form_data['card_platinum'] = document.getElementById('card_platinum_yes')?.checked || false;
+        
+        // Capturer les services digitaux
+        form_data['srv_ecobank_app'] = document.getElementById('srv_ecobank_app')?.checked || false;
+        form_data['srv_airtel_money'] = document.getElementById('srv_airtel_money')?.checked || false;
+        form_data['srv_insurance'] = document.getElementById('srv_insurance')?.checked || false;
+        form_data['srv_mobile_money'] = document.getElementById('srv_mobile_money')?.checked || false;
+        form_data['srv_estatement'] = document.getElementById('srv_estatement')?.checked || false;
+        form_data['srv_sms_alert'] = document.getElementById('srv_sms_alert')?.checked || false;
+        
+        // Capturer ECOBANK ONLINE
+        form_data['online_transfer'] = document.getElementById('online_transfer')?.checked || false;
+        form_data['online_western_union'] = document.getElementById('online_western_union')?.checked || false;
+        
+        // Capturer les montants et détails
         form_data['depot_montant'] = document.getElementById('depot_montant')?.value || '';
         form_data['gestionnaire'] = document.getElementById('gestionnaire')?.value || '';
         form_data['chef_agence'] = document.getElementById('chef_agence')?.value || '';
         form_data['date_ouverture'] = document.getElementById('date_ouverture')?.value || new Date().toISOString().split('T')[0];
+        form_data['airtel_phone'] = document.getElementById('airtel_phone')?.value || '';
+        form_data['mobilemoney_phone'] = document.getElementById('mobilemoney_phone')?.value || '';
+        
+        // Données standards
         form_data['account_number'] = url_params.account;
-        form_data['branch_code'] = url_params.branch;
+        form_data['branch_code'] = (document.getElementById('oe-branch-1')?.textContent || '').trim() || url_params.branch;
         form_data['text_field_0'] = document.getElementById('customer-name')?.value || '';
+        form_data['mobile'] = (document.getElementById('airtel_phone')?.value || document.getElementById('mobilemoney_phone')?.value || '').trim();
         
         return form_data;
     }
@@ -570,13 +1029,20 @@
     // Bouton Soumettre
     document.getElementById('submitBtn').addEventListener('click', function() {
         const form_data = getFormData();
-        
-        if (!form_data.account_number || !form_data.branch_code) {
-            alert('❌ Numéro de compte ou code agence manquant.');
+
+        // Exiger uniquement le numéro de compte ; le code agence est optionnel
+        if (!form_data.account_number) {
+            alert('❌ Numéro de compte manquant.');
             return;
         }
-        
-        if (!confirm('✓ Êtes-vous sûr de vouloir soumettre ce formulaire ?\n\nCompte: ' + form_data.account_number + '\nAgence: ' + form_data.branch_code)) {
+
+        // Construire le message de confirmation en n'incluant l'agence que si fournie
+        let confirmMsg = '✓ Êtes-vous sûr de vouloir soumettre ce formulaire ?\n\nCompte: ' + form_data.account_number;
+        if (form_data.branch_code) {
+            confirmMsg += '\nAgence: ' + form_data.branch_code;
+        }
+
+        if (!confirm(confirmMsg)) {
             return;
         }
         
@@ -587,20 +1053,31 @@
             },
             body: JSON.stringify(form_data)
         })
-        .then(response => response.json())
+        .then(response => {
+            return response.text().then(text => {
+                if (!response.ok) {
+                    throw new Error('Serveur: ' + response.status + ' ' + text);
+                }
+
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    throw new Error('Réponse JSON invalide: ' + text.substring(0, 1000));
+                }
+            });
+        })
         .then(data => {
             if (data.status === 'success') {
-                alert('✓ Formulaire enregistré avec succès !\n\nID Soumission: ' + data.submission_id + '\n\nRedirection vers la page des demandes de chéquiers...');
-                setTimeout(() => {
-                    window.location.href = 'demande_chequier';
-                }, 1500);
+                alert('✓ Formulaire enregistré avec succès !\n\nID Soumission: ' + data.submission_id);
+                // Réinitialiser le formulaire
+                location.reload();
             } else {
                 alert('❌ Erreur: ' + (data.message || 'Une erreur s\'est produite'));
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('❌ Erreur de communication avec le serveur');
+            alert('❌ Erreur de communication avec le serveur - ' + error.message);
         });
     });
 
@@ -631,6 +1108,61 @@
 
     // Initialiser au chargement
     window.addEventListener('DOMContentLoaded', initializeForm);
+
+    // ===== PAGE NAVIGATION =====
+    let currentPage = 1;
+    const totalPages = 3;
+
+    function showPage(page) {
+        // Masquer toutes les pages
+        document.querySelectorAll('.page').forEach(p => {
+            p.classList.add('page-hidden');
+            p.classList.remove('hidden'); // Enlever hidden de tous les éléments .page
+        });
+        
+        // Afficher la page demandée
+        const pageElement = document.getElementById('page-' + page);
+        if (pageElement) {
+            pageElement.classList.remove('page-hidden');
+            pageElement.classList.remove('hidden'); // Enlever aussi hidden pour la première page
+        }
+
+        // Mettre à jour le compteur
+        if (document.getElementById('current-page')) {
+            document.getElementById('current-page').textContent = page;
+        }
+        
+        // Mettre à jour les boutons de navigation
+        const prevBtn = document.querySelector('.page-nav-prev');
+        const nextBtn = document.querySelector('.page-nav-next');
+        
+        if (prevBtn) prevBtn.disabled = page === 1;
+        if (nextBtn) nextBtn.disabled = page === totalPages;
+
+        // Le bouton submit reste toujours visible
+        if (document.getElementById('submitBtn')) {
+            document.getElementById('submitBtn').style.display = 'block';
+        }
+
+        currentPage = page;
+    }
+
+    function nextPage() {
+        if (currentPage < totalPages) {
+            showPage(currentPage + 1);
+        }
+    }
+
+    function previousPage() {
+        if (currentPage > 1) {
+            showPage(currentPage - 1);
+        }
+    }
+
+    // Initialiser au chargement - permet à la fois d'initialiser le formulaire et les pages
+    window.addEventListener('DOMContentLoaded', function() {
+        initializeForm();
+    });
 </script>
 
 </body>

@@ -4,7 +4,6 @@ include('includes/config.php');
 require 'vendor/autoload.php';
 
 use Sonata\GoogleAuthenticator\GoogleAuthenticator;
-use Sonata\GoogleAuthenticator\GoogleQrUrl;
 
 if (isset($_POST['signin'])) {
     $username = $_POST['username'];
@@ -12,76 +11,44 @@ if (isset($_POST['signin'])) {
     $role = $_POST['options'];
 
     // Récupérer l'utilisateur par son nom d'utilisateur
-    $sql = "SELECT * FROM tblemployees WHERE Username ='$username'";
-    $query = mysqli_query($conn, $sql);
+    $stmt = mysqli_prepare($conn, "SELECT * FROM tblemployees WHERE Username = ?");
+    mysqli_stmt_bind_param($stmt, "s", $username);
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
     $count = mysqli_num_rows($query);
     
     if ($count > 0) {
         $row = mysqli_fetch_assoc($query);
         
-        // Vérifier si le mot de passe est stocké en MD5
-        if (strlen($row['Password']) == 32) { // MD5 produit un hachage de 32 caractères
-            // Vérifier le mot de passe avec MD5
+        // Vérifier le mot de passe
+        $passwordValid = false;
+        
+        if (strlen($row['Password']) == 32 && ctype_xdigit($row['Password'])) {
+            // Ancien hash MD5 - vérifier et mettre à jour
             if (md5($password) === $row['Password']) {
-                // Mettre à jour le mot de passe avec password_hash
+                $passwordValid = true;
+                // Mettre à jour vers bcrypt
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                mysqli_query($conn, "UPDATE tblemployees SET Password='$hashedPassword' WHERE emp_id='{$row['emp_id']}'");
-                
-                // Authentifier l'utilisateur
-                $_SESSION['alogin'] = $row['emp_id'];
-                $_SESSION['arole'] = $row['role'];
-                $_SESSION['adepart'] = $row['Department'];
-
-                // Enregistrer la connexion dans tbl_logins
-                $emp_id = $row['emp_id'];
-                $login_sql = "INSERT INTO tbl_logins (emp_id) VALUES ('$emp_id')";
-                mysqli_query($conn, $login_sql);
-
-                // Vérifier si l'utilisateur doit changer son mot de passe
-                if ($row['password_changed'] == 0) {
-                    // Rediriger vers la page de changement de mot de passe
-                    echo "<script type='text/javascript'> document.location = 'change_password.php'; </script>";
-                    exit();
-                }
-
-                // Vérifier si 2FA est configuré
-                if (empty($row['twofa_secret'])) {
-                    // Générer une nouvelle clé secrète
-                    $g = new GoogleAuthenticator();
-                    $secret = $g->generateSecret();
-                    
-                    // Sauvegarder dans la session temporairement
-                    $_SESSION['temp_twofa_secret'] = $secret;
-                    $_SESSION['temp_user_id'] = $row['Username'];
-                    
-                    // Générer l'URL du QR code
-                    $qrUrl = GoogleQrUrl::generate($row['EmailId'], $secret, 'Eco Leave Système');
-                    
-                    // Afficher la page avec le QR code
-                    include('includes/display_qrcode.php');
-                    exit();
-                } else {
-                    // Rediriger vers la vérification du code
-                    $_SESSION['verify_twofa'] = true;
-                    $_SESSION['twofa_secret'] = $row['twofa_secret'];
-                    include('includes/verify_2fa.php');
-                    exit();
-                }
-            } else {
-                echo "<script>alert('Détails Invalides');</script>";
+                $updateStmt = mysqli_prepare($conn, "UPDATE tblemployees SET Password=? WHERE emp_id=?");
+                mysqli_stmt_bind_param($updateStmt, "ss", $hashedPassword, $row['emp_id']);
+                mysqli_stmt_execute($updateStmt);
+                mysqli_stmt_close($updateStmt);
             }
         } else {
-            // Vérifier le mot de passe avec password_verify pour les mots de passe hachés
-            if (password_verify($password, $row['Password'])) {
-                // Authentifier l'utilisateur
+            // Hash bcrypt moderne
+            $passwordValid = password_verify($password, $row['Password']);
+        }
+        
+        if ($passwordValid) {
                 $_SESSION['alogin'] = $row['emp_id'];
                 $_SESSION['arole'] = $row['role'];
                 $_SESSION['adepart'] = $row['Department'];
 
                 // Enregistrer la connexion dans tbl_logins
-                $emp_id = $row['emp_id'];
-                $login_sql = "INSERT INTO tbl_logins (emp_id) VALUES ('$emp_id')";
-                mysqli_query($conn, $login_sql);
+                $loginStmt = mysqli_prepare($conn, "INSERT INTO tbl_logins (emp_id) VALUES (?)");
+                mysqli_stmt_bind_param($loginStmt, "s", $row['emp_id']);
+                mysqli_stmt_execute($loginStmt);
+                mysqli_stmt_close($loginStmt);
 
                 // Vérifier si l'utilisateur doit changer son mot de passe
                 if ($row['password_changed'] == 0) {
@@ -100,8 +67,9 @@ if (isset($_POST['signin'])) {
                     $_SESSION['temp_twofa_secret'] = $secret;
                     $_SESSION['temp_user_id'] = $row['Username'];
                     
-                    // Générer l'URL du QR code
-                    $qrUrl = GoogleQrUrl::generate($row['EmailId'], $secret, 'Eco Leave Système');
+                    // Générer l'URL du QR code pour Microsoft Authenticator
+                    $otpUrl = "otpauth://totp/ECOBANK%20AO%20%26%20KYC:" . urlencode($row['EmailId']) . "?secret=" . $secret . "&issuer=ECOBANK%20AO%20%26%20KYC";
+                    $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . urlencode($otpUrl);
                     
                     // Afficher la page avec le QR code
                     include('includes/display_qrcode.php');
@@ -113,13 +81,14 @@ if (isset($_POST['signin'])) {
                     include('includes/verify_2fa.php');
                     exit();
                 }
-            } else {
-                echo "<script>alert('Détails Invalides');</script>";
-            }
+        } else {
+            $_SESSION['login_error_message'] = "Nom d'utilisateur ou mot de passe incorrect";
         }
     } else {
-        echo "<script>alert('Détails Invalides');</script>";
+        $_SESSION['login_error_message'] = "Nom d'utilisateur ou mot de passe incorrect";
     }
+    
+    mysqli_stmt_close($stmt);
 }
 
 // Traitement de la vérification 2FA
@@ -131,8 +100,8 @@ if (isset($_POST['verify_2fa'])) {
         // Code valide, compléter la connexion
         completeLogin($conn); // Passer la connexion ici
     } else {
-        echo "<script>alert('Code 2FA invalide');</script>";
-        include('includes/verify_2fa.php');
+        $_SESSION['login_error_message'] = "Code 2FA invalide";
+        header("Location: ../index.php");
         exit();
     }
 }
@@ -147,14 +116,17 @@ if (isset($_POST['activate_2fa'])) {
         $emp_id = $_SESSION['temp_user_id'];
         $secret = $_SESSION['temp_twofa_secret'];
         
-        mysqli_query($conn, "UPDATE tblemployees SET twofa_secret='$secret', twofa_enabled=1 WHERE Username='$emp_id'");
+        $stmt = mysqli_prepare($conn, "UPDATE tblemployees SET twofa_secret=?, twofa_enabled=1 WHERE Username=?");
+        mysqli_stmt_bind_param($stmt, "ss", $secret, $emp_id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
         
         // Détruire les variables temporaires
         unset($_SESSION['temp_twofa_secret']);
         unset($_SESSION['temp_user_id']);
         
         // Compléter la connexion
-        completeLogin($conn); // Passer la connexion ici
+        completeLogin($conn);
     } else {
         echo "<script>alert('Code de vérification invalide');</script>";
         include('includes/display_qrcode.php');
@@ -162,10 +134,13 @@ if (isset($_POST['activate_2fa'])) {
     }
 }
 
-function completeLogin($conn) { // Accepter la connexion comme argument
+function completeLogin($conn) {
     // Mettre à jour le statut de connexion
     $emp_id = $_SESSION['alogin'];
-    mysqli_query($conn, "UPDATE tblemployees SET status='Online' WHERE emp_id='$emp_id'");
+    $stmt = mysqli_prepare($conn, "UPDATE tblemployees SET status='Online' WHERE emp_id=?");
+    mysqli_stmt_bind_param($stmt, "s", $emp_id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
 
     // Redirection selon le rôle
     switch ($_SESSION['arole']) {
@@ -174,6 +149,9 @@ function completeLogin($conn) { // Accepter la connexion comme argument
             break;
         case 'staff':
             header("Location: staff/index");
+            break;
+        case 'cso':
+            header("Location: cso/index");
             break;
         case 'RH':
             header("Location: rh/index");

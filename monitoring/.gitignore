@@ -1,0 +1,22 @@
+# Monitoring data (will be created by Docker)
+prometheus_data/
+grafana_data/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Development overrides
+docker-compose.override.yml

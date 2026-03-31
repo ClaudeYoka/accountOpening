@@ -2,6 +2,7 @@
 <?php include('../includes/session.php')?>
 
 <?php
+
 	if (isset($_GET['delete'])) {
 		$delete = $_GET['delete'];
 		$sql = "DELETE FROM tblemployees where emp_id = ".$delete;
@@ -40,9 +41,6 @@
 
 	<div class="main-container">
 		<div class="pd-ltr-20">
-			<div class="title pb-20">
-				<h2 class="h3 mb-0">NOMBRE DE COMPTES PAR AGENCE</h2>
-			</div>
 			<div class="row pb-10">
 				<?php
 					// Définir les agences avec leurs infos
@@ -57,27 +55,9 @@
 
 					);
 
-					foreach ($agencies as $agency) {
-						$query = mysqli_query($conn, "SELECT COUNT(*) AS account_number FROM ecobank_form_submissions WHERE branch_code = '" . $agency['code'] . "'");
-						$result = mysqli_fetch_assoc($query);
-						$count = $result['account_number'];
+					
 				?>
-				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-					<div class="card-box height-100-p widget-style1 agency-card" style="border-top: 4px solid <?php echo $agency['color']; ?>; transition: all 0.3s ease;">
-						<div class="d-flex flex-wrap align-items-center justify-content-between">
-							<div class="widget-data">
-								<div class="h4 mb-0" style="color: <?php echo $agency['color']; ?>; font-weight: 700; font-size: 28px;"><?php echo $count; ?></div>
-								<div class="weight-600 font-14" style="color: #666;"><?php echo $agency['name']; ?></div>
-							</div>
-							<div class="widget-icon">
-								<div class="icon" style="background: linear-gradient(135deg, <?php echo $agency['color']; ?>20 0%, <?php echo $agency['color']; ?>10 100%); border-radius: 12px; padding: 15px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-									<i class="icon-copy fa <?php echo $agency['icon']; ?>" style="font-size: 24px; color: <?php echo $agency['color']; ?>;"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<?php } ?>
+			
 			</div>
 
 			<div class="title pb-20" style="margin-top: 30px;">
@@ -116,11 +96,16 @@
 							<label class="mb-2" style="font-weight: 600; font-size: 12px; color: #666;">Mois :</label>
 							<select id="filter_month" class="form-control" style="width: 100px; height: 40px; border-radius: 6px;">
 								<option value="">Tous</option>
-								<?php 
+								<?php
 									$current_month = date('m');
+									$month_names = [
+										1 => 'janvier', 2 => 'février', 3 => 'mars', 4 => 'avril',
+										5 => 'mai', 6 => 'juin', 7 => 'juillet', 8 => 'août',
+										9 => 'septembre', 10 => 'octobre', 11 => 'novembre', 12 => 'décembre'
+									];
 									for ($m = 1; $m <= 12; $m++) {
 										$selected = ($m == $current_month) ? 'selected' : '';
-										echo '<option value="' . str_pad($m, 2, '0', STR_PAD_LEFT) . '" ' . $selected . '>' . strftime('%B', mktime(0, 0, 0, $m, 1)) . '</option>';
+										echo '<option value="' . str_pad($m, 2, '0', STR_PAD_LEFT) . '" ' . $selected . '>' . $month_names[$m] . '</option>';
 									}
 								?>
 							</select>
@@ -144,7 +129,7 @@
 					</div>
 				</div>
 				<div class="pb-20">
-					<table class="data-table table stripe hover nowrap">
+					<table class="data-table table hover multiple-select-row nowrap">
 						<thead>
 							<tr>
 								<th class="table-plus">AGENCE</th>

@@ -1,5 +1,23 @@
 RewriteEngine On
 
+# Bloquer accès fichiers sensibles
+<FilesMatch "^(\.|config\.php|credentials\.php|.*\.log|.*\.sql|\.env)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Bloquer énumération directories
+IndexIgnore *
+Options -Indexes
+
+# Headers sécurité
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "DENY"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
 # Masquer .php pour les fichiers dans les sous-dossiers (Admin, head, staff, rh, etc.)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
