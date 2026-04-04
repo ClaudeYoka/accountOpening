@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Form Submission - Produits Digitaux</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .test-section { 
+            background: white; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 5px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .button { 
+            padding: 10px 20px; 
+            margin: 5px; 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer;
+        }
+        .button:hover { background: #0056b3; }
+        .success { background: #28a745; }
+        .success:hover { background: #218838; }
+        .danger { background: #dc3545; }
+        .danger:hover { background: #c82333; }
+        .output { 
+            background: #f9f9f9; 
+            border: 1px solid #ddd; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 4px; 
+            max-height: 300px; 
+            overflow-y: auto;
+        }
+        .db-status { 
+            padding: 10px; 
+            border-radius: 4px; 
+            margin: 10px 0;
+        }
+        .db-status.ok { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .db-status.error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        h2 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test de Soumission du Formulaire Produits</h1>
+        
+        <div class="test-section">
+            <h2>📋 1. Vérifier la structure de la table tblproduits</h2>
+            <button class="button" onclick="checkTableStructure()">Vérifier les colonnes</button>
+            <div id="tableStructure" class="output"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📤 2. Envoyer un formulaire de test</h2>
+            <button class="button success" onclick="sendTestForm()">Envoyer Test Complet</button>
+            <button class="button danger" onclick="sendMinimalForm()">Envoyer Test Minimal</button>
+            <div id="submitResult" class="output"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 3. Vérifier les données en base</h2>
+            <button class="button" onclick="checkDatabaseData()">Consulter les données</button>
+            <div id="dbData" class="output"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔍 4. Diagnostic</h2>
+            <button class="button" onclick="runDiagnostics()">Lancer le diagnostic</button>
+            <div id="diagnostics" class="output"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = './';
+        
+        function updateOutput(elementId, content) {
+            document.getElementById(elementId).innerHTML = content;
+        }
+
+        function logToOutput(elementId, message) {
+            const elem = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            elem.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+        }
+
+        async function checkTableStructure() {
+            const outputId = 'tableStructure';
+            updateOutput(outputId, '<p>⏳ Vérification en cours...</p>');
+            
+            try {
+                const response = await fetch('check_table_structure.php');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    let html = `<div class="db-status ok">✓ Table tblproduits vérifiée</div>`;
+                    html += '<table><tr><th>Colonne</th><th>Type</th><th>Null</th><th>Défaut</th></tr>';
+                    
+                    data.columns.forEach(col => {
+                        html += `<tr>
+                            <td><strong>${col.Field}</strong></td>
+                            <td>${col.Type}</td>
+                            <td>${col.Null}</td>
+                            <td>${col.Default || 'N/A'}</td>
+                        </tr>`;
+                    });
+                    html += '</table>';
+                    updateOutput(outputId, html);
+                } else {
+                    updateOutput(outputId, `<div class="db-status error">✗ Erreur: ${data.message}</div>`);
+                }
+            } catch (error) {
+                updateOutput(outputId, `<div class="db-status error">✗ Erreur: ${error.message}</div>`);
+            }
+        }
+
+        async function sendTestForm() {
+            const outputId = 'submitResult';
+            updateOutput(outputId, '<p>⏳ Envoi du formulaire de test...</p>');
+            
+            const testData = {
+                account_number: '1234567890',
+                branch_code: 'T31',
+                text_field_0: 'Client de Test',
+                mobile: '24206555512',
+                card_classic: true,
+                card_gold: false,
+                card_platinum: true,
+                srv_ecobank_app: true,
+                srv_airtel_money: false,
+                srv_insurance: true,
+                srv_mobile_money: true,
+                srv_estatement: true,
+                srv_sms_alert: false,
+                online_transfer: true,
+                online_western_union: false,
+                depot_montant: '100000',
+                gestionnaire: 'Dupont Jean',
+                chef_agence: 'Durand Pierre',
+                airtel_phone: '+242065551234',
+                mobilemoney_phone: '+242065555678',
+                chequier: ['25', '50'],
+                depot: ['ESPÈCE']
+            };
+
+            try {
+                const response = await fetch('save_digital_form.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const responseText = await response.text();
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    throw new Error('Réponse JSON invalide: ' + responseText);
+                }
+
+                if (data.status === 'success') {
+                    updateOutput(outputId, `
+                        <div class="db-status ok">
+                            ✓ Formulaire enregistré avec succès!<br>
+                            <strong>ID Soumission:</strong> ${data.submission_id}<br>
+                            <strong>Chéquier demandé:</strong> ${data.chequier_requested ? 'Oui' : 'Non'}
+                        </div>
+                        <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `);
+                } else {
+                    updateOutput(outputId, `<div class="db-status error">✗ Erreur: ${data.message}</div>`);
+                }
+            } catch (error) {
+                updateOutput(outputId, `<div class="db-status error">✗ Erreur: ${error.message}</div>`);
+            }
+        }
+
+        async function sendMinimalForm() {
+            const outputId = 'submitResult';
+            updateOutput(outputId, '<p>⏳ Envoi du formulaire minimal...</p>');
+            
+            const testData = {
+                account_number: '9876543210',
+                text_field_0: 'Client Minimal'
+            };
+
+            try {
+                const response = await fetch('save_digital_form.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const responseText = await response.text();
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    throw new Error('Réponse JSON invalide: ' + responseText);
+                }
+
+                if (data.status === 'success') {
+                    updateOutput(outputId, `
+                        <div class="db-status ok">
+                            ✓ Formulaire minimal enregistré!<br>
+                            <strong>ID Soumission:</strong> ${data.submission_id}
+                        </div>
+                    `);
+                } else {
+                    updateOutput(outputId, `<div class="db-status error">✗ Erreur: ${data.message}</div>`);
+                }
+            } catch (error) {
+                updateOutput(outputId, `<div class="db-status error">✗ Erreur: ${error.message}</div>`);
+            }
+        }
+
+        async function checkDatabaseData() {
+            const outputId = 'dbData';
+            updateOutput(outputId, '<p>⏳ Consultation de la base...</p>');
+            
+            try {
+                const response = await fetch('check_database_data.php');
+                const data = await response.json();
+                
+                if (data.status === 'success' && data.records) {
+                    let html = '<div class="db-status ok">✓ Données trouvées:</div>';
+                    html += '<table><tr><th>ID</th><th>Compte</th><th>Nom</th><th>Cartes</th><th>Services</th><th>Date</th></tr>';
+                    
+                    data.records.forEach(record => {
+                        const cards = [record.card_classic && 'Classic', record.card_gold && 'Gold', record.card_platinum && 'Platinum'].filter(Boolean).join(', ') || 'Aucune';
+                        const services = [record.srv_ecobank_app && 'EcobankApp', record.srv_mobile_money && 'MobileMoney'].filter(Boolean).join(', ') || 'Aucun';
+                        html += `<tr>
+                            <td>${record.id}</td>
+                            <td>${record.customer_id}</td>
+                            <td>${record.first_name} ${record.last_name}</td>
+                            <td>${cards}</td>
+                            <td>${services}</td>
+                            <td>${record.date_enregistrement}</td>
+                        </tr>`;
+                    });
+                    html += '</table>';
+                    updateOutput(outputId, html);
+                } else {
+                    updateOutput(outputId, `<div class="db-status error">✗ ${data.message || 'Aucune donnée'}</div>`);
+                }
+            } catch (error) {
+                updateOutput(outputId, `<div class="db-status error">✗ Erreur: ${error.message}</div>`);
+            }
+        }
+
+        async function runDiagnostics() {
+            const outputId = 'diagnostics';
+            updateOutput(outputId, '<p>⏳ Diagnostic en cours...</p>');
+            
+            try {
+                const response = await fetch('run_diagnostics.php');
+                const data = await response.json();
+                
+                let html = '';
+                
+                if (data.database_connection) {
+                    html += '<div class="db-status ok">✓ Connexion base de données OK</div>';
+                } else {
+                    html += '<div class="db-status error">✗ Erreur de connexion base de données</div>';
+                }
+                
+                if (data.table_exists) {
+                    html += `<div class="db-status ok">✓ Table tblproduits existe (${data.row_count} lignes)</div>`;
+                } else {
+                    html += '<div class="db-status error">✗ Table tblproduits inexistante</div>';
+                }
+                
+                if (data.columns_count >= 25) {
+                    html += `<div class="db-status ok">✓ ${data.columns_count} colonnes trouvées</div>`;
+                } else {
+                    html += `<div class="db-status error">✗ Seulement ${data.columns_count} colonnes (25+ attendues)</div>`;
+                }
+                
+                if (data.missing_columns && data.missing_columns.length > 0) {
+                    html += '<div class="db-status error">✗ Colonnes manquantes: ' + data.missing_columns.join(', ') + '</div>';
+                } else {
+                    html += '<div class="db-status ok">✓ Toutes les colonnes requises sont présentes</div>';
+                }
+                
+                updateOutput(outputId, html);
+            } catch (error) {
+                updateOutput(outputId, `<div class="db-status error">✗ Erreur: ${error.message}</div>`);
+            }
+        }
+    </script>
+</body>
+</html>

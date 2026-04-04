@@ -1,0 +1,229 @@
+
+    /* Styles améliorés pour une interface interactive et belle */
+        body.login-page {
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .login-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .login-header:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .brand-logo img {
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .login-wrap {
+            min-height: 100vh;
+            background: url('vendors/images/login-bg-pattern.png') repeat;
+            background-size: 50px 50px;
+            animation: backgroundMove 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0% { background-position: 0 0; }
+            50% { background-position: 50px 50px; }
+            100% { background-position: 0 0; }
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-title img {
+            transition: transform 0.3s ease;
+        }
+
+        .login-title img:hover {
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        .select-role .btn {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .select-role .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .select-role .btn:hover::before {
+            left: 100%;
+        }
+
+        .select-role .btn.active {
+            background: #007eb6;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 126, 182, 0.3);
+            transform: scale(1.05);
+        }
+
+        .select-role .btn .icon img {
+            transition: transform 0.3s ease;
+        }
+
+        .select-role .btn:hover .icon img {
+            transform: scale(1.1);
+        }
+
+        .input-group.custom {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group.custom input {
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            padding: 15px 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .input-group.custom input:focus {
+            border-color: #007eb6;
+            box-shadow: 0 0 0 3px rgba(0, 126, 182, 0.1);
+            background: white;
+        }
+
+        .input-group.custom .input-group-text {
+            background: #007eb6;
+            color: white;
+            border: none;
+            border-radius: 0 10px 10px 0;
+            transition: background 0.3s ease;
+        }
+
+        .input-group.custom input:focus + .input-group-append .input-group-text {
+            background: #005a8d;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #007eb6 0%, #005a8d 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 126, 182, 0.3);
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .login-menu a {
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        .login-menu a:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-wrap .row {
+                flex-direction: column;
+            }
+
+            .col-md-6 {
+                margin-bottom: 30px;
+            }
+
+            .login-box {
+                margin: 20px;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    

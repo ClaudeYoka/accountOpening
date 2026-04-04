@@ -111,7 +111,7 @@ if(isset($_POST['add_staff']))
     <?php
     } else {
         $stmt = mysqli_prepare($conn, "INSERT INTO tblemployees(FirstName, LastName, Username, EmailId, Password, Department, AgenceShortName, role, Status, location, Position, password_changed) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, 'NO-IMAGE-AVAILABLE.jpg', ?, 0)");
-        mysqli_stmt_bind_param($stmt, "sssssssss", $fname, $lname, $username, $email, $password, $department, $agence, $user_role, $status, $Position);
+        mysqli_stmt_bind_param($stmt, "ssssssssss", $fname, $lname, $username, $email, $password, $department, $agence, $user_role, $status, $Position);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 

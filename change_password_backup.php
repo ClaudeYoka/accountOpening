@@ -1,23 +1,18 @@
 <?php
-session_name('ACCOUNT_OPENING_SESSION');
 session_start();
 include('includes/config.php');
 include('includes/audit_logger.php');
 include('includes/flash.php');
 
-// Verifier que l'utilisateur est connecte
+// Vérifier que l'utilisateur est connecté
 if (!isset($_SESSION['alogin'])) {
-    error_log("change_password.php: alogin not set, redirecting to index.php");
     header('Location: index.php');
     exit;
-} else {
-    error_log("change_password.php: alogin is set to " . $_SESSION['alogin']);
 }
 
 // Variable pour stocker les messages directement sur cette page
 $message = '';
 $message_type = '';
-$redirect_after_success = false;
 
 if(isset($_POST['change_password'])) {
     // Validation du mot de passe
@@ -29,7 +24,7 @@ if(isset($_POST['change_password'])) {
     if (empty($new_password)) {
         $errors[] = "Le mot de passe est requis";
     } elseif (strlen($new_password) < 8) {
-        $errors[] = "Le mot de passe doit contenir au moins 8 caracteres";
+        $errors[] = "Le mot de passe doit contenir au moins 8 caractères";
     } elseif (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/", $new_password)) {
         $errors[] = "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule et un chiffre";
     }
@@ -40,7 +35,7 @@ if(isset($_POST['change_password'])) {
     } else {
         $emp_id = $_SESSION['alogin'];
 
-        // Verifier que l'utilisateur existe et que le mot de passe n'a pas deja ete change
+        // Vérifier que l'utilisateur existe et que le mot de passe n'a pas déjà été changé
         $check_stmt = mysqli_prepare($conn, "SELECT password_changed FROM tblemployees WHERE emp_id = ?");
         mysqli_stmt_bind_param($check_stmt, "s", $emp_id);
         mysqli_stmt_execute($check_stmt);
@@ -49,16 +44,16 @@ if(isset($_POST['change_password'])) {
         mysqli_stmt_close($check_stmt);
 
         if (!$user_data) {
-            $message = "Utilisateur non trouve.";
+            $message = "Utilisateur non trouvé.";
             $message_type = 'error';
         } elseif ($user_data['password_changed'] == 1) {
-            $message = "Le mot de passe a deja ete change.";
+            $message = "Le mot de passe a déjà été changé.";
             $message_type = 'error';
         } else {
             // Hasher le mot de passe avec password_hash
             $hashedPassword = password_hash($new_password, PASSWORD_DEFAULT);
 
-            // Mettre a jour le mot de passe et le statut
+            // Mettre à jour le mot de passe et le statut
             $stmt = mysqli_prepare($conn, "UPDATE tblemployees SET Password=?, password_changed=1 WHERE emp_id=?");
             mysqli_stmt_bind_param($stmt, "ss", $hashedPassword, $emp_id);
 
@@ -68,22 +63,18 @@ if(isset($_POST['change_password'])) {
                 // Log password change
                 audit_log_user_action($conn, 'password_changed', $emp_id);
 
-                $message = 'Mot de passe change avec succes. Vous allez etre redirige vers la page de connexion.';
+                $message = 'Mot de passe changé avec succès. Vous allez être redirigé vers la page de connexion.';
                 $message_type = 'success';
+
+                // Flag pour déclencher la redirection JavaScript
                 $redirect_after_success = true;
             } else {
                 mysqli_stmt_close($stmt);
-                $message = "Erreur lors de la mise a jour du mot de passe.";
+                $message = "Erreur lors de la mise à jour du mot de passe.";
                 $message_type = 'error';
             }
         }
     }
-}
-?>
-
-<!DOCTYPE html>
-<html>
-<head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
 	<title>Changer Mot de passe</title>
@@ -137,7 +128,7 @@ if(isset($_POST['change_password'])) {
         <div class="alert <?php echo $message_type === 'error' ? 'alert-danger' : 'alert-success'; ?>" role="alert">
             <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
         </div>
-        <?php if ($redirect_after_success): ?>
+        <?php if (isset($redirect_after_success) && $redirect_after_success): ?>
             <script>
                 setTimeout(function() {
                     window.location.href = 'logout.php';
@@ -156,12 +147,12 @@ if(isset($_POST['change_password'])) {
                 <div class="col-md-6">
                     <div class="login-box bg-white box-shadow border-radius-10">
                         <div class="login-title">
-                            <h2>Changer le Mot de Passe</h2>
+                            <h2>Changer le Mot de Passe</h2>						
                         </div>
 
                         <form method="post">
                             <div class="input-group custom">
-                                <input class="form-control form-control-lg" type="password" name="new_password" placeholder="Nouveau mot de passe" required>
+                                <input class="form-control form-control-lg" type="password" name="new_password" placeholder=" Nouveau mot de passe" required>
                                 <div class="input-group-append custom">
                                     <span class="input-group-text"><i class="dw dw-padlock" aria-hidden="true"></i></span>
                                 </div>
@@ -177,7 +168,7 @@ if(isset($_POST['change_password'])) {
                 </div>
             </div>
         </div>
-    </div>
+    </div> 
 
 </body>
 </html>

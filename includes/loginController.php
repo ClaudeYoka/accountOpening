@@ -6,12 +6,19 @@ include('audit_logger.php');
 // Variable utilisée dans index.php
 $login_error = null;
 
+// Tableau global pour gérer les redirections et les erreurs
+$login_result = [
+    'redirect_to_change_password' => false,
+    'redirect_url' => null,
+    'error' => null
+];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
 
     if ($username === '' || $password === '') {
-        $login_error = 'Veuillez renseigner le nom d\'utilisateur et le mot de passe.';
+        $login_result['error'] = 'Veuillez renseigner le nom d\'utilisateur et le mot de passe.';
     } else {
         $stmt = mysqli_prepare($conn, "SELECT * FROM tblemployees WHERE Username = ?");
         mysqli_stmt_bind_param($stmt, "s", $username);
@@ -22,10 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
             $row = mysqli_fetch_assoc($query);
             $passwordValid = false;
 
-            if (strlen($row['Password']) === 32 && ctype_xdigit($row['Password'])) {
+            // Vérifier si c'est un ancien hash MD5 et si le mot de passe n'a pas encore été changé
+            if (strlen($row['Password']) === 32 && ctype_xdigit($row['Password']) && $row['password_changed'] == 0) {
                 if (md5($password) === $row['Password']) {
                     $passwordValid = true;
 
+                    // Convertir automatiquement vers password_hash
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                     $updateStmt = mysqli_prepare($conn, "UPDATE tblemployees SET Password=? WHERE emp_id=?");
                     mysqli_stmt_bind_param($updateStmt, "ss", $hashedPassword, $row['emp_id']);
@@ -33,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
                     mysqli_stmt_close($updateStmt);
                 }
             } else {
+                // Pour les mots de passe déjà hashés avec password_hash ou déjà changés
                 $passwordValid = password_verify($password, $row['Password']);
             }
 
@@ -54,26 +64,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
                 mysqli_stmt_close($statusStmt);
 
                 if ($row['password_changed'] == 0) {
-                    header('Location: change_password.php');
-                    exit;
+                    $login_result['redirect_to_change_password'] = true;
+                } else {
+                    $login_result['redirect_url'] = 'ci/index';
+                    if ($row['role'] === 'Admin') {
+                        $login_result['redirect_url'] = 'admin/index';
+                    } elseif ($row['role'] === 'cso') {
+                        $login_result['redirect_url'] = 'cso/index';
+                    }
                 }
-
-                $redirectUrl = 'ci/index';
-                if ($row['role'] === 'Admin') {
-                    $redirectUrl = 'admin/index';
-                } elseif ($row['role'] === 'cso') {
-                    $redirectUrl = 'cso/index';
-                }
-
-                header('Location: ' . $redirectUrl);
-                exit;
+            } else {
+                audit_log_login($conn, $username, false);
+                $login_result['error'] = 'Nom d\'utilisateur ou mot de passe incorrect.';
             }
-
-            audit_log_login($conn, $username, false);
-            $login_error = 'Nom d\'utilisateur ou mot de passe incorrect.';
         } else {
             audit_log_login($conn, $username, false);
-            $login_error = 'Aucun utilisateur trouvé avec ce nom d\'utilisateur.';
+            $login_result['error'] = 'Aucun utilisateur trouvé avec ce nom d\'utilisateur.';
         }
 
         mysqli_stmt_close($stmt);
@@ -81,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
 }
 
 // Pour affichage dans le template
-if (!empty($login_error)) {
-    $_SESSION['login_error_message'] = $login_error;
+if (!empty($login_result['error'])) {
+    $_SESSION['login_error_message'] = $login_result['error'];
 }
 ?>

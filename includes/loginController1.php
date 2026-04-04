@@ -1,5 +1,5 @@
 <?php
-session_start();
+// Session déjà démarrée dans index.php, pas besoin de la redémarrer
 include('includes/config.php');
 require 'vendor/autoload.php';
 
@@ -145,7 +145,7 @@ function completeLogin($conn) {
     // Redirection selon le rôle
     switch ($_SESSION['arole']) {
         case 'Admin':
-            header("Location: admin/admin_dashboard");
+            header("Location: admin/index");
             break;
         case 'staff':
             header("Location: staff/index");

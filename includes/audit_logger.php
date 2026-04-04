@@ -257,12 +257,14 @@ class AuditLogger {
 }
 
 // Convenience functions for common audit actions
+if (!function_exists('audit_log_chequier_status_change')) {
 function audit_log_chequier_status_change($conn, $requestId, $oldStatus, $newStatus) {
     AuditLogger::log('CHEQUIER_STATUS_CHANGE', [
         'request_id' => $requestId,
         'old_status' => $oldStatus,
         'new_status' => $newStatus
     ], $conn);
+}
 }
 
 function audit_log_export($conn, $type, $filters = [], $recordCount = 0) {

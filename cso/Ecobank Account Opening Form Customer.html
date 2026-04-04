@@ -143,6 +143,89 @@
             flex: 1;
         }
 
+        .photo-staple {
+            width: 140px;
+            height: 180px;
+            border: 2px dashed #007eb6;
+            background-color: #fefefe;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #007eb6;
+            font-weight: 700;
+            font-size: 0.9em;
+            margin-top: 5px;
+            border-radius: 4px;
+            box-shadow: inset 0 0 0 1px #c9e4f7;
+        }
+
+        .photo-staple::before {
+            content: "Agrafer la photo ici";
+            text-align: center;
+            line-height: 1.2;
+            padding: 4px;
+            white-space: pre-line;
+        }
+
+        .photo-preview-item {
+            display: inline-block;
+            width: 95px;
+            height: 95px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            background-color: #fff;
+        }
+
+        .photo-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Increased font sizes for form sections (except engagements and conditions générales) */
+        #form-section-1 .section-content,
+        #form-section-2 .section-content,
+        #form-section-3 .section-content {
+            font-size: 14px;
+        }
+
+        #form-section-1 .section-content label,
+        #form-section-2 .section-content label,
+        #form-section-3 .section-content label {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        #form-section-1 .section-content input,
+        #form-section-2 .section-content input,
+        #form-section-3 .section-content input,
+        #form-section-1 .section-content select,
+        #form-section-2 .section-content select,
+        #form-section-3 .section-content select {
+            font-size: 14px;
+            padding: 6px 8px;
+        }
+
+        /* Specific styling for account number and customer ID inputs */
+        #form-bank-account-number,
+        #customer-id {
+            width: 120px !important;
+            font-size: 16px !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            border: 2px solid #007eb6 !important;
+        }
+
+        /* Make labels for these inputs more visible */
+        label[for="form-bank-account-number"],
+        label[for="customer-id"] {
+            font-size: 16px !important;
+            font-weight: bold !important;
+            color: #007eb6 !important;
+        }
+
         /* Print Styles */
         @media print {
             .section-navigation {
@@ -181,6 +264,30 @@
             /* Réduire la hauteur de la signature à l'impression */
             .signature-area {
                 height: 25px !important;
+            }
+
+            /* Agrandir légèrement les écritures lors de l'impression (sauf engagements et conditions générales) */
+            #form-section-1 .section-content,
+            #form-section-2 .section-content,
+            #form-section-3 .section-content {
+                font-size: 12px !important;
+            }
+
+            #form-section-1 .section-content label,
+            #form-section-2 .section-content label,
+            #form-section-3 .section-content label {
+                font-size: 13px !important;
+                font-weight: 600 !important;
+            }
+
+            #form-section-1 .section-content input,
+            #form-section-2 .section-content input,
+            #form-section-3 .section-content input,
+            #form-section-1 .section-content select,
+            #form-section-2 .section-content select,
+            #form-section-3 .section-content select {
+                font-size: 12px !important;
+                padding: 4px 6px !important;
             }
         }
 
@@ -257,105 +364,88 @@
                     <h3 class="section-title-main">Vos besoins bancaires</h3>
                 </div>
 
+                <!-- Photo Upload Field + Staple Zone -->
+                <div class="form-section compact-section">
+                    <div class="section-header">A l'usage exclusif de la Banque (Vérification et traitement)</div>
+                        <div class="section-content">
+
+                            <div class="form-row" style="display: flex; gap: 22px; align-items: flex-start; flex-wrap: wrap; margin-top: 12px;">
+                                <div class="form-group" style="flex: 1 1 320px;">
+                                    <div style="margin-bottom: 0px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+                                        <div style="display: flex; align-items: center;">
+                                            <input type="checkbox" id="compte-personne-physique" name="account_type[]" value="Compte Personnes Physique" style="width: 16px; height: 16px; margin-right: 6px;">
+                                            <label for="compte-personne-physique" style="font-size: 13px; font-weight: normal;">Compte Personnes Physique</label>
+                                        </div>
+                                        <div style="display: flex; align-items: center;">
+                                            <input type="checkbox" id="compte-entreprise-individuelle" name="account_type[]" value="Comptes Entreprise Individuelle" style="width: 16px; height: 16px; margin-right: 6px;">
+                                            <label for="compte-entreprise-individuelle" style="font-size: 13px; font-weight: normal;">Comptes Entreprise Individuelle</label>
+                                        </div>
+                                    </div>
+                                    <br><br>
+                                    <div class="column">
+                                            <label for="form-bank-account-number" style="font-size: 13px; font-weight: normal;">Numéro de compte:</label>
+                                            <input type="text" id="form-bank-account-number" name="account_number" style="height: 20px;" readonly>
+                                        </div>
+                                        <div class="column">
+                                            <label for="customer-id" style="font-size: 13px; font-weight: normal;">Identifiant client:</label>
+                                            <input type="number" id="customer-id" name="customer_id" style="height: 20px;" readonly>
+                                        </div>
+                                </div>
+
+                                <div class="form-group" style="flex: 0 0 160px;">
+                                    <label style="font-size: 0.85em; color: #555; margin-top: 2px;"><center>Zone pour agrafer la photo </center> </label>
+                                    <div class="photo-staple" id="photoStapleArea" title="Agrafer la photo ici pour impression"></div>
+                                    <p style="font-size: 0.85em; color: #555; margin-top: 2px;">Zone à agrafer ou coller la photo d'identité.</p>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
             <div class="form-section compact-section">
                 <div class="section-header">Aidez-nous à personnaliser votre expérience bancaire</div>
                 <div class="section-content">
-                    <div class="section-title">Quels services financiers vous intéressent ?</div>
-
+                  
                     <div class="form-row compact-margin">
-
-                        <div class="access-checkbox-row compact">
-                            <div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="assurance-checkbox" value="Assurance">
-                                    <label for="assurance-checkbox">Assurance</label>
-                                </div>
-                                            <!-- Always‐visible page‐count options -->
-
-                                <!-- <div class="sub-options" data-for="assurance" style="margin-left: 20px; margin-top: 4px;">
-                                <div class="checkbox-item" style="margin-bottom: 4px;">
-                                    <input type="checkbox" id="assurance-accident" value="Assurance Accident Corporel">
-                                    <label style="font-size: 9px;" for="assurance-accident">Assurance Accident Corporel</label>
-                                </div>
-                                <div class="checkbox-item" style="margin-bottom: 4px;">
-                                    <input type="checkbox" id="assurance-protection" value="Assurance Protection du Revenu">
-                                    <label style="font-size: 9px;" for="assurance-protection">Assurance Protection du Revenu</label>
-                                </div>
-                                </div> -->
-                            </div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="branch" value="Épargne & Investissements">
-                                    <label for="branch">Épargne & Investissements</label>
-                                </div>
-                                <div class="checkbox-item">
-                                    <label style="margin-right:14px; display:inline-flex; align-items:center;">
-                                        <input type="checkbox" id="ussd-banking" name="services[]" value="Paiements" style="margin-right:6px;" />
-                                        Paiements
-                                    </label>
-
-                                    <label style="margin-right:14px; display:inline-flex; align-items:center;">
-                                        <input type="checkbox" id="mobile-app" name="services[]" value="Prêts" style="margin-right:6px;" />
-                                        Prêts
-                                    </label>
-                                </div>
-                                
-                            
-                    </div>
-
-                    <!-- Other Services Input -->
-                    <!-- <div class="other-services-row"> -->
-                        <div class="other-services-input">
-                            <input type="checkbox" id="other-service" value="Autres services susceptibles de vous">
-                            <label for="other-service" style="margin-left: 4px; margin-right: 5px;">Autres services :</label>
-                            <input type="text" placeholder="Préciser">
-                        </div>
-                    <!-- </div> -->
-
-                    <!-- DISCLAIMER -->
-                        <div class="access-disclaimer" style="margin-top:10px; font-size:1.0em; color:#555;">
-                            <strong>NB:</strong> En choisissant l'un des services d'assurance, nous vous inscrirons aux polices d’assurances y relatives.
-                        </div>
-                    <div class="access-break">
+                        <div class="access-break">
                         <!-- Access Methods Section -->
 
 
-                        <div class="section-title">Quel type de compte vous conviendra le mieux ?</div>
-                        <div class="secondary-options">
-                            <div class="form-row">
-                                <div class="column" style="min-width:260px;">
-                                
-                                        <div class="checkbox-group">
-                                            <label style="margin-right:14px; display:inline-flex; align-items:center;">
-                                                <input type="checkbox" id="account-type-courant" name="account_type[]" value="Compte courant" style="margin-right:6px;" />
-                                                Compte courant
-                                            </label>
-                                            <label style="margin-right:14px; display:inline-flex; align-items:center;">
-                                                <input type="checkbox" id="account-type-epargne" name="account_type[]" value="Compte épargne" style="margin-right:6px;" />
-                                                Compte épargne
-                                            </label>
-                                            <label style="margin-right:14px; display:inline-flex; align-items:center;">
-                                                <input type="checkbox" id="account-type-epargne" name="account_type[]" value="Compte mineur" style="margin-right:6px;" />
-                                                Compte Mineur
-                                            </label>
-                                            <label style="margin-right:14px; display:inline-flex; align-items:center;">
-                                                <input type="checkbox" id="account-type-entreprise" name="account_type[]" value="Compte entreprise" style="margin-right:6px;" />
-                                                Compte Entreprise
-                                            </label>
+                            <div class="section-title">Quel type de compte vous conviendra le mieux ?</div>
+                            <div class="secondary-options">
+                                <div class="form-row">
+                                    <div class="column" style="min-width:260px;">
+                                    
+                                            <div class="checkbox-group">
+                                                <label style="margin-right:14px; display:inline-flex; align-items:center;">
+                                                    <input type="checkbox" id="account-type-courant" name="account_type[]" value="Compte courant" style="margin-right:6px;" />
+                                                    Compte courant
+                                                </label>
+                                                <label style="margin-right:14px; display:inline-flex; align-items:center;">
+                                                    <input type="checkbox" id="account-type-epargne" name="account_type[]" value="Compte épargne" style="margin-right:6px;" />
+                                                    Compte épargne
+                                                </label>
+                                                <label style="margin-right:14px; display:inline-flex; align-items:center;">
+                                                    <input type="checkbox" id="account-type-epargne" name="account_type[]" value="Compte mineur" style="margin-right:6px;" />
+                                                    Compte Mineur
+                                                </label>
+                                                <label style="margin-right:14px; display:inline-flex; align-items:center;">
+                                                    <input type="checkbox" id="account-type-entreprise" name="account_type[]" value="Compte entreprise" style="margin-right:6px;" />
+                                                    Compte Entreprise
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
-                                <div class="multi-column" style="margin-top: 3px;">
+                                    <div class="multi-column" style="margin-top: 3px;">
 
                                     
 
                                     <!-- Account Purpose Column -->
                                     <div class="column">
-                                        <p>Objectif Principal du Compte :</p>
+                                        <div class="section-title">Objectif Principal du Compte :</div>
                                         <div class="checkbox-group">
-                                            <div class="checkbox-item">
-                                                <input type="checkbox" id="salary-purpose" name="account-purpose" value="Salaire" checked>
-                                                <label for="salary-purpose">Salaire</label>
-                                            </div>
-
+                                                <div class="checkbox-item">
+                                                    <input type="checkbox" id="salary-purpose" name="account-purpose" value="Salaire" checked>
+                                                    <label for="salary-purpose" style="margin-right:6px;">Salaire</label>
+                                                </div>
                                             <div class="checkbox-item">
                                                 <input type="checkbox" id="business-purpose" name="account-purpose" value="Entreprise">
                                                 <label for="business-purpose">Entreprise</label>
@@ -371,7 +461,7 @@
                                     </div>
 
                                     <div class="column">
-                                        <p>Devise préférée :</p>
+                                        <div class="section-title">Devise préférée :</div>
                                         <div class="checkbox-group">
                                             <div class="checkbox-item">
                                                 <input type="checkbox" id="kes-currency" name="currency" value="Franc CFA (XAF)" checked>
@@ -391,8 +481,92 @@
                                 </div>
                             </div>
                         </div>
+
                         
-                        
+                        <!-- Existing Ecobank Account -->
+                        <div class="form-row" style="margin-top: 15px;">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label><strong>Avez-vous un autre compte à Ecobank ?</strong></label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="radio" id="ecobank-account-yes" name="existing-ecobank-account" value="Oui">
+                                            <label for="ecobank-account-yes">Oui</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="radio" id="ecobank-account-no" name="existing-ecobank-account" value="Non" checked>
+                                            <label for="ecobank-account-no">Non</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conditional for Ecobank credit -->
+                        <div id="ecobank-credit-fields" style="display: none; margin-top: 10px;">
+                            <div class="form-row">
+                                <div class="multi-column">
+                                    <div class="column">
+                                        <label><strong>Avez-vous déjà un crédit à Ecobank ?</strong></label>
+                                        <div class="checkbox-group">
+                                            <div class="checkbox-item">
+                                                <input type="radio" id="ecobank-credit-yes" name="existing-ecobank-credit" value="Oui">
+                                                <label for="ecobank-credit-yes">Oui</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="radio" id="ecobank-credit-no" name="existing-ecobank-credit" value="Non" checked>
+                                                <label for="ecobank-credit-no">Non</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Other Bank Account -->
+                        <div class="form-row" style="margin-top: 15px;">
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label><strong>Avez-vous un compte dans une autre banque ?</strong></label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="radio" id="other-bank-account-yes" name="existing-other-bank-account" value="Oui">
+                                            <label for="other-bank-account-yes">Oui</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="radio" id="other-bank-account-no" name="existing-other-bank-account" value="Non" checked>
+                                            <label for="other-bank-account-no">Non</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conditional for other bank details -->
+                        <div id="other-bank-fields" style="display: none; margin-top: 10px;">
+                            <div class="form-row">
+                                <div class="multi-column">
+                                    <div class="column">
+                                        <label for="other-bank-name">Nom de la banque :</label>
+                                        <input type="text" id="other-bank-name" name="other-bank-name" style="height: 20px;">
+                                    </div>
+                                    <div class="column">
+                                        <label><strong>Avez-vous un crédit dans cette banque ?</strong></label>
+                                        <div class="checkbox-group">
+                                            <div class="checkbox-item">
+                                                <input type="radio" id="other-bank-credit-yes" name="existing-other-bank-credit" value="Oui">
+                                                <label for="other-bank-credit-yes">Oui</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="radio" id="other-bank-credit-no" name="existing-other-bank-credit" value="Non" checked>
+                                                <label for="other-bank-credit-no">Non</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="access-methods">
                             <div class="section-title">Comment préféreriez-vous accéder aux services bancaires ?</div>
                             <div class="access-checkbox-row compact">
@@ -401,10 +575,10 @@
                                     <label for="debit-card">Carte de débit (Type: </label>
                                     <input type="text" id="debit-card-type" style="width:80px; height:18px; margin-left:6px;">
                                 </div>
-                                <div class="checkbox-item">
+                                <!-- <div class="checkbox-item">
                                     <input type="checkbox" id="prepaid-card" value="Carte prépayée">
                                     <label for="prepaid-card">Carte prépayée</label>
-                                </div>
+                                </div> -->
                                 <div class="checkbox-item">
                                     <input type="checkbox" id="app-mobile" value="Application mobile">
                                     <label for="app-mobile">Application mobile</label>
@@ -424,39 +598,26 @@
                                 <div class="checkbox-item">
                                     <input type="checkbox" id="e-alert" value="E-Alert">
                                     <label for="e-alert">E-Alert</label>
-                                </div> 
+                                </div>
                                 <div class="checkbox-item">
                                     <input type="checkbox" id="sms-alert" value="SMS Alert">
                                     <label for="sms-alert">SMS Alert</label>
-                                </div> 
+                                </div>
                                 <div class="checkbox-item">
                                     <input type="checkbox" id="standing-order" value="Virement permanent">
                                     <label for="standing-order">Virement permanent</label>
                                 </div>
                                 <div>
-                                <div class="checkbox-item">
-                                    <input type="checkbox" id="chequier-checkbox" value="Chéquier">
-                                    <label for="chequier-checkbox">Chéquier</label>
-                                </div>
-                                <!-- Always‐visible page‐count options -->
 
-                                <!-- <div class="sub-options" data-for="chequier" style="margin-left: 20px; margin-top: 2px;">
-                                <div class="checkbox-item" style="margin-bottom: 4px;">
-                                    <input type="checkbox" id="chequier-25" value="25 feuilles">
-                                    <label style="font-size: 9px;" for="chequier-25">25 feuilles</label>
-                                </div>
-                                <div class="checkbox-item" style="margin-bottom: 4px;">
-                                    <input type="checkbox" id="chequier-50" value="50 feuilles">
-                                    <label style="font-size: 9px;" for="chequier-50">50 feuilles</label>
-                                </div>
-                                </div> -->
                             </div>
                             </div>
                     
                             </div>
                         </div>
                     </div>
+                    
                 </div>
+
             </div>
                 <!-- End Section 1 -->
 
@@ -514,10 +675,6 @@
                                                 <label for="mrs">Mme.</label>
                                             </div>
                                             <div class="checkbox-item">
-                                                <input type="radio" id="ms" name="title" value="Mlle.">
-                                                <label for="ms">Mlle.</label>
-                                            </div>
-                                            <div class="checkbox-item">
                                                 <input type="radio" id="dr" name="title" value="Dr.">
                                                 <label for="dr">Dr.</label>
                                             </div>
@@ -531,7 +688,6 @@
                                                 <input type="text" style="width: 60px; height: 18px; margin-left: 3px;">
                                             </div>
                                         </div>
-                                
                                 </div>
                             </div>
                         </div>
@@ -563,25 +719,22 @@
                             </div>
                         </div>
 
+                    
                         <!-- Name fields in a row -->
                         <div class="form-row">
                             <div class="multi-column">
                                 <div class="column">
-                                    <label for="first-name">
-                                        <M>Prénom:</strong>
-                                    </label>
+                                    <label for="first-name">Prénom (S):</label>
                                     <input type="text" id="first-name" style="height: 20px;">
                                 </div>
-                                <div class="column">
+                                <!-- <div class="column">
                                     <label for="middle-name">
                                         <M>Deuxième prénom:</strong>
                                     </label>
                                     <input type="text" id="middle-name" style="height: 20px;">
-                                </div>
+                                </div> -->
                                 <div class="column">
-                                    <label for="last-name">
-                                        <M>Nom de famille:</strong>
-                                    </label>
+                                    <label for="last-name">Nom de famille: </label>
                                     <input type="text" id="last-name" style="height: 20px;">
                                 </div>
                             </div>
@@ -591,21 +744,26 @@
                         <div class="form-row">
                             <div class="multi-column">
                                 <div class="column">
-                                    <label for="father-name">Nom du père:</label>
-                                    <input type="text" id="father-name" style="height: 20px;" placeholder="Nom du père" required>
+                                    <label for="father-name">Nom(s) du père:</label>
+                                    <input type="text" id="father-name" style="height: 20px;"  required>
                                 </div>
-                                <div class="column">
+                                 <div class="column">
+                                    <label for="father-name">Prénom(s) du père:</label>
+                                    <input type="text" id="father-name2" style="height: 20px;">
+                                </div>
+                                <!-- <div class="column">
                                     <label for="father-name2">Prénom du père:</label>
                                     <input type="text" id="father-name2" style="height: 20px;" placeholder="Prénom du père" required>
+                                </div> -->
+
+                                <div class="column">
+                                    <label for="mother-name">Nom(s) de la mère:</label>
+                                    <input type="text" id="mother-name" style="height: 20px; " required>
                                 </div>
 
                                 <div class="column">
-                                    <label for="mother-name">Nom de la mère:</label>
-                                    <input type="text" id="mother-name" style="height: 20px; " placeholder="Nom de la mère" required>
-                                </div>
-                                <div class="column">
                                     <label for="mother-name2">Prénom de la mère:</label>
-                                    <input type="text" id="mother-name2" style="height: 20px; " placeholder="Prénom de la mère" required>
+                                    <input type="text" id="mother-name2" style="height: 20px;" >
                                 </div>
                             </div>
                         </div>
@@ -615,9 +773,7 @@
                             <div class="multi-column">
 
                                 <div class="column">
-                                    <label for="nationality">
-                                        <M>Nationalité:</strong>
-                                    </label>
+                                    <label for="nationality">Nationalité:</label>
                                     <input type="text" id="nationality" style="height: 20px;">
                                 </div>
 
@@ -626,9 +782,7 @@
                                 <input type="text" id="pob" style="height: 20px;">
                             </div> -->
                                 <div class="column">
-                                    <label for="residence-country">
-                                        <M>Pays de résidence:</strong>
-                                    </label>
+                                    <label for="residence-country">Pays & Ville de naissance: </label>
                                     <input type="text" id="residence-country" style="height: 20px;">
                                 </div>
                                 <div class="column">
@@ -640,6 +794,49 @@
                                     </div>
                                 </div>
 
+                            </div>
+                        </div>
+
+                        <!-- New Section: Residence Status and Existing Accounts -->
+                        <div class="form-row" style="margin-top: 20px;">
+                            <div class="section-title">Statut de résidence et comptes existants</div>
+                            <div class="multi-column">
+                                <div class="column">
+                                    <label><strong>Êtes-vous résident ?</strong></label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="radio" id="resident-yes" name="resident-status" value="Résident" checked>
+                                            <label for="resident-yes">Oui (Résident)</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="radio" id="resident-no" name="resident-status" value="Non-résident">
+                                            <label for="resident-no">Non (Non-résident)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Conditional fields for non-resident -->
+                        <div id="non-resident-fields" style="display: none; margin-top: 15px;">
+                            <div class="form-row">
+                                <div class="multi-column">
+                                    <div class="column">
+                                        <label for="carte-sejour-number">Numéro de la carte de séjour :</label>
+                                        <input type="text" id="carte-sejour-number" name="carte-sejour-number" style="height: 20px;">
+                                    </div>
+                                    <div class="column">
+                                        <label for="carte-sejour-issue-date">Date d'émission (JJ/MM/AA) :</label>
+                                        <div class="date-container">
+                                            <input type="date" id="carte-sejour-issue-date" name="carte-sejour-issue-date" style="height:22px; width:100%;">
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <label for="carte-sejour-expiry-date">Date d'expiration (JJ/MM/AA) :</label>
+                                        <div class="date-container">
+                                            <input type="date" id="carte-sejour-expiry-date" name="carte-sejour-expiry-date" style="height:22px; width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -664,19 +861,14 @@
                                             <input type="checkbox" id="birth-certificate">
                                             <label for="birth-certificate">Birth Certificate</label>
                                         </div> -->
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="alien-registration">
-                                            <label for="alien-registration">Carte de séjour</label>
-                                        </div>
+                                        
                                         <div class="checkbox-item currency-input">
                                                 <input type="checkbox" id="other-currency-option" name="currency">
-                                                <label for="other-currency-option"
-                                                    style="margin-right: 5px;">Autre:</label>
+                                                <label for="other-currency-option">Autre:</label>
                                                 <input type="text" id="other-currency">
-                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
 
@@ -711,28 +903,6 @@
                             </div>
                         </div>
 
-                        <!-- Document information -->
-                        <!-- <div class="form-row">
-                            <div class="multi-column">
-                                <div class="column">
-                                    <label>
-                                        <M>Are you registered with any
-                                            taxation authority?</strong>
-                                    </label>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item" style="margin-right: 20px;">
-                                            <input type="checkbox" id="tax-yes" name="tax-registration">
-                                            <label for="tax-yes">Yes</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="tax-no" name="tax-registration">
-                                            <label for="tax-no">No</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </div> -->
                 </div>
 
                 <div class="form-section compact-section" style="margin-bottom: 5px;">
@@ -796,7 +966,7 @@
                         <div class="form-row">
                             <div class="multi-column">
                                 <div class="column">
-                                    <label for="personnecontacte">Personne à contacter en cas d’urgence :</label>
+                                    <label for="personnecontacte">Personne à contacter en cas d’urgence:</label>
                                     <input type="text" id="personnecontacte" style="height: 20px;" placeholder="Nom complet">
                                 </div>
 
@@ -805,7 +975,7 @@
                                     <input type="text" id="lparente" style="height: 20px;">
                                 </div>
                                 <div class="column">
-                                    <label for="ltel">Numéro(s) de téléphone mobile:</label>
+                                    <label for="ltel">Numéro de téléphone mobile:</label>
                                     <input type="number" id="ltel" style="height: 20px;">
                                 </div>
                                 
@@ -1291,15 +1461,21 @@
                 <div class="form-section ">
                     <div class="section-header">A l’usage exclusif de la Banque (Vérification et traitement)</div>
                     <div class="section-content">
+
                         <div class="form-row">
                             <div class="multi-column">
+                            
                                 <div class="column">
-                                    <label for="form-bank-account-number">Numéro de compte:</label>
-                                    <input type="text" id="form-bank-account-number" name="account_number" style="height: 20px;" readonly>
+                                    <label for="account-officer">Chargé de clientèle (CSO):</label>
+                                    <input type="text" id="account-officer" name="account-officer" style="height: 20px;" readonly>
                                 </div>
                                 <div class="column">
-                                    <label for="customer-id">Identifiant client:</label>
-                                    <input type="number" id="customer-id" name="customer_id" style="height: 20px;" readonly>
+                                    <label for="account-handler">Chargé de compte:</label>
+                                    <input type="text" id="account-handler" style="height: 20px;">
+                                </div>
+                                <div class="column">
+                                    <label for="approved-by">Chef D'agence:</label>
+                                    <input type="text" id="approved-by" style="height: 24px;">
                                 </div>
                                 <div class="column">
                                     <label for="branch-code">Code Agence:</label>
@@ -1307,58 +1483,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-row">
-                            <div class="multi-column">
-                                <div class="column">
-                                    <label for="risk-rating">Code Guichet:</label>
-                                    <input type="text" id="emergency-contact-name" style="height: 20px; width: 100%;">
-                                </div>
-                                <div class="column">
-                                    <label for="account-officer">Personne ayant introduit (CSO):</label>
-                                    <input type="text" id="account-officer" name="account-officer" style="height: 20px;" readonly>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="multi-column">
-                                <div class="column">
-                                    <label for="branch-code">Chargé de clientèle:</label>
-                                    <input type="text" id="branch-code" style="height: 20px;">
-                                </div>
-                                <div class="column">
-                                    <label for="account-handler">Chargé de compte:</label>
-                                    <input type="text" id="account-handler" style="height: 20px;">
-                                </div>
-                                <div class="column">
-                                    <label for="approved-by">Approuvé par:</label>
-                                    <input type="text" id="approved-by" style="height: 24px;">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-row" style="page-break-inside: avoid !important;">
-                            <div class="multi-column">
-                                <div class="column">
-                                    <label for="approval-date">Date d'approbation: (Jour/Mois/Année)</label>
-                                    <div class="date-container">
-                                        <div class="date-box" title="JJ"></div>
-                                        <div class="date-separator">/</div>
-                                        <div class="date-box" title="MM"></div>
-                                        <div class="date-separator">/</div>
-                                        <div class="date-box year" title="AAAA"></div>
-                                    </div>
-                                    <p class="form-note" style="margin-top:6px;">Écrivez la date au stylo dans le format JJ / MM / AAAA</p>
-                                </div>
-                                
-                                <div class="column" style="flex:0 0 auto;">
-                                    <label>Photo - à agrafer ici</label>
-                                    <div class="photo-staple">Agrafer la photo ici (45mm x 60mm)</div>
-                                </div>
-                                
-                            </div>
-                    </div>
 
                         
                                 </div>
@@ -1602,6 +1726,70 @@
             // Save: forward to existing save handler if present (floatSave handler may be bound elsewhere)
             var sv = document.getElementById('floatSaveBtn');
             if(sv && !sv._bound){ sv.addEventListener('click', function(){ sv.dispatchEvent(new Event('click_internal')); }); sv._bound = true; }
+
+            // Photo preview for multiple attachments
+            var photosInput = document.getElementById('customer_photos_multiple');
+            var photoPreview = document.getElementById('photoPreview');
+            if(photosInput && photoPreview){
+                photosInput.addEventListener('change', function(){
+                    photoPreview.innerHTML = '';
+                    Array.from(this.files).slice(0, 3).forEach(function(file){
+                        if(!file.type.startsWith('image/')) return;
+                        var reader = new FileReader();
+                        reader.onload = function(evt){
+                            var container = document.createElement('div');
+                            container.className = 'photo-preview-item';
+                            var img = document.createElement('img');
+                            img.src = evt.target.result;
+                            container.appendChild(img);
+                            photoPreview.appendChild(container);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                });
+            }
+
+            // Show/hide conditional fields based on user responses
+            function updateResidentFields(){
+                var nonResidentSection = document.getElementById('non-resident-fields');
+                if(!nonResidentSection) return;
+                var isNonResident = document.getElementById('resident-no') && document.getElementById('resident-no').checked;
+                nonResidentSection.style.display = isNonResident ? 'block' : 'none';
+            }
+
+            function updateEcobankCreditFields(){
+                var ecobankFields = document.getElementById('ecobank-credit-fields');
+                if(!ecobankFields) return;
+                var hasEcobankAccount = document.getElementById('ecobank-account-yes') && document.getElementById('ecobank-account-yes').checked;
+                ecobankFields.style.display = hasEcobankAccount ? 'block' : 'none';
+            }
+
+            function updateOtherBankFields(){
+                var otherBankFields = document.getElementById('other-bank-fields');
+                if(!otherBankFields) return;
+                var hasOtherBank = document.getElementById('other-bank-account-yes') && document.getElementById('other-bank-account-yes').checked;
+                otherBankFields.style.display = hasOtherBank ? 'block' : 'none';
+            }
+
+            var residentRadios = document.querySelectorAll('input[name="resident-status"]');
+            residentRadios.forEach(function(radio){
+                radio.addEventListener('change', updateResidentFields);
+            });
+
+            var ecobankRadios = document.querySelectorAll('input[name="existing-ecobank-account"]');
+            ecobankRadios.forEach(function(radio){
+                radio.addEventListener('change', updateEcobankCreditFields);
+            });
+
+            var otherBankRadios = document.querySelectorAll('input[name="existing-other-bank-account"]');
+            otherBankRadios.forEach(function(radio){
+                radio.addEventListener('change', updateOtherBankFields);
+            });
+
+            // Initial state sync
+            updateResidentFields();
+            updateEcobankCreditFields();
+            updateOtherBankFields();
         })();
 
         // Print helpers: try to keep printed document <= maxPages by reducing root font-size

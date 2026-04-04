@@ -296,4 +296,41 @@ function searchAccounts($criteria, $conn, $limit = 100) {
     mysqli_stmt_close($stmt);
     return $accounts;
 }
+
+/**
+ * Enrichit une ligne de données avec des informations Flexcube
+ * 
+ * @param array $row Ligne de données de base de données
+ * @return array Ligne enrichie
+ */
+function enrichRowWithFlexcube($row) {
+    if (empty($row['account_number'])) {
+        return $row;
+    }
+    
+    $flexcube_data = fetchAccountFromFlexcube($row['account_number']);
+    
+    if ($flexcube_data) {
+        // Fusionner les données Flexcube avec les données locales
+        $enriched = array_merge($row, [
+            'flexcube_balance' => $flexcube_data['balance'] ?? null,
+            'flexcube_status' => $flexcube_data['status'] ?? null,
+            'flexcube_currency' => $flexcube_data['currency'] ?? null,
+            'flexcube_opening_date' => $flexcube_data['opening_date'] ?? null,
+            'source' => 'flexcube_enriched'
+        ]);
+        
+        // Utiliser les données Flexcube pour certains champs si manquants localement
+        if (empty($enriched['customer_name']) && !empty($flexcube_data['account_name'])) {
+            $enriched['customer_name'] = $flexcube_data['account_name'];
+        }
+        if (empty($enriched['account_type']) && !empty($flexcube_data['account_type'])) {
+            $enriched['account_type'] = $flexcube_data['account_type'];
+        }
+        
+        return $enriched;
+    }
+    
+    return $row;
+}
 ?>
