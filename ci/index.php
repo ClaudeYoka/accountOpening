@@ -45,13 +45,13 @@
 				<?php
 					// Définir les agences avec leurs infos
 					$agencies = array(
-						array('code' => 'T31', 'name' => 'Agence T31 - SIEGE', 'icon' => 'fa-building', 'color' => '#D32F2F'),
-						array('code' => 'T32', 'name' => 'Agence T32 - LUMUMBA', 'icon' => 'fa-user-tie', 'color' => '#1976D2'),
-						array('code' => 'T33', 'name' => 'Agence T33 - ATLANTIC', 'icon' => 'fa-cogs', 'color' => '#0aadb3'),
-						array('code' => 'T34', 'name' => 'Agence T34 - POTO-POTO', 'icon' => 'fa-users', 'color' => '#F57C00'),
-						array('code' => 'T38', 'name' => 'Agence T38 - DOLISIE', 'icon' => 'fa-cogs', 'color' => '#f8cd0f'),
-						array('code' => 'T39', 'name' => 'Agence T39 - OUESSO', 'icon' => 'fa-cogs', 'color' => '#7B1FA2'),
-						array('code' => 'T41', 'name' => 'Agence T41 - BACONGO', 'icon' => 'fa-briefcase', 'color' => '#388E3C'),
+						array('code' => 'T31', 'name' => 'T31 - Agence SIEGE', 'icon' => 'fa-building', 'color' => '#D32F2F'),
+						array('code' => 'T32', 'name' => 'T32 - Agence LUMUMBA', 'icon' => 'fa-user-tie', 'color' => '#1976D2'),
+						array('code' => 'T33', 'name' => 'T33 - Agence ATLANTIC', 'icon' => 'fa-cogs', 'color' => '#0aadb3'),
+						array('code' => 'T34', 'name' => 'T34 - Agence POTO-POTO', 'icon' => 'fa-users', 'color' => '#F57C00'),
+						array('code' => 'T38', 'name' => 'T38 - Agence DOLISIE', 'icon' => 'fa-cogs', 'color' => '#f8cd0f'),
+						array('code' => 'T39', 'name' => 'T39 - Agence OUESSO', 'icon' => 'fa-cogs', 'color' => '#7B1FA2'),
+						array('code' => 'T41', 'name' => 'T41 - Agence BACONGO', 'icon' => 'fa-briefcase', 'color' => '#388E3C'),
 
 					);
 
@@ -61,21 +61,39 @@
 			</div>
 
 			<div class="title pb-20" style="margin-top: 30px;">
-				<h2 class="h3 mb-0">DEMANDES DE CHÉQUIERS PAR AGENCE</h2>
+				<h2 class="h3 mb-0">DEMANDES DE CHÉQUIERS EN COURS PAR AGENCE</h2>
 			</div>
 			<div class="row pb-10">
 				<?php
 					foreach ($agencies as $agency) {
-						$chequier_query = mysqli_query($conn, "SELECT COUNT(*) AS chequier_count FROM tblcompte WHERE branch_code = '" . $agency['code'] . "'");
-						$chequier_result = mysqli_fetch_assoc($chequier_query);
-						$chequier_count = $chequier_result['chequier_count'];
+						$chequier_query = mysqli_query($conn, "SELECT COUNT(*) AS chequier_count FROM tblcompte tc
+							LEFT JOIN (
+								SELECT request_id, status
+								FROM chequier_status cs1
+								WHERE cs1.changed_at = (
+									SELECT MAX(cs2.changed_at)
+									FROM chequier_status cs2
+									WHERE cs2.request_id = cs1.request_id
+								)
+							) cs ON tc.id = cs.request_id
+						WHERE tc.branch_code COLLATE utf8mb4_0900_ai_ci = '" . mysqli_real_escape_string($conn, $agency['code']) . "'
+						AND tc.type_compte IS NOT NULL
+						AND tc.type_compte COLLATE utf8mb4_0900_ai_ci != ''
+						AND LOWER(COALESCE(cs.status COLLATE utf8mb4_0900_ai_ci, tc.access COLLATE utf8mb4_0900_ai_ci, 'encours' COLLATE utf8mb4_0900_ai_ci)) = 'encours' COLLATE utf8mb4_0900_ai_ci");
+						$chequier_count = 0;
+						if ($chequier_query) {
+							$chequier_result = mysqli_fetch_assoc($chequier_query);
+							$chequier_count = $chequier_result['chequier_count'];
+						} else {
+							error_log("SQL Error in ci/index.php (agency query): " . mysqli_error($conn));
+						}
 				?>
 				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
 					<div class="card-box height-100-p widget-style1 agency-card" style="border-top: 4px solid <?php echo $agency['color']; ?>; transition: all 0.3s ease; opacity: 0.85;">
 						<div class="d-flex flex-wrap align-items-center justify-content-between">
 							<div class="widget-data">
 								<div class="h4 mb-0" style="color: <?php echo $agency['color']; ?>; font-weight: 700; font-size: 28px;"><?php echo $chequier_count; ?></div>
-								<div class="weight-600 font-14" style="color: #666;"><?php echo $agency['name']; ?> - Chéquiers</div>
+						<div class="weight-600 font-14" style="color: #666;"><?php echo $agency['name']; ?> - En cours</div>
 							</div>
 							<div class="widget-icon">
 								<div class="icon" style="background: linear-gradient(135deg, <?php echo $agency['color']; ?>20 0%, <?php echo $agency['color']; ?>10 100%); border-radius: 12px; padding: 15px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
@@ -87,6 +105,7 @@
 				</div>
 				<?php } ?>
 			</div>
+
 
 			<div class="card-box mb-30">
 				<div class="pd-20 d-flex justify-content-between align-items-center">
@@ -175,11 +194,16 @@
 										LEFT JOIN tblemployees te ON tc.emp_id = te.emp_id
 										WHERE " . $where_clause . $month_filter . $year_filter . "
 										ORDER BY tc.date_enregistrement DESC
-									") or die(mysqli_error($conn));
+									");
+									
+									if (!$chequier_query) {
+										error_log("SQL Error in ci/index.php (filtered query): " . mysqli_error($conn));
+										$chequier_query = null;
+									}
 								} else {
 									// Pas de filtre: afficher toutes les demandes de l'année courante
 									$chequier_query = mysqli_query($conn, "
-										SELECT 
+										SELECT
 											tc.id,
 											tc.firstname,
 											tc.branch_code,
@@ -187,19 +211,25 @@
 											tc.etabliss,
 											tc.access,
 											tc.date_enregistrement,
-											CONCAT(te.FirstName, ' ', te.LastName) as cso_name
+											CONCAT(te.FirstName, ' ', te.LastName) AS cso_name
 										FROM tblcompte tc
 										LEFT JOIN tblemployees te ON tc.emp_id = te.emp_id
-										WHERE YEAR(tc.date_enregistrement) = $current_year
-										ORDER BY tc.date_enregistrement DESC
-									") or die(mysqli_error($conn));
+										WHERE tc.date_enregistrement >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+										ORDER BY tc.date_enregistrement DESC;
+");
+									
+									if (!$chequier_query) {
+										error_log("SQL Error in ci/index.php (default query): " . mysqli_error($conn));
+										$chequier_query = null;
+									}
 								}
 								
-								while ($row = mysqli_fetch_array($chequier_query)) {
-									// Déterminer la couleur du statut
-									$status_color = '#FFC107';
-									if ($row['access'] === 'En Cours') {
-										$status_color = '#FF9800';
+								if ($chequier_query && mysqli_num_rows($chequier_query) > 0) {
+									while ($row = mysqli_fetch_array($chequier_query)) {
+										// Déterminer la couleur du statut
+										$status_color = '#FFC107';
+										if ($row['access'] === 'En Cours') {
+											$status_color = '#FF9800';
 									} elseif ($row['access'] === 'Traité') {
 										$status_color = '#4CAF50';
 									} elseif ($row['access'] === 'Rejeté') {
@@ -225,7 +255,15 @@
 								</td>
 								<td><?php echo date('d/m/Y', strtotime($row['date_enregistrement'])); ?></td>
 							</tr>
-							<?php } ?>
+							<?php } // end while
+									} else { // if no query results
+							?>
+							<tr>
+								<td colspan="7" style="text-align: center; padding: 20px; color: #999;">
+									Aucune demande de chéquier trouvée
+								</td>
+							</tr>
+							<?php } // end if chequier_query ?>
 						</tbody>
 					</table>
 				</div>

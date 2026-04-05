@@ -147,17 +147,11 @@ function completeLogin($conn) {
         case 'Admin':
             header("Location: admin/index");
             break;
-        case 'staff':
-            header("Location: staff/index");
-            break;
         case 'cso':
             header("Location: cso/index");
             break;
-        case 'RH':
-            header("Location: rh/index");
-            break;
-        case 'HOD':
-            header("Location: heads/index");
+        case 'CI':
+            header("Location: ci/index");
             break;
         default:
             header("Location: index");

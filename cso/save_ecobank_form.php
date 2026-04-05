@@ -5,6 +5,7 @@
 ob_start();
 include('../includes/session.php');
 include('../includes/audit_logger.php');
+include('../includes/RateLimiter.php');
 $__sess_out = ob_get_clean();
 // if session include emitted a redirect script, treat as unauthorized
 if ($__sess_out && (stripos($__sess_out, 'window.location') !== false || stripos($__sess_out, '<script') !== false)){
@@ -37,6 +38,14 @@ if (!isset($_SESSION) || !isset($_SESSION['alogin']) || trim($_SESSION['alogin']
     http_response_code(401);
     echo json_encode(['status' => 'error', 'message' => 'Unauthorized - please login']);
     exit;
+}
+
+// SÉCURITÉ: Rate limiting - Protection anti-spam formulaires (5 soumissions/60 sec)
+try {
+    $rate_check = middleware_rate_limit($dbh, 'form_submit_ecobank', 5, 60);
+} catch (Exception $e) {
+    error_log("Rate limiter error in save_ecobank_form: " . $e->getMessage());
+    // Continuer même en cas d'erreur (fail open)
 }
 
 // Quick sanity: ensure DB connection exists

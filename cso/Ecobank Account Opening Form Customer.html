@@ -373,23 +373,23 @@
                                 <div class="form-group" style="flex: 1 1 320px;">
                                     <div style="margin-bottom: 0px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
                                         <div style="display: flex; align-items: center;">
-                                            <input type="checkbox" id="compte-personne-physique" name="account_type[]" value="Compte Personnes Physique" style="width: 16px; height: 16px; margin-right: 6px;">
-                                            <label for="compte-personne-physique" style="font-size: 13px; font-weight: normal;">Compte Personnes Physique</label>
+                                            <input type="checkbox" id="compte-personne-physique" name="account_type[]" value="Compte Personne Physique" style="width: 16px; height: 16px; margin-right: 6px;">
+                                            <label for="compte-personne-physique" style="font-size: 13px; font-weight: normal;">Compte Personne Physique</label>
                                         </div>
                                         <div style="display: flex; align-items: center;">
-                                            <input type="checkbox" id="compte-entreprise-individuelle" name="account_type[]" value="Comptes Entreprise Individuelle" style="width: 16px; height: 16px; margin-right: 6px;">
-                                            <label for="compte-entreprise-individuelle" style="font-size: 13px; font-weight: normal;">Comptes Entreprise Individuelle</label>
+                                            <input type="checkbox" id="compte-entreprise-individuelle" name="account_type[]" value="Compte Entreprise Individuelle" style="width: 16px; height: 16px; margin-right: 6px;">
+                                            <label for="compte-entreprise-individuelle" style="font-size: 13px; font-weight: normal;">Compte Entreprise Individuelle</label>
                                         </div>
                                     </div>
                                     <br><br>
                                     <div class="column">
-                                            <label for="form-bank-account-number" style="font-size: 13px; font-weight: normal;">Numéro de compte:</label>
-                                            <input type="text" id="form-bank-account-number" name="account_number" style="height: 20px;" readonly>
-                                        </div>
-                                        <div class="column">
-                                            <label for="customer-id" style="font-size: 13px; font-weight: normal;">Identifiant client:</label>
-                                            <input type="number" id="customer-id" name="customer_id" style="height: 20px;" readonly>
-                                        </div>
+                                        <label for="form-bank-account-number" style="font-size: 13px; font-weight: normal;">Numéro de compte:</label>
+                                        <input type="text" id="form-bank-account-number" name="account_number" style="height: 35px; width: 350px; font-size: 20px; font-weight: bold;" readonly>
+                                    </div>
+                                    <div class="column">
+                                        <label for="customer-id" style="font-size: 13px; font-weight: normal;">Identifiant client:</label>
+                                        <input type="number" id="customer-id" name="customer_id" style="height: 35px; width: 200px; font-size: 14px; font-weight: bold;" readonly>
+                                    </div>
                                 </div>
 
                                 <div class="form-group" style="flex: 0 0 160px;">
@@ -417,19 +417,19 @@
                                     
                                             <div class="checkbox-group">
                                                 <label style="margin-right:14px; display:inline-flex; align-items:center;">
-                                                    <input type="checkbox" id="account-type-courant" name="account_type[]" value="Compte courant" style="margin-right:6px;" />
+                                                    <input type="checkbox" id="account-type-courant" name="account_type[]" value="Compte courant" style="width: 16px; height: 16px; margin-right:6px;" />
                                                     Compte courant
                                                 </label>
                                                 <label style="margin-right:14px; display:inline-flex; align-items:center;">
-                                                    <input type="checkbox" id="account-type-epargne" name="account_type[]" value="Compte épargne" style="margin-right:6px;" />
+                                                    <input type="checkbox" id="account-type-epargne" name="account_type[]" value="Compte épargne" style="width: 16px; height: 16px; margin-right:6px;" />
                                                     Compte épargne
                                                 </label>
                                                 <label style="margin-right:14px; display:inline-flex; align-items:center;">
-                                                    <input type="checkbox" id="account-type-epargne" name="account_type[]" value="Compte mineur" style="margin-right:6px;" />
+                                                    <input type="checkbox" id="account-type-epargne" name="account_type[]" value="Compte mineur" style="width: 16px; height: 16px; margin-right:6px;" />
                                                     Compte Mineur
                                                 </label>
                                                 <label style="margin-right:14px; display:inline-flex; align-items:center;">
-                                                    <input type="checkbox" id="account-type-entreprise" name="account_type[]" value="Compte entreprise" style="margin-right:6px;" />
+                                                    <input type="checkbox" id="account-type-entreprise" name="account_type[]" value="Compte entreprise" style="width: 16px; height: 16px; margin-right:6px;" />
                                                     Compte Entreprise
                                                 </label>
                                             </div>
@@ -443,16 +443,16 @@
                                         <div class="section-title">Objectif Principal du Compte :</div>
                                         <div class="checkbox-group">
                                                 <div class="checkbox-item">
-                                                    <input type="checkbox" id="salary-purpose" name="account-purpose" value="Salaire" checked>
+                                                    <input type="checkbox" id="salary-purpose" name="account-purpose" value="Salaire" style="width: 16px; height: 16px; margin-right:6px;" checked>
                                                     <label for="salary-purpose" style="margin-right:6px;">Salaire</label>
                                                 </div>
                                             <div class="checkbox-item">
-                                                <input type="checkbox" id="business-purpose" name="account-purpose" value="Entreprise">
+                                                <input type="checkbox" id="business-purpose" name="account-purpose" value="Entreprise" style="width: 16px; height: 16px; margin-right:6px;">
                                                 <label for="business-purpose">Entreprise</label>
                                             </div>
 
                                             <div class="checkbox-item currency-input">
-                                                <input type="checkbox" id="other-purpose-option" name="account-purpose" value="Autre">
+                                                <input type="checkbox" id="other-purpose-option" name="account-purpose" value="Autre" style="width: 16px; height: 16px; margin-right:6px;">
                                                 <label for="other-purpose-option"
                                                     style="margin-right: 5px;">Autre:</label>
                                                 <input type="text" id="other-purpose" placeholder="Préciser" >
@@ -464,13 +464,13 @@
                                         <div class="section-title">Devise préférée :</div>
                                         <div class="checkbox-group">
                                             <div class="checkbox-item">
-                                                <input type="checkbox" id="kes-currency" name="currency" value="Franc CFA (XAF)" checked>
+                                                <input type="checkbox" id="kes-currency" name="currency" value="Franc CFA (XAF)" style="width: 16px; height: 16px; margin-right:6px;" checked>
                                                 <label for="kes-currency">Franc CFA (XAF)</label>
                                             </div>
 
                                             <div class="checkbox-item currency-input">
-                                                <input type="checkbox" id="other-currency-option" name="currency" value="Autre">
-                                                <label for="other-purpose-option" style="margin-right: 5px;">Autre:</label>
+                                                <input type="checkbox" id="other-currency-option" name="currency" value="Autre" style="width: 16px; height: 16px; margin-right:6px;">
+                                                <label for="other-currency-option" style="margin-right: 5px;">Autre:</label>
                                                 <input type="text" id="other-currency">
                                             </div>
                                         </div>
@@ -571,7 +571,7 @@
                             <div class="section-title">Comment préféreriez-vous accéder aux services bancaires ?</div>
                             <div class="access-checkbox-row compact">
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="debit-card" value="Carte de débit">
+                                    <input type="checkbox" id="debit-card" value="Carte de débit" style="width: 16px; height: 16px; margin-right:6px;">
                                     <label for="debit-card">Carte de débit (Type: </label>
                                     <input type="text" id="debit-card-type" style="width:80px; height:18px; margin-left:6px;">
                                 </div>
@@ -580,31 +580,31 @@
                                     <label for="prepaid-card">Carte prépayée</label>
                                 </div> -->
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="app-mobile" value="Application mobile">
+                                    <input type="checkbox" id="app-mobile" value="Application mobile" style="width: 16px; height: 16px; margin-right:6px;">
                                     <label for="app-mobile">Application mobile</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="web-banking" value="Banque par internet">
+                                    <input type="checkbox" id="web-banking" value="Banque par internet" style="width: 16px; height: 16px; margin-right:6px;">
                                     <label for="web-banking">Banque par internet</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="mobile-money" value="Mobile money">
+                                    <input type="checkbox" id="mobile-money" value="Mobile money" style="width: 16px; height: 16px; margin-right:6px;">
                                     <label for="mobile-money">Mobile money</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="e-statement" value="E-Statement">
+                                    <input type="checkbox" id="e-statement" value="E-Statement" style="width: 16px; height: 16px; margin-right:6px;">
                                     <label for="e-statement">E-Statement</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="e-alert" value="E-Alert">
+                                    <input type="checkbox" id="e-alert" value="E-Alert" style="width: 16px; height: 16px; margin-right:6px;">
                                     <label for="e-alert">E-Alert</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="sms-alert" value="SMS Alert">
+                                    <input type="checkbox" id="sms-alert" value="SMS Alert" style="width: 16px; height: 16px; margin-right:6px;">
                                     <label for="sms-alert">SMS Alert</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="standing-order" value="Virement permanent">
+                                    <input type="checkbox" id="standing-order" value="Virement permanent" style="width: 16px; height: 16px; margin-right:6px;">
                                     <label for="standing-order">Virement permanent</label>
                                 </div>
                                 <div>
@@ -683,7 +683,7 @@
                                                 <label for="prof">Prof.</label>
                                             </div>
                                             <div class="checkbox-item">
-                                                <input type="checkbox" id="other-title">
+                                                <input type="checkbox" id="other-title" style="width: 16px; height: 16px; margin-right:6px;">
                                                 <label for="other-title">Autre:</label>
                                                 <input type="text" style="width: 60px; height: 18px; margin-left: 3px;">
                                             </div>
@@ -1705,6 +1705,7 @@
                 </style>
         </form>
         <!-- Floating buttons (Print / Save / Back / Reset) -->
+    
         <button id="floatBicBtn" class="btn btn-print btn-print-floating"  title="bic"><span class="icon">📋</span> BIC</button>
         <button id="floatSaveBtn" class="btn btn-save btn-save-floating" title="Enregistrer" type="button"><span class="icon">💾 </span>  Save</button>
         <button id="floatBackBtn" class="btn btn-back btn-back-floating" title="Retour" type="button"><span class="icon">↩️ </span>  Back</button>

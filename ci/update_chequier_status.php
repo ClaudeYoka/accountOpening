@@ -118,10 +118,11 @@ if ($ok) {
         'table' => 'tblcompte'
     ]);
 
-    echo json_encode(['status'=>'success','message'=>'Statut mis à jour avec succès']);
+    echo json_encode(['status'=>'success','success' => true, 'message'=>'Statut mis à jour avec succès']);
 } else {
-    audit_log_error($conn, 'STATUS_UPDATE_FAILED', 'Impossible de mettre à jour access : ' . mysqli_stmt_error($stmt_update), ['request_id' => $request_id, 'new_status' => $status]);
-    echo json_encode(['status'=>'error','message'=>mysqli_stmt_error($stmt)]);
+    $errorMessage = mysqli_stmt_error($stmt);
+    audit_log_error($conn, 'STATUS_UPDATE_FAILED', 'Impossible de mettre à jour le statut : ' . $errorMessage, ['request_id' => $request_id, 'new_status' => $status]);
+    echo json_encode(['status'=>'error','success' => false, 'error' => $errorMessage, 'message' => $errorMessage]);
 }
 mysqli_stmt_close($stmt);
 exit;

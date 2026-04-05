@@ -2,25 +2,25 @@
 <?php include('../includes/session.php')?>
 
 <?php
-// Récupérer les demandes de chéquier à partir de tblcompte
-function get_chequier_requests($conn, $account_search = '', $filter_month = '', $filter_year = '') {
+// Récupérer TOUTES les demandes de chéquier (historique complet) à partir de tblcompte
+function get_chequier_requests_history($conn, $account_search = '', $filter_month = '', $filter_year = '') {
     $where = "tc.type_compte IS NOT NULL AND tc.type_compte != ''";
-    
+
     // Si recherche par numéro de compte
     if (!empty($account_search)) {
         $account_search = mysqli_real_escape_string($conn, $account_search);
         $where .= " AND tc.account_number = '$account_search'";
     }
-    
+
     // Filtre par mois et année
     if (!empty($filter_month)) {
         $where .= " AND MONTH(tc.date_enregistrement) = '" . intval($filter_month) . "'";
     }
-    
+
     if (!empty($filter_year)) {
         $where .= " AND YEAR(tc.date_enregistrement) = '" . intval($filter_year) . "'";
     }
-    
+
     $query = "SELECT
                 tc.id,
                 tc.firstname as client_name,
@@ -52,7 +52,7 @@ function get_chequier_requests($conn, $account_search = '', $filter_month = '', 
     $result = mysqli_query($conn, $query);
     
     if (!$result) {
-        error_log("SQL Error in get_chequier_requests: " . mysqli_error($conn));
+        error_log("SQL Error in get_chequier_requests_history: " . mysqli_error($conn));
         return array();
     }
     
@@ -62,9 +62,9 @@ function get_chequier_requests($conn, $account_search = '', $filter_month = '', 
 function extract_chequier_info($row) {
     // Extrait les infos de chéquier depuis les colonnes directes
     if (empty($row['type_compte'])) return null;
-    
+
     $chequier_info = array('requested' => false, 'types' => array(), 'quantity' => 0);
-    
+
     // type_compte contient "25, 50, 100"
     if (!empty($row['type_compte'])) {
         $chequier_info['requested'] = true;
@@ -75,22 +75,13 @@ function extract_chequier_info($row) {
             }
         }
     }
-    
+
     if (!empty($chequier_info['types'])) {
         // Utiliser la quantité depuis la base de données (colonne etabliss)
         $chequier_info['quantity'] = isset($row['quantity']) ? (int)$row['quantity'] : count($chequier_info['types']);
     }
-    
-    return $chequier_info;
-}
 
-// Créer une notification dans la table tblnotification
-function create_notification($conn, $emp_id_recipient, $message, $type = 'info', $submission_id = null) {
-    $timestamp = date('Y-m-d H:i:s');
-    $submission_val = $submission_id ? intval($submission_id) : 'NULL';
-    $insert_query = "INSERT INTO tblnotification (emp_id, message, type, submission_id, created_at, is_read) 
-                        VALUES ('".mysqli_real_escape_string($conn,$emp_id_recipient)."', '".mysqli_real_escape_string($conn,$message)."', '".mysqli_real_escape_string($conn,$type)."', $submission_val, '$timestamp', 0)";
-    return mysqli_query($conn, $insert_query);
+    return $chequier_info;
 }
 
 // Traiter les demandes de chéquier
@@ -110,7 +101,7 @@ if (isset($_GET['filter_year']) && !empty($_GET['filter_year'])) {
     $filter_year = $_GET['filter_year'];
 }
 
-$result = get_chequier_requests($conn, $account_search, $filter_month, $filter_year);
+$result = get_chequier_requests_history($conn, $account_search, $filter_month, $filter_year);
 $chequier_requests = array();
 
 // Ensure status table exists
@@ -129,7 +120,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         $chequier_info = extract_chequier_info($row);
         if ($chequier_info && $chequier_info['requested']) {
             $row['chequier_info'] = $chequier_info;
-            
+
             // Fetch last status change date and current status
             $status_q = mysqli_query($conn, "SELECT status, changed_at FROM chequier_status WHERE request_id = " . intval($row['id']) . " ORDER BY changed_at DESC LIMIT 1");
             $current_status = $row['status'] ?? 'encours';
@@ -142,20 +133,8 @@ if ($result && mysqli_num_rows($result) > 0) {
                 $row['status_changed_at'] = $row['created_at'];
             }
             
-            // Exclure les demandes avec statut "Donné"
-            if (strtolower($current_status) === 'donné') {
-                continue;
-            }
-            
             $row['current_status'] = $current_status;
             $chequier_requests[] = $row;
-
-            // Envoyer une notification au CSO responsable si nécessaire
-            $check_notif = mysqli_query($conn, "SELECT id FROM tblnotification WHERE message LIKE '%" . $row['id'] . "%' AND emp_id = '" . mysqli_real_escape_string($conn, $_SESSION['emp_id']) . "'");
-            if ($check_notif && mysqli_num_rows($check_notif) == 0 && $row['emp_id']) {
-                $msg_cso = "Demande de chéquier effectuée pour le compte " . $row['account_number'] . " - Client: " . $row['client_name'] . " (Demande #" . $row['id'] . ")";
-                create_notification($conn, $_SESSION['emp_id'], $msg_cso, 'chequier_created', $row['id']);
-            }
         }
     }
 }
@@ -172,15 +151,12 @@ if ($result && mysqli_num_rows($result) > 0) {
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
                         <div class="title">
-                            <h2 class="h3 mb-0">DEMANDES DE CHÉQUIERS</h2>
+                            <h2 class="h3 mb-0">HISTORIQUE DES DEMANDES DE CHÉQUIERS</h2>
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-12 text-right">
-                        <a href="demande_chequier_directe" class="btn btn-sm btn-primary" style="background: linear-gradient(135deg, #05b7e4 0%, #00455a 100%); border: none;">
-                            <i class="dw dw-plus"></i> Nouvelle Demande
-                        </a>
-                        <a href="historique_chequier" class="btn btn-sm btn-info ml-2" style="border: none;">
-                            <i class="dw dw-time-past"></i> Historique
+                        <a href="demande_chequier" class="btn btn-sm btn-secondary">
+                            <i class="dw dw-arrow-left"></i> Retour aux demandes actives
                         </a>
                     </div>
                 </div>
@@ -195,12 +171,12 @@ if ($result && mysqli_num_rows($result) > 0) {
                                 <label style="font-weight: 600; font-size: 12px; color: #666; display: block; margin-bottom: 4px;">Rechercher par N°</label>
                                 <input type="text" name="search" placeholder="N° de compte" value="<?php echo htmlspecialchars($account_search); ?>" class="form-control" style="width: 150px;">
                             </div>
-                            
+
                             <div>
                                 <label style="font-weight: 600; font-size: 12px; color: #666; display: block; margin-bottom: 4px;">Mois :</label>
                                 <select id="filter_month" name="filter_month" class="form-control" style="width: 100px;">
                                     <option value="">Tous</option>
-                                    <?php 
+                                    <?php
                                         for ($m = 1; $m <= 12; $m++) {
                                             $selected = ($m == $filter_month) ? 'selected' : '';
                                             $month_name = date('F', mktime(0, 0, 0, $m, 1));
@@ -209,12 +185,12 @@ if ($result && mysqli_num_rows($result) > 0) {
                                     ?>
                                 </select>
                             </div>
-                            
+
                             <div>
                                 <label style="font-weight: 600; font-size: 12px; color: #666; display: block; margin-bottom: 4px;">Année :</label>
                                 <select id="filter_year" name="filter_year" class="form-control" style="width: 100px;">
                                     <option value="">Toutes</option>
-                                    <?php 
+                                    <?php
                                         $current_year = date('Y');
                                         for ($y = $current_year; $y >= $current_year - 5; $y--) {
                                             $selected = ($y == $filter_year) ? 'selected' : '';
@@ -223,22 +199,22 @@ if ($result && mysqli_num_rows($result) > 0) {
                                     ?>
                                 </select>
                             </div>
-                            
+
                             <button type="submit" class="btn btn-sm btn-primary">Appliquer</button>
-                            
+
                             <?php if (!empty($account_search) || !empty($filter_month) || !empty($filter_year)): ?>
-                                <a href="?" class="btn btn-sm btn-secondary">Réinitialiser</a>
+                                <a href="historique_chequier" class="btn btn-sm btn-secondary">Réinitialiser</a>
                             <?php endif; ?>
                         </form>
                     </div>
 
                     <?php if (empty($chequier_requests)): ?>
                         <div style="text-align: center; padding: 40px;">
-                            <i class="fa fa-inbox" style="font-size: 48px; color: #ccc; margin-bottom: 20px;"></i>
-                            <p style="color: #999; font-size: 16px;">Aucune demande de chéquier pour le moment</p>
+                            <i class="fa fa-history" style="font-size: 48px; color: #ccc; margin-bottom: 20px;"></i>
+                            <p style="color: #999; font-size: 16px;">Aucune demande dans l'historique</p>
                         </div>
                     <?php else: ?>
-                        <h4 class="mb-20">Total : <strong><?php echo count($chequier_requests); ?></strong> demande(s)</h4>
+                        <h4 class="mb-20">Total : <strong><?php echo count($chequier_requests); ?></strong> demande(s) dans l'historique</h4>
                         <div class="table-responsive">
                             <table class="data-table table hover multiple-select-row nowrap">
                                 <thead>
@@ -247,13 +223,12 @@ if ($result && mysqli_num_rows($result) > 0) {
                                         <th>NOM CLIENT</th>
                                         <th>COMPTE</th>
                                         <th>CHÉQUIER</th>
-                                        <!-- <th>QUANTITÉ</th> -->
                                         <th>STATUT</th>
                                         <th>DATE</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($chequier_requests as $req): 
+                                    <?php foreach ($chequier_requests as $req):
                                         $status = strtolower($req['current_status'] ?? $req['status'] ?? 'encours');
                                         $statusColors = [
                                             'encours' => ['bg' => '#ffe4cd', 'color' => '#eb6c05', 'label' => 'En cours'],
@@ -268,22 +243,12 @@ if ($result && mysqli_num_rows($result) > 0) {
                                             <td><small><?php echo htmlspecialchars($req['client_name'] ?? ''); ?></small></td>
                                             <td><code><?php echo htmlspecialchars($req['account_number'] ?? ''); ?></code></td>
                                             <td><?php echo htmlspecialchars(implode(', ', $req['chequier_info']['types'])); ?></td>
-                                            <!-- <td><strong><?php echo $req['chequier_info']['quantity']; ?></strong></td> -->
                                             <td>
                                                 <span style="display: inline-block; padding: 6px 12px; background-color: <?php echo $badgeStyle['bg']; ?>; color: <?php echo $badgeStyle['color']; ?>; border-radius: 4px; font-weight: 500; font-size: 12px;">
                                                     <?php echo htmlspecialchars($badgeStyle['label'], ENT_QUOTES, 'UTF-8'); ?>
                                                 </span>
-                                                <div class="dropdown" style="display: inline-block; margin-left: 5px;">
-                                                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" title="Modifier le statut">
-                                                        ⋮
-                                                    </button>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#" onclick="updateStatusCSO(<?php echo $req['id']; ?>, 'Donné'); return false;">Donné</a>
-                                                    </div>
-                                                </div>
                                             </td>
-                                            <td><small><?php echo date('d/m/Y', strtotime($req['status_changed_at'] ?? $req['created_at'])); ?></small></td>
-                                            <!-- <td><?php echo htmlspecialchars(($req['FirstName'] ?? '') . ' ' . ($req['LastName'] ?? '')); ?></td> -->
+                                            <td><small><?php echo date('d/m/Y', strtotime($req['status_changed_at'] ?: $req['created_at'])); ?></small></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -294,7 +259,6 @@ if ($result && mysqli_num_rows($result) > 0) {
             </div>
         </div>
     </div>
-
 
     <!-- Modal Détails Demande CSO -->
     <div id="detailsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -346,7 +310,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 
         function showDetailsCSO(requestId) {
             document.getElementById('detailsContent').innerHTML = '<div style="text-align: center; padding: 20px;"><i class="fa fa-spinner fa-spin" style="font-size: 24px; color: #05b7e4;"></i> Chargement...</div>';
-            
+
             fetch('get_chequier_details.php?request_id=' + requestId)
                 .then(response => response.json())
                 .then(data => {
@@ -355,75 +319,46 @@ if ($result && mysqli_num_rows($result) > 0) {
                         let html = `
                             <div class="mb-3">
                                 <label class="font-weight-600">Agence : ${escapeHtml(req.branch_code)}</label>
-                                
                             </div>
                             <div class="mb-3">
-                                <label class="font-weight-600">Nom du Client : ${escapeHtml(req.client_name)}</label>
+                                <label class="font-weight-600">Client : ${escapeHtml(req.customer_name || req.client_name)}</label>
                             </div>
                             <div class="mb-3">
-                                <label class="font-weight-600">Numéro de Compte et Téléphone :</label>
-                                <p>
-                                    <strong>Tél :</strong> ${escapeHtml(req.phone || req.mobile1 || 'N/A')}<br>
-                                    <strong>Compte :</strong> <code>${escapeHtml(req.account_number || 'N/A')}</code>
-                                </p>
+                                <label class="font-weight-600">Numéro de compte : ${escapeHtml(req.account_number)}</label>
                             </div>
                             <div class="mb-3">
-                                <label class="font-weight-600">Email : ${escapeHtml(req.email || 'N/A')}</label>
+                                <label class="font-weight-600">Type de chéquier : ${escapeHtml(req.chequier_types || req.type_compte)}</label>
                             </div>
                             <div class="mb-3">
-                                <label class="font-weight-600">Type de Chéquier : ${escapeHtml(req.type_compte)} Feuilles</label>
+                                <label class="font-weight-600">Quantité : ${escapeHtml(req.quantity || req.etabliss)}</label>
                             </div>
                             <div class="mb-3">
-                                <label class="font-weight-600">Quantité : ${escapeHtml(req.quantity|| 'N/A')}</label>
+                                <label class="font-weight-600">Statut : <span class="badge badge-info">${escapeHtml(req.status || 'encours')}</span></label>
                             </div>
                             <div class="mb-3">
-                                <label class="font-weight-600">Statut :
-                                    <span style="display: inline-block; padding: 6px 12px; background-color: ${getStatusColor(req.status).bg}; color: ${getStatusColor(req.status).color}; border-radius: 4px; font-weight: 500;">
-                                        ${getStatusLabel(req.status)}
-                                    </span>
-                                </label>
-                            </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Date de Demande Client: ${new Date(req.created_at).toLocaleString('fr-FR')}</label>
+                                <label class="font-weight-600">Date de demande : ${new Date(req.created_at).toLocaleDateString('fr-FR')}</label>
                             </div>
                         `;
                         document.getElementById('detailsContent').innerHTML = html;
                     } else {
-                        document.getElementById('detailsContent').innerHTML = '<p style="color: red;">Erreur : ' + data.error + '</p>';
+                        document.getElementById('detailsContent').innerHTML = '<div class="alert alert-danger">Erreur lors du chargement des détails</div>';
                     }
                 })
                 .catch(error => {
                     console.error('Erreur:', error);
-                    document.getElementById('detailsContent').innerHTML = '<p style="color: red;">Erreur réseau</p>';
+                    document.getElementById('detailsContent').innerHTML = '<div class="alert alert-danger">Erreur réseau</div>';
                 });
-            
-            $('#detailsModal').modal('show');
-        }
-
-        function getStatusColor(status) {
-            const colors = {
-                'encours': { bg: '#ffe4cd', color: '#eb6c05' },
-                'reçu': { bg: '#d1ecf1', color: '#0c5460' },
-                'livré': { bg: '#d4edda', color: '#155724' },
-                'donné': { bg: '#d4edda', color: '#155724' }
-            };
-            return colors[status] || { bg: '#e2e3e5', color: '#383d41' };
-        }
-
-        function getStatusLabel(status) {
-            const labels = {
-                'encours': 'En cours',
-                'reçu': 'Reçu',
-                'livré': 'Livré',
-                'donné': 'Donné'
-            };
-            return labels[status] || status;
         }
 
         function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+            var map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return (text || '').replace(/[&<>"']/g, function(m) { return map[m]; });
         }
     </script>
 </body>

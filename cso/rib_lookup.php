@@ -19,12 +19,30 @@ if(!$account){
     exit;
 }
 
+// PRIORITY 0: Check LOCAL DATABASE FIRST (much faster than Flexcube)
+// If account exists locally with recent data, use it immediately - don't wait for slow API
 $row = null;
+$use_flexy = true; // Flag pour décider si on essaie Flexcube
 
-// PRIORITY 1: Try FLEXCUBE API first (using real FlexcubeAPI class)
+// Quick check in local database first
+$q_quick = mysqli_prepare($conn, "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1");
+if($q_quick){
+    mysqli_stmt_bind_param($q_quick, 's', $account);
+    mysqli_stmt_execute($q_quick);
+    $r_quick = mysqli_stmt_get_result($q_quick);
+    if($r_quick && mysqli_num_rows($r_quick) > 0){
+        $row = mysqli_fetch_assoc($r_quick);
+        $use_flexy = false; // Already found locally, skip Flexcube
+        error_log("Account found in local DB immediately, skipping Flexcube API");
+    }
+    mysqli_stmt_close($q_quick);
+}
+
+// PRIORITY 1: Try FLEXCUBE API first (using real FlexcubeAPI class) - ONLY IF NOT IN LOCAL DB
+if($use_flexy){
 try {
-    // Timeout plus court pour éviter les blocages
-    set_time_limit(5); // 5 secondes maximum pour cette opération
+    // Timeout pour éviter les blocages (augmenté à 15 secondes pour la requête API)
+    set_time_limit(20); // 20 secondes maximum pour cette opération complète (15 API + 5 buffer)
     $flexcube_api = new FlexcubeAPI();
     $flexcube_response = $flexcube_api->getAccountInfo($account);
     
@@ -45,32 +63,37 @@ try {
 } catch (Exception $e) {
     error_log('Flexcube Error: ' . $e->getMessage());
     // Continuer au fallback
+} catch (Throwable $t) {
+    // Attraper les erreurs fatales/timeouts (PHP 7+)
+    error_log('Flexcube Throwable: ' . $t->getMessage());
+    // Continuer au fallback
 }
+} // Fin du if($use_flexy)
 
 // Si Flexcube n'a pas trouvé le compte, fallback vers la base de données locale
 if(!$row){
     // PRIORITY 2: Try exact match in LOCAL DATABASE (ecobank_form_submissions)
-    $sql = "SELECT * FROM ecobank_form_submissions WHERE account_number = ? LIMIT 1";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, 's', $account);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
-    $row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
+$sql = "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1";
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, 's', $account);
+mysqli_stmt_execute($stmt);
+$res = mysqli_stmt_get_result($stmt);
+$row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
 
-    // PRIORITY 3: If not found in ecobank_form_submissions, try LIKE search
-    if(!$row){
-        $esc = '%'.$account.'%';
-        $sql2 = "SELECT * FROM ecobank_form_submissions WHERE account_number LIKE ? LIMIT 1";
-        $stmt2 = mysqli_prepare($conn, $sql2);
-        mysqli_stmt_bind_param($stmt2, 's', $esc);
-        mysqli_stmt_execute($stmt2);
-        $res = mysqli_stmt_get_result($stmt2);
-        $row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
-    }
+// PRIORITY 3: If not found in ecobank_form_submissions, try LIKE search
+if(!$row){
+    $esc = '%'.$account.'%';
+    $sql2 = "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci LIKE ? LIMIT 1";
+    $stmt2 = mysqli_prepare($conn, $sql2);
+    mysqli_stmt_bind_param($stmt2, 's', $esc);
+    mysqli_stmt_execute($stmt2);
+    $res = mysqli_stmt_get_result($stmt2);
+    $row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
+}
 
     // PRIORITY 4: If still not found, try tblcompte
     if(!$row){
-        $q = mysqli_prepare($conn, "SELECT id, account_number, noms, mobile1, email FROM tblcompte WHERE account_number = ? LIMIT 1");
+        $q = mysqli_prepare($conn, "SELECT id, account_number, noms, mobile1, email FROM tblcompte WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1");
         if($q){
             mysqli_stmt_bind_param($q, 's', $account);
             mysqli_stmt_execute($q);
@@ -78,7 +101,7 @@ if(!$row){
             if($r2 && mysqli_num_rows($r2) > 0){
                 $pc = mysqli_fetch_assoc($r2);
                 // Try to find a submission by account_number or matching customer name/email/mobile
-                $sql3 = "SELECT * FROM ecobank_form_submissions WHERE account_number = ? OR customer_name LIKE ? OR mobile = ? OR email = ? LIMIT 1";
+                $sql3 = "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? OR customer_name COLLATE utf8mb4_0900_ai_ci LIKE ? OR mobile COLLATE utf8mb4_0900_ai_ci = ? OR email COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1";
                 $stmt3 = mysqli_prepare($conn, $sql3);
                 $likeName = '%'.($pc['noms'] ?? '').'%';
                 $mobile = $pc['mobile1'] ?? '';

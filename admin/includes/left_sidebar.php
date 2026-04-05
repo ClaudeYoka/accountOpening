@@ -64,6 +64,12 @@
 							<span class="micon fa fa-cogs"></span><span class="mtext">Audit Log</span>
 						</a>
 					</li>
+
+					<li>
+						<a href="rate_limiting_dashboard" class="dropdown-toggle no-arrow menu-item-ecobank">
+							<span class="micon fa fa-cogs"></span><span class="mtext">Rate Limiting</span>
+						</a>
+					</li>
 					
 					<li>
 						<div class="dropdown-divider"></div>

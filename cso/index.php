@@ -43,7 +43,6 @@
 								<th>NOM & PRENOM</th>
 								<th>TYPE COMPTE</th>
 								<th>DATE OUVERTURE </th>
-								<!-- <th>DECISION RH</th> -->
 								<th class="datatable-nosort">ACTION</th>
 							</tr>
 						</thead>
