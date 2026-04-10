@@ -69,7 +69,7 @@ function get_chequier_requests($conn, $account_search = '', $filter_month = '', 
                 )
             ) cs ON tc.id = cs.request_id
             WHERE " . $whereSql . "
-            AND COALESCE(cs.status, tc.access, 'encours') COLLATE utf8mb4_general_ci != 'livré'
+            AND COALESCE(cs.status, tc.access, 'encours') COLLATE utf8mb4_general_ci = 'encours'
             ORDER BY tc.date_enregistrement DESC";
 
     $stmt = mysqli_prepare($conn, $query);
@@ -262,18 +262,6 @@ if ($result && mysqli_num_rows($result) > 0) {
             $row['status_history'] = $history;
             $chequier_requests[] = $row;
             
-            // Vérifier si une notification a déjà été envoyée pour cette demande
-            // $stmt = mysqli_prepare($conn, "SELECT id FROM notifications WHERE message LIKE CONCAT('%', ?, '%') AND emp_id = ?");
-            // mysqli_stmt_bind_param($stmt, "ss", $row['id'], $_SESSION['emp_id']);
-            // mysqli_stmt_execute($stmt);
-            // $check_notif = mysqli_stmt_get_result($stmt);
-            // mysqli_stmt_close($stmt);
-            
-            // if ($check_notif && mysqli_num_rows($check_notif) == 0 && $row['emp_id']) {
-            //     // Envoyer notification au CSO (CI)
-            //     $msg_cso = "Demande de chéquier effectuée pour le compte " . $row['account_number'] . " - Client: " . $row['customer_name'] . " (Demande #" . $row['id'] . ")";
-            //     create_notification($conn, $_SESSION['emp_id'], $msg_cso, 'chequier_created');
-            // }
         }
     }
 }
@@ -429,7 +417,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                                                 $status_raw = $req['current_status'] ?? $req['status'] ?? 'encours';
                                                 $status_norm = normalize_chequier_status($status_raw);
                                                 $status_color = '#FFC107';
-                                                $status_label = status_label_php($status_norm);
+                                                $status_label = $status_raw; // Afficher le statut exact brut
 
                                                 if ($status_norm === 'prestataire') {
                                                     $status_color = '#17A2B8';

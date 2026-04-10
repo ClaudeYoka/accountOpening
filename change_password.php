@@ -1,6 +1,7 @@
 <?php
 session_name('ACCOUNT_OPENING_SESSION');
 session_start();
+require_once __DIR__ . '/includes/security_config.php';
 include('includes/config.php');
 include('includes/audit_logger.php');
 include('includes/flash.php');
@@ -20,6 +21,7 @@ $message_type = '';
 $redirect_after_success = false;
 
 if(isset($_POST['change_password'])) {
+    check_csrf();
     // Validation du mot de passe
     $new_password = $_POST['new_password'];
 
@@ -160,6 +162,7 @@ if(isset($_POST['change_password'])) {
                         </div>
 
                         <form method="post">
+                            <?php echo get_csrf_field(); ?>
                             <div class="input-group custom">
                                 <input class="form-control form-control-lg" type="password" name="new_password" placeholder="Nouveau mot de passe" required>
                                 <div class="input-group-append custom">

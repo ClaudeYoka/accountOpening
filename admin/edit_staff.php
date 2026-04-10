@@ -5,6 +5,7 @@
 <?php
 	if(isset($_POST['add_staff']))
 	{
+    check_csrf();
     // Validation des données du personnel
     $fname = trim($_POST['firstname']);
     $lname = trim($_POST['lastname']);
@@ -156,6 +157,7 @@
 					</div>
 					<div class="wizard-content">
 						<form method="post" action="">
+			<?php echo get_csrf_field(); ?>
 							<section>
 								<?php
 									$query = mysqli_query($conn,"select * from tblemployees where emp_id = '$get_id' ");

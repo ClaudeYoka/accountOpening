@@ -48,6 +48,9 @@ try {
     // Continuer même en cas d'erreur (fail open)
 }
 
+// Ensure CSRF token is present for POST requests before processing
+check_csrf();
+
 // Quick sanity: ensure DB connection exists
 if (!isset($conn) || !$conn) {
     error_log('[save_ecobank_form] Missing $conn or DB connection failed');
@@ -77,7 +80,7 @@ if ($data === null) {
 
 // helper to write local debug log for easier inspection
 function debug_log_local($msg){
-    $path = __DIR__ . '/save_ecobank_form_debug.log';
+    $path = __DIR__ . '/../logs/save_ecobank_form_debug.log';
     $line = '['.date('c').'] ' . $msg . PHP_EOL;
     // log both to system log and a local debug file
     error_log('[save_ecobank_form] ' . $msg);

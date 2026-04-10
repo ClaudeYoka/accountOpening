@@ -54,6 +54,7 @@ if ($actions_query) {
 
 // Handle cleanup action
 if (isset($_POST['cleanup_logs'])) {
+    check_csrf();
     $days = intval($_POST['cleanup_days'] ?? 90);
     $deleted = AuditLogger::cleanOldLogs($conn, $days);
     $cleanup_message = "Nettoyage effectué : $deleted anciens logs supprimés.";
@@ -275,6 +276,7 @@ if (isset($_POST['cleanup_logs'])) {
                             </button>
                         </div>
                         <form method="POST">
+                            <?php echo get_csrf_field(); ?>
                             <div class="modal-body">
                                 <p>Cette action supprimera définitivement tous les logs plus anciens que le nombre de jours spécifié.</p>
                                 <div class="form-group">

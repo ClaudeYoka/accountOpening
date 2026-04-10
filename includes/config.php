@@ -19,15 +19,20 @@ if (file_exists(__DIR__ . '/../.env')) {
 require_once __DIR__ . '/error_handler.php';
 
 $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+if (!$conn) {
+    error_log('MySQLi connection failed: ' . mysqli_connect_error());
+}
 
 // Establish database connection.
 try
 {
-$dbh = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME,DB_USER, DB_PASS,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+    $dbh = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME,DB_USER, DB_PASS,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 catch (PDOException $e)
 {
-exit("Error: " . $e->getMessage());
+    $dbh = null;
+    error_log('PDO connection failed: ' . $e->getMessage());
 }
 
 // Safe htmlentities helper: never pass null to htmlentities (prevents PHP deprecation warnings)

@@ -5,7 +5,7 @@ include('../includes/config.php');
 include('../includes/audit_helpers.php');
 
 function debug_log_local($msg){
-    $path = __DIR__ . '/save_ecobank_form_debug.log';
+    $path = __DIR__ . '/../logs/save_ecobank_form_debug.log';
     $line = '['.date('c').'] ' . $msg . PHP_EOL;
     error_log('[ecobank_submission_edit] ' . $msg);
     @file_put_contents($path, $line, FILE_APPEND | LOCK_EX);
@@ -65,6 +65,7 @@ $editable = [
 
 $messages = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    check_csrf();
     // collect posted values
     $candidates = [];
     foreach($editable as $k){
@@ -175,6 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
     <form method="post">
+        <?php echo get_csrf_field(); ?>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
             <?php foreach($editable as $field):
                 $val = isset($row[$field]) && $row[$field] !== null ? $row[$field] : (isset($data[$field]) ? $data[$field] : '');

@@ -4,7 +4,7 @@
         "dompdf/dompdf": "^3.1",
         "sonata-project/google-authenticator": "^2.3",
         "phpoffice/phpspreadsheet": "^5.4",
-        "spomky-labs/otphp": "^11.4",
-        "endroid/qr-code": "^5.1"
+        "spomky-labs/otphp": "^11.4"
+       
     }
 }

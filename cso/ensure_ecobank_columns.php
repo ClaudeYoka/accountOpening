@@ -5,7 +5,7 @@
 include('../includes/config.php');
 
 function debug_log_local($msg){
-    $path = __DIR__ . '/save_ecobank_form_debug.log';
+    $path = __DIR__ . '/../logs/save_ecobank_form_debug.log';
     $line = '['.date('c').'] ' . $msg . PHP_EOL;
     error_log('[ensure_ecobank_columns] ' . $msg);
     @file_put_contents($path, $line, FILE_APPEND | LOCK_EX);

@@ -5,9 +5,14 @@ error_reporting(E_ALL);
 ini_set('display_errors', 0);  // Ne pas afficher les erreurs directement
 
 try {
-    @include('../includes/config.php');
-    @include('../includes/FlexcubeAPI.php');
-    @include('../includes/flexcube_helpers.php');
+    @include_once(__DIR__ . '/../includes/config.php');
+    @include_once(__DIR__ . '/../includes/FlexcubeAPI.php');
+    @include_once(__DIR__ . '/../includes/flexcube_helpers.php');
+
+function json_error($message) {
+    echo json_encode(['status'=>'error','message'=>$message]);
+    exit;
+}
 
 $account = isset($_GET['account']) ? trim($_GET['account']) : '';
 $rib_key = isset($_GET['rib_key']) ? trim($_GET['rib_key']) : '';
@@ -15,8 +20,15 @@ $rib_key = isset($_GET['rib_key']) ? trim($_GET['rib_key']) : '';
 error_log("rib_lookup.php called with account: '$account' (length: " . strlen($account) . ")");
 
 if(!$account){
-    echo json_encode(['status'=>'error','message'=>'Numéro de compte manquant']);
-    exit;
+    json_error('Numéro de compte manquant');
+}
+
+$db_unavailable = true;
+if (isset($conn) && $conn && ($conn instanceof mysqli)) {
+    $db_unavailable = false;
+}
+if ($db_unavailable) {
+    error_log('rib_lookup.php: DB connection is unavailable, skipping local database lookup.');
 }
 
 // PRIORITY 0: Check LOCAL DATABASE FIRST (much faster than Flexcube)
@@ -24,25 +36,28 @@ if(!$account){
 $row = null;
 $use_flexy = true; // Flag pour décider si on essaie Flexcube
 
-// Quick check in local database first
-$q_quick = mysqli_prepare($conn, "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1");
-if($q_quick){
-    mysqli_stmt_bind_param($q_quick, 's', $account);
-    mysqli_stmt_execute($q_quick);
-    $r_quick = mysqli_stmt_get_result($q_quick);
-    if($r_quick && mysqli_num_rows($r_quick) > 0){
-        $row = mysqli_fetch_assoc($r_quick);
-        $use_flexy = false; // Already found locally, skip Flexcube
-        error_log("Account found in local DB immediately, skipping Flexcube API");
+if (!$db_unavailable) {
+    $q_quick = mysqli_prepare($conn, "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1");
+    if($q_quick){
+        mysqli_stmt_bind_param($q_quick, 's', $account);
+        mysqli_stmt_execute($q_quick);
+        $r_quick = mysqli_stmt_get_result($q_quick);
+        if($r_quick && mysqli_num_rows($r_quick) > 0){
+            $row = mysqli_fetch_assoc($r_quick);
+            $use_flexy = false; // Already found locally, skip Flexcube
+            error_log("Account found in local DB immediately, skipping Flexcube API");
+        }
+        mysqli_stmt_close($q_quick);
+    } else {
+        error_log('rib_lookup.php: Failed to prepare quick DB query.');
     }
-    mysqli_stmt_close($q_quick);
 }
 
 // PRIORITY 1: Try FLEXCUBE API first (using real FlexcubeAPI class) - ONLY IF NOT IN LOCAL DB
 if($use_flexy){
 try {
-    // Timeout pour éviter les blocages (augmenté à 15 secondes pour la requête API)
-    set_time_limit(20); // 20 secondes maximum pour cette opération complète (15 API + 5 buffer)
+    // Timeout pour éviter les blocages (largement supérieur au timeout cURL)
+    set_time_limit(40); // 40 secondes maximum pour cette opération complète
     $flexcube_api = new FlexcubeAPI();
     $flexcube_response = $flexcube_api->getAccountInfo($account);
     
@@ -71,25 +86,33 @@ try {
 } // Fin du if($use_flexy)
 
 // Si Flexcube n'a pas trouvé le compte, fallback vers la base de données locale
-if(!$row){
+if(!$row && !$db_unavailable){
     // PRIORITY 2: Try exact match in LOCAL DATABASE (ecobank_form_submissions)
-$sql = "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, 's', $account);
-mysqli_stmt_execute($stmt);
-$res = mysqli_stmt_get_result($stmt);
-$row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
+    $sql = "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1";
+    $stmt = mysqli_prepare($conn, $sql);
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, 's', $account);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        $row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
+    } else {
+        error_log('rib_lookup.php: Failed to prepare exact local DB query.');
+    }
 
-// PRIORITY 3: If not found in ecobank_form_submissions, try LIKE search
-if(!$row){
-    $esc = '%'.$account.'%';
-    $sql2 = "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci LIKE ? LIMIT 1";
-    $stmt2 = mysqli_prepare($conn, $sql2);
-    mysqli_stmt_bind_param($stmt2, 's', $esc);
-    mysqli_stmt_execute($stmt2);
-    $res = mysqli_stmt_get_result($stmt2);
-    $row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
-}
+    // PRIORITY 3: If not found in ecobank_form_submissions, try LIKE search
+    if(!$row){
+        $esc = '%'.$account.'%';
+        $sql2 = "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci LIKE ? LIMIT 1";
+        $stmt2 = mysqli_prepare($conn, $sql2);
+        if ($stmt2) {
+            mysqli_stmt_bind_param($stmt2, 's', $esc);
+            mysqli_stmt_execute($stmt2);
+            $res = mysqli_stmt_get_result($stmt2);
+            $row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
+        } else {
+            error_log('rib_lookup.php: Failed to prepare LIKE local DB query.');
+        }
+    }
 
     // PRIORITY 4: If still not found, try tblcompte
     if(!$row){
@@ -103,21 +126,31 @@ if(!$row){
                 // Try to find a submission by account_number or matching customer name/email/mobile
                 $sql3 = "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? OR customer_name COLLATE utf8mb4_0900_ai_ci LIKE ? OR mobile COLLATE utf8mb4_0900_ai_ci = ? OR email COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1";
                 $stmt3 = mysqli_prepare($conn, $sql3);
-                $likeName = '%'.($pc['noms'] ?? '').'%';
-                $mobile = $pc['mobile1'] ?? '';
-                $email = $pc['email'] ?? '';
-                mysqli_stmt_bind_param($stmt3, 'ssss', $pc['account_number'], $likeName, $mobile, $email);
-                mysqli_stmt_execute($stmt3);
-                $res = mysqli_stmt_get_result($stmt3);
-                $row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
+                if ($stmt3) {
+                    $likeName = '%'.($pc['noms'] ?? '').'%';
+                    $mobile = $pc['mobile1'] ?? '';
+                    $email = $pc['email'] ?? '';
+                    mysqli_stmt_bind_param($stmt3, 'ssss', $pc['account_number'], $likeName, $mobile, $email);
+                    mysqli_stmt_execute($stmt3);
+                    $res = mysqli_stmt_get_result($stmt3);
+                    $row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
+                    mysqli_stmt_close($stmt3);
+                } else {
+                    error_log('rib_lookup.php: Failed to prepare tblcompte fallback query.');
+                }
             }
             mysqli_stmt_close($q);
+        } else {
+            error_log('rib_lookup.php: Failed to prepare tblcompte query.');
         }
     }
 }
 
 // If still not found in any source, return error
 if(!$row){
+    if ($db_unavailable && $use_flexy) {
+        json_error('Impossible de se connecter à la base de données et le compte est introuvable.');
+    }
     echo json_encode(['status'=>'not_found','message'=>'Compte introuvable']);
     exit;
 }
@@ -215,6 +248,31 @@ $customer = [
     'email' => pick_sn($row, $data, ['email','courriel','email_address']) ?: null,
     'mobile' => pick_sn($row, $data, ['mobile','telephone','telephone1','mobile1']) ?: null
 ];
+
+// Si seul le nom complet est disponible, tenter de le splitter en prénom / nom
+if (empty($customer['first_name']) && empty($customer['last_name']) && !empty($customer['customer_name'])) {
+    $parts = preg_split('/\s+/', trim($customer['customer_name']));
+    if (count($parts) === 1) {
+        $customer['first_name'] = $parts[0];
+    } else {
+        $customer['first_name'] = array_shift($parts);
+        $customer['last_name'] = implode(' ', $parts);
+    }
+}
+
+$customer_full_name = trim(implode(' ', array_filter([
+    $customer['first_name'],
+    $customer['last_name']
+], function($part){
+    return trim((string)$part) !== '';
+})));
+if (!$customer_full_name && !empty($customer['customer_name'])) {
+    $customer_full_name = trim($customer['customer_name']);
+}
+if ($customer_full_name) {
+    $customer['customer_name'] = $customer_full_name;
+    $account_obj['account_title'] = $customer_full_name;
+}
 
 $correspondents = [
     ["bank"=>"BANQUE NATIONAL DU CANADA","account"=>"10332322800100101","swift"=>"BNDCCAMM","currency"=>"CAD"],

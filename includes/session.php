@@ -15,8 +15,12 @@ ini_set('session.cookie_secure', '0'); // 0 pour développement local, 1 en prod
 ini_set('session.cookie_samesite', 'Strict');
 ini_set('session.gc_maxlifetime', 3600); // 1 heure
 
-session_name('ACCOUNT_OPENING_SESSION');
-session_start();
+require_once __DIR__ . '/security_config.php';
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_name('ACCOUNT_OPENING_SESSION');
+    session_start();
+}
 
 // Timeout de session pour inactivité
 $timeout = 3600; // 1 heure
@@ -32,14 +36,16 @@ if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Fonctions helper pour CSRF
-function get_csrf_token() {
-    return $_SESSION['csrf_token'];
+// Fonctions helper pour CSRF (compatibilité)
+if (!function_exists('get_csrf_token')) {
+    function get_csrf_token() {
+        return CSRFProtection::generateToken();
+    }
 }
 
-function verify_csrf_token() {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die("Erreur de validation CSRF");
+if (!function_exists('verify_csrf_token')) {
+    function verify_csrf_token($token) {
+        return CSRFProtection::validateToken($token);
     }
 }
 

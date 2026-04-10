@@ -125,7 +125,11 @@ try {
                             <a href="?debug=1" class="text-info" target="_blank">🔍 Debug Session</a>
                         </small>
                     </div>
+                       
                     <div class="col-md-6 col-sm-12 text-right">
+                        <a href="." class="btn btn-sm btn-primary">
+                            ← Retour
+                        </a>
                         <a href="monitoring_security.php" class="btn btn-sm btn-primary">
                             ← Retour Sécurité
                         </a>

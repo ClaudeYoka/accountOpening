@@ -4,6 +4,8 @@ ob_start();
 
 session_name('ACCOUNT_OPENING_SESSION');
 session_start();
+require_once __DIR__ . '/includes/security_config.php';
+
 // Charger les variables d'environnement
 $env = parse_ini_file('.env');
 $loginController = $env['LOGIN_CONTROLLER'] ?? 'loginController';
@@ -77,6 +79,7 @@ ob_end_flush();
                             <?php unset($_SESSION['login_error_message']); ?>
                         <?php endif; ?>
                         <form name="signin" method="post" id="loginForm">
+                            <?php echo get_csrf_field(); ?>
 							<div class="select-role">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn active" id="csoBtn">

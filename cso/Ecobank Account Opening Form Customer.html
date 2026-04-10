@@ -211,11 +211,13 @@
         /* Specific styling for account number and customer ID inputs */
         #form-bank-account-number,
         #customer-id {
-            width: 120px !important;
-            font-size: 16px !important;
+            width: 220px !important;
+            height: 42px !important;
+            font-size: 18px !important;
             font-weight: bold !important;
             text-align: center !important;
             border: 2px solid #007eb6 !important;
+            border-radius: 4px !important;
         }
 
         /* Make labels for these inputs more visible */
@@ -224,6 +226,30 @@
             font-size: 16px !important;
             font-weight: bold !important;
             color: #007eb6 !important;
+        }
+
+        /* Inline paired question layout */
+        .question-row .multi-column {
+            display: flex !important;
+            gap: 20px !important;
+            flex-wrap: wrap !important;
+            align-items: flex-start !important;
+        }
+
+        .question-row .column {
+            flex: 1 1 280px !important;
+            min-width: 220px !important;
+        }
+
+        .question-row .checkbox-group {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 12px !important;
+            margin-top: 8px !important;
+        }
+
+        .question-row label strong {
+            font-size: 15px !important;
         }
 
         /* Print Styles */
@@ -270,13 +296,13 @@
             #form-section-1 .section-content,
             #form-section-2 .section-content,
             #form-section-3 .section-content {
-                font-size: 12px !important;
+                font-size: 13px !important;
             }
 
             #form-section-1 .section-content label,
             #form-section-2 .section-content label,
             #form-section-3 .section-content label {
-                font-size: 13px !important;
+                font-size: 14px !important;
                 font-weight: 600 !important;
             }
 
@@ -286,8 +312,8 @@
             #form-section-1 .section-content select,
             #form-section-2 .section-content select,
             #form-section-3 .section-content select {
-                font-size: 12px !important;
-                padding: 4px 6px !important;
+                font-size: 13px !important;
+                padding: 5px 7px !important;
             }
         }
 
@@ -357,6 +383,17 @@
                 </div>
             </div>
 
+            <!-- Navigation Buttons Section 1 -->
+            
+            <div class="section-nav-buttons" id="nav-section-1">
+                <button type="button" class="btn-section-nav prev" onclick="window.prevSection()">
+                        ← Précédent
+                </button>
+                <button type="button" class="btn-section-nav" onclick="window.nextSection()">
+                    Suivant (Section) →
+                </button>
+            </div>
+
             <!-- Section 1: Banking Needs -->
             <div class="form-section-group" id="form-section-1" data-section="1">
                 <div class="section-number-header">
@@ -370,25 +407,15 @@
                         <div class="section-content">
 
                             <div class="form-row" style="display: flex; gap: 22px; align-items: flex-start; flex-wrap: wrap; margin-top: 12px;">
-                                <div class="form-group" style="flex: 1 1 320px;">
-                                    <div style="margin-bottom: 0px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
-                                        <div style="display: flex; align-items: center;">
-                                            <input type="checkbox" id="compte-personne-physique" name="account_type[]" value="Compte Personne Physique" style="width: 16px; height: 16px; margin-right: 6px;">
-                                            <label for="compte-personne-physique" style="font-size: 13px; font-weight: normal;">Compte Personne Physique</label>
-                                        </div>
-                                        <div style="display: flex; align-items: center;">
-                                            <input type="checkbox" id="compte-entreprise-individuelle" name="account_type[]" value="Compte Entreprise Individuelle" style="width: 16px; height: 16px; margin-right: 6px;">
-                                            <label for="compte-entreprise-individuelle" style="font-size: 13px; font-weight: normal;">Compte Entreprise Individuelle</label>
-                                        </div>
-                                    </div>
-                                    <br><br>
+                                <div class="form-group" style="flex: 1 1 220px;">
+                                   
                                     <div class="column">
                                         <label for="form-bank-account-number" style="font-size: 13px; font-weight: normal;">Numéro de compte:</label>
-                                        <input type="text" id="form-bank-account-number" name="account_number" style="height: 35px; width: 350px; font-size: 20px; font-weight: bold;" readonly>
+                                        <input type="text" id="form-bank-account-number" name="account_number" style="height: 35px;  font-size: 20px; font-weight: bold;" readonly>
                                     </div>
                                     <div class="column">
                                         <label for="customer-id" style="font-size: 13px; font-weight: normal;">Identifiant client:</label>
-                                        <input type="number" id="customer-id" name="customer_id" style="height: 35px; width: 200px; font-size: 14px; font-weight: bold;" readonly>
+                                        <input type="number" id="customer-id" name="customer_id" style="height: 35px;  font-size: 20px; font-weight: bold;" readonly>
                                     </div>
                                 </div>
 
@@ -430,13 +457,11 @@
                                                 </label>
                                                 <label style="margin-right:14px; display:inline-flex; align-items:center;">
                                                     <input type="checkbox" id="account-type-entreprise" name="account_type[]" value="Compte entreprise" style="width: 16px; height: 16px; margin-right:6px;" />
-                                                    Compte Entreprise
+                                                    Compte Entreprise Individuelle
                                                 </label>
                                             </div>
                                         </div>
                                     <div class="multi-column" style="margin-top: 3px;">
-
-                                    
 
                                     <!-- Account Purpose Column -->
                                     <div class="column">
@@ -477,14 +502,13 @@
                                         </div>
                                     </div>
 
-
                                 </div>
                             </div>
                         </div>
 
                         
-                        <!-- Existing Ecobank Account -->
-                        <div class="form-row" style="margin-top: 15px;">
+                        <!-- Existing Ecobank Account + credit on same line -->
+                        <div class="form-row question-row" style="margin-top: 15px;">
                             <div class="multi-column">
                                 <div class="column">
                                     <label><strong>Avez-vous un autre compte à Ecobank ?</strong></label>
@@ -499,32 +523,24 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Conditional for Ecobank credit -->
-                        <div id="ecobank-credit-fields" style="display: none; margin-top: 10px;">
-                            <div class="form-row">
-                                <div class="multi-column">
-                                    <div class="column">
-                                        <label><strong>Avez-vous déjà un crédit à Ecobank ?</strong></label>
-                                        <div class="checkbox-group">
-                                            <div class="checkbox-item">
-                                                <input type="radio" id="ecobank-credit-yes" name="existing-ecobank-credit" value="Oui">
-                                                <label for="ecobank-credit-yes">Oui</label>
-                                            </div>
-                                            <div class="checkbox-item">
-                                                <input type="radio" id="ecobank-credit-no" name="existing-ecobank-credit" value="Non" checked>
-                                                <label for="ecobank-credit-no">Non</label>
-                                            </div>
+                                <div class="column" id="ecobank-credit-column" style="display: none;">
+                                    <label><strong>Avez-vous déjà un crédit à Ecobank ?</strong></label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="radio" id="ecobank-credit-yes" name="existing-ecobank-credit" value="Oui">
+                                            <label for="ecobank-credit-yes">Oui</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="radio" id="ecobank-credit-no" name="existing-ecobank-credit" value="Non" checked>
+                                            <label for="ecobank-credit-no">Non</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Other Bank Account -->
-                        <div class="form-row" style="margin-top: 15px;">
+                        <!-- Other Bank Account + credit on same line -->
+                        <div class="form-row question-row" style="margin-top: 15px;">
                             <div class="multi-column">
                                 <div class="column">
                                     <label><strong>Avez-vous un compte dans une autre banque ?</strong></label>
@@ -539,29 +555,29 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="column" id="other-bank-credit-column" style="display: none;">
+                                    <label><strong>Avez-vous un crédit dans cette banque ?</strong></label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="radio" id="other-bank-credit-yes" name="existing-other-bank-credit" value="Oui">
+                                            <label for="other-bank-credit-yes">Oui</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="radio" id="other-bank-credit-no" name="existing-other-bank-credit" value="Non" checked>
+                                            <label for="other-bank-credit-no">Non</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Conditional for other bank details -->
-                        <div id="other-bank-fields" style="display: none; margin-top: 10px;">
+                        <!-- Conditional other bank details -->
+                        <div id="other-bank-name-row" style="display: none; margin-top: 10px;">
                             <div class="form-row">
                                 <div class="multi-column">
                                     <div class="column">
                                         <label for="other-bank-name">Nom de la banque :</label>
-                                        <input type="text" id="other-bank-name" name="other-bank-name" style="height: 20px;">
-                                    </div>
-                                    <div class="column">
-                                        <label><strong>Avez-vous un crédit dans cette banque ?</strong></label>
-                                        <div class="checkbox-group">
-                                            <div class="checkbox-item">
-                                                <input type="radio" id="other-bank-credit-yes" name="existing-other-bank-credit" value="Oui">
-                                                <label for="other-bank-credit-yes">Oui</label>
-                                            </div>
-                                            <div class="checkbox-item">
-                                                <input type="radio" id="other-bank-credit-no" name="existing-other-bank-credit" value="Non" checked>
-                                                <label for="other-bank-credit-no">Non</label>
-                                            </div>
-                                        </div>
+                                        <input type="text" id="other-bank-name" name="other-bank-name" style="height: 20px; width: 100%;">
                                     </div>
                                 </div>
                             </div>
@@ -621,16 +637,7 @@
             </div>
                 <!-- End Section 1 -->
 
-            <!-- Navigation Buttons Section 1 -->
             
-            <!-- <div class="section-nav-buttons" id="nav-section-1">
-                <button type="button" class="btn-section-nav prev" onclick="window.prevSection()">
-                        ← Précédent
-                </button>
-                <button type="button" class="btn-section-nav" onclick="window.nextSection()">
-                    Suivant (Section) →
-                </button>
-            </div> -->
 
             <!-- Section 2: About You -->
             <div class="form-section-group" id="form-section-2" data-section="2" style="display: none;">
@@ -751,11 +758,7 @@
                                     <label for="father-name">Prénom(s) du père:</label>
                                     <input type="text" id="father-name2" style="height: 20px;">
                                 </div>
-                                <!-- <div class="column">
-                                    <label for="father-name2">Prénom du père:</label>
-                                    <input type="text" id="father-name2" style="height: 20px;" placeholder="Prénom du père" required>
-                                </div> -->
-
+                               
                                 <div class="column">
                                     <label for="mother-name">Nom(s) de la mère:</label>
                                     <input type="text" id="mother-name" style="height: 20px; " required>
@@ -1706,7 +1709,8 @@
         </form>
         <!-- Floating buttons (Print / Save / Back / Reset) -->
     
-        <button id="floatBicBtn" class="btn btn-print btn-print-floating"  title="bic"><span class="icon">📋</span> BIC</button>
+        <button id="floatPrintBtn" class="btn btn-print btn-print-floating" title="Imprimer" type="button"><span class="icon">🖨️</span> Imprimer</button>
+        <!-- <button id="floatBicBtn" class="btn btn-print btn-print-floating"  title="bic"><span class="icon">📋</span> BIC</button> -->
         <button id="floatSaveBtn" class="btn btn-save btn-save-floating" title="Enregistrer" type="button"><span class="icon">💾 </span>  Save</button>
         <button id="floatBackBtn" class="btn btn-back btn-back-floating" title="Retour" type="button"><span class="icon">↩️ </span>  Back</button>
         <button id="floatResetBtn" class="btn btn-reset btn-reset-floating" title="Réinitialiser" type="button"><span class="icon">🔄 </span>  Reset</button>
@@ -1725,6 +1729,8 @@
             var rst = document.getElementById('floatResetBtn');
             if(rst){ rst.addEventListener('click', function(){ var f = document.querySelector('form'); if(f) f.reset(); var slog = document.getElementById('ecobank-save-log'); if(slog) slog.innerHTML = ''; var errs = document.querySelectorAll('.validation-error'); errs.forEach(function(n){ n.innerHTML = ''; }); }); }
             // Save: forward to existing save handler if present (floatSave handler may be bound elsewhere)
+            var printBtn = document.getElementById('floatPrintBtn');
+            if(printBtn){ printBtn.addEventListener('click', function(){ if(typeof window.printForm === 'function'){ window.printForm(); } else { window.print(); } }); }
             var sv = document.getElementById('floatSaveBtn');
             if(sv && !sv._bound){ sv.addEventListener('click', function(){ sv.dispatchEvent(new Event('click_internal')); }); sv._bound = true; }
 
@@ -1759,17 +1765,19 @@
             }
 
             function updateEcobankCreditFields(){
-                var ecobankFields = document.getElementById('ecobank-credit-fields');
-                if(!ecobankFields) return;
+                var ecobankCreditColumn = document.getElementById('ecobank-credit-column');
+                if(!ecobankCreditColumn) return;
                 var hasEcobankAccount = document.getElementById('ecobank-account-yes') && document.getElementById('ecobank-account-yes').checked;
-                ecobankFields.style.display = hasEcobankAccount ? 'block' : 'none';
+                ecobankCreditColumn.style.display = hasEcobankAccount ? 'block' : 'none';
             }
 
             function updateOtherBankFields(){
-                var otherBankFields = document.getElementById('other-bank-fields');
-                if(!otherBankFields) return;
+                var otherBankCreditColumn = document.getElementById('other-bank-credit-column');
+                var otherBankNameRow = document.getElementById('other-bank-name-row');
+                if(!otherBankCreditColumn || !otherBankNameRow) return;
                 var hasOtherBank = document.getElementById('other-bank-account-yes') && document.getElementById('other-bank-account-yes').checked;
-                otherBankFields.style.display = hasOtherBank ? 'block' : 'none';
+                otherBankCreditColumn.style.display = hasOtherBank ? 'block' : 'none';
+                otherBankNameRow.style.display = hasOtherBank ? 'block' : 'none';
             }
 
             var residentRadios = document.querySelectorAll('input[name="resident-status"]');

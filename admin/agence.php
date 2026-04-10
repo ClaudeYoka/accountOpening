@@ -26,6 +26,7 @@
 <?php
 	if(isset($_POST['add']))
 {
+    check_csrf();
     // Validation des données d'agence
     $agename = trim($_POST['Agencename']);
     $ageshortname = trim($_POST['Agenceshortname']);
@@ -142,6 +143,7 @@
 								<h2 class="mb-30 h4">Nouvelle Agence</h2>
 								<section>
 									<form name="save" method="post">
+                                    <?php echo get_csrf_field(); ?>
 									<div class="row">
 										<div class="col-md-12">
 											<div class="form-group">

@@ -68,22 +68,145 @@
   .fab-container { position: fixed; right: 20px; bottom: 30px; display:flex; flex-direction:column; gap:10px; z-index:9999; }
   .fab { background:var(--brand-blue); color:#fff; border:none; padding:12px 14px; border-radius: 50px; box-shadow: 0 6px 16px rgba(16,106,162,.24); cursor:pointer; font-weight:700; }
   .fab.print { background:#444; }
-  .no-print { }
+  .fab.reset { background:#777; }
+  
 
   /* Print: hide floating buttons and set A4 print layout; preserve blue bands */
-  @page { size: A4 portrait; margin: 12mm; }
+  @page {
+    size: A4 portrait;
+    margin: 8mm; /* Réduit les marges pour gagner de l'espace */
+    @top-center { content: none; }
+    @bottom-center { content: none; }
+    @top-left { content: none; }
+    @bottom-left { content: none; }
+    @top-right { content: none; }
+    @bottom-right { content: none; }
+  }
   @media print {
     .no-print { display:none !important; }
-    html, body { width: 210mm; height: 297mm; }
-    .page { width: 210mm !important; min-height: 297mm !important; margin: 0 auto !important; box-shadow:none !important; border:none !important; }
+    html, body {
+      width: 210mm;
+      height: 297mm;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: white !important;
+    }
+    .page {
+      width: 210mm !important;
+      min-height: 297mm !important;
+      margin: 0 auto !important;
+      box-shadow:none !important;
+      border:none !important;
+      padding: 0 !important;
+    }
+
+    /* SUPPRESSION COMPLETEMENT AGRESSIVE des en-têtes et pieds de page du navigateur */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* Forcer la suppression des en-têtes de page du navigateur */
+    @page {
+      margin: 8mm !important;
+      @top-center { content: none !important; }
+      @bottom-center { content: none !important; }
+      @top-left { content: none !important; }
+      @bottom-left { content: none !important; }
+      @top-right { content: none !important; }
+      @bottom-right { content: none !important; }
+    }
+
+    /* Supprimer tout contenu généré par le navigateur */
+    html::before, html::after,
+    body::before, body::after,
+    header::before, header::after,
+    .page::before, .page::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    /* Ne pas masquer l'en-tête du formulaire : il doit s'imprimer sans l'en-tête du navigateur */
+    header {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+    }
+
+    /* Aligner l'entête sur la même ligne que le logo */
+    .header {
+      align-items: center !important;
+    }
+    .title {
+      text-align: left !important;
+      margin: 0 !important;
+    }
+
+    /* Optimiser l'espace pour tenir sur 2 pages, tout en gardant une lecture plus confortable */
+    body { font-size: 14px !important; line-height: 1.4 !important; padding: 8px !important; }
+    .section { margin: 4px 8px 8px !important; padding: 0 !important; border: none !important; }
+    .section-title { font-size: 14px !important; padding: 6px 8px !important; }
+    .section-body { padding: 8px !important; }
+
+    /* Tailles de police plus grandes pour une meilleure lisibilité à l'impression */
+    h1 { font-size: 16px !important; } /* Réduit pour aligner avec le logo */
+    h2 { font-size: 14px !important; }
+    label { font-size: 14px !important; }
+    input[type=text], input[type=email], input[type=number], input[type=date] {
+      font-size: 14px !important;
+      padding: 6px 8px !important;
+    }
+    .inline-checks label { font-size: 14px !important; }
+    .range-checks label { font-size: 14px !important; }
+
+    /* Réduire les espaces entre éléments */
+    .field { margin-bottom: 6px !important; }
+    .grid-2, .grid-3, .grid-4 { gap: 8px !important; }
+    .inline-checks { gap: 8px !important; }
+    .range-checks { gap: 4px !important; }
 
     /* Preserve section title blue bands when printing */
-    .section-title, .kyc .card .card-head { background: var(--brand-blue) !important; color: #fff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .section-title, .kyc .card .card-head {
+      background: var(--brand-blue) !important;
+      color: #fff !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .kyc .card { border: none !important; }
 
-    /* Force KYC to start on the next printed page and avoid breaking it across pages */
-    #kyc-section { page-break-before: always !important; break-before: page !important; page-break-inside: avoid !important; -webkit-column-break-inside: avoid !important; }
-    /* Avoid breaking sections across pages */
+    /* Gestion des sauts de page pour tenir sur 2 pages */
+    #kyc-section {
+      page-break-before: auto !important; /* Changé de always à auto pour économiser l'espace */
+      break-before: auto !important;
+      page-break-inside: avoid !important;
+      -webkit-column-break-inside: avoid !important;
+    }
     .section { page-break-inside: avoid !important; }
+
+    /* Signature et photo sections */
+    .signature-section, .photo-section {
+      page-break-inside: avoid !important;
+      margin-top: 10px !important;
+      border-top: 1px solid #000 !important;
+      padding-top: 8px !important;
+    }
+    .signature-line {
+      border-bottom: 1px solid #000 !important;
+      width: 200px !important;
+      height: 30px !important;
+      margin: 20px 0 5px 0 !important;
+    }
+    .photo-placeholder {
+      border: 2px dashed #666 !important;
+      width: 120px !important;
+      height: 150px !important;
+      display: inline-block !important;
+      text-align: center !important;
+      vertical-align: top !important;
+      margin-right: 20px !important;
+      font-size: 10px !important;
+      padding-top: 60px !important;
+    }
 
     /* Ensure SVG/logo color prints correctly where supported */
     svg { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -178,6 +301,19 @@
           <div class="field"><label>DATE D’EXPIRATION</label><input type="date" name="dateexpiration"></div>
           <div class="field"><label>NUMÉRO DE RÉFÉRENCE (OPTIONNEL)</label><input type="text" name="numero_de_referenceoptionnel" placeholder="(optionnel)"></div>
         </div>
+
+         <div class="grid-2">
+              <div class="field"><label>FLUX DE REVENU</label><input type="text" id="contact_income_source" /></div>
+              <div class="field"><label>AVEZ-VOUS UN COMPTE DANS UNE AUTRE BANQUE ?</label>
+                  <div class="inline-checks">
+                      <label><input type="radio" name="has_other_bank_account" value="1" /> OUI</label>
+                      <label><input type="radio" name="has_other_bank_account" value="0" checked /> NON</label>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="field"><label>PRIEZ D'INDIQUER LE NOM DE VOS AUTRES BANQUES</label><input type="text" id="other_bank_details" /></div>
+
       </div>
     </section>
 
@@ -214,8 +350,9 @@
             <div class="field"><label>NOM DE L’EMPLOYEUR</label><input type="text" name="nomdelemployeur"></div>
             <div class="field"><label>TYPE DE CONTRAT</label>
               <div class="inline-checks">
-                <label><input type="checkbox" name="typecontrat[]" value="PERMANENT"> PERMANENT</label>
-                <label><input type="checkbox" name="typecontrat[]" value="CONTRATIQUE"> CONTRATIQUE</label>
+                <label><input type="checkbox" name="typecontrat[]" value="CDI"> CDI</label>
+                <label><input type="checkbox" name="typecontrat[]" value="CDD"> CDD</label>
+                
               </div>
             </div>
             <div class="field"><label>FONCTION</label><input type="text" name="fonction"></div>
@@ -279,36 +416,41 @@
               <div class="field"><label>N° TÉL</label><input type="text" id="contact_phone" /></div>
               <div class="field"><label>EMAIL</label><input type="email" id="contact_email" /></div>
           </div>
-          <div class="grid-2">
-              <div class="field"><label>FLUX DE REVENU</label><input type="text" id="contact_income_source" /></div>
-              <div class="field"><label>AVEZ-VOUS UN COMPTE DANS UNE AUTRE BANQUE ?</label>
-                  <div class="inline-checks">
-                      <label><input type="radio" name="has_other_bank_account" value="1" /> OUI</label>
-                      <label><input type="radio" name="has_other_bank_account" value="0" checked /> NON</label>
-                  </div>
-              </div>
-          </div>
+         
           <div class="grid-2">
               <div class="field"><label>VEUILLEZ DONNER LES INFORMATIONS SUR LA/LES PERSONNES QUI VOUS A/ONT INTRODUIT</label><input type="text" id="other_bank_person_name" /></div>
               <div class="field"><label>ADRESSE</label><input type="text" id="other_bank_person_address" /></div>
           </div>
-          <div class="field"><label>PRIEZ D'INDIQUER LE NOM DE VOS AUTRES BANQUES</label><input type="text" id="other_bank_details" /></div>
       </div>
   </section>
 
-<section class="section">
-    <div class="disclaimer">
-      <strong>  DECLARATION ET CONSENTEMENT DU TUTEUR :</strong><br> <br>
-      Je soussigné(e) ______________________________________________________________________, certifie que les informations fournies dans ce formulaire sont exactes et complètes à ma connaissance
-      à la date d'ouverture du compte. J'ai également pris connaissance des termes et conditions de compte ainsi que les clauses contenues dans "Conditions Générales de Compte" du formulaire d'ouverture de compte.
-      Je comprends que toute fausse déclaration peut entraîner le refus de l'ouverture du compte ou la fermeture ultérieure de celui-ci.
-      J'autorise la vérification des informations fournies et accepte les termes et conditions de la banque concernant l'ouverture et l'utilisation du compte.
+  <!-- SIGNATURE ET PHOTO -->
+  <section class="section signature-section">
+    <div class="section-title">SIGNATURE ET PHOTO</div>
+    <div class="section-body">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div class="photo-section">
+          <div class="photo-placeholder">
+            PHOTO<br>À AGRAFER ICI<br>(3.5 x 4.5 cm)
+          </div>
+        </div>
+        <div style="flex: 1; margin-left: 20px;">
+          <div style="margin-bottom: 20px;">
+            <strong>Fait à ______________________, le _____/_____/________</strong>
+          </div>
+          <div>
+            <strong>Signature du Tuteur :</strong>
+            <div class="signature-line"></div>
+          </div>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
 </form>
   <div class="fab-container no-print" aria-hidden="true">
     <button id="save-btn" class="fab save">Enregistrer</button>
+    <button id="reset-btn" class="fab reset">Réinitialiser</button>
     <button id="print-btn" class="fab print">🖨️ Imprimer</button>
     <button id="back-btn" class="fab back">← Retour</button>
   </div>
@@ -385,6 +527,17 @@
             alert('Erreur lors de l\'enregistrement : '+(res && res.error ? res.error : 'inconnue'));
           }
         }).catch(function(e){ alert('Erreur réseau: '+e.message); }).finally(function(){ btn.disabled = false; btn.innerText = 'Enregistrer'; });
+      });
+
+      document.getElementById('reset-btn').addEventListener('click', function(){
+        var formElements = document.querySelectorAll('#tutor-form input, #tutor-form select, #tutor-form textarea');
+        formElements.forEach(function(el){
+          if(el.type === 'checkbox' || el.type === 'radio') {
+            el.checked = false;
+          } else {
+            el.value = '';
+          }
+        });
       });
 
       document.getElementById('print-btn').addEventListener('click', function(){ window.print(); });

@@ -15,6 +15,7 @@ $login_result = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin'])) {
+    check_csrf();
     // SÉCURITÉ: Rate limiting - Protection brute force (5 tentatives/5min)
     $rate_check = ['allowed' => true, 'blocked' => false];
     try {

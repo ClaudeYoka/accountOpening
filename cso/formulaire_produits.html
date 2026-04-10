@@ -370,17 +370,39 @@
     }
 
     /* Print layout */
-    @page { size: A4; margin: 8mm; }
+    @page { 
+        size: A4; 
+        margin: 8mm;
+        @top-center { content: none; }
+        @bottom-center { content: none; }
+        @top-left { content: none; }
+        @bottom-left { content: none; }
+        @top-right { content: none; }
+        @bottom-right { content: none; }
+    }
 
     @media print {
         html, body {
             -webkit-print-color-adjust: exact;
-            color-adjust: exact;
+            print-color-adjust: exact;
             background: #fff !important;
             margin: 0 !important;
             padding: 0 !important;
             height: auto !important;
             font-size: 13px !important;
+        }
+
+        /* Supprimer les en-têtes et pieds de page du navigateur */
+        @page {
+            margin: 8mm;
+            size: A4;
+        }
+
+        /* Masquer tout contenu ajouté par le navigateur */
+        html::before, html::after,
+        body::before, body::after {
+            content: none !important;
+            display: none !important;
         }
 
         .page{
@@ -812,7 +834,7 @@
         <div class="article">
                 <strong>Déclaration de sinistre</strong> <br>
             <div style="font-size: smaller;">
-            En cas de sinistre, le Bénéficiaire a l’obligation de contacter l’Assureur dans un délai de 5 jours ouvrés dès qu'il a eu connaissance du Sinistre.
+            En cas de sinistre, le Bénéficiaire a l'obligation de contacter l’Assureur dans un délai de 5 jours ouvrés dès qu'il a eu connaissance du Sinistre.
             La déclaration peut se faire auprès de la banque ou directement auprès de SUNU Assurances IARD Congo.
             La déclaration d'un sinistre peut être envoyée directement par lettre recommandée avec accusé de réception, à l’adresse du siège de SUNU Assurances IARD Congo,. <br>
             </div>
@@ -877,6 +899,7 @@
 </div>
 
 <!-- FAB Buttons -->
+
 <div class="fab-container">
     <button id="submitBtn" class="fab-btn fab-submit" title="Soumettre le formulaire">✓ SOUMETTRE</button>
     <button id="printBtn" class="fab-btn fab-print" title="Imprimer">🖨️ IMPRIMER</button>
@@ -1032,7 +1055,7 @@
 
         // Exiger uniquement le numéro de compte ; le code agence est optionnel
         if (!form_data.account_number) {
-            alert('❌ Numéro de compte manquant.');
+            alert('❌ Numero de compte manquant.');
             return;
         }
 

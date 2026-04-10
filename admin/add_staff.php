@@ -76,6 +76,7 @@ function validateStaffData($data) {
 
 if(isset($_POST['add_staff']))
 {
+    check_csrf();
     // Validation des données
     $validation = validateStaffData($_POST);
     if (!empty($validation['errors'])) {
@@ -122,7 +123,7 @@ if(isset($_POST['add_staff']))
             'department' => $department
         ]); ?>
 
-        <script>alert('Nouvel utilisateur Ajouté avec succès');</script>
+        <script>alert('Nouvel utilisateur Ajouté avec succès Mot de Passe Par défaut : Passw0rd' );</script>
         <script>
             window.location = "staff";
         </script>
@@ -179,6 +180,7 @@ if(isset($_POST['add_staff']))
 
                     <div class="wizard-content">
                         <form method="post" action="" class="tab-wizard wizard-circle wizard vertical">
+                            <?php echo get_csrf_field(); ?>
 
                             <h5>Infos Personnelles</h5>
                             <section>

@@ -23,6 +23,7 @@
 <?php
  if(isset($_POST['add']))
 {
+    check_csrf();
     // Validation des données de département
     $deptname = trim($_POST['departmentname']);
     $deptshortname = trim($_POST['departmentshortname']);
@@ -135,6 +136,7 @@
 								<h2 class="mb-30 h4">Nouveau Division</h2>
 								<section>
 									<form name="save" method="post">
+                                    <?php echo get_csrf_field(); ?>
 									<div class="row">
 										<div class="col-md-12">
 											<div class="form-group">
