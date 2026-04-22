@@ -7,7 +7,7 @@
 include('./includes/header.php');
 include('../includes/session.php');
 include('../includes/config.php'); // Assurer que $dbh est défini
-include('../includes/audit_logger.php');
+require_once('../includes/audit_logger.php');
 include('../includes/audit_helpers.php'); // Ajouté pour log_admin_action
 include('../includes/RateLimiter.php');
 

@@ -6,13 +6,13 @@
 
 <style>
     
-    /* Header Styles */
         .header {
             display: flex;
             justify-content: space-between;
-            padding: 15px;
+            padding: 8px 10px;
             border-bottom: 1px solid #ddd;
             align-items: center;
+            gap: 10px;
         }
 
         .logo-container {
@@ -20,114 +20,212 @@
             flex-direction: column;
             margin: 0;
             padding: 0;
+            flex-shrink: 0;
         }
 
         .logo-container svg {
             margin: 0;
             padding: 0;
+            width: 120px;
+            height: auto;
         }
 
         .form-title {
             text-align: right;
             color: #007eb6;
+            flex: 1;
         }
 
         .form-title h1 {
-            font-size: 18px;
-            margin-bottom: 3px;
+            font-size: 16px;
+            margin-bottom: 2px;
             color: #333;
+            line-height: 1.2;
         }
 
         .form-title p {
             font-style: italic;
             color: #666;
+            font-size: 12px;
+            margin: 0;
         }
     body{
-        font-family: Arial, Helvetica, sans-serif;
-        background:#f4f4f4;
-        margin:20px;
-        font-size:12px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        margin: 8px;
+        font-size: 15px;
     }
 
     .page{
-        background:#fff;
-        width:900px;
-        margin:auto;
-        padding:20px;
-        border:1px solid #999;
-    }
-
-    .logo{
-        font-weight:bold;
-        color:#007db8;
-        font-size:18px;
+        background: #fff;
+        width: 900px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        line-height: 1.5;
+        font-size: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     .title{
-        text-align:center;
-        font-weight:bold;
-        margin:10px 0 20px;
-        text-transform:uppercase;
+        text-align: center;
+        font-weight: bold;
+        margin: 10px 0 15px;
+        text-transform: uppercase;
+        font-size: 16px;
+        color: #007db8;
+        border-bottom: 2px solid #007db8;
+        padding-bottom: 8px;
     }
 
     .row{
-        display:flex;
-        gap:10px;
-        margin-bottom:10px;
+        display: flex;
+        gap: 15px;
+        margin-bottom: 12px;
     }
 
     .field{
-        flex:1;
+        flex: 1;
     }
 
     .field label{
-        display:block;
-        font-weight:bold;
-        margin-bottom:3px;
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 15px;
+        color: #333;
     }
 
     .field input{
-        width:100%;
-        padding:4px;
-        border:1px solid #999;
+        width: 100%;
+        padding: 6px;
+        border: 1px solid #bbb;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .field input:focus {
+        border-color: #007db8;
+        box-shadow: 0 0 5px rgba(0, 125, 184, 0.3);
+        outline: none;
     }
 
     .section{
-        background:#007db8;
-        color:#fff;
-        padding:6px;
-        font-weight:bold;
-        margin-top:15px;
-        text-transform:uppercase;
+        background: linear-gradient(135deg, #007db8 0%, #005a8a 100%);
+        color: #fff;
+        padding: 8px 10px;
+        font-weight: bold;
+        margin-top: 12px;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        font-size: 13px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     table{
-        width:100%;
-        border-collapse:collapse;
-        margin-top:5px;
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 4px;
+        margin-bottom: 10px;
+        background: #fff;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
     td, th{
-        border:1px solid #999;
-        padding:6px;
-        vertical-align:middle;
+        border: 1px solid #ddd;
+        padding: 6px 8px;
+        vertical-align: middle;
+        font-size: 13px;
+    }
+    
+    th {
+        background: #f0f8ff;
+        font-weight: bold;
+        color: #007db8;
     }
 
     .sub{
-        background:#e6f2f9;
-        font-weight:bold;
+        background: #e6f2f9;
+        font-weight: bold;
+        font-size: 13px;
+        color: #007db8;
     }
 
     .chk{
-        margin-right:6px;
+        margin-right: 5px;
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+    }
+
+    input[type="checkbox"],
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="tel"] {
+        font-size: 14px;
+        border-radius: 3px;
+        transition: all 0.2s ease;
+    }
+
+    input[type="checkbox"]:hover {
+        border-color: #007db8;
+        cursor: pointer;
+    }
+
+    input[type="checkbox"]:checked {
+        background-color: #007db8;
+        border-color: #007db8;
+    }
+
+    /* Styles spécifiques pour les champs importants */
+    .customer-field label {
+        font-size: 16px !important;
+        font-weight: bold !important;
+        color: #007db8 !important;
+        margin-bottom: 8px !important;
+    }
+
+    .customer-field input {
+        font-size: 18px !important;
+        font-weight: bold !important;
+        padding: 10px !important;
+        border: 2px solid #007db8 !important;
+        background: linear-gradient(135deg, #f0f8ff 0%, #e6f2f9 100%) !important;
+        border-radius: 4px !important;
+        color: #007db8 !important;
+    }
+
+    .account-field label {
+        font-size: 14px !important;
+        font-weight: bold !important;
+        color: #007db8 !important;
+        margin-bottom: 8px !important;
+    }
+
+    .account-field input {
+        font-size: 16px !important;
+        font-weight: bold !important;
+        padding: 8px !important;
+        border: 2px solid #007db8 !important;
+        background: linear-gradient(135deg, #f0f8ff 0%, #e6f2f9 100%) !important;
+        border-radius: 4px !important;
+        color: #007db8 !important;
     }
 
     .small{
-        font-size:11px;
+        font-size:12px;
     }
 
     .signature{
-        height:40px;
+        height:35px;
+        font-size:13px;
     }
 
     .right{
@@ -372,13 +470,18 @@
     /* Print layout */
     @page { 
         size: A4; 
-        margin: 8mm;
+        margin: 5mm;
         @top-center { content: none; }
         @bottom-center { content: none; }
         @top-left { content: none; }
         @bottom-left { content: none; }
         @top-right { content: none; }
         @bottom-right { content: none; }
+    }
+
+    /* Prévention des coupures de texte */
+    .row, .section, table, tr {
+        page-break-inside: avoid;
     }
 
     @media print {
@@ -389,16 +492,14 @@
             margin: 0 !important;
             padding: 0 !important;
             height: auto !important;
-            font-size: 13px !important;
+            font-size: 14px !important;
         }
 
-        /* Supprimer les en-têtes et pieds de page du navigateur */
         @page {
-            margin: 8mm;
+            margin: 5mm;
             size: A4;
         }
 
-        /* Masquer tout contenu ajouté par le navigateur */
         html::before, html::after,
         body::before, body::after {
             content: none !important;
@@ -410,29 +511,243 @@
             max-width: 190mm !important;
             height: auto !important;
             margin: 0 !important;
-            padding: 10mm !important;
+            padding: 6mm !important;
             border: none !important;
             box-shadow: none !important;
             box-sizing: border-box !important;
             overflow: visible !important;
             font-size: 13px !important;
-            page-break-after: always !important;
+            page-break-after: auto !important;
+            line-height: 1.3 !important;
         }
 
-        .header { padding: 8px !important; }
-        .form-title h1 { font-size: 15px !important; }
-        .section { padding: 4px 6px !important; font-size: 12px !important; }
-        td, th { padding: 6px !important; font-size: 12.5px !important; }
-        .small { font-size: 11.5px !important; }
-        .logo-container svg { width: 120px !important; height: auto !important; }
-        .fab-container { display: none !important; }
-        .page-navigation { display: none !important; }
-        .page-counter { display: none !important; }
-        .page-hidden { display: block !important; }
-        .page.hidden { display: block !important; }
-        .article { page-break-inside: avoid !important; }
-        tr { page-break-inside: avoid !important; }
-        table { page-break-inside: avoid !important; }
+        .header { 
+            padding: 4px 6px !important; 
+            margin-bottom: 8px !important;
+            page-break-inside: avoid !important;
+        }
+        
+        .form-title h1 { 
+            font-size: 14px !important; 
+            margin-bottom: 1px !important;
+        }
+        
+        .form-title p { 
+            font-size: 10px !important; 
+            margin: 0 !important;
+        }
+        
+        .section { 
+            padding: 3px 5px !important; 
+            font-size: 13px !important;
+            margin-bottom: 2px !important;
+            margin-top: 6px !important;
+            page-break-inside: avoid !important;
+            page-break-after: avoid !important;
+        }
+        
+        .title { 
+            margin: 4px 0 6px !important; 
+            font-size: 14px !important;
+        }
+        
+        .row{
+            margin-bottom: 6px !important;
+            page-break-inside: avoid !important;
+        }
+        
+        .field input{
+            font-size: 13px !important;
+            padding: 3px !important;
+        }
+        
+        .field label{
+            font-size: 12px !important;
+            margin-bottom: 1px !important;
+        }
+        
+        td, th { 
+            padding: 3px 4px !important; 
+            font-size: 12px !important;
+            border-width: 0.5px !important;
+            page-break-inside: avoid !important;
+        }
+        
+        .sub {
+            font-size: 12px !important;
+            background:#e6f2f9 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .small { 
+            font-size: 11px !important; 
+        }
+        
+        .logo-container svg { 
+            width: 80px !important; 
+            height: auto !important; 
+        }
+        
+        .fab-container { 
+            display: none !important; 
+        }
+        
+        .page-navigation { 
+            display: none !important; 
+        }
+        
+        .page-counter { 
+            display: none !important; 
+        }
+        
+        .page-hidden { 
+            display: block !important; 
+            page-break-before: always !important;
+        }
+        
+        .page.hidden { 
+            display: block !important; 
+        }
+        
+        .article { 
+            page-break-inside: avoid !important;
+            margin-bottom: 8px !important;
+        }
+        
+        tr { 
+            page-break-inside: avoid !important; 
+        }
+        
+        table { 
+            page-break-inside: avoid !important;
+            margin-bottom: 6px !important;
+            margin-top: 2px !important;
+            width: 100% !important;
+        }
+        
+        /* Prevent centering for Chequier and Depôt tables */
+        table.table-no-center tr td {
+            text-align: left !important;
+        }
+        
+        /* Produits Digitaux - Better Spacing */
+        table:not(.table-no-center) tr td {
+            vertical-align: middle !important;
+            padding: 6px 4px !important;
+            text-align: center !important;
+        }
+        
+        /* Ecobank Online - Centered Layout */
+        #oe-account-1, #oe-account-2,
+        #oe-type-1, #oe-type-2,
+        #oe-currency-1, #oe-currency-2,
+        #oe-branch-1, #oe-branch-2,
+        #oe-branch-office-1, #oe-branch-office-2 {
+            text-align: center !important;
+            word-break: break-word !important;
+        }
+        
+        .customer-field input,
+        .account-field input {
+            font-size: 19px !important;
+            font-weight: bold !important;
+            padding: 8px !important;
+            border: 2px solid #007db8 !important;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f2f9 100%) !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .customer-field label {
+            font-size: 14px !important;
+            font-weight: bold !important;
+            color: #007db8 !important;
+        }
+        
+        .account-field label {
+            font-size: 13px !important;
+            font-weight: bold !important;
+            color: #007db8 !important;
+        }
+        
+        .cso-input,
+        .chef-input {
+            font-size: 14px !important;
+            padding: 6px !important;
+            border: 2px solid #0088cc !important;
+        }
+        
+        /* Signature Section */
+        .signature {
+            height: auto !important;
+            font-size: 11px !important;
+            padding: 6px 4px !important;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="tel"] {
+            font-size: 12px !important;
+            padding: 2px 3px !important;
+            border: 0.5px solid #999 !important;
+        }
+        
+        input[type="checkbox"] {
+            margin-right: 2px !important;
+            cursor: default !important;
+            appearance: none !important;
+            width: 14px !important;
+            height: 14px !important;
+            border: 1px solid #333 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        input[type="checkbox"]:checked {
+            background-color: #007db8 !important;
+        }
+
+        /* Declaration Page */
+        .declaration-header {
+            background: #0066cc !important;
+            padding: 7px !important;
+            font-size: 12px !important;
+            page-break-inside: avoid !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .declaration-content {
+            font-size: 10px !important;
+            line-height: 1.4 !important;
+            margin-bottom: 6px !important;
+        }
+
+        .declaration-signature {
+            margin-top: 15px !important;
+            padding-top: 10px !important;
+        }
+
+        .signature-box {
+            text-align: center !important;
+        }
+
+        .signature-line {
+            height: 25px !important;
+            border-bottom: 1px solid #333 !important;
+            margin-bottom: 3px !important;
+        }
+        
+        /* CSO and Chef d'Agence Fields -  Enlarged for print */
+        .cso-input,
+        .chef-input {
+            font-size: 20px !important;
+            padding: 10px !important;
+            border: 2px solid #0088cc !important;
+            font-weight: bold !important;
+        }
     }
 </style>
 </head>
@@ -442,7 +757,7 @@
 <div id="form-loader" class="hidden">
     <div class="loader-content-rib">
         <div class="loader-spinner-rib"></div>
-        <div>Recherche du compte en cours...</div>
+        <div>Recherche du compte en cours... </div>
     </div>
 </div>
 
@@ -472,13 +787,13 @@
     <div class="title"></div>
 
     <div class="row">
-        <div class="field">
+        <div class="field customer-field" style="flex: 2;">
             <label>NOM DU CLIENT</label>
-            <input type="text" id="customer-name" readonly>
+            <input type="text" id="customer-name" readonly style="width: 95%;">
         </div>
-        <div class="field">
+        <div class="field account-field" style="flex: 1;">
             <label>N° DE COMPTE</label>
-            <input type="text" id="account-number" readonly>
+            <input type="text" id="account-number" readonly style="width: 80%;">
         </div>
     </div>
 
@@ -488,27 +803,24 @@
     <table>
         <tr>
             <td class="sub">1. CLASSIC</td>
-            <td><input type="checkbox" class="chk" name="card_classic" id="card_classic_yes"> OUI</td>
-            <td><input type="checkbox" class="chk" name="card_classic_no" id="card_classic_no"> NON</td>
-            <td class="small">
-                Frais de souscription : 20 000 FCFA HT<br>
-                Frais mensuels : 3 325 FCFA HT
-            </td>
-            <td class="small">Redevance annuelle : 20 000 FCFA HT</td>
+            <td><input type="checkbox" class="chk" name="card_classic" id="card_classic_yes">OUI</td>
+            <td class="small">Souscription : 20 000 FCFA HT<br> </td>
+            <td class="small">Mensuels : 3 325 FCFA HT</td>
+            <td class="small">Annuelle : 20 000 FCFA HT</td>
         </tr>
         <tr>
             <td class="sub">2. GOLD</td>
-            <td><input type="checkbox" class="chk" name="card_gold" id="card_gold_yes"> OUI</td>
-            <td><input type="checkbox" class="chk" name="card_gold_no" id="card_gold_no"> NON</td>
-            <td class="small">Frais de souscription : 90 000 FCFA HT</td>
-            <td class="small">Redevance annuelle : 90 000 FCFA HT</td>
+            <td><input type="checkbox" class="chk" name="card_gold" id="card_gold_yes">OUI</td>
+            <td class="small">Souscription : 90 000 FCFA HT</td>
+            <td class="small">Mensuels : 3 325 FCFA HT</td>
+            <td class="small">Annuelle : 90 000 FCFA HT</td>
         </tr>
         <tr>
             <td class="sub">3. PLATINUM</td>
-            <td><input type="checkbox" class="chk" name="card_platinum" id="card_platinum_yes"> OUI</td>
-            <td><input type="checkbox" class="chk" name="card_platinum_no" id="card_platinum_no"> NON</td>
-            <td class="small">Frais de souscription : 120 000 FCFA HT</td>
-            <td class="small">Redevance annuelle : 120 000 FCFA HT</td>
+            <td><input type="checkbox" class="chk" name="card_platinum" id="card_platinum_yes">OUI</td>
+            <td class="small">Souscription : 120 000 FCFA HT</td>
+            <td class="small">Mensuels : 3 325 FCFA HT</td>
+            <td class="small">Annuelle : 120 000 FCFA HT</td>
         </tr>
     </table>
 
@@ -517,69 +829,63 @@
 
     <table>
         <tr>
-            <td>
-                <input type="checkbox" class="chk" name="srv_ecobank_app" id="srv_ecobank_app"> ECOBANK MOBILE APP<br><br>
-                <input type="checkbox" class="chk" name="srv_airtel_money" id="srv_airtel_money"> VIREMENT PERMANENT &nbsp;
-                <input type="text" id="srv_montant" name="montant">
-            </td>
-            <td>
-                <input type="checkbox" class="chk" name="srv_insurance" id="srv_insurance"> ASSURANCE MONÉTIQUE (CLASSIQUE : 4 025 FCFA TTC / 6 mois)<br><br>
-                <input type="checkbox" class="chk" name="srv_mobile_money" id="srv_mobile_money"> MOBILE MONEY &nbsp; N° TEL
-                <input type="number" id="mobilemoney_phone" name="mobilemoney_phone">
-            </td>
-            <td>
-                <input type="checkbox" class="chk" name="srv_estatement" id="srv_estatement"> E-STATEMENT<br><br>
-                <input type="checkbox" class="chk" name="srv_sms_alert" id="srv_sms_alert"> SMS ALERT
-            </td>
+            <td><input type="checkbox" class="chk" name="srv_ecobank_app" id="srv_ecobank_app"><strong> ECOBANK MOBILE APP</strong></td>
+            <td><input type="checkbox" class="chk" name="srv_insurance" id="srv_insurance"> <strong> ASSURANCE MONÉTIQUE</strong> <small>(4025 FCFA / 6 mois)</small></td>
+            <td><input type="checkbox" class="chk" name="srv_estatement" id="srv_estatement"> <strong>E-STATEMENT</strong></td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" class="chk" name="srv_airtel_money" id="srv_airtel_money"> <strong>VIREMENT PERMANENT</strong><br>Montant: <input type="text" id="srv_montant" name="montant" style="width: 120px; font-size: 15px;"></td>
+            <td><input type="checkbox" class="chk" name="srv_mobile_money" id="srv_mobile_money"> <strong>MOBILE MONEY</strong> TEL: <input type="tel" id="mobilemoney_phone" name="mobilemoney_phone" style="width: 100px; font-size: 12px;"></td>
+            <td><input type="checkbox" class="chk" name="srv_sms_alert" id="srv_sms_alert"> <strong>SMS ALERT</strong></td>
         </tr>
     </table>
 
     <!-- ECOBANK ONLINE -->
     <table>
         <tr class="sub">
-            <td colspan="5">
+            <td colspan="5" style="text-align: center;">
                 ECOBANK ONLINE  :
                 Activer les virements <input type="checkbox" class="chk" name="online_transfer" id="online_transfer">
                 Activer Western Union <input type="checkbox" class="chk" name="online_western_union" id="online_western_union">
             </td>
         </tr>
         <tr>
-            <th>N° de Compte</th>
-            <th>Type</th>
-            <th>Devise</th>
-            <th>Agence</th>
-            <th>Filiale</th>
+            <th style="text-align: center; width: 20%;">N° de Compte</th>
+            <th style="text-align: center; width: 25%;">Type</th>
+            <th style="text-align: center; width: 25%;">Devise</th>
+            <th style="text-align: center; width: 10%;">Agence</th>
+            <th style="text-align: center; width: 20%;">Filiale</th>
         </tr>
         <tr>
-            <td id="oe-account-1">&nbsp;</td>
-            <td id="oe-type-1"></td>
-            <td id="oe-currency-1"></td>
-            <td id="oe-branch-1"></td>
-            <td id="oe-branch-office-1"></td>
+            <td id="oe-account-1" style="text-align: center;">&nbsp;</td>
+            <td id="oe-type-1" style="text-align: center;"></td>
+            <td id="oe-currency-1" style="text-align: center;"></td>
+            <td id="oe-branch-1" style="text-align: center;"></td>
+            <td id="oe-branch-office-1" style="text-align: center;"></td>
         </tr>
         <tr>
-            <td id="oe-account-2">&nbsp;</td>
-            <td id="oe-type-2"></td>
-            <td id="oe-currency-2"></td>
-            <td id="oe-branch-2"></td>
-            <td id="oe-branch-office-2"></td>
+            <td id="oe-account-2" style="text-align: center;">&nbsp;</td>
+            <td id="oe-type-2" style="text-align: center;"></td>
+            <td id="oe-currency-2" style="text-align: center;"></td>
+            <td id="oe-branch-2" style="text-align: center;"></td>
+            <td id="oe-branch-office-2" style="text-align: center;"></td>
         </tr>
     </table>
 
     <!-- CHEQUIER -->
     <div class="section">CHEQUIER</div>
 
-    <table>
+    <table class="table-no-center">
         <tr>
-            <td><input type="checkbox" id="chequier_25" name="chequier" value="25"> 25 Feuilles</td>
-            <td><input type="checkbox" id="chequier_50" name="chequier" value="50"> 50 Feuilles</td>
+            <td style="text-align: center;"><input type="checkbox" id="chequier_25" name="chequier" value="25"> 25 Feuilles</td>
+            <td style="text-align: center;"><input type="checkbox" id="chequier_50" name="chequier" value="50"> 50 Feuilles</td>
         </tr>
     </table>
 
     <!-- DEPOT -->
     <div class="section">DEPÔT INITIAL</div>
 
-    <table>
+    <table class="table-no-center">
         <tr>
             <td><input type="checkbox" id="depot_espece" name="depot" value="ESPÈCE"> ESPÈCE</td>
             <td><input type="checkbox" id="depot_cheque" name="depot" value="CHÈQUE"> CHÈQUE</td>
@@ -588,168 +894,86 @@
         </tr>
     </table>
 
+    <!-- CLIENT SIGNATURE -->
+    <div class="section">SIGNATURE DU CLIENT</div>
+
+    <table>
+        <tr>
+            <td style="width: 60%; vertical-align: bottom;">
+                <div style="height: 50px; border-bottom: 1px solid #333; margin-bottom: 5px;"></div>
+                <div style="text-align: center; font-size: 12px; font-weight: bold;">Signature client</div>
+            </td>
+            <td style="width: 40%; padding-left: 15px;">
+                <div style="font-size: 12px; font-weight: bold; margin-bottom: 8px;">Date:</div>
+                <div style="display: flex; gap: 8px; align-items: flex-end;">
+                    <div style="flex: 0.6; text-align: center;">
+                        <input type="text" maxlength="2" placeholder="JJ" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
+                        <div style="font-size: 10px; margin-top: 2px;">JJ</div>
+                    </div>
+                    <div style="font-weight: bold; font-size: 16px;">-</div>
+                    <div style="flex: 0.6; text-align: center;">
+                        <input type="text" maxlength="2" placeholder="MM" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
+                        <div style="font-size: 10px; margin-top: 2px;">MM</div>
+                    </div>
+                    <div style="font-weight: bold; font-size: 16px;">-</div>
+                    <div style="flex: 0.8; text-align: center;">
+                        <input type="text" maxlength="4" placeholder="AAAA" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
+                        <div style="font-size: 10px; margin-top: 2px;">AAAA</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
     <!-- RESERVE -->
     <div class="section">RÉSERVÉ À LA BANQUE</div>
 
     <table>
         <tr>
-            <td>GESTIONNAIRE DE COMPTE :</td>
-            <td><input type="text" size="40" id="gestionnaire"></td>
+            <td colspan="2" style="height: auto; padding: 8px 5px;">
+                <div style="display: flex; gap: 20px; margin-bottom: 12px;">
+                    <div style="flex: 1;">
+                        <div style="font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #333;">CSO/SCC (CHARGÉ DE LA CLIENTÈLE):</div>
+                        <input type="text" class="cso-input" style="width: 90%; padding: 10px; border: 2px solid #0088cc; font-size: 15px; font-weight: bold; background: #f5f9fc; border-radius: 4px;">
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #333;">CHEF D'AGENCE:</div>
+                        <input type="text" class="chef-input" style="width: 90%; padding: 10px; border: 2px solid #0088cc; font-size: 15px; font-weight: bold; background: #f5f9fc; border-radius: 4px;">
+                    </div>
+                </div>
+            </td>
         </tr>
         <tr>
-            <td>CSO :</td>
-            <td><input type="text" size="40" id="gestionnaire"></td>
-        </tr>
-        <tr>
-            <td>CHEF D'AGENCE :</td>
-            <td><input type="text" size="40" id="chef_agence"></td>
-        </tr>
-        <tr>
-            <td class="signature"> SIGNATURE: </td>
-            <td class="signature">DATE D'OUVERTURE : <input type="date" id="date_ouverture"></td>
+            <td style="width: 50%; vertical-align: bottom; padding: 8px 5px;">
+                <div style="height: 40px; border-bottom: 1px solid #333; margin-bottom: 5px;"></div>
+                <div style="text-align: center; font-size: 11px; font-weight: bold;">Signature CSO</div>
+            </td>
+            <td style="width: 50%; padding-left: 15px; padding-right: 5px;">
+                <div style="font-size: 12px; font-weight: bold; margin-bottom: 8px;">Date d'ouverture:</div>
+                <div style="display: flex; gap: 8px; align-items: flex-end;">
+                    <div style="flex: 0.6; text-align: center;">
+                        <input type="text" maxlength="2" placeholder="JJ" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
+                        <div style="font-size: 10px; margin-top: 2px;">JJ</div>
+                    </div>
+                    <div style="font-weight: bold; font-size: 16px;">-</div>
+                    <div style="flex: 0.6; text-align: center;">
+                        <input type="text" maxlength="2" placeholder="MM" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
+                        <div style="font-size: 10px; margin-top: 2px;">MM</div>
+                    </div>
+                    <div style="font-weight: bold; font-size: 16px;">-</div>
+                    <div style="flex: 0.8; text-align: center;">
+                        <input type="text" maxlength="4" placeholder="AAAA" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
+                        <div style="font-size: 10px; margin-top: 2px;">AAAA</div>
+                    </div>
+                </div>
+            </td>
         </tr>
     </table>
 
 </div>
 
-<!-- PAGE 2: DECLARATION - Convention Banque par Internet ECOBANK CONGO -->
-<div class="page page-hidden" id="page-2">
-
-    <div class="header">
-        <div class="logo-container">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="60" zoomAndPan="magnify" viewBox="0 0 375 225" preserveAspectRatio="xMidYMid meet" version="1.0">
-                <defs>
-                    <clippath id="28a01fd8dc">
-                        <path d="M 9.386719 25.0625 L 365.636719 25.0625 L 365.636719 199.8125 L 9.386719 199.8125 Z M 9.386719 25.0625 " clip-rule="nonzero"></path>
-                    </clippath>
-                </defs>
-                <path fill="#007eb6" d="M 65.179688 67.949219 L 66.386719 60.703125 L 35.582031 60.703125 C 32.257812 60.703125 29.238281 63.417969 28.636719 66.441406 L 16.554688 134.089844 C 15.949219 137.414062 18.066406 140.132812 21.386719 140.132812 L 55.210938 140.132812 L 56.421875 132.882812 L 27.425781 132.882812 L 32.863281 102.679688 L 56.421875 102.679688 L 57.628906 95.734375 L 34.070312 95.734375 L 38.902344 67.949219 Z M 80.28125 141.339844 C 66.6875 141.339844 58.835938 129.257812 62.460938 109.023438 C 66.085938 88.488281 78.167969 77.011719 92.058594 77.011719 C 99.609375 77.011719 103.535156 79.425781 105.046875 81.238281 L 101.722656 86.976562 C 100.214844 85.464844 97.496094 83.957031 92.964844 83.957031 C 81.789062 83.957031 75.449219 94.226562 73.03125 108.722656 C 70.011719 123.519531 73.636719 133.789062 83.601562 133.789062 C 87.832031 133.789062 90.851562 132.277344 93.570312 130.769531 L 95.078125 137.109375 C 92.058594 139.226562 87.226562 141.339844 80.28125 141.339844 Z M 123.167969 141.339844 C 106.253906 141.339844 101.421875 127.445312 104.441406 109.023438 C 107.761719 90.601562 117.730469 76.707031 134.339844 76.707031 C 151.554688 76.707031 156.386719 90.296875 153.066406 109.023438 C 149.742188 127.445312 139.777344 141.339844 123.167969 141.339844 Z M 133.132812 83.351562 C 121.355469 83.351562 116.523438 96.640625 114.40625 109.023438 C 112.292969 121.707031 112.597656 134.394531 124.375 134.394531 C 136.152344 134.394531 140.683594 121.707031 142.796875 109.324219 C 144.910156 96.640625 145.214844 83.351562 133.132812 83.351562 Z M 229.476562 141.339844 C 213.46875 141.339844 207.125 134.394531 208.9375 122.917969 C 211.960938 106.304688 228.269531 101.472656 247.898438 99.660156 L 248.503906 95.734375 C 250.316406 86.070312 244.878906 83.351562 237.027344 83.351562 C 230.984375 83.351562 225.246094 85.464844 221.320312 87.277344 L 219.8125 81.238281 C 223.738281 79.425781 230.984375 76.707031 239.746094 76.707031 C 251.222656 76.707031 260.582031 81.539062 257.867188 96.941406 L 250.917969 136.808594 C 245.785156 139.527344 238.234375 141.339844 229.476562 141.339844 Z M 246.992188 104.796875 C 230.984375 106.609375 221.019531 110.230469 218.90625 122.613281 C 217.394531 131.675781 222.226562 135.300781 231.289062 135.300781 C 235.214844 135.300781 239.140625 134.695312 241.859375 133.183594 Z M 293.804688 140.132812 L 301.65625 95.433594 C 302.5625 89.695312 301.355469 83.351562 290.785156 83.351562 C 285.046875 83.351562 282.027344 84.257812 278.703125 85.464844 L 269.039062 140.132812 L 258.773438 140.132812 L 269.039062 81.238281 C 275.082031 78.519531 282.628906 76.707031 292.597656 76.707031 C 309.8125 76.707031 313.132812 86.371094 311.625 95.132812 L 303.773438 139.828125 L 293.804688 139.828125 Z M 293.804688 140.132812 " fill-opacity="1" fill-rule="nonzero"></path>
-                <path fill="#bed000" d="M 355.417969 154.328125 L 12.929688 154.328125 L 13.234375 152.515625 L 355.71875 152.515625 Z M 355.417969 154.328125 " fill-opacity="1" fill-rule="nonzero"></path>
-                <g clip-path="url(#28a01fd8dc)">
-                    <path fill="#007eb6" d="M 188.703125 77.3125 C 182.664062 77.3125 179.039062 78.519531 175.414062 80.332031 L 180.851562 50.128906 L 169.675781 56.171875 L 155.480469 136.808594 C 158.804688 139.226562 164.84375 141.339844 173.300781 141.339844 C 191.722656 141.339844 203.804688 128.050781 207.429688 108.117188 C 210.75 89.089844 203.199219 77.3125 188.703125 77.3125 Z M 197.160156 108.417969 C 194.441406 124.125 187.496094 134.695312 174.507812 134.695312 C 171.1875 134.695312 168.167969 134.394531 166.050781 133.183594 L 174.507812 85.464844 C 177.527344 83.957031 180.550781 83.050781 185.078125 83.050781 C 196.859375 83.050781 199.578125 94.828125 197.160156 108.417969 Z M 365.382812 77.917969 L 354.8125 77.917969 L 327.632812 106.609375 L 327.328125 106.609375 L 334.277344 67.34375 C 341.222656 28.6875 299.242188 20.53125 255.449219 27.175781 C 225.550781 31.707031 199.273438 43.488281 199.273438 43.488281 C 199.273438 43.488281 233.703125 31.40625 263.90625 29.59375 C 301.960938 27.480469 331.859375 33.21875 323.101562 73.6875 L 311.625 140.132812 L 321.589844 140.132812 L 327.328125 108.117188 L 327.632812 108.117188 L 345.753906 140.132812 L 357.230469 140.132812 L 336.992188 106.910156 Z M 18.667969 174.863281 L 14.441406 199.628906 L 10.515625 199.628906 L 14.742188 174.863281 L 9.609375 174.863281 L 9.910156 172.445312 L 24.40625 172.445312 L 24.105469 174.863281 Z M 35.582031 199.328125 L 38.300781 184.226562 C 38.601562 182.113281 37.996094 179.996094 34.675781 179.996094 C 33.164062 179.996094 31.65625 180.300781 30.449219 181.207031 L 27.125 199.328125 L 23.5 199.328125 L 28.9375 168.519531 L 32.257812 168.519531 L 30.75 179.394531 C 32.5625 178.488281 34.375 178.183594 35.882812 178.183594 C 41.320312 178.183594 42.226562 181.507812 41.925781 184.527344 L 39.207031 199.628906 L 35.582031 199.628906 Z M 47.359375 189.964844 C 47.058594 194.796875 48.871094 197.210938 52.496094 197.210938 C 54.910156 197.210938 56.722656 196.609375 57.929688 196.003906 L 58.535156 198.421875 C 57.023438 199.328125 54.609375 199.929688 51.890625 199.929688 C 46.453125 199.929688 43.132812 196.304688 44.339844 188.757812 C 45.546875 181.507812 49.777344 177.882812 54.910156 177.882812 C 60.046875 177.882812 62.460938 181.207031 61.253906 188.152344 Z M 54.308594 179.996094 C 51.285156 179.996094 48.570312 182.414062 47.664062 188.152344 L 58.234375 186.640625 C 58.835938 181.808594 57.328125 179.996094 54.308594 179.996094 Z M 83 188.152344 L 81.789062 188.152344 L 79.675781 199.328125 L 76.050781 199.328125 L 80.582031 173.351562 C 82.09375 172.445312 84.808594 171.84375 87.527344 171.84375 C 93.871094 171.84375 96.285156 175.164062 95.382812 179.996094 C 94.777344 184.828125 90.851562 189.058594 83 188.152344 Z M 87.226562 173.957031 C 85.714844 173.957031 84.808594 174.257812 84.207031 174.5625 L 82.09375 186.039062 L 83.300781 186.039062 C 89.039062 186.640625 91.453125 183.921875 92.058594 179.996094 C 92.964844 176.070312 91.453125 173.957031 87.226562 173.957031 Z M 102.628906 199.929688 C 97.191406 199.929688 95.078125 197.515625 95.683594 193.589844 C 96.589844 187.851562 102.328125 186.339844 108.972656 185.734375 L 109.273438 184.527344 C 109.878906 181.207031 108.066406 180.300781 105.347656 180.300781 C 103.234375 180.300781 101.421875 180.902344 99.910156 181.507812 L 99.308594 179.394531 C 100.515625 178.789062 103.234375 177.882812 105.953125 177.882812 C 109.878906 177.882812 113.199219 179.695312 111.992188 184.828125 L 109.574219 198.421875 C 108.066406 199.328125 105.347656 199.929688 102.628906 199.929688 Z M 108.367188 187.246094 C 102.929688 187.851562 99.609375 189.058594 98.703125 193.285156 C 98.097656 196.304688 99.910156 197.515625 102.929688 197.515625 C 104.140625 197.515625 105.648438 197.210938 106.554688 196.910156 Z M 126.1875 199.328125 L 128.90625 184.226562 C 129.207031 182.113281 128.90625 179.996094 125.28125 179.996094 C 123.167969 179.996094 122.261719 180.300781 121.050781 180.601562 L 117.730469 199.328125 L 114.40625 199.328125 L 118.03125 179.089844 C 120.144531 178.183594 122.5625 177.582031 126.1875 177.582031 C 132.226562 177.582031 133.132812 180.902344 132.832031 183.921875 L 130.113281 199.328125 Z M 162.730469 199.328125 L 161.824219 191.171875 L 152.460938 191.171875 L 148.535156 199.328125 L 145.214844 199.328125 L 159.105469 172.144531 L 162.429688 172.144531 L 166.65625 199.328125 Z M 160.3125 178.789062 C 160.011719 176.675781 160.011719 175.46875 160.011719 175.46875 C 160.011719 175.46875 159.710938 176.675781 158.503906 178.789062 L 153.367188 189.058594 L 161.523438 189.058594 Z M 177.527344 180.300781 L 174.207031 199.328125 L 170.582031 199.328125 L 173.90625 180.300781 L 171.488281 180.300781 L 171.789062 178.183594 L 174.207031 178.183594 L 174.8125 175.164062 C 175.414062 170.9375 178.433594 168.21875 183.265625 168.519531 L 182.964844 170.636719 C 180.851562 170.636719 179.039062 171.84375 178.433594 174.863281 L 177.832031 178.183594 L 181.757812 178.183594 L 181.457031 180.300781 Z M 193.535156 180.601562 C 192.027344 179.996094 189.910156 180.300781 188.703125 180.902344 L 185.382812 199.328125 L 181.757812 199.328125 L 185.382812 179.089844 C 187.796875 178.183594 189.910156 177.582031 194.746094 177.582031 Z M 194.746094 199.328125 L 198.367188 178.183594 L 201.691406 178.183594 L 198.066406 199.328125 Z M 201.085938 173.957031 C 199.878906 173.957031 199.273438 173.050781 199.273438 172.144531 C 199.578125 170.9375 200.484375 170.332031 201.691406 170.332031 C 202.898438 170.332031 203.503906 171.238281 203.503906 172.144531 C 203.199219 173.351562 201.992188 173.957031 201.085938 173.957031 Z M 210.75 199.929688 C 206.222656 199.929688 203.503906 195.703125 204.710938 188.757812 C 205.917969 181.808594 210.148438 177.882812 214.675781 177.882812 C 217.394531 177.882812 218.601562 178.789062 219.207031 179.394531 L 218 181.207031 C 217.394531 180.601562 216.488281 180.300781 214.980469 180.300781 C 211.054688 180.300781 208.9375 183.921875 208.03125 188.757812 C 207.125 193.589844 208.335938 197.210938 211.960938 197.210938 C 213.46875 197.210938 214.375 196.609375 215.28125 196.304688 L 215.886719 198.421875 C 214.675781 199.023438 213.167969 199.929688 210.75 199.929688 Z M 226.152344 199.929688 C 220.71875 199.929688 218.601562 197.515625 219.207031 193.589844 C 220.113281 187.851562 225.851562 186.339844 232.496094 185.734375 L 232.796875 184.527344 C 233.402344 181.207031 231.589844 180.300781 228.871094 180.300781 C 226.757812 180.300781 224.945312 180.902344 223.4375 181.507812 L 222.832031 179.394531 C 224.039062 178.789062 226.757812 177.882812 229.476562 177.882812 C 233.402344 177.882812 236.722656 179.695312 235.816406 184.828125 L 233.402344 198.421875 C 231.890625 199.328125 229.175781 199.929688 226.152344 199.929688 Z M 232.195312 187.246094 C 226.757812 187.851562 223.4375 189.058594 222.53125 193.285156 C 221.925781 196.304688 223.738281 197.515625 226.757812 197.515625 C 227.964844 197.515625 229.476562 197.210938 230.382812 196.910156 Z M 250.011719 199.328125 L 252.730469 184.226562 C 253.035156 182.113281 252.730469 179.996094 249.105469 179.996094 C 246.992188 179.996094 246.085938 180.300781 244.878906 180.601562 L 241.554688 199.328125 L 238.234375 199.328125 L 241.859375 179.089844 C 243.972656 178.183594 246.390625 177.582031 250.011719 177.582031 C 256.054688 177.582031 256.960938 180.902344 256.65625 183.921875 L 253.9375 199.328125 Z M 278.402344 199.929688 C 275.382812 199.929688 272.964844 199.328125 271.152344 198.421875 L 275.683594 173.65625 C 277.195312 172.75 279.914062 172.144531 282.933594 172.144531 C 288.972656 172.144531 291.691406 174.863281 290.785156 178.789062 C 290.179688 182.714844 286.859375 184.527344 284.441406 185.132812 C 286.859375 185.734375 290.179688 188.152344 289.578125 192.078125 C 288.671875 197.515625 283.839844 199.929688 278.402344 199.929688 Z M 278.703125 186.039062 L 276.890625 186.039062 L 275.082031 196.910156 C 275.988281 197.210938 277.195312 197.515625 278.703125 197.515625 C 282.328125 197.515625 285.347656 196.003906 285.953125 192.078125 C 286.558594 187.851562 284.441406 186.039062 278.703125 186.039062 Z M 282.628906 173.957031 C 281.121094 173.957031 280.214844 174.257812 279.007812 174.5625 L 277.195312 184.226562 L 279.007812 184.226562 C 284.746094 184.226562 286.859375 182.414062 287.464844 179.089844 C 288.066406 175.769531 286.253906 173.957031 282.628906 173.957031 Z M 299.542969 199.929688 C 294.105469 199.929688 291.992188 197.515625 292.597656 193.589844 C 293.503906 187.851562 299.242188 186.339844 305.886719 185.734375 L 306.1875 184.527344 C 306.792969 181.207031 304.980469 180.300781 302.261719 180.300781 C 300.148438 180.300781 298.035156 180.902344 296.824219 181.507812 L 296.222656 179.394531 C 297.429688 178.789062 300.148438 177.882812 302.867188 177.882812 C 306.792969 177.882812 310.113281 179.695312 309.207031 184.828125 L 306.792969 198.421875 C 304.980469 199.328125 302.261719 199.929688 299.542969 199.929688 Z M 305.28125 187.246094 C 299.84375 187.851562 296.523438 189.058594 295.617188 193.285156 C 295.011719 196.304688 296.824219 197.515625 299.847656 197.515625 C 301.054688 197.515625 302.5625 197.210938 303.46875 196.910156 Z M 323.703125 199.328125 L 326.421875 184.226562 C 326.726562 182.113281 326.421875 179.996094 322.800781 179.996094 C 320.683594 179.996094 319.777344 180.300781 318.570312 180.601562 L 315.25 199.328125 L 311.625 199.328125 L 315.25 179.089844 C 317.363281 178.183594 319.777344 177.582031 323.402344 177.582031 C 329.441406 177.582031 330.347656 180.902344 330.046875 183.921875 L 327.328125 199.328125 Z M 343.636719 199.328125 L 337.597656 188.453125 L 335.785156 199.328125 L 332.464844 199.328125 L 337.898438 168.519531 L 341.222656 168.519531 L 337.898438 188.152344 L 347.261719 178.183594 L 350.886719 178.183594 L 341.222656 188.152344 L 348.167969 199.328125 Z M 343.636719 199.328125 " fill-opacity="1" fill-rule="nonzero"></path>
-                </g>
-            </svg>
-        </div>
-        <div class="form-title">
-            <h1>Your Banking, Your Way</h1>
-            <p>Personal / Business - <b>Convention de Service</b></p>
-        </div>
-    </div>
-
-    <div class="declaration-header">DÉCLARATION</div>
-
-    <div class="declaration-title">2. CONVENTION BANQUE PAR INTERNET ECOBANK CONGO</div>
-
-    <div class="page-declaration">
-        <div class="article">
-            <div class="article-title">ARTICLE 1 : OBJET</div>
-            <div style="font-size: smaller;">
-                Présente convention est de définir les conditions et modalités suivant lesquelles ECOBANK (ci-disposition de son client souhaitant l'accès ECOBANK par Internet.
-                ECOBANK par internet est un produit de paiement, accessible par le réseau internet.<br>
-                ECOBANK par Internet pourra également être accessible, compte dure.
-            </div>
-        </div>
-
-        <div class="article">
-            <div class="article-title">ARTICLE 2</div>
-            <div style="font-size: smaller;">
-                Manière exhaustive les comptes pour lesquels il dient la fourniture des services.
-                La détermination des pouvoirs à cette fin est fonction des instructions de la banque ou par instructions ultérieures dûment entregistrées par la banque.
-                Distincts suivant des modules nommés « Bleu », « Argent », « Or », « Platinum » dont les fonctionnalités diffèrent. L'abonné bénéficit lors de la souscription de son abonnement le module souhaité.
-                Les comptes bénéficient automatiquement, au sur à mesure de leur mise à disposition, de toutes les fonctionnalités offertes sous le module considéré, ce en fonction de la nature du compte concerné.
-            </div>
-        </div>
-
-        <div class="article">
-                <div class="article-title">ARTICLE 3 : IDENTIFICATION, ACCÈS, CONFIDENTIALITÉ</div>
-                <div style="font-size: smaller;">
-                Le code secret est transmis par la Banque à l'Abonné.
-                Il est conseillé de le garder hors de la portée de toute personne. L'Abonné est responsable de la confidentialité de son code secret.
-                ECOBANK garantit que la circulation de ce code sur Internet est protégée par une licence SSL de la société VeriSign.
-            </div>
-        </div>
-
-        <div class="article">
-            <div class="article-title">ARTICLE 4 : REFUS D'ACCÈS</div>
-            <div style="font-size: smaller;">
-                ECOBANK peut suspendre l'accès à ECOBANK par Internet au cas où il existe des faits laissant présumer une utilisation frauduleuse. L'Abonné en est informé par tout moyen.
-            </div>
-        </div>
-
-        <div class="article">
-            <div class="article-title">ARTICLE 5 : TARIFICATION</div>
-            <div style="font-size: smaller;">
-                Tarification mensuelle indivisible payable par avance par le débit de l'Abonné.<br>
-                Les tarifs varient suivant les modules choisis et sont communiqués à l'Abonné.
-                L'entrée en vigueur des modifications tarifaires vaut déclaration de celle-ci par l'Abonné.
-            </div>
-        </div>
-
-        <div class="article">
-            <div class="article-title">ARTICLE 6 : RESPONSABILITÉ DE LA BANQUE</div>
-            <div style="font-size: smaller;">
-                La Banque garantit la confidentialité des informations communiquées. Toutefois, ECOBANK ne saurait être responsable du mauvais fonctionnement dû à des événements hors de son contrôle :<br>
-                • transport des données
-                • défaillance des matériels ou réseau
-                • erreurs des gestionnaires de réseau
-                • interruptions de service (cas de force majeure, conflits sociaux, défaut de fourniture électrique, etc.)
-                • mauvais fonctionnement du matériel de l'Abonné
-            </div>
-        </div>
-
-        <div class="article">
-            <div class="article-title">ARTICLE 7 : RESPONSABILITÉ DE L'ABONNÉ</div>
-            <div style="font-size: smaller;">
-                L'abonné est responsable de la conservation et de l'utilisation de son code secret.
-                En cas d'abonnement joint, les co-abonnés sont solidairement responsables.
-                Toute opération précédée de la frappe du numéro d'abonné et du code secret est réputée émaner de l'Abonné ou des co-abonnés.
-            </div>
-        </div>
-
-        <div class="article">
-            <div class="article-title">ARTICLE 8 : FORCE PROBANTE DES LIVRES DE LA BANQUE</div>
-            <div style="font-size: smaller;">
-                Toutes les opérations passées font l'objet d'un relevé mensuel ou trimestriel.
-                Passé un délai de trois mois, l'Abonné est réputé avoir approuvé les opérations à aucune réclamation.
-            </div>
-        </div>
-
-        <div class="article">
-            <div class="article-title">ARTICLE 9 : RÉSILIATION</div>
-            <div style="font-size: smaller;">
-                La durée de l'abonnement est d'une durée lors de la souscription. En cas de clôture du compte, l'abonnement est considéré comme éteint.
-                Chaque partie peut résilier l'abonnement avec un préavis de quinze (15) jours.
-            </div>
-        </div>
-
-        <div class="article">
-            <div class="article-title">ARTICLE 10 : DONNÉES PERSONNELLES</div>
-            <div style="font-size: smaller;">
-                Les données recueillies sont utilisées uniquement pour la gestion du service et le respect des obligations légales.
-                L'Abonné autorise la Banque à communiquer ces données aux entreprises sous-traitantes.
-            </div>
-        </div>
-
-        <div class="article">
-            <div class="article-title">ARTICLE 11 : DOCUMENTS CONTRACTUELS ET LOI APPLICABLE</div>
-            <div style="font-size: smaller;">
-                La convention comprend le texte, le bulletin de souscription et les formulaires en usage.<br>
-                Elle est soumise au droit congolais.
-                Les tribunaux congolais sont compétents pour toute question relative à son interprétation ou exécution, à défaut d'accord amiable.
-            </div>
-        </div>
-    </div>
-
-    <div class="page-counter">
-        <span>Page <span id="current-page">2</span> de <span id="total-pages">3</span></span>
-        <br>
-        <label><input type="checkbox" id="accept-declaration"> J'accepte les termes et conditions de cette convention</label>
-    </div>
-
-</div>
-
-<!-- PAGE 3: ENGAGEMENT AIRTEL MONEY + BULLETIN D'ADHESION -->
-<div class="page page-hidden" id="page-3">
+<!-- PAGE 2: ENGAGEMENT AIRTEL MONEY + BULLETIN D'ADHESION -->
+<div class="page page-hidden" id="page-3" style="page-break-before: always;">
 
     <div class="header">
         <div class="logo-container">
@@ -799,7 +1023,7 @@
         <div class="declaration-header">4. BULLETIN D'ADHESION ASSURANCE MONETIQUE (1/2)</div>
 
         <div class="article">
-            <div class="article-title">NOTICE D'INFORMATION</div>
+            <div class="article-title">NOTICE D'INFORMATION</div><br>
             <div class="article-content">
                 <strong>1. Définitions au sens des contrats souscrits</strong><br>
                 <div style="font-size: smaller;"> ASSURE : vous-même, nommément désigné sur votre bulletin d'adhésion, titulaire ou co-titulaire du compte courant (les mandataires ne peuvent être assurés), en qualité de simple particulier agissant dans le cadre de votre vie privée (en dehors de toute participation à une activité professionnelle, à la gestion ou à l'administration d'une association ou d'une société civile ou commerciale).
@@ -819,31 +1043,27 @@
                 Assistance Voyages : Assister l’assuré en cas de survenance d’un incident ou d’une maladie durant son séjour à l’étranger. <br>
                 Individuelle Accident. Couvre les lésions corporelles (accident mortel ou incapacité et frais médicaux) subies par le client à la suite d’un accident ou d’une agression ayant entrainé la perte ou le vol de son effet de paiement. </div> <br>
                 <strong>Territorialité </strong>  <br>
-                <div style="font-size: smaller;">  La garantie "Assistance Voyages" ne couvre qu'au cours des déplacements à l'étranger dans la limite de 92 jours consécutifs. Toutes les autres garanties s'exercent en tout temps et en tous lieux dans le MONDE ENTIER.
+                <div style="font-size: smaller;">  La garantie "Assistance Voyages" ne couvre qu'au cours des déplacements à l'étranger dans la limite de 92 jours consécutifs. Toutes les autres garanties s'exercent en tout temps et en tous lieux.
                 Contrat d'assurance N°2023-70-0174184  </div> <br>
                 <strong> Exclusions</strong><br>
                 <div style="font-size: smaller;">Faute intentionnelle ou dolosive de votre part ou effectuée avec votre complicité, ou de la part d'un de vos proches
                 (conjoint, ascendant, descendant ou préposés à votre service), <br>
                 Vols et pertes opérés suite à la perte ou au vol d’une carte conservée avec son code secret <br>
                 Guerre civile ou étrangère, <br>
-                Embargo, confiscation, capture ou destruction, par ordre d'un gouvernement ou d'une autorité publique,- Désintégration du noyau atomique ou rayonnement ionisant. </div>
+                Embargo, confiscation, capture ou destruction, par ordre d'un gouvernement ou d'une autorité publique,- Désintégration du noyau atomique ou rayonnement ionisant. </div><br>
+                <strong>Déclaration de sinistre</strong> 
+                <div style="font-size: smaller;">
+                En cas de sinistre, le Bénéficiaire a l'obligation de contacter l’Assureur dans un délai de 5 jours ouvrés dès qu'il a eu connaissance du Sinistre.
+                La déclaration peut se faire auprès de la banque ou directement auprès de SUNU Assurances IARD Congo.
+                La déclaration d'un sinistre peut être envoyée directement par lettre recommandée avec accusé de réception, à l’adresse du siège de SUNU Assurances IARD Congo. <br>
+                </div>
 
             </div>
         </div>
 
+                
         <div class="article">
-                <strong>Déclaration de sinistre</strong> <br>
-            <div style="font-size: smaller;">
-            En cas de sinistre, le Bénéficiaire a l'obligation de contacter l’Assureur dans un délai de 5 jours ouvrés dès qu'il a eu connaissance du Sinistre.
-            La déclaration peut se faire auprès de la banque ou directement auprès de SUNU Assurances IARD Congo.
-            La déclaration d'un sinistre peut être envoyée directement par lettre recommandée avec accusé de réception, à l’adresse du siège de SUNU Assurances IARD Congo,. <br>
-            </div>
-        </div>
-
-        <div class="article">
-            <div class="article-content">
-                <strong>DISPOSITIONS DIVERSES</strong><br> <br>
-            </div>
+            <div class="article-title">DISPOSITIONS DIVERSES<br> <br></div>
         </div>
 
         <div class="article">
@@ -888,8 +1108,6 @@
 
             </div>
         </div>
-
-
     </div>
 
 </div>

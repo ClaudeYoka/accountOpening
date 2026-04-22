@@ -289,7 +289,21 @@
 
             /* Réduire la hauteur de la signature à l'impression */
             .signature-area {
-                height: 25px !important;
+                height: 15px !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Réduire l'espace de la section Engagement pour que le montant reste sur la même page */
+            #form-section-4 .form-section .form-row {
+                margin-top: 12px !important;
+            }
+
+            /* Forcer les Conditions générales de compte à commencer à la page 3 */
+            #conditions-section {
+                page-break-before: always;
+                margin-top: 0 !important;
+                padding-top: 0 !important;
             }
 
             /* Agrandir légèrement les écritures lors de l'impression (sauf engagements et conditions générales) */
@@ -506,39 +520,7 @@
                             </div>
                         </div>
 
-                        
-                        <!-- Existing Ecobank Account + credit on same line -->
-                        <div class="form-row question-row" style="margin-top: 15px;">
-                            <div class="multi-column">
-                                <div class="column">
-                                    <label><strong>Avez-vous un autre compte à Ecobank ?</strong></label>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item">
-                                            <input type="radio" id="ecobank-account-yes" name="existing-ecobank-account" value="Oui">
-                                            <label for="ecobank-account-yes">Oui</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="radio" id="ecobank-account-no" name="existing-ecobank-account" value="Non" checked>
-                                            <label for="ecobank-account-no">Non</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column" id="ecobank-credit-column" style="display: none;">
-                                    <label><strong>Avez-vous déjà un crédit à Ecobank ?</strong></label>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item">
-                                            <input type="radio" id="ecobank-credit-yes" name="existing-ecobank-credit" value="Oui">
-                                            <label for="ecobank-credit-yes">Oui</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="radio" id="ecobank-credit-no" name="existing-ecobank-credit" value="Non" checked>
-                                            <label for="ecobank-credit-no">Non</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+        
                         <!-- Other Bank Account + credit on same line -->
                         <div class="form-row question-row" style="margin-top: 15px;">
                             <div class="multi-column">
@@ -556,15 +538,12 @@
                                     </div>
                                 </div>
                                 <div class="column" id="other-bank-credit-column" style="display: none;">
-                                    <label><strong>Avez-vous un crédit dans cette banque ?</strong></label>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item">
-                                            <input type="radio" id="other-bank-credit-yes" name="existing-other-bank-credit" value="Oui">
-                                            <label for="other-bank-credit-yes">Oui</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="radio" id="other-bank-credit-no" name="existing-other-bank-credit" value="Non" checked>
-                                            <label for="other-bank-credit-no">Non</label>
+                                    <div class="form-row">
+                                        <div class="multi-column">
+                                            <div class="column">
+                                                <label for="other-bank-name">Nom de la banque :</label>
+                                                <input type="text" id="other-bank-name" name="other-bank-name" style="height: 20px; width: 100%;">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -573,14 +552,7 @@
 
                         <!-- Conditional other bank details -->
                         <div id="other-bank-name-row" style="display: none; margin-top: 10px;">
-                            <div class="form-row">
-                                <div class="multi-column">
-                                    <div class="column">
-                                        <label for="other-bank-name">Nom de la banque :</label>
-                                        <input type="text" id="other-bank-name" name="other-bank-name" style="height: 20px; width: 100%;">
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <div class="access-methods">
@@ -591,10 +563,10 @@
                                     <label for="debit-card">Carte de débit (Type: </label>
                                     <input type="text" id="debit-card-type" style="width:80px; height:18px; margin-left:6px;">
                                 </div>
-                                <!-- <div class="checkbox-item">
+                                <div class="checkbox-item">
                                     <input type="checkbox" id="prepaid-card" value="Carte prépayée">
                                     <label for="prepaid-card">Carte prépayée</label>
-                                </div> -->
+                                </div>
                                 <div class="checkbox-item">
                                     <input type="checkbox" id="app-mobile" value="Application mobile" style="width: 16px; height: 16px; margin-right:6px;">
                                     <label for="app-mobile">Application mobile</label>
@@ -637,7 +609,6 @@
             </div>
                 <!-- End Section 1 -->
 
-            
 
             <!-- Section 2: About You -->
             <div class="form-section-group" id="form-section-2" data-section="2" style="display: none;">
@@ -783,20 +754,19 @@
                                 <!-- <div class="column">
                                 <label for="pob"><strong>Place of birth:</strong></label>
                                 <input type="text" id="pob" style="height: 20px;">
-                            </div> -->
+                                </div> -->
                                 <div class="column">
                                     <label for="residence-country">Pays & Ville de naissance: </label>
                                     <input type="text" id="residence-country" style="height: 20px;">
                                 </div>
                                 <div class="column">
                                     <label for="date-of-birth">
-                                        <M>Date de naissance (JJ/MM/AA):</strong>
+                                        Date de naissance (JJ/MM/AA):</strong>
                                     </label>
                                     <div class="date-container">
                                         <input type="date" id="date-of-birth" name="date-of-birth" style="height:22px; width:100%;">
                                     </div>
                                 </div>
-
                             </div>
                         </div>
 
@@ -848,9 +818,7 @@
                             <div class="multi-column">
 
                                 <div class="column">
-                                    <label>
-                                        <M>Pièce d’identité:</strong>
-                                    </label>
+                                    <label>Pièce d’identité:</strong></label>
                                     <div class="checkbox-group">
                                         <div class="checkbox-item">
                                             <input type="checkbox" id="national-id">
@@ -882,14 +850,12 @@
                         <div class="form-row">
                             <div class="multi-column">
                                 <div class="column">
-                                    <label for="document-number">
-                                        <M>Numéro du document:</strong>
-                                    </label>
+                                    <label for="document-number">Numéro du document:</strong></label>
                                     <input type="text" id="document-number" style="height: 20px;">
                                 </div>
                                 <div class="column">
                                     <label for="document-issue-date">
-                                        <N>Date de délivrance :(JJ/MM/AA)</strong>
+                                        Date de délivrance :(JJ/MM/AA)</strong>
                                     </label>
                                     <div class="date-container">
                                         <input type="date" id="document-issue-date" name="document-issue-date" style="height:22px; width:100%;">
@@ -897,7 +863,7 @@
                                 </div>
                                 <div class="column">
                                     <label for="document-expiry-date">
-                                        <M>Date d’expiration: (JJ/MM/AA)</strong>
+                                        Date d’expiration: (JJ/MM/AA)</strong>
                                     </label>
                                     <div class="date-container">
                                         <input type="date" id="document-expiry-date" name="document-expiry-date" style="height:22px; width:100%;">
@@ -934,9 +900,7 @@
                                     <input type="text" id="BP" style="height: 20px;">
                                 </div>
                                 <div class="column">
-                                    <label for="pob">
-                                        <N>NIP/NIF/SSN:</strong>
-                                    </label>
+                                    <label for="pob"> NIP/NIF/SSN:</strong></label>
                                     <input type="text" id="pob" style="height: 20px;">
                                 </div>
                                 <div class="column">
@@ -1006,7 +970,7 @@
                                 <!-- Employed Service Box -->
                                 <div class="service-box" style="margin-left: 10px;">
                                     <div class="service-header" style="border-bottom: 2px solid #007eb6;">
-                                        <label for="type-employed">Salarié</label>
+                                        <label for="type-employed"> Salarié</label>
                                         <input type="checkbox" id="type-employed" name="employment-type" value="Salarié">
                                     </div>
                                     <div class="service-products">
@@ -1027,9 +991,15 @@
                                                     </div>
                                                     <div class="checkbox-item">
                                                         <input type="checkbox" id="contract-salaried"
-                                                            name="salaried-terms" value="Contrat">
+                                                            name="salaried-terms" value="CDD">
                                                         <label style="font-size: 9px;"
-                                                            for="contract-salaried">Contrat</label>
+                                                            for="contract-salaried">CDD</label>
+                                                    </div>
+                                                    <div class="checkbox-item">
+                                                        <input type="checkbox" id="contract-salaried"
+                                                            name="salaried-terms" value="Interimaire">
+                                                        <label style="font-size: 9px;"
+                                                            for="contract-salaried">Interimaire</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1213,7 +1183,11 @@
                                 </li>
                             </ul>
                         </div></div>
-                        <div class="section-header">Conditions générales de compte</div>
+                </div>
+
+                <!-- Conditions Générales de Compte Section - Page 3 -->
+                <div class="form-section compact-section" id="conditions-section">
+                    <div class="section-header" id="conditions-generales-section">Conditions générales de compte</div>
                         <div class="section-content">
                         <div class="declaration engagement-content">
                             <ul style="list-style-type: none; color: #007fb6a4;">
@@ -1406,24 +1380,70 @@
 
                             </ul>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Engagement Section -->
+                <div class="form-section compact-section" style="padding-bottom: 0px;">
+                    <div class="section-header">Engagement du Client</div>
+                    <div class="section-content">
+                        <div class="form-row">
+                            <p style="font-size: 12px; margin-bottom: 15px; line-height: 1.6;">
+                                <strong>Attestation:</strong> Le client atteste que les informations fournies dans le présent document sont correctes et complètes. Il reconnaît avoir fourni des informations exactes et s'engage à informer la banque de tout changement ultérieur.
+                            </p>
+                        </div>
 
                         <div class="form-row">
-                            <div class="multi-column">
-                                <div class="column">
-                            
+                            <div class="multi-column" style="gap: 40px;">
+                                <div class="column" style="flex: 1;">
+                                    <label style="display: block; font-weight: bold; margin-bottom: 8px;">Signature du Client:</label>
+                                    <div class="signature-area" style="height: 20px; border: 1px solid #333; border-top: none; border-left: none; border-right: none;"></div>
                                 </div>
-                                <div class="column">
-                                    <div style="display: flex; align-items: flex-end; gap: 10px;">
-                                        <label style="color: #333;">Lu et approuvé:</label>
-                                        <div style="border-bottom: 1px solid #333; width: 300px; height: 30px; display: inline-block;"></div>
+                                <div class="column" style="flex: 0.5;">
+                                    <label style="display: block; font-weight: bold; margin-bottom: 8px;">Date:</label>
+                                    <div style="display: flex; gap: 5px; align-items: flex-end;">
+                                        <div style="flex: 1;">
+                                            <label style="font-size: 10px; display: block; text-align: center; margin-bottom: 2px;">JJ</label>
+                                            <input type="text" maxlength="2" placeholder="JJ" style="width: 100%; height: 30px; text-align: center; font-weight: bold; border: 1px solid #333;">
+                                        </div>
+                                        <div style="font-weight: bold; font-size: 18px;">-</div>
+                                        <div style="flex: 1;">
+                                            <label style="font-size: 10px; display: block; text-align: center; margin-bottom: 2px;">MM</label>
+                                            <input type="text" maxlength="2" placeholder="MM" style="width: 100%; height: 30px; text-align: center; font-weight: bold; border: 1px solid #333;">
+                                        </div>
+                                        <div style="font-weight: bold; font-size: 18px;">-</div>
+                                        <div style="flex: 1.5;">
+                                            <label style="font-size: 10px; display: block; text-align: center; margin-bottom: 2px;">AAAA</label>
+                                            <input type="text" maxlength="4" placeholder="AAAA" style="width: 100%; height: 30px; text-align: center; font-weight: bold; border: 1px solid #333;">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-row" style="margin-top: 20px;">
+                            <div class="multi-column" style="gap: 40px;">
+                                <div class="column" style="flex: 1;">
+                                    <label style="display: block; font-weight: bold; margin-bottom: 8px;">Nom du Client (en majuscules):</label>
+                                    <input type="text" style="width: 100%; height: 30px; border: 1px solid #ccc;">
+                                </div>
+                                <div class="column" style="flex: 0.5;">
+                                    <label style="display: block; font-weight: bold; margin-bottom: 8px;">Lieu:</label>
+                                    <input type="text" style="width: 100%; height: 30px; border: 1px solid #ccc;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row" style="margin-top: 20px;">
+                            <div class="column">
+                                <label style="display: block; font-weight: bold; margin-bottom: 8px;">Montant du Premier Versement (XAF):</label>
+                                <input type="number" placeholder="0,00" style="width: 300px; height: 35px; border: 1px solid #007eb6; padding: 5px; font-size: 14px; font-weight: bold;">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- Juridique Section -->
 
+                <!-- Juridique Section -->
                 <div class="form-section compact-section" style="padding-bottom: 0px;">
                     <div class="section-header">Confirmation pour les demandes assistées</div>
                     <div class="section-content">
@@ -1452,7 +1472,7 @@
                                 </div>
                                 <div class="column">
                                     <label for="interpreterAddress">Signature:</label>
-                                    <div class="signature-area" style="height: 50px;"></div>
+                                    <div class="signature-area" style="height: 25px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -1470,19 +1490,19 @@
                             
                                 <div class="column">
                                     <label for="account-officer">Chargé de clientèle (CSO):</label>
-                                    <input type="text" id="account-officer" name="account-officer" style="height: 20px;" readonly>
+                                    <input type="text" id="account-officer" name="account-officer" style="height: 30px;" readonly>
                                 </div>
-                                <div class="column">
+                                <!-- <div class="column">
                                     <label for="account-handler">Chargé de compte:</label>
                                     <input type="text" id="account-handler" style="height: 20px;">
-                                </div>
+                                </div> -->
                                 <div class="column">
                                     <label for="approved-by">Chef D'agence:</label>
-                                    <input type="text" id="approved-by" style="height: 24px;">
+                                    <input type="text" id="approved-by" style="height: 30px;">
                                 </div>
                                 <div class="column">
                                     <label for="branch-code">Code Agence:</label>
-                                    <input type="text" id="branch-code" name="branch_code" style="height: 20px;">
+                                    <input type="text" id="branch-code" name="branch_code" style="height: 30px;">
                                 </div>
                             </div>
                         </div>

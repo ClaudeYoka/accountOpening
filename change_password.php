@@ -3,7 +3,7 @@ session_name('ACCOUNT_OPENING_SESSION');
 session_start();
 require_once __DIR__ . '/includes/security_config.php';
 include('includes/config.php');
-include('includes/audit_logger.php');
+require_once('includes/audit_logger.php');
 include('includes/flash.php');
 
 // Verifier que l'utilisateur est connecte

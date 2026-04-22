@@ -4,8 +4,8 @@
 // include session while capturing any unintended output (prevent HTML redirect from being sent)
 ob_start();
 include('../includes/session.php');
-include('../includes/audit_logger.php');
-include('../includes/RateLimiter.php');
+require_once('../includes/audit_logger.php');
+require_once('../includes/RateLimiter.php');
 $__sess_out = ob_get_clean();
 // if session include emitted a redirect script, treat as unauthorized
 if ($__sess_out && (stripos($__sess_out, 'window.location') !== false || stripos($__sess_out, '<script') !== false)){
@@ -15,7 +15,7 @@ if ($__sess_out && (stripos($__sess_out, 'window.location') !== false || stripos
     exit;
 }
 
-include('../includes/config.php');
+require_once('../includes/config.php');
 // Disable direct display of PHP errors (they break JSON responses) and enable logging
 ini_set('display_errors', 0);
 error_reporting(E_ALL);

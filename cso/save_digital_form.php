@@ -28,10 +28,9 @@ try {
         error_log('[save_digital_form] sortie incomprise depuis session.php: ' . trim(strip_tags($sess_output)));
     }
 
-    include('../includes/config.php');
-    include('../includes/flexcube_helpers.php');
-    include('../includes/audit_helpers.php');
-    include('../includes/audit_logger.php');
+    require_once('../includes/config.php');
+    require_once('../includes/flexcube_helpers.php');
+    require_once('../includes/audit_helpers.php');
 
     // Vérifier la connexion DB
     if (!$conn) {

@@ -1,7 +1,7 @@
 <?php
     session_start();
     include('includes/config.php');
-    include('includes/audit_logger.php');
+    require_once('includes/audit_logger.php');
 
     if(isset($_SESSION['alogin'])) {
         $emp_id = $_SESSION['alogin'];

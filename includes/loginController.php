@@ -1,7 +1,7 @@
 <?php
 // Session déjà démarrée dans index.php, pas besoin de la redémarrer
 include('config.php');
-include('audit_logger.php');
+require_once('audit_logger.php');
 include('RateLimiter.php');
 
 // Variable utilisée dans index.php

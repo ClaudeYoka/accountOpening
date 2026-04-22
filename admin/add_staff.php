@@ -1,6 +1,6 @@
 <?php include('includes/header.php')?>
 <?php include('../includes/session.php')?>
-<?php include('../includes/audit_logger.php')?>
+<?php require_once('../includes/audit_logger.php')?>
 
 <?php
 // Fonction de validation côté serveur

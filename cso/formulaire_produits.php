@@ -35,12 +35,7 @@
                                 <input type="text" id="account-number" name="account" class="form-control" autocomplete="off" placeholder="Saisir le numéro de compte ici" required>
                             </div>
                         </div>
-                        <!-- <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Code Agence</label>
-                            <div class="col-sm-2">
-                                <input type="text" id="branch-code" name="branch" class="form-control" placeholder="Optionnel">
-                            </div>
-                        </div> -->
+                       
 
                         <div class="form-group row">
                             <div class="col-sm-8">

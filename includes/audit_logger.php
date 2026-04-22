@@ -4,6 +4,9 @@
  * Logs all critical actions for compliance and debugging
  */
 
+// Prevent redeclaration when file is included multiple times
+if (!class_exists('AuditLogger')) {
+
 class AuditLogger {
     private static $logFile = __DIR__ . '/../logs/audit.log';
     private static $dbTable = 'audit_logs';
@@ -255,6 +258,7 @@ class AuditLogger {
         return 0;
     }
 }
+} // End of if (!class_exists('AuditLogger'))
 
 // Convenience functions for common audit actions
 if (!function_exists('audit_log_chequier_status_change')) {
@@ -267,49 +271,65 @@ function audit_log_chequier_status_change($conn, $requestId, $oldStatus, $newSta
 }
 }
 
+if (!function_exists('audit_log_export')) {
 function audit_log_export($conn, $type, $filters = [], $recordCount = 0) {
     AuditLogger::log('EXPORT_' . strtoupper($type), [
         'filters' => $filters,
         'record_count' => $recordCount
     ], $conn);
 }
+}
 
+if (!function_exists('audit_log_login')) {
 function audit_log_login($conn, $userId, $success = true) {
     AuditLogger::log($success ? 'LOGIN_SUCCESS' : 'LOGIN_FAILED', [
         'user_id' => $userId
     ], $conn);
 }
+}
 
+if (!function_exists('audit_log_logout')) {
 function audit_log_logout($conn, $userId) {
     AuditLogger::log('LOGOUT', [
         'user_id' => $userId
     ], $conn);
 }
+}
 
+if (!function_exists('audit_log_user_action')) {
 function audit_log_user_action($conn, $action, $userId, $details = []) {
     AuditLogger::log('USER_' . strtoupper($action), array_merge([
         'user_id' => $userId
     ], $details), $conn);
 }
+}
 
+if (!function_exists('audit_log_form_submission')) {
 function audit_log_form_submission($conn, $formType, $submissionId, $details = []) {
     AuditLogger::log('FORM_SUBMIT_' . strtoupper($formType), array_merge([
         'submission_id' => $submissionId
     ], $details), $conn);
 }
+}
 
+if (!function_exists('audit_log_admin_action')) {
 function audit_log_admin_action($conn, $action, $details = []) {
     AuditLogger::log('ADMIN_' . strtoupper($action), $details, $conn);
 }
+}
 
+if (!function_exists('audit_log_error')) {
 function audit_log_error($conn, $errorType, $message, $context = []) {
     AuditLogger::log('ERROR_' . strtoupper($errorType), [
         'message' => $message,
         'context' => $context
     ], $conn);
 }
+}
 
+if (!function_exists('audit_log_security_event')) {
 function audit_log_security_event($conn, $eventType, $details = []) {
     AuditLogger::log('SECURITY_' . strtoupper($eventType), $details, $conn);
+}
 }
 ?>
