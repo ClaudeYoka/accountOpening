@@ -70,7 +70,6 @@ foreach ($columns_in_table as $column) {
         'nidentificationfiscale' => ['nidentificationfiscale', 'n_identification_fiscale'],
         'datededelivrance' => ['datededelivrance', 'date_delivrance'],
         'dateexpiration' => ['dateexpiration', 'date_expiration'],
-        'numero_de_referenceoptionnel' => ['numero_de_referenceoptionnel', 'numero_de_reference_optionnel'],
         'deuxiemetelephone' => ['deuxiemetelephone', 'deuxieme_telephone'],
         'adressemail' => ['adressemail', 'adresse_mail'],
         'nationalite_1' => ['nationalite_1', 'nationalite_cordonnee'],

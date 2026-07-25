@@ -75,7 +75,13 @@
 						<div class="dropdown-divider"></div>
 					</li>
 
-					<li class="dropdown">
+					<!-- <li>
+						<a href="monitoring" class="dropdown-toggle no-arrow menu-item-ecobank">
+							<span class="micon fa fa-cogs"></span><span class="mtext">Monitoring</span>
+						</a>
+					</li> -->
+
+					<!-- <li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle menu-item-ecobank">
 							<span class="micon fa fa fa-cog"></span><span class="mtext">Monitoring</span>
 						</a>
@@ -86,11 +92,11 @@
 							<li><a href="monitoring_security" target="_blank"><i class="fa fa-shield-alt"></i> Sécurité</a></li>
 							<li><a href="monitoring_grafana" target="_blank"><i class="fa fa-external-link-alt"></i> Grafana Direct</a></li>
 						</ul>
-					</li>
+					</li> -->
 
-					<li>
+					<!-- <li>
 						<div class="dropdown-divider"></div>
-					</li>
+					</li> -->
 
 					<li>
 						<a href="../logout.php" class="dropdown-toggle no-arrow menu-item-ecobank logout-item">

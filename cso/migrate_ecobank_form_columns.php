@@ -3,7 +3,10 @@
 // Simple one-off script to backfill dedicated columns from JSON `data` in ecobank_form_submissions
 // Run from CLI or via browser (recommended: CLI)
 
-include('../includes/config.php');
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+
+
 
 function debug_log_local($msg){
     $path = __DIR__ . '/../logs/save_ecobank_form_debug.log';

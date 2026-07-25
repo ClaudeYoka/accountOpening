@@ -1,18 +1,32 @@
-<?php include('includes/header.php')?>
 <?php include('../includes/session.php')?>
+<?php include('../includes/config.php')?>
+<?php include('includes/header.php')?>
+<?php require_once('../includes/audit_logger.php')?>
 <?php
-if(isset($_POST['new_update']))
-{
+/** @var mysqli $conn */
+if (empty($conn) || !($conn instanceof mysqli)) {
+    echo "<div style='padding:20px;color:#900'>Connexion à la base de données introuvable.</div>";
+    exit;
+}
+
+// Vérifier que emp_id est disponible dans la session
+if (!isset($_SESSION['emp_id'])) {
+    echo "<div style='padding:20px;color:#900'>Session non trouvée. Veuillez vous reconnecter.</div>";
+    exit;
+}
+
+if (isset($_POST['new_update'])) {
     // Validation du mot de passe
-    $newpassword = $_POST['newpassword'];
+    $newPassword = $_POST['newpassword'];
+
     $errors = [];
 
     // Validation du mot de passe
-    if (empty($newpassword)) {
+    if (empty($newPassword)) {
         $errors[] = "Le mot de passe est requis";
-    } elseif (strlen($newpassword) < 8) {
+    } elseif (strlen($newPassword) < 8) {
         $errors[] = "Le mot de passe doit contenir au moins 8 caractères";
-    } elseif (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/", $newpassword)) {
+    } elseif (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/", $newPassword)) {
         $errors[] = "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule et un chiffre";
     }
 
@@ -21,35 +35,37 @@ if(isset($_POST['new_update']))
         return;
     }
 
-	$empid=$session_id;
-	$hashePassword=password_hash($newpassword, PASSWORD_DEFAULT);
-
+    $empid = $_SESSION['emp_id'];
+    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
     $stmt = mysqli_prepare($conn, "UPDATE tblemployees SET Password=? WHERE emp_id=?");
-    mysqli_stmt_bind_param($stmt, "ss", $hashePassword, $session_id);
+    mysqli_stmt_bind_param($stmt, "ss", $hashedPassword, $empid);
     $result = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
-
+    
     if ($result) {
-     	echo "<script>alert('Mot de passe modifer avec succès');</script>";
-     	echo "<script type='text/javascript'> document.location = 'staff_profile.php'; </script>";
-	} else{
-	  die(mysqli_error($conn));
-   }
-
+        AuditLogger::log('password_changed', [
+            'target_user_id' => $empid,
+            'changed_by' => $empid,
+            'page' => 'admin/change_password.php'
+        ], $conn);
+        echo "<script>alert('Mot de passe modifié avec succès');</script>";
+        echo "<script type='text/javascript'> document.location = 'staff_profile'; </script>";
+    } else {
+        die(mysqli_error($conn));
+    }
 }
 
 if (isset($_POST["update_image"])) {
+    $image = $_FILES['image']['name'];
 
-	$image = $_FILES['image']['name'];
-
-	if(!empty($image)){
-		move_uploaded_file($_FILES['image']['tmp_name'], '../uploads/'.$image);
-		$location = $image;	
-	}
-	else {
-		echo "<script>alert('Please Select Picture to Update');</script>";
-	}
+    if(!empty($image)){
+        move_uploaded_file($_FILES['image']['tmp_name'], '../uploads/'.$image);
+        $location = $image;	
+    }
+    else {
+        echo "<script>alert('Please Select Picture to Update');</script>";
+    }
 
     $stmt = mysqli_prepare($conn, "UPDATE tblemployees SET location=? WHERE emp_id=?");
     mysqli_stmt_bind_param($stmt, "ss", $location, $session_id);

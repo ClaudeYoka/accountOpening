@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Tableau de Bord - Tests et Diagnostics</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        .card-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .card-footer {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #764ba2;
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status.active {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .status.pending {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .info-box {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid white;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>🧪 Tableau de Bord - Tests et Diagnostics</h1>
+        <p class="subtitle">
+            Centre de test pour les problèmes "Failed to fetch" et remplissage du formulaire d'ouverture de compte
+        </p>
+    </div>
+
+    <!-- Tests Directs -->
+    <div class="section">
+        <h2 class="section-title">🎯 Tests Directs</h2>
+        <div class="info-box">
+            Les tests directs vous permettent de tester rapidement chaque composant du système.
+        </div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">🔍</span>
+                    Test API - Fetch Account
+                    <span class="status active">ACTIF</span>
+                </div>
+                <p class="card-description">
+                    Testez l'API principal (fetch_account_flexcube.php) qui récupère les données depuis Oracle.
+                    Montre les résultats en temps réel avec logs détaillés.
+                </p>
+                <div class="card-footer">
+                    <a href="cso/test_fetch_simple.html" class="btn btn-primary" target="_blank">Ouvrir Test</a>
+                    <a href="cso/test_fetch_simple.html?account=2100067842" class="btn btn-secondary" target="_blank">Exemple</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">📋</span>
+                    Formulaire d'Ouverture
+                    <span class="status active">ACTIF</span>
+                </div>
+                <p class="card-description">
+                    Ouvrez le formulaire complet d'ouverture de compte et testez la récupération automatique des données.
+                    Ouvrez F12 (Console) pour voir les logs.
+                </p>
+                <div class="card-footer">
+                    <a href="cso/ecobank_account_form.php" class="btn btn-primary" target="_blank">Ouvrir Formulaire</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">📊</span>
+                    Test RIB Lookup
+                    <span class="status active">ACTIF</span>
+                </div>
+                <p class="card-description">
+                    Testez l'API rib_lookup.php qui retourne les données du compte pour le formulaire des produits.
+                </p>
+                <div class="card-footer">
+                    <a href="test_rib_lookup.php" class="btn btn-primary" target="_blank">Ouvrir Test</a>
+                    <a href="test_rib_lookup.php?account=2100067842" class="btn btn-secondary" target="_blank">Exemple</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diagnostics -->
+    <div class="section">
+        <h2 class="section-title">🔧 Outils de Diagnostic</h2>
+        <div class="info-box">
+            Ces outils vous aident à identifier et réparer les problèmes.
+        </div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">🐛</span>
+                    Debug Failed to Fetch
+                    <span class="status pending">EN DEV</span>
+                </div>
+                <p class="card-description">
+                    Outil de debug pour identifier pourquoi "Failed to fetch" s'affiche.
+                    Teste chaque couche du système séparément.
+                </p>
+                <div class="card-footer">
+                    <a href="debug_failed_fetch.php" class="btn btn-primary" target="_blank">Ouvrir Debug</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">📝</span>
+                    Lecteur Error Log
+                    <span class="status active">ACTIF</span>
+                </div>
+                <p class="card-description">
+                    Affiche les dernières erreurs PHP du fichier error.log.
+                    Filtré pour les logs pertinents.
+                </p>
+                <div class="card-footer">
+                    <a href="check_error_log.php" class="btn btn-primary" target="_blank">Lire Logs</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">✅</span>
+                    Configuration Check
+                    <span class="status active">ACTIF</span>
+                </div>
+                <p class="card-description">
+                    Vérifie la configuration système: OCI8, PHP, .env, etc.
+                </p>
+                <div class="card-footer">
+                    <a href="diagnostic.php" class="btn btn-primary" target="_blank">Vérifier Config</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flux Complet -->
+    <div class="section">
+        <h2 class="section-title">🚀 Tests de Flux Complet</h2>
+        <div class="info-box">
+            Ces tests vérifient l'ensemble du flux de récupération et remplissage des données.
+        </div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">🔄</span>
+                    Test Flux Complet
+                    <span class="status active">ACTIF</span>
+                </div>
+                <p class="card-description">
+                    Teste l'ensemble du flux: OCI8 → Oracle → fetch_account_flexcube → rib_lookup → Frontend
+                </p>
+                <div class="card-footer">
+                    <a href="test_account_name_flow.php" class="btn btn-primary" target="_blank">Lancer Test</a>
+                    <a href="test_account_name_flow.php?account=2100067842" class="btn btn-secondary" target="_blank">Exemple</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">🔗</span>
+                    Test API Principal
+                    <span class="status active">ACTIF</span>
+                </div>
+                <p class="card-description">
+                    Test de l'API fetch_account_flexcube.php avec affichage détaillé des résultats.
+                </p>
+                <div class="card-footer">
+                    <a href="test_main_api.php" class="btn btn-primary" target="_blank">Ouvrir Test</a>
+                    <a href="test_main_api.php?account=2100067842" class="btn btn-secondary" target="_blank">Exemple</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Documentation -->
+    <div class="section">
+        <h2 class="section-title">📚 Documentation</h2>
+        <div class="info-box">
+            Consultez la documentation pour comprendre les corrections et comment diagnostiquer les problèmes.
+        </div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">📖</span>
+                    Diagnostic: Failed to Fetch
+                </div>
+                <p class="card-description">
+                    Guide complet pour diagnostiquer et réparer l'erreur "Failed to fetch".
+                    Inclutsolutions détaillées pour chaque problème.
+                </p>
+                <div class="card-footer">
+                    <a href="DIAGNOSTIC_FAILED_FETCH.md" class="btn btn-primary" target="_blank">Lire Guide</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">✨</span>
+                    Résumé Complet Corrections
+                </div>
+                <p class="card-description">
+                    Résumé complet de tous les changements effectués, modifications détaillées, checklist.
+                </p>
+                <div class="card-footer">
+                    <a href="RESUME_CORRECTIONS_COMPLETE.md" class="btn btn-primary" target="_blank">Lire Résumé</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">🏷️</span>
+                    Fixes - Intitulé Compte
+                </div>
+                <p class="card-description">
+                    Documentation sur la correction du champ "Intitulé du Compte" (account_name).
+                </p>
+                <div class="card-footer">
+                    <a href="FIXES_ACCOUNT_NAME.md" class="btn btn-primary" target="_blank">Lire Doc</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="section">
+        <h2 class="section-title">⚡ Accès Rapide</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="card-title">
+                    <span class="card-icon">🌐</span>
+                    URL Locals
+                </div>
+                <p class="card-description">
+                    Accès direct aux applications principales.
+                </p>
+                <div class="card-footer">
+                    <a href="http://localhost/account_opening/" class="btn btn-primary" target="_blank">Root</a>
+                    <a href="http://localhost/account_opening/cso/" class="btn btn-secondary" target="_blank">CSO</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>🧪 Tableau de Bord de Diagnostics & Tests</p>
+        <p>Dernière mise à jour: 2026-05-05</p>
+    </div>
+</div>
+</body>
+</html>

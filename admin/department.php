@@ -1,9 +1,13 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php 
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
 <?php include('../includes/audit_helpers.php')?>
 
 <?php 
-	 if (isset($_GET['delete'])) {
+	if (isset($_GET['delete'])) {
 		$department_id = $_GET['delete'];
 		$sql = "DELETE FROM tbldepartments where id = ".$department_id;
 		$result = mysqli_query($conn, $sql);

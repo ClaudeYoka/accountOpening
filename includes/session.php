@@ -11,11 +11,20 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-i
 ini_set('session.use_strict_mode', '1');
 ini_set('session.use_only_cookies', '1');
 ini_set('session.cookie_httponly', '1');
-ini_set('session.cookie_secure', '0'); // 0 pour développement local, 1 en production HTTPS
+$secureCookie = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
+ini_set('session.cookie_secure', $secureCookie ? '1' : '0');
 ini_set('session.cookie_samesite', 'Strict');
 ini_set('session.gc_maxlifetime', 3600); // 1 heure
 
 require_once __DIR__ . '/security_config.php';
+include_once __DIR__ . '/config.php';
+
+/** @var mysqli $conn */
+if (empty($conn) || !($conn instanceof mysqli)) {
+    error_log('Session error: database connection not available.');
+    echo "<div style='padding:20px;color:#900'>Connexion à la base de données introuvable.</div>";
+    exit;
+}
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_name('ACCOUNT_OPENING_SESSION');
@@ -50,15 +59,23 @@ if (!function_exists('verify_csrf_token')) {
 }
 
 //Check whether the session variable SESS_MEMBER_ID is present or not
-if (!isset($_SESSION['alogin']) || (trim($_SESSION['alogin']) == '')) { ?>
-<script>
-window.location = "../index.php";
-</script>
-<?php
+$session_id = '';
+$session_role = '';
+$session_depart = '';
+
+if (isset($_SESSION['alogin']) && trim((string) $_SESSION['alogin']) !== '') {
+    $session_id = trim((string) $_SESSION['alogin']);
+} elseif (isset($_SESSION['emp_id']) && trim((string) $_SESSION['emp_id']) !== '') {
+    $session_id = trim((string) $_SESSION['emp_id']);
 }
-$session_id=$_SESSION['alogin'];
-$session_role = $_SESSION['arole'];
-$session_depart = $_SESSION['adepart'];
+
+if ($session_id === '') {
+    header('Location: ../index.php');
+    exit;
+}
+
+$session_role = $_SESSION['arole'] ?? '';
+$session_depart = $_SESSION['adepart'] ?? '';
 
 // Stocker emp_id dans la session
 if (!isset($_SESSION['emp_id'])) {
@@ -66,11 +83,13 @@ if (!isset($_SESSION['emp_id'])) {
 }
 
 // Récupérer le nom complet de l'utilisateur depuis la base de données
-include('config.php');
-$query = "SELECT FirstName, LastName FROM tblemployees WHERE emp_id = '$session_id'";
-$result = mysqli_query($conn, $query);
-if ($result && mysqli_num_rows($result) > 0) {
-    $user_info = mysqli_fetch_assoc($result);
-    $_SESSION['user_fullname'] = $user_info['FirstName'] . ' ' . $user_info['LastName'];
+// config.php est déjà inclus avant session.php dans tous les fichiers
+if (isset($conn) && $conn instanceof mysqli) {
+    $query = "SELECT FirstName, LastName FROM tblemployees WHERE emp_id = '$session_id'";
+    $result = mysqli_query($conn, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $user_info = mysqli_fetch_assoc($result);
+        $_SESSION['user_fullname'] = $user_info['FirstName'] . ' ' . $user_info['LastName'];
+    }
 }
 ?>

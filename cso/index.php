@@ -1,6 +1,15 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php 
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
+
 <body>
+
+
+	<?php include('includes/preloader.php')?>
+
 
 	<?php include('includes/navbar.php')?>
 
@@ -33,7 +42,7 @@
 
 			<div class="card-box mb-30">
 				<div class="pd-20">
-					<h2 class="text-blue h4">Mes Comptes Ouverts au cours de 7 derniers jours</h2>
+					<h2 class="text-blue h4">Mes Comptes Ouverts au cours des 7 derniers jours</h2>
 				</div>
 				<div class="pb-20">
 					<table class="data-table table hover multiple-select-row nowrap">

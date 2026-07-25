@@ -1,6 +1,7 @@
-<?php
-include('../includes/session.php');
-include('../includes/config.php');
+<?php 
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+
 include('../includes/audit_helpers.php');
 
 // Récupérer les données POST
@@ -55,9 +56,9 @@ if ($result) {
 
     // Récupérer les infos du client et du CSO pour envoyer les notifications
     $query = "SELECT efs.id, efs.customer_name, efs.account_number, efs.emp_id, efs.email, te.EmailId
-              FROM ecobank_form_submissions efs
-              LEFT JOIN tblemployees te ON efs.emp_id = te.emp_id
-              WHERE efs.id = $request_id";
+                FROM ecobank_form_submissions efs
+                LEFT JOIN tblemployees te ON efs.emp_id = te.emp_id
+                WHERE efs.id = $request_id";
     
     $res = mysqli_query($conn, $query);
     if ($res && $row = mysqli_fetch_assoc($res)) {

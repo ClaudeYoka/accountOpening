@@ -11,7 +11,7 @@
 class RateLimiter {
     private $pdo;
     private $table = 'rate_limit_logs';
-    private $cleanup_interval = 3600; // Cleanup old records every 1 hour
+    private $cleanup_interval = 3600; // Déconnecter les utilisateurs toutes les heures
     
     public function __construct($pdo) {
         $this->pdo = $pdo;

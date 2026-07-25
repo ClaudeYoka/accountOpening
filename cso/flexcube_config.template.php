@@ -101,6 +101,9 @@ define('FLEXCUBE_FALLBACK_TO_LOCAL_DB', true);
 
 /**
  * Configuration du service Flexcube au démarrage
+ * NOTE: Migration to OCI8 direct Oracle connection completed.
+ * This function is deprecated and kept for backwards compatibility only.
+ * All Flexcube data retrieval now uses OCI8 native functions via flexcube_helpers.php
  */
 if (!function_exists('init_flexcube')) {
     function init_flexcube() {
@@ -109,25 +112,16 @@ if (!function_exists('init_flexcube')) {
         if (file_exists($flexcube_path)) {
             include_once($flexcube_path);
             
-            // Configurer l'instance
-            $api = getFlexcubeAPI();
+            // Legacy API code removed - using OCI8 direct connection instead
+            // The flexcube_helpers.php file now uses native OCI8 functions:
+            // - connectToFlexcubeDatabase() for OCI connections
+            // - fetchAccountFromOracleDatabase() for data retrieval
+            // - fetchAccountFromFlexcube() wrapper for compatibility
+            // - fetchAccountWithFallback() for fallback scenarios
             
-            // Appliquer les paramètres si définis
-            if (defined('FLEXCUBE_API_URL')) {
-                $api->setApiUrl(FLEXCUBE_API_URL);
-            }
-            
-            if (defined('FLEXCUBE_VERIFY_SSL')) {
-                $api->setSSLVerification(FLEXCUBE_VERIFY_SSL);
-            }
-            
-            if (defined('FLEXCUBE_SOURCE_CODE') && defined('FLEXCUBE_AFFILIATE_CODE')) {
-                $api->setAuthConfig(FLEXCUBE_SOURCE_CODE, FLEXCUBE_AFFILIATE_CODE);
-            }
-            
-            return true;
+            error_log("[Flexcube] OCI8 direct connection initialized via flexcube_helpers.php");
         }
-        return false;
+        return true;
     }
 }
 

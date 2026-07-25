@@ -1,5 +1,18 @@
+<?php 
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
+
+<?php
+// Vérifier que l'utilisateur est authentifié AVANT d'inclure header.php
+if (!isset($_SESSION['emp_id'])) {
+    header('Location: ../index.php');
+    exit('Authentification requise');
+}
+?>
+
 <?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
 
 <?php
 // Récupérer les demandes de chéquier à partir de tblcompte
@@ -151,10 +164,12 @@ if ($result && mysqli_num_rows($result) > 0) {
             $chequier_requests[] = $row;
 
             // Envoyer une notification au CSO responsable si nécessaire
-            $check_notif = mysqli_query($conn, "SELECT id FROM tblnotification WHERE message LIKE '%" . $row['id'] . "%' AND emp_id = '" . mysqli_real_escape_string($conn, $_SESSION['emp_id']) . "'");
-            if ($check_notif && mysqli_num_rows($check_notif) == 0 && $row['emp_id']) {
-                $msg_cso = "Demande de chéquier effectuée pour le compte " . $row['account_number'] . " - Client: " . $row['client_name'] . " (Demande #" . $row['id'] . ")";
-                create_notification($conn, $_SESSION['emp_id'], $msg_cso, 'chequier_created', $row['id']);
+            if (isset($_SESSION['emp_id']) && !empty($_SESSION['emp_id'])) {
+                $check_notif = mysqli_query($conn, "SELECT id FROM tblnotification WHERE message LIKE '%" . $row['id'] . "%' AND emp_id = '" . mysqli_real_escape_string($conn, $_SESSION['emp_id']) . "'");
+                if ($check_notif && mysqli_num_rows($check_notif) == 0 && $row['emp_id']) {
+                    $msg_cso = "Demande de chéquier effectuée pour le compte " . $row['account_number'] . " - Client: " . $row['client_name'] . " (Demande #" . $row['id'] . ")";
+                    create_notification($conn, $_SESSION['emp_id'], $msg_cso, 'chequier_created', $row['id']);
+                }
             }
         }
     }

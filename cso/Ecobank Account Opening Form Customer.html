@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecobank Account Opening Form</title>
     <link rel="stylesheet" type="text/css" href="../vendors/styles/ao_formulaire.css">
-    <link rel="ecobank-bg" sizes="180x180" href="../vendors/images/ecobank-bg.png">
+    <link rel="icon" sizes="180x180" href="../vendors/images/ecobank-bg.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="../vendors/images/ecobank-bg.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="../vendors/images/ecobank-bg.png">
     <style>
@@ -287,9 +287,14 @@
                 display: none !important;
             }
 
+            /* Search header hidden on print */
+            #search-header, #loader {
+                display: none !important;
+            }
+
             /* Réduire la hauteur de la signature à l'impression */
             .signature-area {
-                height: 15px !important;
+                height: 10px !important;
                 margin: 0 !important;
                 padding: 0 !important;
             }
@@ -330,6 +335,7 @@
                 padding: 5px 7px !important;
             }
         }
+
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -698,22 +704,17 @@
                         </div>
 
                     
+
                         <!-- Name fields in a row -->
                         <div class="form-row">
                             <div class="multi-column">
                                 <div class="column">
-                                    <label for="first-name">Prénom (S):</label>
-                                    <input type="text" id="first-name" style="height: 20px;">
-                                </div>
-                                <!-- <div class="column">
-                                    <label for="middle-name">
-                                        <M>Deuxième prénom:</strong>
-                                    </label>
-                                    <input type="text" id="middle-name" style="height: 20px;">
-                                </div> -->
-                                <div class="column">
                                     <label for="last-name">Nom de famille: </label>
-                                    <input type="text" id="last-name" style="height: 20px;">
+                                    <input type="text" id="last-name">
+                                </div>
+                                <div class="column">
+                                    <label for="prenoms">Prénom (S):</label>
+                                    <input type="text" id="prenoms">
                                 </div>
                             </div>
                         </div>
@@ -896,17 +897,11 @@
                         <div class="form-row">
                             <div class="multi-column">
                                 <div class="column">
-                                    <label for="BP">Adresse Postale:</label>
-                                    <input type="text" id="BP" style="height: 20px;">
+                                    <label for="address">Adresse du client (depuis compte Flexcube):</label>
+                                    <input type="text" id="address" style="height: 20px;">
                                 </div>
-                                <div class="column">
-                                    <label for="pob"> NIP/NIF/SSN:</strong></label>
-                                    <input type="text" id="pob" style="height: 20px;">
-                                </div>
-                                <div class="column">
-                                    <label for="pob">Informations fiscales:</strong></label>
-                                    <input type="text" id="pob" style="height: 20px;">
-                                </div>
+                                
+                                
                                 
                             </div>
                         </div>
@@ -915,16 +910,20 @@
 
                             <div class="multi-column">
                                 <div class="column">
+                                    <label for="BP">Adresse Postale:</label>
+                                    <input type="text" id="BP" style="height: 20px;">
+                                </div>
+                                <!-- <div class="column">
                                     <label for="contact_adress">Adresse résidentielle (Rue/Avenue):</label>
                                     <input type="text" id="contact_adress" style="height: 20px;">
+                                </div> -->
+                                <div class="column">
+                                    <label for="pob"> NIP/NIF/SSN:</strong></label>
+                                    <input type="text" id="pob" style="height: 20px;">
                                 </div>
                                 <div class="column">
-                                    <label for="country">Ville:</label>
-                                    <input type="text" id="country" style="height: 20px;">
-                                </div>
-                                <div class="column">
-                                    <label for="country">Pays:</label>
-                                    <input type="text" id="pays" style="height: 20px;">
+                                    <label for="pob">Informations fiscales:</strong></label>
+                                    <input type="text" id="pob" style="height: 20px;">
                                 </div>
                             </div>
 
@@ -1394,10 +1393,10 @@
                         </div>
 
                         <div class="form-row">
-                            <div class="multi-column" style="gap: 40px;">
+                            <div class="multi-column" style="gap: 30px;">
                                 <div class="column" style="flex: 1;">
                                     <label style="display: block; font-weight: bold; margin-bottom: 8px;">Signature du Client:</label>
-                                    <div class="signature-area" style="height: 20px; border: 1px solid #333; border-top: none; border-left: none; border-right: none;"></div>
+                                    <div class="signature-area" style="height: 10px; border: 1px solid #333; border-top: none; border-left: none; border-right: none;"></div>
                                 </div>
                                 <div class="column" style="flex: 0.5;">
                                     <label style="display: block; font-weight: bold; margin-bottom: 8px;">Date:</label>
@@ -1421,23 +1420,11 @@
                             </div>
                         </div>
 
-                        <div class="form-row" style="margin-top: 20px;">
-                            <div class="multi-column" style="gap: 40px;">
-                                <div class="column" style="flex: 1;">
-                                    <label style="display: block; font-weight: bold; margin-bottom: 8px;">Nom du Client (en majuscules):</label>
-                                    <input type="text" style="width: 100%; height: 30px; border: 1px solid #ccc;">
-                                </div>
-                                <div class="column" style="flex: 0.5;">
-                                    <label style="display: block; font-weight: bold; margin-bottom: 8px;">Lieu:</label>
-                                    <input type="text" style="width: 100%; height: 30px; border: 1px solid #ccc;">
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="form-row" style="margin-top: 20px;">
                             <div class="column">
                                 <label style="display: block; font-weight: bold; margin-bottom: 8px;">Montant du Premier Versement (XAF):</label>
-                                <input type="number" placeholder="0,00" style="width: 300px; height: 35px; border: 1px solid #007eb6; padding: 5px; font-size: 14px; font-weight: bold;">
+                                <input type="number"  style="width: 300px; height: 35px; border: 1px solid #007eb6; padding: 5px; font-size: 14px; font-weight: bold;">
                             </div>
                         </div>
                     </div>
@@ -1528,7 +1515,247 @@
 
                 <!-- Add this script at the end of your document before the closing body tag -->
                 <script>
-                    // Section Navigation System
+                // ============================================
+                // ACCOUNT SEARCH FUNCTIONALITY
+                // ============================================
+                
+                // Show/hide loader
+                function showLoader(show) {
+                    const loader = document.getElementById('loader');
+                    if (show) {
+                        loader.style.display = 'flex';
+                    } else {
+                        loader.style.display = 'none';
+                    }
+                }
+                
+                // Show message in search header
+                function showMessage(message, isError = false) {
+                    const msgEl = document.getElementById('generateMessage');
+                    msgEl.textContent = message;
+                    msgEl.style.background = isError ? 'rgba(220,53,69,0.2)' : 'rgba(0,0,0,0.2)';
+                    msgEl.style.color = isError ? '#ff6b6b' : '#fff';
+                }
+                
+                // Fill form from account data
+                function fillFormFromData(data) {
+                    console.log('[fillFormFromData] Données reçues:', data);
+                    
+                    // Gérer les données imbriquées (data.data ou directement data)
+                    let sourceData = data.data || data;
+                    console.log('[fillFormFromData] Source de données utilisée:', sourceData);
+                    
+                    // Account number
+                    const accountField = document.getElementById('form-bank-account-number');
+                    if (accountField && sourceData.account_number) {
+                        accountField.value = sourceData.account_number;
+                        console.log('[fillFormFromData] Account number:', sourceData.account_number);
+                    }
+                    
+                    // Customer ID
+                    const customerIdField = document.getElementById('customer-id');
+                    if (customerIdField && sourceData.customer_id) {
+                        customerIdField.value = sourceData.customer_id;
+                    }
+                    
+                    // Email
+                    const emailField = document.getElementById('email');
+                    if (emailField && sourceData.email) {
+                        emailField.value = sourceData.email;
+                    }
+                    
+                    // Telephone (first phone number)
+                    const phoneField = document.getElementById('telephone');
+                    if (phoneField && sourceData.telephone) {
+                        phoneField.value = sourceData.telephone;
+                    }
+                    
+                    // Customer address
+                    const addressField = document.getElementById('address');
+                    if (addressField && sourceData.customer_address) {
+                        addressField.value = sourceData.customer_address;
+                    }
+                    
+                    // Adresse Postale (Postal Address) - from customer_address
+                    const bpField = document.getElementById('BP');
+                    if (bpField && sourceData.customer_address) {
+                        bpField.value = sourceData.customer_address;
+                    }
+                    
+                    // Code Agence (Branch Code)
+                    const branchCodeField = document.getElementById('branch-code');
+                    if (branchCodeField && sourceData.branch_code) {
+                        branchCodeField.value = sourceData.branch_code;
+                        console.log('[fillFormFromData] Branch code:', sourceData.branch_code);
+                    }
+                    
+                    // Names - as per user request:
+                    // - "nom" field (last-name) should contain first_name
+                    // - "prenoms" field should contain middle_name + last_name
+                    const firstName = sourceData.first_name || '';
+                    const middleName = sourceData.middle_name || '';
+                    const lastName = sourceData.last_name || '';
+                    
+                    console.log('[fillFormFromData] first_name:', firstName);
+                    console.log('[fillFormFromData] middle_name:', middleName);
+                    console.log('[fillFormFromData] last_name:', lastName);
+                    
+                    // Last name field (but populated with first_name as per requirement)
+                    const lastNameField = document.getElementById('last-name');
+                    if (lastNameField && firstName) {
+                        lastNameField.value = firstName;
+                        console.log('[fillFormFromData] last-name field set to first_name:', firstName);
+                    }
+                    
+                    // For prenoms field, combine middle + last name
+                    const prenomsValue = [middleName, lastName].filter(n => n).join(' ');
+                    const prenomsField = document.getElementById('prenoms');
+                    if (prenomsField && prenomsValue) {
+                        prenomsField.value = prenomsValue;
+                        console.log('[fillFormFromData] prenoms field set to:', prenomsValue);
+                    }
+                    
+                    // Date of birth - convert from DD-MMM-YY format (e.g., "28-AUG-99") to YYYY-MM-DD
+                    if (sourceData.date_of_birth) {
+                        const dobField = document.getElementById('date-of-birth');
+                        if (dobField) {
+                            try {
+                                // Parse date in format "DD-MMM-YY" (e.g., "28-AUG-99")
+                                const dobStr = sourceData.date_of_birth;
+                                const dateObj = new Date(dobStr);
+                                
+                                if (!isNaN(dateObj.getTime())) {
+                                    // Format as YYYY-MM-DD for HTML date input
+                                    const year = dateObj.getFullYear();
+                                    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                                    const day = String(dateObj.getDate()).padStart(2, '0');
+                                    dobField.value = `${year}-${month}-${day}`;
+                                    console.log('[fillFormFromData] Date de naissance définie:', dobField.value);
+                                }
+                            } catch (e) {
+                                console.error('[fillFormFromData] Erreur conversion date:', e);
+                            }
+                        }
+                    }
+                    
+                    console.log('[fillFormFromData] Formulaire rempli avec succès');
+                }
+                
+                // API CALLS
+                function fetchAccountFromFlexcube(accountNumber) {
+                    return fetch('fetch_account_flexcube.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'account=' + encodeURIComponent(accountNumber)
+                    })
+                    .then(function(resp) {
+                        console.log('[fetchAccountFromFlexcube] Status:', resp.status);
+                        
+                        // Try to parse JSON
+                        return resp.text().then(function(text) {
+                            console.log('[fetchAccountFromFlexcube] Réponse brute:', text);
+                            
+                            try {
+                                var json = JSON.parse(text);
+                                return { status: resp.status, data: json };
+                            } catch (e) {
+                                console.error('[fetchAccountFromFlexcube] Erreur JSON:', e.message);
+                                console.error('[fetchAccountFromFlexcube] Texte reçu:', text);
+                                throw new Error('Réponse invalide du serveur: ' + text);
+                            }
+                        });
+                    })
+                    .then(function(result) {
+                        console.log('[fetchAccountFromFlexcube] Résultat:', result);
+                        
+                        if (result.status === 200 && result.data.success) {
+                            return result.data.data;
+                        } else {
+                            throw new Error(result.data.error || 'Compte non trouvé');
+                        }
+                    })
+                    .catch(function(err) {
+                        console.error('[fetchAccountFromFlexcube] Erreur:', err.message);
+                        throw err;
+                    });
+                }
+
+                function searchLocalDatabase(q) {
+                    return fetch('search_compte.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'q=' + encodeURIComponent(q)
+                    }).then(function(resp) {
+                        return resp.json();
+                    }).then(function(json) {
+                        if (json.status === 'ok' && json.data) {
+                            return json.data;
+                        } else {
+                            throw new Error(json.message || 'Compte introuvable');
+                        }
+                    });
+                }
+
+                // MAIN SEARCH
+                function handleAccountSearch(accountNumber) {
+                    var q = accountNumber.trim();
+                    if (!q) { 
+                        showMessage('Veuillez saisir un numéro de compte', true); 
+                        return; 
+                    }
+                    
+                    showMessage('Recherche...', false);
+                    showLoader(true);
+
+                    // Try Flexcube first
+                    fetchAccountFromFlexcube(q)
+                        .then(function(data) {
+                            // Add the account number entered to the data
+                            data.account_number = q;
+                            fillFormFromData(data);
+                            showMessage('✓ Compte trouvé et formulaire prérempli', false);
+                        })
+                        .catch(function(err) {
+                            // Fallback to local database
+                            return searchLocalDatabase(q)
+                                .then(function(data) {
+                                    // Add the account number entered to the data
+                                    data.account_number = q;
+                                    fillFormFromData(data);
+                                    showMessage('✓ Compte trouvé et formulaire prérempli', false);
+                                });
+                        })
+                        .catch(function(err) {
+                            showMessage('❌ ' + err.message, true);
+                        })
+                        .finally(function() {
+                            showLoader(false);
+                        });
+                }
+                
+                // Initialize search functionality
+                document.addEventListener('DOMContentLoaded', function() {
+                    const searchBtn = document.getElementById('btnGenerate');
+                    const searchInput = document.getElementById('bank-account-number');
+                    
+                    if (searchBtn) {
+                        searchBtn.addEventListener('click', function() {
+                            const accountNumber = searchInput.value.trim();
+                            handleAccountSearch(accountNumber);
+                        });
+                    }
+                    
+                    if (searchInput) {
+                        searchInput.addEventListener('keypress', function(e) {
+                            if (e.key === 'Enter') {
+                                const accountNumber = searchInput.value.trim();
+                                handleAccountSearch(accountNumber);
+                            }
+                        });
+                    }
+                });
+
+                // Section Navigation System
                     (function() {
                         let currentSection = 1;
                         const maxSection = 4;

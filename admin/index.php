@@ -1,8 +1,23 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
-<?php require_once('../includes/audit_logger.php')?>
-<?php include('../includes/audit_helpers.php')?>
-<?php include('monitoring_notification.php')?>
+<?php 
+// Initialiser les sessions ET config AVANT tout output
+include('../includes/session.php');
+include('../includes/config.php');
+require_once('../includes/audit_logger.php');
+include('../includes/audit_helpers.php');
+
+/** @var mysqli $conn */
+if (empty($conn) || !($conn instanceof mysqli)) {
+    echo "<div style='padding:20px;color:#900'>Connexion à la base de données introuvable.</div>";
+    exit;
+}
+
+
+// Maintenant on peut inclure header.php qui génère du HTML
+include('includes/header.php');
+
+// Les includes qui n'envoient pas de contenu HTML peuvent se faire après
+include('monitoring_notification.php');
+?>
 
 <?php
 	// Initialize audit logging for admin dashboard
@@ -49,147 +64,64 @@
 
 	<div class="main-container">
 		<div class="pd-ltr-20">
-			<div class="title pb-20">
-				<h2 class="h3 mb-0">NOMBRE DE COMPTES PAR AGENCE</h2>
-			</div>
-			<div class="row pb-10">
-				<?php
-					// Définir les agences avec leurs infos
-					$agencies = array(
-						array('code' => 'T31', 'name' => 'Agence T31 - SIEGE', 'icon' => 'fa-building', 'color' => '#D32F2F'),
-						array('code' => 'T32', 'name' => 'Agence T32 - LUMUMBA', 'icon' => 'fa-building', 'color' => '#1976D2'),
-						array('code' => 'T33', 'name' => 'Agence T33 - ATLANTIC', 'icon' => 'fa-building', 'color' => '#0aadb3'),
-						array('code' => 'T34', 'name' => 'Agence T34 - POTO-POTO', 'icon' => 'fa-building', 'color' => '#F57C00'),
-						array('code' => 'T38', 'name' => 'Agence T38 - DOLISIE', 'icon' => 'fa-building', 'color' => '#f8cd0f'),
-						array('code' => 'T39', 'name' => 'Agence T39 - OUESSO', 'icon' => 'fa-building', 'color' => '#7B1FA2'),
-						array('code' => 'T41', 'name' => 'Agence T41 - BACONGO', 'icon' => 'fa-building', 'color' => '#388E3C'),
+		
+			<div class="dashboard-section">
+				<h2 class="dashboard-section-title"> Comptes par Agence</h2>
+				<div class="stats-grid">
+					<?php
+						$agencies = array(
+							array('code' => 'T31', 'name' => 'SIÈGE', 'icon' => 'fa-building', 'color' => 'red'),
+							array('code' => 'T32', 'name' => 'LUMUMBA', 'icon' => 'fa-building', 'color' => 'blue'),
+							array('code' => 'T33', 'name' => 'ATLANTIC', 'icon' => 'fa-building', 'color' => 'teal'),
+							array('code' => 'T34', 'name' => 'POTO-POTO', 'icon' => 'fa-building', 'color' => 'orange'),
+							array('code' => 'T38', 'name' => 'DOLISIE', 'icon' => 'fa-building', 'color' => 'amber'),
+							array('code' => 'T39', 'name' => 'OUESSO', 'icon' => 'fa-building', 'color' => 'purple'),
+							array('code' => 'T41', 'name' => 'BACONGO', 'icon' => 'fa-building', 'color' => 'green'),
+						);
 
-					);
-
-					foreach ($agencies as $agency) {
-						$query = mysqli_query($conn, "SELECT COUNT(*) AS account_number FROM ecobank_form_submissions WHERE branch_code = '" . $agency['code'] . "' AND YEAR(created_at) = YEAR(CURDATE())");
-						$result = mysqli_fetch_assoc($query);
-						$count = $result['account_number'];
-				?>
-				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-					<div class="card-box height-100-p widget-style1 agency-card" style="border-top: 4px solid <?php echo htmlspecialchars($agency['color'], ENT_QUOTES, 'UTF-8'); ?>; transition: all 0.3s ease;">
-						<div class="d-flex flex-wrap align-items-center justify-content-between">
-							<div class="widget-data">
-								<div class="h4 mb-0" style="color: <?php echo htmlspecialchars($agency['color'], ENT_QUOTES, 'UTF-8'); ?>; font-weight: 700; font-size: 28px;"><?php echo $count; ?></div>
-								<div class="weight-600 font-14" style="color: #666;"><?php echo htmlspecialchars($agency['name'], ENT_QUOTES, 'UTF-8'); ?></div>
+						foreach ($agencies as $agency) {
+							$query = mysqli_query($conn, "SELECT COUNT(*) AS account_number FROM ecobank_form_submissions WHERE branch_code = '" . $agency['code'] . "' AND YEAR(created_at) = YEAR(CURDATE())");
+							$result = mysqli_fetch_assoc($query);
+							$count = $result['account_number'];
+					?>
+						<div class="stat-card <?php echo $agency['color']; ?>">
+							<div class="stat-header">
+								<div class="stat-icon"><i class="fa <?php echo $agency['icon']; ?>"></i></div>
 							</div>
-							<div class="widget-icon">
-								<div class="icon" style="background: linear-gradient(135deg, <?php echo $agency['color']; ?>20 0%, <?php echo $agency['color']; ?>10 100%); border-radius: 12px; padding: 15px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-									<i class="icon-copy fa <?php echo $agency['icon']; ?>" style="font-size: 24px; color: <?php echo $agency['color']; ?>;"></i>
-								</div>
+							<div class="stat-content">
+								<div class="stat-number"><?php echo $count; ?></div>
+								<div class="stat-label"><?php echo $agency['name']; ?></div>
 							</div>
 						</div>
-					</div>
-				</div>
-				<?php } ?>
-			</div>
-
-			<!-- Widget de Monitoring Rapide -->
-			<div class="title pb-20" style="margin-top: 30px;">
-				<h2 class="h3 mb-0">📊 MONITORING SYSTÈME</h2>
-			</div>
-			<div class="row pb-10">
-				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-					<div class="card-box height-100-p widget-style1" style="border-top: 4px solid #28a745; cursor: pointer;" onclick="window.open('monitoring', '_blank')">
-						<div class="d-flex flex-wrap align-items-center justify-content-between">
-							<div class="widget-data">
-								<div class="h4 mb-0" style="color: #28a745; font-weight: 700;">ACTIF</div>
-								<div class="weight-600 font-14" style="color: #666;">Statut Application</div>
-							</div>
-							<div class="widget-icon">
-								<div class="icon" style="background: linear-gradient(135deg, #28a74520 0%, #28a74510 100%); border-radius: 12px; padding: 15px;">
-									<i class="icon-copy fa fa-server" style="font-size: 24px; color: #28a745;"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-					<div class="card-box height-100-p widget-style1" style="border-top: 4px solid #007bff; cursor: pointer;" onclick="window.open('monitoring', '_blank')">
-						<div class="d-flex flex-wrap align-items-center justify-content-between">
-							<div class="widget-data">
-								<div class="h4 mb-0" id="monitoring-users" style="color: #007bff; font-weight: 700;">-</div>
-								<div class="weight-600 font-14" style="color: #666;">Utilisateurs actifs</div>
-							</div>
-							<div class="widget-icon">
-								<div class="icon" style="background: linear-gradient(135deg, #007bff20 0%, #007bff10 100%); border-radius: 12px; padding: 15px;">
-									<i class="icon-copy fa fa-users" style="font-size: 24px; color: #007bff;"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-					<div class="card-box height-100-p widget-style1" style="border-top: 4px solid #ffc107; cursor: pointer;" onclick="window.open('monitoring', '_blank')">
-						<div class="d-flex flex-wrap align-items-center justify-content-between">
-							<div class="widget-data">
-								<div class="h4 mb-0" id="monitoring-accounts" style="color: #ffc107; font-weight: 700;">-</div>
-								<div class="weight-600 font-14" style="color: #666;">Total comptes</div>
-							</div>
-							<div class="widget-icon">
-								<div class="icon" style="background: linear-gradient(135deg, #ffc10720 0%, #ffc10710 100%); border-radius: 12px; padding: 15px;">
-									<i class="icon-copy fa fa-database" style="font-size: 24px; color: #ffc107;"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-					<div class="card-box height-100-p widget-style1" style="border-top: 4px solid #dc3545; cursor: pointer;" onclick="window.open('monitoring', '_blank')">
-						<div class="d-flex flex-wrap align-items-center justify-content-between">
-							<div class="widget-data">
-								<div class="h4 mb-0" id="monitoring-errors" style="color: #dc3545; font-weight: 700;">-</div>
-								<div class="weight-600 font-14" style="color: #666;">Erreurs récentes</div>
-							</div>
-							<div class="widget-icon">
-								<div class="icon" style="background: linear-gradient(135deg, #dc354520 0%, #dc354510 100%); border-radius: 12px; padding: 15px;">
-									<i class="icon-copy fa fa-exclamation-triangle" style="font-size: 24px; color: #dc3545;"></i>
-								</div>
-							</div>
-						</div>
-					</div>
+					<?php } ?>
 				</div>
 			</div>
 
-			<div class="title pb-20" style="margin-top: 30px;">
-				<h2 class="h3 mb-0">DEMANDES DE CHÉQUIERS PAR AGENCE</h2>
-			</div>
-			<div class="row pb-10">
-				<?php
-					foreach ($agencies as $agency) {
-						$chequier_query = mysqli_query($conn, "SELECT COUNT(*) AS chequier_count FROM tblcompte WHERE branch_code = '" . $agency['code'] . "'");
-						$chequier_result = mysqli_fetch_assoc($chequier_query);
-						$chequier_count = $chequier_result['chequier_count'];
-				?>
-				<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-					<div class="card-box height-100-p widget-style1 agency-card" style="border-top: 4px solid <?php echo $agency['color']; ?>; transition: all 0.3s ease; opacity: 0.85;">
-						<div class="d-flex flex-wrap align-items-center justify-content-between">
-							<div class="widget-data">
-								<div class="h4 mb-0" style="color: <?php echo $agency['color']; ?>; font-weight: 700; font-size: 28px;"><?php echo $chequier_count; ?></div>
-								<div class="weight-600 font-14" style="color: #666;"><?php echo $agency['name']; ?> - Chéquiers</div>
+			<div class="dashboard-section" style="margin-top: 40px;">
+				<h2 class="dashboard-section-title"> Demandes de Chéquiers</h2>
+				<div class="stats-grid">
+					<?php
+						foreach ($agencies as $agency) {
+							$chequier_query = mysqli_query($conn, "SELECT COUNT(*) AS chequier_count FROM tblcompte WHERE branch_code = '" . $agency['code'] . "'");
+							$chequier_result = mysqli_fetch_assoc($chequier_query);
+							$chequier_count = $chequier_result['chequier_count'];
+						?>
+						<div class="stat-card <?php echo $agency['color']; ?>">
+							<div class="stat-header">
+								<div class="stat-icon"><i class="fa fa-file-text"></i></div>
 							</div>
-							<div class="widget-icon">
-								<div class="icon" style="background: linear-gradient(135deg, <?php echo $agency['color']; ?>20 0%, <?php echo $agency['color']; ?>10 100%); border-radius: 12px; padding: 15px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-									<i class="icon-copy fa fa-file-text" style="font-size: 24px; color: <?php echo $agency['color']; ?>;"></i>
-								</div>
+							<div class="stat-content">
+								<div class="stat-number"><?php echo $chequier_count; ?></div>
+								<div class="stat-label"><?php echo $agency['name']; ?></div>
 							</div>
 						</div>
-					</div>
+					<?php } ?>
 				</div>
-				<?php } ?>
 			</div>
 
 			<div class="card-box mb-30">
 				<div class="pd-20 d-flex justify-content-between align-items-center">
-					<h2 class="text-blue h4 mb-0">LISTE DES CSO</h2>
+					<h2 class="text-blue h4 mb-0">LISTE DES UTILISATEURS</h2>
 					<div class="filter-group d-flex gap-2">
 						<div class="form-group mb-0">
 							<label class="mb-2" style="font-weight: 600; font-size: 12px; color: #666;">Mois :</label>
@@ -320,10 +252,34 @@
 				</div>
 			</div>
 
-			<?php include('includes/footer.php'); ?>
+			
 		</div>
+		<div class="dashboard-section">
+					<h2 class="dashboard-section-title">📈 Évolution mensuelle des demandes de chéquiers</h2>
+					
+					<div class="filters-bar">
+						<div class="filter-group">
+							<div class="filter-item">
+								<label>Année</label>
+								<select id="chart_year_filter" class="form-control">
+									<?php 
+										$current_year = date('Y');
+										for ($y = $current_year; $y >= 2025; $y--) {
+										echo '<option value="' . $y . '" ' . $selected . '>' . $y . '</option>';
+									}
+								?>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); margin-bottom: 32px;">
+					<canvas id="accounts_chart" height="80"></canvas>
+				</div>
+			</div>
 	</div>
 	<!-- js -->
+	<?php include('includes/footer.php'); ?>
 
 	<?php include('includes/scriptJs.php')?>
 
@@ -396,7 +352,136 @@
 					this.style.transform = '';
 				});
 			});
+
+			// Initialiser le graphique
+			let chartInstance = null;
+			const chartCanvas = document.getElementById('accounts_chart');
+			const yearFilter = document.getElementById('chart_year_filter');
+
+			function drawCanvasLineChart(ctx, labels, datasets) {
+				const canvas = ctx.canvas;
+				const width = canvas.clientWidth || 900;
+				const height = canvas.clientHeight || 320;
+				const dpr = window.devicePixelRatio || 1;
+				canvas.width = width * dpr;
+				canvas.height = height * dpr;
+				ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+				ctx.clearRect(0, 0, width, height);
+
+				const padding = { top: 24, right: 16, bottom: 40, left: 42 };
+				const chartWidth = width - padding.left - padding.right;
+				const chartHeight = height - padding.top - padding.bottom;
+				const maxValue = Math.max(1, ...datasets.flatMap(ds => ds.data));
+				const stepY = chartHeight / Math.max(1, maxValue);
+
+				ctx.strokeStyle = 'rgba(0, 0, 0, 0.08)';
+				ctx.lineWidth = 1;
+				for (let i = 0; i <= 5; i++) {
+					const y = padding.top + (chartHeight / 5) * i;
+					ctx.beginPath();
+					ctx.moveTo(padding.left, y);
+					ctx.lineTo(width - padding.right, y);
+					ctx.stroke();
+				}
+
+				ctx.beginPath();
+				ctx.moveTo(padding.left, padding.top + chartHeight);
+				ctx.lineTo(width - padding.right, padding.top + chartHeight);
+				ctx.stroke();
+
+				ctx.font = '12px Arial';
+				ctx.fillStyle = '#666';
+				ctx.textAlign = 'center';
+				labels.forEach((label, index) => {
+					const x = padding.left + (chartWidth / (labels.length - 1)) * index;
+					ctx.fillText(label, x, height - 14);
+				});
+
+				datasets.forEach((dataset) => {
+					const color = dataset.borderColor || '#1f77b4';
+					ctx.strokeStyle = color;
+					ctx.fillStyle = color;
+					ctx.lineWidth = 2;
+					ctx.beginPath();
+					dataset.data.forEach((value, index) => {
+						const x = padding.left + (chartWidth / (labels.length - 1)) * index;
+						const y = padding.top + chartHeight - (value * stepY);
+						if (index === 0) {
+							ctx.moveTo(x, y);
+						} else {
+							ctx.lineTo(x, y);
+						}
+					});
+					ctx.stroke();
+
+					dataset.data.forEach((value, index) => {
+						const x = padding.left + (chartWidth / (labels.length - 1)) * index;
+						const y = padding.top + chartHeight - (value * stepY);
+						ctx.beginPath();
+						ctx.arc(x, y, 3, 0, Math.PI * 2);
+						ctx.fill();
+					});
+				});
+			}
+
+			function initChart(year) {
+				if (!chartCanvas) return;
+				const ctx = chartCanvas.getContext('2d');
+				
+				fetch(`get_accounts_stats.php?year=${year}`)
+					.then(response => response.json())
+					.then(data => {
+						if (chartInstance) {
+							chartInstance.destroy();
+						}
+
+						try {
+							if (typeof Chart !== 'undefined' && ctx) {
+								chartInstance = new Chart(ctx, {
+									type: 'line',
+									data: {
+										labels: data.labels,
+										datasets: data.datasets
+									},
+									options: {
+										responsive: true,
+										maintainAspectRatio: true,
+										plugins: {
+											legend: { position: 'top' },
+											tooltip: { enabled: true }
+										},
+										scales: {
+											y: {
+												beginAtZero: true,
+												ticks: { stepSize: 1 }
+											}
+										}
+									}
+								});
+							} else {
+								drawCanvasLineChart(ctx, data.labels, data.datasets);
+							}
+						} catch (error) {
+							console.error('Erreur lors du chargement du graphique:', error);
+							drawCanvasLineChart(ctx, data.labels, data.datasets);
+						}
+					})
+					.catch(error => {
+						console.error('Erreur lors du chargement du graphique:', error);
+					});
+			}
+
+			// Initialiser au chargement
+			if (chartCanvas && yearFilter) {
+				initChart(yearFilter.value);
+
+				// Mettre à jour le graphique quand l'année change
+				yearFilter.addEventListener('change', function() {
+					initChart(this.value);
+				});
+			}
 		});
 	</script>
+
 </body>
 </html>

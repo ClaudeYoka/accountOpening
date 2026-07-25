@@ -6,8 +6,10 @@
  * Returns account data from Flexcube API for form auto-fill
  */
 
-include('../includes/config.php');
-include('../includes/session.php');
+// Prevent any HTML output that could break JSON
+ob_start();
+
+// Only include what's needed for Oracle connection
 include('../includes/flexcube_helpers.php');
 
 header('Content-Type: application/json; charset=utf-8');
@@ -18,6 +20,7 @@ $account_number = isset($_GET['account']) ? trim($_GET['account']) : $account_nu
 
 if (empty($account_number)) {
     http_response_code(400);
+    ob_end_clean();
     echo json_encode([
         'success' => false,
         'error' => 'Numéro de compte manquant'
@@ -28,6 +31,7 @@ if (empty($account_number)) {
 // Validate format (basic check)
 if (!preg_match('/^[0-9]{10,20}$/', $account_number)) {
     http_response_code(400);
+    ob_end_clean();
     echo json_encode([
         'success' => false,
         'error' => 'Format de numéro de compte invalide'
@@ -36,13 +40,22 @@ if (!preg_match('/^[0-9]{10,20}$/', $account_number)) {
 }
 
 try {
-    // Try to fetch from Flexcube first
+    error_log("[fetch_account_flexcube] Début de la requête pour le compte: $account_number");
+
+    // Try to fetch from Flexcube first (via OCI8)
     $flexcube_data = fetchAccountFromFlexcube($account_number);
-    
+
+    error_log("[fetch_account_flexcube] Résultat: " . ($flexcube_data ? 'Données trouvées' : 'Aucune donnée'));
+
     if ($flexcube_data) {
+        error_log("[fetch_account_flexcube] Données brutes: " . json_encode($flexcube_data));
+
         // Map Flexcube data to form field names
         $form_data = mapFlexcubeDataToFormFields($flexcube_data);
-        
+
+        error_log("[fetch_account_flexcube] Données mappées: " . json_encode($form_data));
+
+        ob_end_flush();
         echo json_encode([
             'success' => true,
             'source' => 'flexcube',
@@ -51,96 +64,85 @@ try {
         ]);
         exit;
     }
-    
-    // Fallback to local database
-    $db_result = fetchAccountWithFallback($account_number, $conn);
-    
-    if ($db_result['data']) {
-        $form_data = mapDatabaseDataToFormFields($db_result['data']);
-        
-        echo json_encode([
-            'success' => true,
-            'source' => $db_result['source'],
-            'data' => $form_data,
-            'raw' => $db_result['data']
-        ]);
-        exit;
-    }
-    
-    // Not found anywhere
+
+    // If Flexcube fails, return not found error
+    // Do NOT attempt MySQL fallback here as it causes PDO errors
+    error_log("[fetch_account_flexcube] Compte introuvable dans Flexcube");
     http_response_code(404);
+    ob_end_clean();
     echo json_encode([
         'success' => false,
-        'error' => 'Compte introuvable dans Flexcube et base de données'
+        'error' => 'Compte introuvable dans Flexcube'
     ]);
-    
+    exit;
+
 } catch (Exception $e) {
+    error_log('[fetch_account_flexcube] Exception: ' . $e->getMessage());
+    error_log('[fetch_account_flexcube] Stack:' . $e->getTraceAsString());
     http_response_code(500);
+    ob_end_clean();
     echo json_encode([
         'success' => false,
         'error' => 'Erreur serveur: ' . $e->getMessage()
     ]);
+    exit;
 }
 
 /**
  * Map Flexcube API response to form field names
- * 
+ * Clean version - retourne juste les champs nécessaires
+ *
  * @param array $flexcube_data Data from Flexcube API
  * @return array Mapped form data
  */
 function mapFlexcubeDataToFormFields($flexcube_data) {
     $form_data = [];
-    
-    // Account info
-    $form_data['account_number'] = $flexcube_data['account_number'] ?? null;
-    $form_data['account-number-field'] = $flexcube_data['account_number'] ?? null;
-    $form_data['account_name'] = $flexcube_data['account_name'] ?? null;
-    $form_data['account_type'] = $flexcube_data['account_type'] ?? null;
-    $form_data['currency'] = $flexcube_data['currency'] ?? null;
-    $form_data['status'] = $flexcube_data['status'] ?? null;
-    $form_data['balance'] = $flexcube_data['balance'] ?? null;
-    $form_data['customer_id'] = $flexcube_data['customer_id'] ?? null;
-    
-    // Use form_fields if available (from UDFDataMapper)
-    if (!empty($flexcube_data['form_fields']) && is_array($flexcube_data['form_fields'])) {
-        $form_data = array_merge($form_data, $flexcube_data['form_fields']);
+
+    // Account number
+    $form_data['account_number'] = $flexcube_data['account_number'] ?? '';
+
+    // Customer ID
+    $form_data['customer_id'] = $flexcube_data['customer_id'] ?? '';
+
+    // Email
+    $form_data['email'] = $flexcube_data['email'] ?? '';
+
+    // Telephone
+    $form_data['telephone'] = $flexcube_data['telephone'] ?? '';
+    $form_data['phone_number'] = $flexcube_data['telephone'] ?? '';
+
+    // RIB / clé RIB
+    $form_data['rib'] = $flexcube_data['rib'] ?? $flexcube_data['clearing_ac_no'] ?? $flexcube_data['rib_key'] ?? '';
+    $form_data['rib_key'] = $flexcube_data['rib_key'] ?? $flexcube_data['rib'] ?? $flexcube_data['clearing_ac_no'] ?? '';
+    $form_data['clearing_ac_no'] = $flexcube_data['clearing_ac_no'] ?? $form_data['rib'];
+
+    // Customer address
+    $form_data['customer_address'] = $flexcube_data['customer_address'] ?? '';
+
+    // Branch code
+    $form_data['branch_code'] = $flexcube_data['branch_code'] ?? '';
+
+    // Account title direct from Flexcube (ac_desc)
+    $form_data['account_title'] = $flexcube_data['account_name'] ?? $flexcube_data['account_title'] ?? '';
+    $form_data['customer_name'] = $form_data['account_title'];
+    $form_data['account_name'] = $form_data['account_title'];
+
+    // Names - use explicit fields when available, otherwise preserve explicit fields if possible
+    if (!empty($flexcube_data['first_name']) || !empty($flexcube_data['last_name'])) {
+        $form_data['first_name'] = $flexcube_data['first_name'] ?? '';
+        $form_data['last_name'] = $flexcube_data['last_name'] ?? '';
+    } else {
+        $form_data['first_name'] = '';
+        $form_data['last_name'] = '';
     }
-    
-    // Try to extract name parts from account_name if not already in form_fields
-    if (!empty($flexcube_data['account_name']) && empty($form_data['first-name'])) {
-        $name_parts = explode(' ', trim($flexcube_data['account_name']));
-        
-        if (count($name_parts) > 0) {
-            $form_data['first-name'] = $name_parts[0];
-            $form_data['noms'] = $name_parts[0]; // Alternative field name
-            $form_data['prenom'] = $name_parts[0]; // French alternative
-        }
-        
-        if (count($name_parts) > 1) {
-            $form_data['last-name'] = $name_parts[count($name_parts) - 1];
-            $form_data['nom'] = $name_parts[count($name_parts) - 1];
-        }
-        
-        if (count($name_parts) > 2) {
-            $form_data['middle-name'] = implode(' ', array_slice($name_parts, 1, -1));
-            $form_data['prenom2'] = implode(' ', array_slice($name_parts, 1, -1));
-        }
-    }
-    
-    // Dates and other fields
-    if (!empty($flexcube_data['opening_date'])) {
-        $form_data['opening_date'] = $flexcube_data['opening_date'];
-        $form_data['date_open'] = $flexcube_data['opening_date'];
-    }
-    
-    // Branch info
-    if (!empty($flexcube_data['branch_code'])) {
-        $form_data['branch_code'] = $flexcube_data['branch_code'];
-    }
-    
-    return array_filter($form_data, function($v) {
-        return $v !== null && $v !== '';
-    });
+
+    // Middle name if available
+    $form_data['middle_name'] = $flexcube_data['middle_name'] ?? '';
+
+    // Date of birth
+    $form_data['date_of_birth'] = $flexcube_data['date_of_birth'] ?? '';
+
+    return $form_data;
 }
 
 /**

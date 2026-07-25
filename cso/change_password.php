@@ -1,6 +1,15 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php 
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
 <?php
+/** @var mysqli $conn */
+if (empty($conn) || !($conn instanceof mysqli)) {
+    echo "<div style='padding:20px;color:#900'>Connexion à la base de données introuvable.</div>";
+    exit;
+}
 if (isset($_POST['new_update'])) {
     // Validation du mot de passe
     $newPassword = $_POST['newpassword'];
@@ -62,6 +71,7 @@ if (isset($_POST["update_image"])) {
 ?>
 
 <body>
+	
 	<div class="pre-loader">
 		<div class="pre-loader-box">
 			<div class="loader-logo"><img src="../vendors/images/ecobank-bg3.png" alt=""></div>

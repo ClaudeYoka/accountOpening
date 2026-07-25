@@ -1,5 +1,9 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php 
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
 <?php require_once('../includes/audit_logger.php')?>
 <?php include('../includes/audit_helpers.php')?>
 
@@ -166,7 +170,7 @@ if (isset($_POST['cleanup_logs'])) {
                         <h4 class="mb-20">Total : <strong><?php echo count($logs); ?></strong> log(s)</h4>
 
                         <div class="table-responsive">
-                            <table class="data-table table hover multiple-select-row nowrap">
+                            <table class="table hover multiple-select-row data-table-export nowrap">
                                 <thead>
                                     <tr>
                                         <th>Date/Heure</th>
@@ -195,7 +199,7 @@ if (isset($_POST['cleanup_logs'])) {
                                                 } else {
                                                     echo '<strong>' . htmlspecialchars($user_display) . '</strong>';
                                 
-                                                     if (!empty($log['user_role'])) {
+                                                    if (!empty($log['user_role'])) {
                                                         echo '<br><small class="text-muted">' . htmlspecialchars($log['user_role']) . '</small>';
                                                     }
                                                 }
@@ -208,28 +212,26 @@ if (isset($_POST['cleanup_logs'])) {
                                                     echo htmlspecialchars($action_desc);
                                                     ?>
                                                 </span>
-                                                <br>
-                                                <small class="text-muted"><?php echo htmlspecialchars($log['action']); ?></small>
                                             </td>
                                             <td>
                                                 <?php
-                                                $details = $log['details'] ?? '';
-                                                if (!empty($details)) {
-                                                    $decoded = json_decode($details, true);
-                                                    if ($decoded !== null) {
-                                                        echo '<div style="font-size: 12px;">';
-                                                        foreach ($decoded as $key => $value) {
-                                                            $display_key = ucfirst(str_replace('_', ' ', $key));
-                                                            $display_value = is_array($value) ? json_encode($value, JSON_UNESCAPED_UNICODE) : $value;
-                                                            echo '<strong>' . htmlspecialchars($display_key) . ':</strong> ' . htmlspecialchars($display_value) . '<br>';
+                                                    $details = $log['details'] ?? '';
+                                                    if (!empty($details)) {
+                                                        $decoded = json_decode($details, true);
+                                                        if ($decoded !== null) {
+                                                            echo '<div style="font-size: 12px;">';
+                                                            foreach ($decoded as $key => $value) {
+                                                                $display_key = ucfirst(str_replace('_', ' ', $key));
+                                                                $display_value = is_array($value) ? json_encode($value, JSON_UNESCAPED_UNICODE) : $value;
+                                                                echo '<strong>' . htmlspecialchars($display_key) . ':</strong> ' . htmlspecialchars($display_value) . '<br>';
+                                                            }
+                                                            echo '</div>';
+                                                        } else {
+                                                            echo '<span style="font-size: 12px; color: #666;">' . htmlspecialchars($details) . '</span>';
                                                         }
-                                                        echo '</div>';
                                                     } else {
-                                                        echo '<span style="font-size: 12px; color: #666;">' . htmlspecialchars($details) . '</span>';
+                                                        echo '<span class="text-muted">-</span>';
                                                     }
-                                                } else {
-                                                    echo '<span class="text-muted">-</span>';
-                                                }
                                                 ?>
                                             </td>
                                             <td><?php echo htmlspecialchars($log['ip_address'] ?? 'N/A'); ?></td>

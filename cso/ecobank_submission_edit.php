@@ -1,7 +1,9 @@
 <?php
 // ecobank_submission_edit.php
-include('../includes/session.php');
-include('../includes/config.php');
+
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+
 include('../includes/audit_helpers.php');
 
 function debug_log_local($msg){

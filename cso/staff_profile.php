@@ -1,8 +1,16 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
-
 <?php
-	if(isset($_POST['new_update']))
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+
+if (!isset($conn) || !($conn instanceof mysqli)) {
+    $conn = null;
+}
+if (!isset($session_id) || !is_string($session_id)) {
+    $session_id = '';
+}
+
+if(isset($_POST['new_update']))
 	{
 		$empid=$session_id;
 		$fname=$_POST['fname'];

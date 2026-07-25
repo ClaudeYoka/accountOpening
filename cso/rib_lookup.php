@@ -1,15 +1,16 @@
 <?php
-// Éviter les redirects pendant le traitement JSON
+// Éviter toute sortie HTML qui pourrait casser le JSON
+ob_start();
 header('Content-Type: application/json; charset=utf-8');
 error_reporting(E_ALL);
 ini_set('display_errors', 0);  // Ne pas afficher les erreurs directement
 
 try {
     @include_once(__DIR__ . '/../includes/config.php');
-    @include_once(__DIR__ . '/../includes/FlexcubeAPI.php');
     @include_once(__DIR__ . '/../includes/flexcube_helpers.php');
 
 function json_error($message) {
+    ob_end_clean(); // Vider le buffer de sortie
     echo json_encode(['status'=>'error','message'=>$message]);
     exit;
 }
@@ -23,134 +24,34 @@ if(!$account){
     json_error('Numéro de compte manquant');
 }
 
-$db_unavailable = true;
-if (isset($conn) && $conn && ($conn instanceof mysqli)) {
-    $db_unavailable = false;
-}
-if ($db_unavailable) {
-    error_log('rib_lookup.php: DB connection is unavailable, skipping local database lookup.');
-}
-
-// PRIORITY 0: Check LOCAL DATABASE FIRST (much faster than Flexcube)
-// If account exists locally with recent data, use it immediately - don't wait for slow API
+// Rechercher uniquement via Flexcube SQL
 $row = null;
-$use_flexy = true; // Flag pour décider si on essaie Flexcube
-
-if (!$db_unavailable) {
-    $q_quick = mysqli_prepare($conn, "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1");
-    if($q_quick){
-        mysqli_stmt_bind_param($q_quick, 's', $account);
-        mysqli_stmt_execute($q_quick);
-        $r_quick = mysqli_stmt_get_result($q_quick);
-        if($r_quick && mysqli_num_rows($r_quick) > 0){
-            $row = mysqli_fetch_assoc($r_quick);
-            $use_flexy = false; // Already found locally, skip Flexcube
-            error_log("Account found in local DB immediately, skipping Flexcube API");
-        }
-        mysqli_stmt_close($q_quick);
-    } else {
-        error_log('rib_lookup.php: Failed to prepare quick DB query.');
-    }
-}
-
-// PRIORITY 1: Try FLEXCUBE API first (using real FlexcubeAPI class) - ONLY IF NOT IN LOCAL DB
-if($use_flexy){
 try {
-    // Timeout pour éviter les blocages (largement supérieur au timeout cURL)
-    set_time_limit(40); // 40 secondes maximum pour cette opération complète
-    $flexcube_api = new FlexcubeAPI();
-    $flexcube_response = $flexcube_api->getAccountInfo($account);
-    
-    if($flexcube_response['success'] && $flexcube_response['data']){
-        // Flexcube trouvé - transformer les données au format RIB
-        $flexcube_data = $flexcube_response['data'];
+    set_time_limit(40);
+    $flexcube_data = fetchAccountFromFlexcube($account);
+    if ($flexcube_data) {
         $row = [
             'account_number' => $flexcube_data['account_number'] ?? null,
             'customer_name' => $flexcube_data['account_name'] ?? null,
-            'currency' => $flexcube_data['currency'] ?? 'XAF',
+            'customer_address' => $flexcube_data['customer_address'] ?? null,
+            'manager_name' => $flexcube_data['manager_name'] ?? null,
+            'internal_account' => $flexcube_data['account_number'] ?? null,
+            'currency' => 'XAF',
             'branch_code' => $flexcube_data['branch_code'] ?? 'T31',
-            'account_type' => $flexcube_data['account_type'] ?? 'Courant',
+            'account_type' => 'Courant',
             'created_at' => date('Y-m-d'),
-            'source' => 'flexcube',
+            'source' => 'flexcube_oracle',
+            'rib_key' => null,
             'json_snapshot' => json_encode($flexcube_data)
         ];
     }
 } catch (Exception $e) {
-    error_log('Flexcube Error: ' . $e->getMessage());
-    // Continuer au fallback
+    error_log('Flexcube Oracle Error: ' . $e->getMessage());
 } catch (Throwable $t) {
-    // Attraper les erreurs fatales/timeouts (PHP 7+)
-    error_log('Flexcube Throwable: ' . $t->getMessage());
-    // Continuer au fallback
-}
-} // Fin du if($use_flexy)
-
-// Si Flexcube n'a pas trouvé le compte, fallback vers la base de données locale
-if(!$row && !$db_unavailable){
-    // PRIORITY 2: Try exact match in LOCAL DATABASE (ecobank_form_submissions)
-    $sql = "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1";
-    $stmt = mysqli_prepare($conn, $sql);
-    if ($stmt) {
-        mysqli_stmt_bind_param($stmt, 's', $account);
-        mysqli_stmt_execute($stmt);
-        $res = mysqli_stmt_get_result($stmt);
-        $row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
-    } else {
-        error_log('rib_lookup.php: Failed to prepare exact local DB query.');
-    }
-
-    // PRIORITY 3: If not found in ecobank_form_submissions, try LIKE search
-    if(!$row){
-        $esc = '%'.$account.'%';
-        $sql2 = "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci LIKE ? LIMIT 1";
-        $stmt2 = mysqli_prepare($conn, $sql2);
-        if ($stmt2) {
-            mysqli_stmt_bind_param($stmt2, 's', $esc);
-            mysqli_stmt_execute($stmt2);
-            $res = mysqli_stmt_get_result($stmt2);
-            $row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
-        } else {
-            error_log('rib_lookup.php: Failed to prepare LIKE local DB query.');
-        }
-    }
-
-    // PRIORITY 4: If still not found, try tblcompte
-    if(!$row){
-        $q = mysqli_prepare($conn, "SELECT id, account_number, noms, mobile1, email FROM tblcompte WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1");
-        if($q){
-            mysqli_stmt_bind_param($q, 's', $account);
-            mysqli_stmt_execute($q);
-            $r2 = mysqli_stmt_get_result($q);
-            if($r2 && mysqli_num_rows($r2) > 0){
-                $pc = mysqli_fetch_assoc($r2);
-                // Try to find a submission by account_number or matching customer name/email/mobile
-                $sql3 = "SELECT * FROM ecobank_form_submissions WHERE account_number COLLATE utf8mb4_0900_ai_ci = ? OR customer_name COLLATE utf8mb4_0900_ai_ci LIKE ? OR mobile COLLATE utf8mb4_0900_ai_ci = ? OR email COLLATE utf8mb4_0900_ai_ci = ? LIMIT 1";
-                $stmt3 = mysqli_prepare($conn, $sql3);
-                if ($stmt3) {
-                    $likeName = '%'.($pc['noms'] ?? '').'%';
-                    $mobile = $pc['mobile1'] ?? '';
-                    $email = $pc['email'] ?? '';
-                    mysqli_stmt_bind_param($stmt3, 'ssss', $pc['account_number'], $likeName, $mobile, $email);
-                    mysqli_stmt_execute($stmt3);
-                    $res = mysqli_stmt_get_result($stmt3);
-                    $row = ($res && mysqli_num_rows($res) > 0) ? mysqli_fetch_assoc($res) : null;
-                    mysqli_stmt_close($stmt3);
-                } else {
-                    error_log('rib_lookup.php: Failed to prepare tblcompte fallback query.');
-                }
-            }
-            mysqli_stmt_close($q);
-        } else {
-            error_log('rib_lookup.php: Failed to prepare tblcompte query.');
-        }
-    }
+    error_log('Flexcube Oracle Throwable: ' . $t->getMessage());
 }
 
-// If still not found in any source, return error
-if(!$row){
-    if ($db_unavailable && $use_flexy) {
-        json_error('Impossible de se connecter à la base de données et le compte est introuvable.');
-    }
+if (!$row) {
     echo json_encode(['status'=>'not_found','message'=>'Compte introuvable']);
     exit;
 }
@@ -167,6 +68,13 @@ function pick_sn($row, $data, $keys){
         if(isset($data[$k]) && $data[$k] !== null && $data[$k] !== '') return $data[$k];
     }
     return null;
+}
+
+function extractRibKey($value){
+    if (!$value) return null;
+    $digits = preg_replace('/\D/', '', (string)$value);
+    if ($digits === '') return null;
+    return strlen($digits) >= 2 ? substr($digits, -2) : $digits;
 }
 
 // Mapping des codes guichets Ecobank vers les codes numériques RIB
@@ -191,8 +99,9 @@ $DEFAULT_BANK_CODE = '30014';
 $DEFAULT_BRANCH_CODE = '00001';
 
 // Get account info - prioritize row data (from local DB)
-$account_number_val = $row ? ($row['account_number'] ?? ($data['account_number'] ?? null)) : ($data['account_number'] ?? null);
-$rkey_val = $rib_key ?: ($data['rib_key'] ?? null);
+$account_number_val = $row ? ($row['account_number'] ?? ($row['bank_account_number'] ?? ($data['account_number'] ?? null))) : ($data['account_number'] ?? null);
+$rib_value = pick_sn($row ?: [], $data, ['rib', 'rib_key', 'clearing_ac_no', 'RIB']);
+$rkey_val = $rib_key ?: extractRibKey($rib_value);
 
 // Determine account opening date: prefer DB created_at (submission date), fallback to snapshot fields
 $date_open_val = null;
@@ -212,6 +121,7 @@ if ($date_open_val === null) {
 $account_obj = [
     'account_number' => $account_number_val,
     'rib_key' => $rkey_val,
+    'rib_full' => $rib_value,
     'account_title' => pick_sn($row ?: [], $data, ['account_title','account_name','customer_name','full_name']),
     // use fixed codes unless overridden by snapshot
     // 'country_code' => pick_sn($row ?: [], $data, ['country_code','country-code','residence_country','pays','country']) ?: $DEFAULT_COUNTRY_CODE,
@@ -222,7 +132,8 @@ $account_obj = [
     'date_open' => $date_open_val,
     'currency' => pick_sn($row ?: [], $data, ['currency','devise','account_currency']) ?: null,
     'iban' => null,
-    'internal_account' => $row ? ($row['account_number'] ?? null) : null,
+    'internal_account' => $row ? ($row['account_number'] ?? ($row['bank_account_number'] ?? null)) : null,
+    'manager_name' => pick_sn($row ?: [], $data, ['manager_name','account_manager','manager','charge_compte','chargé_compte']) ?: null,
     'swift' => pick_sn($row ?: [], $data, ['swift','swift_code','swift-code']) ?: 'ECOCCGCG'
 ];
 
@@ -238,12 +149,13 @@ if($account_obj['country_code'] && $account_obj['bank_code'] && $account_obj['br
 
 $bank_obj = [
     'name' => 'ECOBANK CONGO',
-    'address' => "Croisement des avenues Gouverneur Félix ÉBOUÉ et Amilcar CABRAL, quartier la Plaine, Centre-Ville. B.P. 2485, Brazzaville"
+    'address' => "Croisement des avenues Gouverneur Félix ÉBOUÉ et Amilcar CABRAL, quartier la Plaine, Centre-Ville."
 ];
 
 $customer = [
-    'customer_name' => pick_sn($row, $data, ['customer_name','full_name','name']) ?: null,
+    'customer_name' => pick_sn($row, $data, ['customer_name','account_name','full_name','name']) ?: null,
     'first_name' => pick_sn($row, $data, ['first_name','prenom','given_name']) ?: null,
+    'middle_name' => pick_sn($row, $data, ['middle_name','prenom2','middle_name_2','second_name']) ?: null,
     'last_name' => pick_sn($row, $data, ['last_name','nom','family_name']) ?: null,
     'email' => pick_sn($row, $data, ['email','courriel','email_address']) ?: null,
     'mobile' => pick_sn($row, $data, ['mobile','telephone','telephone1','mobile1']) ?: null
@@ -255,23 +167,28 @@ if (empty($customer['first_name']) && empty($customer['last_name']) && !empty($c
     if (count($parts) === 1) {
         $customer['first_name'] = $parts[0];
     } else {
-        $customer['first_name'] = array_shift($parts);
         $customer['last_name'] = implode(' ', $parts);
+        $customer['first_name'] = array_shift($parts);
+        
     }
 }
 
-$customer_full_name = trim(implode(' ', array_filter([
-    $customer['first_name'],
-    $customer['last_name']
-], function($part){
-    return trim((string)$part) !== '';
-})));
-if (!$customer_full_name && !empty($customer['customer_name'])) {
+$customer_full_name = '';
+if (!empty($customer['customer_name'])) {
     $customer_full_name = trim($customer['customer_name']);
+} else {
+    $customer_full_name = trim(implode(' ', array_filter([
+        $customer['last_name'],
+        $customer['first_name']
+    ], function($part){
+        return trim((string)$part) !== '';
+    })));
 }
 if ($customer_full_name) {
     $customer['customer_name'] = $customer_full_name;
-    $account_obj['account_title'] = $customer_full_name;
+    if (empty($account_obj['account_title'])) {
+        $account_obj['account_title'] = $customer_full_name;
+    }
 }
 
 $correspondents = [
@@ -300,9 +217,11 @@ echo json_encode([
     'correspondents'=>$correspondents
 ]);
 
+ob_end_flush();
 exit;
 
 } catch (Exception $e) {
+    ob_end_clean();
     echo json_encode(['status'=>'error','message'=>'Erreur interne: ' . $e->getMessage()]);
     exit;
 }

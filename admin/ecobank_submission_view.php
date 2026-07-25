@@ -1,7 +1,8 @@
 <?php
 // ecobank_submission_view.php
-include('../includes/session.php');
-include('../includes/config.php');
+
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id <= 0) {

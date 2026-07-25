@@ -1,5 +1,9 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php 
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
 <?php include('../includes/flexcube_helpers.php')?>
 <?php
 // Helper to safely escape output and avoid passing null to htmlspecialchars (PHP 8.1+ deprecation)

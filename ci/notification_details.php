@@ -1,6 +1,8 @@
-<?php
-    include('includes/header.php');
-    include('../includes/session.php');
+<?php 
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+
 
     // Validation de l'ID de la notification
     if (!isset($_GET['id'])) {
@@ -69,7 +71,7 @@
         }
 
         .notification-header {
-            background: linear-gradient(135deg, #042852 0%, #017ac5 100%);
+            background: linear-gradient(135deg, #cbd7e5 0%, #017ac5 100%);
             color: white;
             padding: 30px;
             border-radius: 8px 8px 0 0;
@@ -383,10 +385,10 @@
                             ?>
                         </div>
                     </div>
-                    <div class="metadata-item">
+                    <!-- <div class="metadata-item">
                         <div class="metadata-label">👤 ID Employé</div>
                         <div class="metadata-value"><?php echo htmlspecialchars($notification['emp_id'] ?? 'N/A'); ?></div>
-                    </div>
+                    </div> -->
                     <div class="metadata-item">
                         <div class="metadata-label">📌 ID Notification</div>
                         <div class="metadata-value"><?php echo htmlspecialchars($notification['id']); ?></div>

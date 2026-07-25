@@ -1,6 +1,7 @@
-<?php
-include('../includes/session.php');
-include('../includes/config.php');
+<?php 
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+
 include('../includes/audit_helpers.php');
 
 header('Content-Type: application/json; charset=utf-8');

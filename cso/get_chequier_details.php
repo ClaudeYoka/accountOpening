@@ -1,6 +1,6 @@
-<?php
-include('../includes/session.php');
-include('../includes/config.php');
+<?php 
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
 
 // Retourner les détails d'une demande de chéquier
 if (!isset($_GET['request_id'])) {

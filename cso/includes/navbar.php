@@ -50,6 +50,7 @@
 					<a href="formulaire_produits" class="btn btn-primary btn-block" role="button">Formulaire Produits</a>
 					<a href="bic_personne_physique" class="btn btn-primary btn-block" role="button">Formulaire BIC Personne Physique</a>
 					<a href="rib" class="btn btn-primary btn-block" role="button">Relevé Identité Bancaire (RIB)</a>
+					<a href="formulaire_carte" class="btn btn-primary btn-block" role="button">Formulaire Carte </a>
 				</div>
 			</div>
 			<div class="modal-footer justify-content-center">

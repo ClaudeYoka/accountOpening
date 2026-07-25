@@ -3,6 +3,7 @@
 include('../includes/session.php');
 include('../includes/config.php');
 
+
 function debug_log_local($msg){
     $path = __DIR__ . '/../logs/save_ecobank_form_debug.log';
     $line = '['.date('c').'] ' . $msg . PHP_EOL;

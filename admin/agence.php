@@ -1,7 +1,17 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php
+include('../includes/session.php');
+include('../includes/config.php');
+include('includes/header.php');
+?>
 <?php include('../includes/flash.php')?>
 <?php include('../includes/audit_helpers.php')?>
+<?php
+/** @var mysqli $conn */
+if (empty($conn) || !($conn instanceof mysqli)) {
+    echo "<div style='padding:20px;color:#900'>Connexion à la base de données introuvable.</div>";
+    exit;
+}
+?>
 
 <?php
 	if (isset($_GET['delete'])) {

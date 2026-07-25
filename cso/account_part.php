@@ -1,10 +1,10 @@
 <html>
 <head>
     
-    <?php include('includes/header.php'); ?>
-
 </head>
 <?php include('../includes/session.php');?>
+<?php include('../includes/config.php');?>
+<?php include('includes/header.php'); ?>
 <?php include('includes/trackingController.php');?>
 
 <body>

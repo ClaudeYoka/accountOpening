@@ -1,31 +1,35 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php 
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
 <?php $get_id = $_GET['edit']; ?>
 <?php 
-	 if (isset($_GET['delete'])) {
+	if (isset($_GET['delete'])) {
 		$agence_id = $_GET['delete'];
 		$sql = "DELETE FROM tblagences where id = ".$agence_id;
 		$result = mysqli_query($conn, $sql);
 		if ($result) {
 			echo "<script>alert('Agence supprimée avec succès');</script>";
-     		echo "<script type='text/javascript'> document.location = 'agence.php'; </script>";
+			echo "<script type='text/javascript'> document.location = 'agence.php'; </script>";
 			
 		}
 	}
 ?>
 
 <?php
- if(isset($_POST['edit']))
+	if(isset($_POST['edit']))
 {
-	 $deptname=$_POST['agencename'];
-	 $deptshortname=$_POST['agenceshortname'];
+		$deptname=$_POST['agencename'];
+		$deptshortname=$_POST['agenceshortname'];
 
     $result = mysqli_query($conn,"UPDATE tblagences set AgenceName = '$deptname' , AgencehortName ='$deptshortname' where id = '$get_id' ");
     if ($result) {
-     	echo "<script>alert('Agence Modifiée avec Succès');</script>";
-     	echo "<script type='text/javascript'> document.location = 'agence.php'; </script>";
+		echo "<script>alert('Agence Modifiée avec Succès');</script>";
+		echo "<script type='text/javascript'> document.location = 'agence.php'; </script>";
 	} else{
-	  die(mysqli_error($conn));
+		die(mysqli_error($conn));
    }
 }
 

@@ -1,6 +1,11 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php 
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
 <?php include('../includes/flash.php')?>
+<?php require_once('../includes/audit_logger.php')?>
 <?php
 if(isset($_POST['new_update']))
 {
@@ -34,6 +39,11 @@ if(isset($_POST['new_update']))
     mysqli_stmt_close($stmt);
 
     if ($result) {
+        AuditLogger::log('password_changed', [
+            'target_user_id' => $session_id,
+            'changed_by' => $session_id,
+            'page' => 'ci/change_password.php'
+        ], $conn);
         set_flash_message('Mot de passe modifié avec succès.', 'success');
         header('Location: staff_profile.php');
         exit;

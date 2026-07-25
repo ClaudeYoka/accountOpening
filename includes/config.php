@@ -1,22 +1,26 @@
 <?php
 
+
+
+// Inclure le gestionnaire d'erreurs avant toute opération de configuration
+require_once __DIR__ . '/error_handler.php';
+
 // Charger les variables d'environnement depuis .env
-if (file_exists(__DIR__ . '/../.env')) {
-    $env = parse_ini_file(__DIR__ . '/../.env');
-    if ($env) {
-        if (!defined('DB_HOST')) define('DB_HOST', $env['DB_HOST'] ?? '');
-        if (!defined('DB_USER')) define('DB_USER', $env['DB_USER'] ?? '');
-        if (!defined('DB_PASS')) define('DB_PASS', $env['DB_PASS'] ?? '');
-        if (!defined('DB_NAME')) define('DB_NAME', $env['DB_NAME'] ?? '');
-    } else {
-        die('Erreur de chargement du fichier .env');
-    }
-} else {
-    die('Fichier .env manquant. Veuillez créer .env avec les configurations.');
+if (!file_exists(__DIR__ . '/../.env')) {
+    error_log('Config error: .env file is missing.');
+    exit('Configuration manquante. Contactez l\'administrateur.');
 }
 
-// Inclure le gestionnaire d'erreurs
-require_once __DIR__ . '/error_handler.php';
+$env = parse_ini_file(__DIR__ . '/../.env');
+if ($env === false) {
+    error_log('Config error: failed to parse .env file.');
+    exit('Configuration invalide. Contactez l\'administrateur.');
+}
+
+if (!defined('DB_HOST')) define('DB_HOST', $env['DB_HOST'] ?? '');
+if (!defined('DB_USER')) define('DB_USER', $env['DB_USER'] ?? '');
+if (!defined('DB_PASS')) define('DB_PASS', $env['DB_PASS'] ?? '');
+if (!defined('DB_NAME')) define('DB_NAME', $env['DB_NAME'] ?? '');
 
 $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if (!$conn) {

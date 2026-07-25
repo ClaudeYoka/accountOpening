@@ -4,32 +4,71 @@
 <?php
 require_once __DIR__ . '/../includes/config.php';
 
+function normalize_chequier_status($status) {
+    $s = trim(mb_strtolower($status, 'UTF-8'));
+    $s = str_replace([' ', '-'], '', $s);
+
+    if (in_array($s, ['recu', 'reçu', 'reçue'])) {
+        return 'reçu';
+    }
+    if (in_array($s, ['livre', 'livré'])) {
+        return 'livré';
+    }
+    if (in_array($s, ['prestataire'])) {
+        return 'prestataire';
+    }
+    if (in_array($s, ['encours'])) {
+        return 'encours';
+    }
+    return 'encours';
+}
+
 $search = trim($_GET['search'] ?? '');
 $status_filter = trim($_GET['status'] ?? '');
 $date_from = trim($_GET['date_from'] ?? '');
 $date_to = trim($_GET['date_to'] ?? '');
 
-$where = "tc.type_compte IS NOT NULL AND tc.type_compte != ''";
+$whereParts = ["tc.type_compte IS NOT NULL", "tc.type_compte != ''"];
+$bindTypes = '';
+$bindValues = [];
 
 if ($search !== '') {
-    $search_escaped = mysqli_real_escape_string($conn, $search);
-    $where .= " AND (tc.account_number LIKE '%$search_escaped%' OR tc.firstname LIKE '%$search_escaped%' OR tc.nip LIKE '%$search_escaped%')";
+    $searchTerm = '%' . $search . '%';
+    $whereParts[] = "(tc.account_number LIKE ? OR tc.firstname LIKE ? OR tc.nip LIKE ?)";
+    $bindTypes .= 'sss';
+    $bindValues[] = $searchTerm;
+    $bindValues[] = $searchTerm;
+    $bindValues[] = $searchTerm;
 }
 
 if ($status_filter !== '') {
-    $status_safe = mysqli_real_escape_string($conn, $status_filter);
-    $where .= " AND (COALESCE(cs.status, tc.access, 'encours') = '$status_safe')";
+    $status_filter_normalized = normalize_chequier_status($status_filter);
+    if ($status_filter_normalized !== '') {
+        $whereParts[] = "LOWER(REPLACE(COALESCE(cs.status, tc.access, 'encours'), ' ', '')) COLLATE utf8mb4_general_ci = ?";
+        $bindTypes .= 's';
+        $bindValues[] = str_replace([' ', '-'], '', mb_strtolower($status_filter_normalized, 'UTF-8'));
+    }
 }
 
 if ($date_from !== '') {
-    $date_from_safe = mysqli_real_escape_string($conn, $date_from);
-    $where .= " AND tc.date_enregistrement >= '$date_from_safe 00:00:00'";
+    $dateFrom = DateTime::createFromFormat('Y-m-d', $date_from);
+    if ($dateFrom) {
+        $whereParts[] = "tc.date_enregistrement >= ?";
+        $bindTypes .= 's';
+        $bindValues[] = $dateFrom->format('Y-m-d') . ' 00:00:00';
+    }
 }
 
 if ($date_to !== '') {
-    $date_to_safe = mysqli_real_escape_string($conn, $date_to);
-    $where .= " AND tc.date_enregistrement <= '$date_to_safe 23:59:59'";
+    $dateTo = DateTime::createFromFormat('Y-m-d', $date_to);
+    if ($dateTo) {
+        $whereParts[] = "tc.date_enregistrement <= ?";
+        $bindTypes .= 's';
+        $bindValues[] = $dateTo->format('Y-m-d') . ' 23:59:59';
+    }
 }
+
+$where = implode(' AND ', $whereParts);
 
 $query = "SELECT
             tc.id,
@@ -60,7 +99,28 @@ $query = "SELECT
         WHERE $where
         ORDER BY tc.date_enregistrement DESC";
 
-$result = mysqli_query($conn, $query);
+$stmt = mysqli_prepare($conn, $query);
+$result = false;
+if (!$stmt) {
+    $chequier_error_message = 'Échec préparation requête : ' . mysqli_error($conn);
+} else {
+    if ($bindTypes !== '') {
+        $bindParams = array_merge([$bindTypes], $bindValues);
+        $tmp = [];
+        foreach ($bindParams as $key => $value) {
+            $tmp[$key] = &$bindParams[$key];
+        }
+        call_user_func_array([$stmt, 'bind_param'], $tmp);
+    }
+
+    if (!mysqli_stmt_execute($stmt)) {
+        $chequier_error_message = 'Échec exécution requête : ' . mysqli_stmt_error($stmt);
+        mysqli_stmt_close($stmt);
+    } else {
+        $result = mysqli_stmt_get_result($stmt);
+        mysqli_stmt_close($stmt);
+    }
+}
 $historic_requests = [];
 if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
@@ -114,7 +174,7 @@ function status_label_php($status) {
                             <thead><tr><th>#</th><th>Compte</th><th>Client</th><th>Agence</th><th>Type</th><th>Quantité</th><th>Statut</th><th>Date Demande</th></tr></thead>
                             <tbody>
                     <?php foreach ($historic_requests as $idx => $req): ?>
-                        <tr>
+                        <tr onclick="window.location.href='chequier_request_detail.php?request_id=<?php echo $req['id']; ?>'" style="cursor: pointer;" data-request-id="<?php echo $req['id']; ?>">
                             <td><?php echo $idx + 1; ?></td>
                             <td><?php echo htmlspecialchars($req['account_number']); ?></td>
                             <td><?php echo htmlspecialchars($req['customer_name']); ?></td>

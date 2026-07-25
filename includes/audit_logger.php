@@ -133,19 +133,22 @@ class AuditLogger {
             (timestamp, user_id, action, details, ip_address, user_agent)
             VALUES (?, ?, ?, ?, ?, ?)");
 
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, 'ssssss',
-                $logEntry['timestamp'],
-                $logEntry['user_id'],
-                $logEntry['action'],
-                $logEntry['details'],
-                $logEntry['ip_address'],
-                $logEntry['user_agent']
-            );
-
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_close($stmt);
+        if (!$stmt) {
+            error_log('AuditLogger DB insert prepare failed: ' . mysqli_error($conn));
+            return;
         }
+
+        mysqli_stmt_bind_param($stmt, 'ssssss',
+            $logEntry['timestamp'],
+            $logEntry['user_id'],
+            $logEntry['action'],
+            $logEntry['details'],
+            $logEntry['ip_address'],
+            $logEntry['user_agent']
+        );
+
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
     }
 
     /**
@@ -209,33 +212,39 @@ class AuditLogger {
                   ORDER BY al.timestamp DESC LIMIT ? OFFSET ?";
         $stmt = mysqli_prepare($conn, $query);
 
-        if ($stmt) {
-            $types .= 'ii';
-            $params[] = $limit;
-            $params[] = $offset;
-
-            $bindParams = array_merge([$types], $params);
-            $tmp = [];
-            foreach ($bindParams as $key => $value) {
-                $tmp[$key] = &$bindParams[$key];
-            }
-            call_user_func_array([$stmt, 'bind_param'], $tmp);
-
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-            mysqli_stmt_close($stmt);
-
-            $logs = [];
-            if ($result) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $logs[] = $row;
-                }
-            }
-
-            return $logs;
+        if (!$stmt) {
+            error_log('AuditLogger getLogs prepare failed: ' . mysqli_error($conn));
+            return [];
         }
 
-        return [];
+        $types .= 'ii';
+        $params[] = $limit;
+        $params[] = $offset;
+
+        $bindParams = array_merge([$types], $params);
+        $tmp = [];
+        foreach ($bindParams as $key => $value) {
+            $tmp[$key] = &$bindParams[$key];
+        }
+
+        if (!call_user_func_array([$stmt, 'bind_param'], $tmp)) {
+            error_log('AuditLogger getLogs bind_param failed: ' . mysqli_error($conn));
+            mysqli_stmt_close($stmt);
+            return [];
+        }
+
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        mysqli_stmt_close($stmt);
+
+        $logs = [];
+        if ($result) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $logs[] = $row;
+            }
+        }
+
+        return $logs;
     }
 
     /**

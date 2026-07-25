@@ -1,5 +1,5 @@
-<?php include('includes/header.php'); ?>
 <?php include('../includes/session.php');?>
+<?php include('includes/header.php'); ?>
 <body>
     <?php include('includes/navbar.php')?>
     <?php include('includes/right_sidebar.php')?>
@@ -35,7 +35,7 @@
                                 <input type="text" id="account-number" name="account" class="form-control" autocomplete="off" placeholder="Saisir le numéro de compte ici" required>
                             </div>
                         </div>
-                       
+                    
 
                         <div class="form-group row">
                             <div class="col-sm-8">

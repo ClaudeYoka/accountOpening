@@ -74,36 +74,33 @@ try {
         $branch_code = 'DEFAULT';  // Valeur par défaut pour éviter les erreurs
     }
 
-    // Préparer les données pour insertion dans tblcompte
-    // Déterminer le nom complet : priorité au champ pré-rempli dans le formulaire,
-    // sinon tenter Flexcube via account_number, sinon session.
-    $firstname = trim($data['text_field_0'] ?? '');
-    $flex_data = null;
-    if (empty($firstname) && !empty($account_number)) {
-        $flex_resp = fetchAccountFromFlexcube($account_number);
-        if (!empty($flex_resp) && is_array($flex_resp)) {
-            $flex_data = $flex_resp;
-        }
-
-        if (!empty($flex_data)) {
-            if (!empty($flex_data['account_name'])) {
-                $firstname = $flex_data['account_name'];
-            } else {
-                $fn = $flex_data['first_name'] ?? $flex_data['form_fields']['first-name'] ?? '';
-                $ln = $flex_data['last_name'] ?? $flex_data['form_fields']['last-name'] ?? '';
-                $fullname = trim($fn . ' ' . $ln);
-                if ($fullname) $firstname = $fullname;
+    // Récupérer le type de compte depuis Flexcube ou ecobank_form_submissions
+    $type_compte = 'Compte courant'; // Valeur par défaut
+    if (!empty($flex_data) && !empty($flex_data['account_type'])) {
+        $type_compte = $flex_data['account_type'];
+    } else {
+        // Essayer de récupérer depuis ecobank_form_submissions
+        $submissions_query = mysqli_prepare($conn, "SELECT account_type FROM ecobank_form_submissions WHERE account_number = ? ORDER BY created_at DESC LIMIT 1");
+        if ($submissions_query) {
+            mysqli_stmt_bind_param($submissions_query, 's', $account_number);
+            mysqli_stmt_execute($submissions_query);
+            $result = mysqli_stmt_get_result($submissions_query);
+            if ($result && $row = mysqli_fetch_assoc($result)) {
+                $type_compte = $row['account_type'] ?? 'Compte courant';
             }
+            mysqli_stmt_close($submissions_query);
         }
     }
 
-    if (empty($firstname)) {
-        $firstname = $_SESSION['user_fullname'] ?? 'N/A';
-    }
+    // Récupérer le nom du CSO (utilisateur connecté)
+    $gestionnaire = trim($_SESSION['user_fullname'] ?? $_SESSION['alogin'] ?? 'CSO Inconnu');
     // Pour compatibilité, on écrira aussi dans `noms` la même valeur (nom complet)
     $services = '';
     $type_compte = '';
     $chequier_requested = false;
+
+    // Récupérer le nom du client depuis les données
+    $firstname = $data['first_name'] ?? $data['firstname'] ?? $flex_data['first_name'] ?? 'Client';
 
     // Extraction des données de chéquier
     if (!empty($data['chequier']) && is_array($data['chequier'])) {
@@ -119,7 +116,56 @@ try {
 
     $services = implode(', ', $services_array);
 
-    // Vérifier que la table tblcompte existe
+    // Vérifier que la table tblproduits existe et a les bonnes colonnes
+    $check_table = mysqli_query($conn, "SHOW TABLES LIKE 'tblproduits'");
+    if (!$check_table || mysqli_num_rows($check_table) == 0) {
+        throw new Exception('Table tblproduits inexistante');
+    }
+
+    // Vérifier et créer TOUTES les colonnes nécessaires pour tblproduits
+    $required_columns = [
+        'customer_id' => "VARCHAR(50) NOT NULL",
+        'first_name' => "VARCHAR(100) DEFAULT NULL",
+        'last_name' => "VARCHAR(100) DEFAULT NULL",
+        'mobile' => "VARCHAR(20) DEFAULT NULL",
+        'services' => "TEXT DEFAULT NULL",
+        'deposit_amount' => "DECIMAL(15,2) DEFAULT 0",
+        'emp_id' => "VARCHAR(50) DEFAULT NULL",
+        'branch_code' => "VARCHAR(20) DEFAULT NULL",
+        'card_classic' => "TINYINT(1) DEFAULT 0",
+        'card_gold' => "TINYINT(1) DEFAULT 0",
+        'card_platinum' => "TINYINT(1) DEFAULT 0",
+        'srv_ecobank_app' => "TINYINT(1) DEFAULT 0",
+        'srv_airtel_money' => "TINYINT(1) DEFAULT 0",
+        'srv_insurance' => "TINYINT(1) DEFAULT 0",
+        'srv_mobile_money' => "TINYINT(1) DEFAULT 0",
+        'srv_estatement' => "TINYINT(1) DEFAULT 0",
+        'srv_sms_alert' => "TINYINT(1) DEFAULT 0",
+        'online_transfer' => "TINYINT(1) DEFAULT 0",
+        'online_western_union' => "TINYINT(1) DEFAULT 0",
+        'gestionnaire' => "VARCHAR(255) DEFAULT NULL",
+        'chef_agence' => "VARCHAR(255) DEFAULT NULL",
+        'airtel_phone' => "VARCHAR(20) DEFAULT NULL",
+        'mobilemoney_phone' => "VARCHAR(20) DEFAULT NULL",
+        'chequier_types' => "TEXT DEFAULT NULL",
+        'deposit_type' => "TEXT DEFAULT NULL",
+        'type_compte' => "VARCHAR(100) DEFAULT 'Compte courant'",
+        'title' => "VARCHAR(255) DEFAULT NULL",
+        'date_enregistrement' => "DATETIME DEFAULT CURRENT_TIMESTAMP"
+    ];
+
+    foreach ($required_columns as $column => $definition) {
+        $check_column = mysqli_query($conn, "SHOW COLUMNS FROM tblproduits LIKE '$column'");
+        if (!$check_column || mysqli_num_rows($check_column) == 0) {
+            error_log("Adding missing column $column to tblproduits");
+            $alter_sql = "ALTER TABLE tblproduits ADD COLUMN $column $definition";
+            $alter_result = mysqli_query($conn, $alter_sql);
+            if (!$alter_result) {
+                error_log("Failed to add column $column: " . mysqli_error($conn));
+                throw new Exception("Impossible d'ajouter la colonne $column: " . mysqli_error($conn));
+            }
+        }
+    }
     $check_table = mysqli_query($conn, "SHOW TABLES LIKE 'tblcompte'");
     if (!$check_table || mysqli_num_rows($check_table) == 0) {
         throw new Exception('Table tblcompte inexistante');
@@ -155,14 +201,24 @@ try {
     $submission_id = null; // garde la variable disponible pour la réponse
 
     // Insertion dans table tblproduits (produit digital)
-    // Split du nom complet en first_name / last_name
-    $full_name = trim($firstname);
-    $first_name = $full_name;
-    $last_name = '';
-    if (strpos($full_name, ' ') !== false) {
+    // Récupérer first_name et last_name, soit directement du formulaire, soit en splittant le titre/nom complet
+    $first_name = trim($data['first_name'] ?? '');
+    $last_name = trim($data['last_name'] ?? '');
+    
+    // Si les valeurs ne sont pas fournies, essayer de les extraire du $firstname ou du $title
+    if (empty($first_name) && !empty($firstname)) {
+        $first_name = trim($firstname);
+    }
+    
+    // Si on a un nom complet mais pas first/last séparé, on le splits
+    $full_name = $first_name . ($last_name ? ' ' . $last_name : '');
+    if (!empty($full_name) && strpos($full_name, ' ') !== false) {
         $parts = preg_split('/\s+/', $full_name);
         $first_name = array_shift($parts);
         $last_name = trim(implode(' ', $parts));
+    } elseif (empty($last_name) && !empty($first_name)) {
+        // Si on a seulement first_name, last_name reste vide
+        $last_name = '';
     }
 
     // Extraire TOUS les champs du formulaire produits
@@ -178,45 +234,35 @@ try {
     $online_transfer = (int)($data['online_transfer'] ?? 0);
     $online_western_union = (int)($data['online_western_union'] ?? 0);
     
+    // Capturer les nouvelles données
     $gestionnaire = trim($data['gestionnaire'] ?? '');
     $chef_agence = trim($data['chef_agence'] ?? '');
     $airtel_phone = trim($data['airtel_phone'] ?? '');
     $mobilemoney_phone = trim($data['mobilemoney_phone'] ?? '');
+    $type_compte_form = trim($data['type_compte'] ?? 'Compte courant');
+    $title_client = trim($data['title'] ?? $firstname);
     
     // Convertir les tableaux en JSON pour stockage
     $chequier_types = !empty($data['chequier']) ? json_encode($data['chequier']) : null;
     $deposit_type = !empty($data['depot']) ? json_encode($data['depot']) : null;
 
-    // Requête INSERT avec TOUS les champs
-    $produit_stmt = mysqli_prepare($conn, "INSERT INTO tblproduits (
-        customer_id,
-        first_name,
-        last_name,
-        mobile,
-        services,
-        deposit_amount,
-        emp_id,
-        branch_code,
-        card_classic,
-        card_gold,
-        card_platinum,
-        srv_ecobank_app,
-        srv_airtel_money,
-        srv_insurance,
-        srv_mobile_money,
-        srv_estatement,
-        srv_sms_alert,
-        online_transfer,
-        online_western_union,
-        gestionnaire,
-        chef_agence,
-        airtel_phone,
-        mobilemoney_phone,
-        chequier_types,
-        deposit_type,
-        date_enregistrement
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+    // Requête INSERT avec TOUTES les colonnes de la table tblproduits
+    // IMPORTANT: date_enregistrement n'est pas inclus - il sera géré par NOW() en tant que valeur non-bindée
+    $columns = [
+        'customer_id', 'title', 'first_name', 'last_name', 'mobile',
+        'services', 'deposit_amount', 'emp_id', 'branch_code',
+        'card_classic', 'card_gold', 'card_platinum', 'srv_ecobank_app', 'srv_airtel_money', 'srv_insurance',
+        'srv_mobile_money', 'srv_estatement', 'srv_sms_alert', 'online_transfer', 'online_western_union',
+        'gestionnaire', 'chef_agence', 'type_compte', 'airtel_phone', 'mobilemoney_phone', 'chequier_types', 'deposit_type'
+    ];
+
+    
+    $placeholders = str_repeat('?,', count($columns)) . 'NOW()';
+    $columns_str = implode(',', $columns) . ',date_enregistrement';
+
+    $produit_sql = "INSERT INTO tblproduits ($columns_str) VALUES ($placeholders)
     ON DUPLICATE KEY UPDATE
+        title = VALUES(title),
         first_name = VALUES(first_name),
         last_name = VALUES(last_name),
         mobile = VALUES(mobile),
@@ -236,15 +282,23 @@ try {
         online_western_union = VALUES(online_western_union),
         gestionnaire = VALUES(gestionnaire),
         chef_agence = VALUES(chef_agence),
+        type_compte = VALUES(type_compte),
         airtel_phone = VALUES(airtel_phone),
         mobilemoney_phone = VALUES(mobilemoney_phone),
         chequier_types = VALUES(chequier_types),
         deposit_type = VALUES(deposit_type),
-        date_enregistrement = NOW()");
+        date_enregistrement = NOW()";
 
-    // Bind parameters pour 26 colonnes (y compris le NOW() qui n'est pas bindé)
-    mysqli_stmt_bind_param($produit_stmt, "ssssssssiiiiiiiiiiissssss",
+    $produit_stmt = mysqli_prepare($conn, $produit_sql);
+    if (!$produit_stmt) {
+        throw new Exception('Erreur de préparation de la requête produit: ' . mysqli_error($conn));
+    }
+
+    // Bind parameters pour 27 colonnes 
+    $param_types = "sssssssssiiiiiiiiiiisssssss"; 
+    $param_values = [
         $account_number,
+        $title_client,
         $first_name,
         $last_name,
         $mobile,
@@ -265,11 +319,56 @@ try {
         $online_western_union,
         $gestionnaire,
         $chef_agence,
+        $type_compte_form,
         $airtel_phone,
         $mobilemoney_phone,
         $chequier_types,
         $deposit_type
-    );
+    ];
+    
+    $param_count = strlen($param_types);
+    $value_count = count($param_values);
+    
+    if ($param_count !== $value_count) {
+        throw new Exception("Erreur critique: $param_count types vs $value_count valeurs");
+    }
+
+    // Debug logging
+    error_log("=== DEBUG INSERT PRODUIT ===");
+    error_log("Nombre de colonnes: " . count($columns));
+    error_log("Nombre de placeholders: " . substr_count($placeholders, '?') . " + NOW()");
+    error_log("Nombre de types de paramètres: " . strlen($param_types));
+    error_log("Nombre de valeurs de paramètres: " . count($param_values));
+    error_log("SQL: $produit_sql");
+
+    // Vérifier que le nombre de types correspond au nombre de valeurs
+    if (strlen($param_types) !== count($param_values)) {
+        $error_msg = "Nombre de types de paramètres (" . strlen($param_types) . ") ne correspond pas au nombre de valeurs (" . count($param_values) . ")";
+        error_log($error_msg);
+        throw new Exception($error_msg);
+    }
+
+    // Vérifier que le nombre de colonnes correspond au nombre de paramètres + NOW()
+    $expected_placeholders = count($columns); // We need 27 placeholders (for 27 columns) + NOW()
+    if (substr_count($placeholders, '?') !== $expected_placeholders) {
+        $error_msg = "Nombre de placeholders (" . substr_count($placeholders, '?') . ") ne correspond pas au nombre attendu (" . $expected_placeholders . ")";
+        error_log($error_msg);
+        throw new Exception($error_msg);
+    }
+
+    // Log des valeurs des paramètres pour debug
+    error_log("Paramètres:");
+    foreach ($param_values as $i => $value) {
+        error_log("  [$i] " . (is_null($value) ? 'NULL' : "'$value'"));
+    }
+
+    // Binder les paramètres dynamiquement avec des références
+    // IMPORTANT: mysqli_stmt_bind_param requires parameters to be passed by reference
+    $args = [$produit_stmt, $param_types];
+    foreach ($param_values as &$val) {
+        $args[] = &$val;
+    }
+    call_user_func_array('mysqli_stmt_bind_param', $args);
 
     $produit_result = mysqli_stmt_execute($produit_stmt);
     if (!$produit_result) {

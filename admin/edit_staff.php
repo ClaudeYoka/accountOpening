@@ -1,5 +1,9 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php 
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
 <?php require_once('../includes/audit_logger.php')?>
 <?php $get_id = $_GET['edit']; ?>
 <?php

@@ -1,5 +1,18 @@
+<?php 
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
+
+<?php
+// Vérifier que l'utilisateur est authentifié AVANT d'inclure header.php
+if (!isset($_SESSION['emp_id'])) {
+    header('Location: ../index.php');
+    exit('Authentification requise');
+}
+?>
+
 <?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
 
 <body>
     <?php include('includes/navbar.php')?>
@@ -35,6 +48,27 @@
                     </div>
 
                     <form id="chequerForm">
+                        <!-- RECHERCHE ET AUTO-REMPLISSAGE FLEXCUBE -->
+                        <div class="row mb-30" style="border: 1px solid #e8e8e8; padding: 15px; background: #f5f5f5; border-radius: 4px; margin-bottom: 20px;">
+                            <div class="col-md-12 col-sm-12">
+                                <h5 style="margin-bottom: 15px; color: #333;">📋 Rechercher un Compte</h5>
+                            </div>
+                            <div class="col-md-8 col-sm-12">
+                                <div class="form-group">
+                                    <label>Numéro de Compte Flexcube</label>
+                                    <input type="text" id="flexcube_search" class="form-control" placeholder="Ex: 37155023238" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12" style="display: flex; align-items: flex-end;">
+                                <button type="button" id="btn_search_flexcube" class="btn btn-info w-100" style="background: linear-gradient(135deg, #05b7e4 0%, #00455a 100%); border: none;">
+                                    <i class="dw dw-search"></i> Rechercher
+                                </button>
+                            </div>
+                            <div class="col-md-12 col-sm-12" id="search_result" style="margin-top: 10px;"></div>
+                        </div>
+
+                        <hr style="margin: 30px 0;">
+
                         <div class="row">
                             <!-- NOM DU CLIENT -->
                             <div class="col-md-6 col-sm-12">
@@ -317,6 +351,102 @@
                 console.error('Error:', error);
                 alert('✗ Erreur de communication avec le serveur');
             });
+        });
+
+        // Recherche et auto-remplissage Flexcube
+        document.getElementById('btn_search_flexcube').addEventListener('click', function() {
+            const accountNumber = document.getElementById('flexcube_search').value.trim();
+            
+            if (!accountNumber) {
+                alert('Veuillez entrer un numéro de compte');
+                return;
+            }
+
+            const resultDiv = document.getElementById('search_result');
+            resultDiv.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Recherche en cours...';
+
+            fetch('fetch_account_flexcube.php?account=' + encodeURIComponent(accountNumber))
+                .then(response => {
+                    if (!response.ok) throw new Error('Erreur réseau: ' + response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Données reçues:', data);
+                    
+                    if (data.success || data.account_number) {
+                        // Auto-remplissage des champs
+                        console.log('Remplissage des champs...');
+                        
+                        // Les données sont imbriquées dans data.data si on utilise la nouvelle API
+                        let accountData = data.data || data;
+                        
+                        console.log('Données à utiliser:', accountData);
+                        
+                        // Remplir account_number
+                        const accField = document.getElementById('account_number');
+                        if (accField) {
+                            accField.value = accountData.account_number || '';
+                            console.log('account_number set to:', accField.value);
+                        }
+                        
+                        // Remplir client_name
+                        const nameField = document.getElementById('client_name');
+                        if (nameField) {
+                            nameField.value = (accountData.first_name || '') + ' ' + (accountData.last_name || '');
+                            console.log('client_name set to:', nameField.value);
+                        }
+                        
+                        // Remplir phone_number
+                        const phoneField = document.getElementById('phone_number');
+                        if (phoneField) {
+                            phoneField.value = accountData.phone_number || accountData.telephone || '';
+                            console.log('phone_number set to:', phoneField.value);
+                        }
+
+                        // Remplir rib_key
+                        const ribField = document.getElementById('rib_key');
+                        if (ribField) {
+                            ribField.value = accountData.rib_key || accountData.rib || accountData.clearing_ac_no || '';
+                            console.log('rib_key set to:', ribField.value);
+                        }
+                        
+                        // Remplir email
+                        const emailField = document.getElementById('email');
+                        if (emailField) {
+                            emailField.value = accountData.email || '';
+                            console.log('email set to:', emailField.value);
+                        }
+                        
+                        // Remplir address
+                        const addrField = document.getElementById('address');
+                        if (addrField) {
+                            addrField.value = accountData.customer_address || '';
+                            console.log('address set to:', addrField.value);
+                        }
+                        
+                        // Remplir branch_code
+                        const branchField = document.getElementById('branch_code');
+                        if (branchField) {
+                            branchField.value = accountData.branch_code || '';
+                            console.log('branch_code set to:', branchField.value);
+                        }
+
+                        resultDiv.innerHTML = '<div style="color: #28a745; padding: 10px; background: #d4edda; border-radius: 4px;"><strong>✓ Compte trouvé!</strong> Les informations ont été pré-remplies.</div>';
+                    } else {
+                        resultDiv.innerHTML = '<div style="color: #dc3545; padding: 10px; background: #f8d7da; border-radius: 4px;"><strong>✗ Compte non trouvé</strong><br>' + (data.error || 'Veuillez vérifier le numéro de compte') + '</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    resultDiv.innerHTML = '<div style="color: #dc3545; padding: 10px; background: #f8d7da; border-radius: 4px;"><strong>✗ Erreur de communication</strong><br>Impossible de récupérer les données du compte. Veuillez réessayer.</div>';
+                });
+        });
+
+        // Permettre la recherche avec la touche Entrée
+        document.getElementById('flexcube_search').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('btn_search_flexcube').click();
+            }
         });
     </script>
 </body>

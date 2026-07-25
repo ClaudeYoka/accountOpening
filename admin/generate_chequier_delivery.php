@@ -1,6 +1,7 @@
-<?php
-include('../includes/session.php');
-include('../includes/config.php');
+<?php 
+
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
 
 $request_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 

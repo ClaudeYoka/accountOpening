@@ -1,6 +1,7 @@
 <?php
-    include('../includes/header.php');
-    include('../includes/session.php');
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
 
     // Validation de l'ID de la notification
     if (!isset($_GET['id'])) {

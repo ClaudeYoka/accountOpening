@@ -20,11 +20,11 @@
 
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle menu-item-ecobank">
-							<span class="micon fa fa-user-o"></span><span class="mtext">Personnels</span>
+							<span class="micon fa fa-user-o"></span><span class="mtext">Utilisateurs</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="add_staff">Ajouter un personnel</a></li>
-							<li><a href="staff">Gestion du personnel</a></li>
+							<li><a href="add_staff">Ajouter</a></li>
+							<li><a href="staff">Gestion (CRUD)</a></li>
 						</ul>
 					</li>
 

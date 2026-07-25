@@ -281,7 +281,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
                         <div class="title">
-                            <h2 class="h3 mb-0">DEMANDES DE CHÉQUIERS</h2>
+                            <h2 class="h3 mb-0">DEMANDES DE CHÉQUIERS 30 DERNIERS JOURS</h2>
                         </div>
                         <nav aria-label="breadcrumb" role="navigation">
                             <ol class="breadcrumb">

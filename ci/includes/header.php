@@ -27,6 +27,9 @@
 	<link rel="stylesheet" type="text/css" href="../vendors/styles/style.css">
 	<link rel="stylesheet" type="text/css" href="../src/styles/ecobank_admin.css">
 	<link rel="stylesheet" type="text/css" href="../vendors/styles/fixes.css">
+	<link rel="stylesheet" type="text/css" href="../src/css/dashboard-modern.css">
+	<!-- Chart.js -->
+	<script src="../vendors/scripts/chart.js"></script>
 
 </head>
-<?php include('../includes/config.php'); ?>
+<?php require_once __DIR__ . '/../../includes/config.php'; ?>

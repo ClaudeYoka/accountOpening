@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Fetch Account Flexcube</title>
+</head>
+<body>
+    <h1>Test Fetch Account Flexcube - Compte 37155023238</h1>
+    <div id="result">Chargement...</div>
+
+    <script>
+        fetch('fetch_account_flexcube.php?account=37155023238')
+            .then(r => r.text())
+            .then(text => {
+                console.log('Réponse brute:', text);
+                try {
+                    const data = JSON.parse(text);
+                    document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                } catch (e) {
+                    document.getElementById('result').innerHTML = '<strong>Erreur JSON:</strong> ' + e.message + '<br><pre>' + text + '</pre>';
+                }
+            })
+            .catch(err => {
+                document.getElementById('result').innerHTML = '<strong>Erreur fetch:</strong> ' + err.message;
+            });
+    </script>
+</body>
+</html>

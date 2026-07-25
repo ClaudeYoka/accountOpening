@@ -1,6 +1,7 @@
-<?php
-include('../includes/session.php');
-include('../includes/config.php');
+<?php 
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+
 require_once('../TCPDF-main/tcpdf.php');
 
 // Fonction pour traduire les mois en français
@@ -40,7 +41,7 @@ function translateMonthToFrench($date) {
 // Récupération des données
 $did = intval($_GET['leave_id']);
 $sql = "SELECT tblleave.id as lid, tblemployees.FirstName, tblemployees.LastName, tblemployees.Department,tblemployees.cumulative_days, tblleave.LeaveType, tblleave.ToDate, tblleave.FromDate, tblleave.PostingDate, tblleave.RequestedDays, tblleave.DaysOutstand,tblleave.RemainingDays, tblleave.WorkCovered FROM tblleave JOIN tblemployees ON tblleave.empid = tblemployees.emp_id WHERE tblleave.id='$did'";
-$query = mysqli_query($conn, $sql) or die(mysqli_error());
+$query = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 $row = mysqli_fetch_array($query);
 
 // Récupération des données

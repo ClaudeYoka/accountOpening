@@ -23,6 +23,7 @@ function get_action_description($action) {
         'updated' => 'Modification d\'utilisateur',
         'login' => 'Connexion',
         'logout' => 'Déconnexion',
+        'password_changed' => 'Modification du mot de passe',
 
         // Department actions
         'department_created' => 'Création de département',

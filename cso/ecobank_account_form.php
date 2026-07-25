@@ -2,6 +2,7 @@
 // Ecobank Account Opening Form - PHP version
 // Converted from HTML to allow server interaction for auto-fill and printing
 include('../includes/session.php');
+include('../includes/config.php');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -236,128 +237,70 @@ if (!file_exists($htmlFile)) {
     }
 
     // ============================================
-    // FORM FILLING
+    // FORM FILLING - VERSION SIMPLIFIÉE
     // ============================================
     function fillFormFromData(data) {
         if (!data || typeof data !== 'object') return;
         
-        console.log('FormAutoFiller: Data received', data);
-        console.log('DEBUG - Full API Response:', JSON.stringify(data, null, 2));
+        console.log('fillFormFromData: Données reçues', data);
         
-        // IMPORTANT: Remplir les champs critiques EN PREMIER
-        // Ces champs doivent TOUJOURS être remplis, peu importe la source
-        
-        // Numéro de compte - PRIORITE MAXIMALE
+        // 1. Remplir le numéro de compte
         if (data.account_number) {
-            console.log('Filling account_number: ' + data.account_number);
             setVal('#form-bank-account-number', data.account_number);
         }
         
-        // Identifiant client (customer_id)
+        // 2. Remplir le customer ID
         if (data.customer_id) {
-            console.log('Filling customer_id: ' + data.customer_id);
             setVal('#customer-id', data.customer_id);
         }
         
-        // Numéro de téléphone depuis l'API (priorité: telephone, phone, phoneNo, phone_no)
-        if (data.telephone) {
-            console.log('Filling telephone: ' + data.telephone);
-            setVal('#telephone', data.telephone);
-        } else if (data.phone) {
-            console.log('Filling phone as telephone: ' + data.phone);
-            setVal('#telephone', data.phone);
-        } else if (data.phoneNo) {
-            console.log('Filling phoneNo as telephone: ' + data.phoneNo);
-            setVal('#telephone', data.phoneNo);
-        } else if (data.phone_no) {
-            console.log('Filling phone_no as telephone: ' + data.phone_no);
-            setVal('#telephone', data.phone_no);
-        }
-        
-        // Email depuis l'API (priorité: email, adresse_email, emailID, email_id)
+        // 3. Remplir l'email
         if (data.email) {
-            console.log('Filling email: ' + data.email);
             setVal('#email', data.email);
-        } else if (data.adresse_email) {
-            console.log('Filling adresse_email as email: ' + data.adresse_email);
-            setVal('#email', data.adresse_email);
-        } else if (data.emailID) {
-            console.log('Filling emailID as email: ' + data.emailID);
-            setVal('#email', data.emailID);
-        } else if (data.email_id) {
-            console.log('Filling email_id as email: ' + data.email_id);
-            setVal('#email', data.email_id);
         }
         
-        // Branch code depuis l'API
+        // 4. Remplir le téléphone
+        if (data.telephone) {
+            setVal('#telephone', data.telephone);
+        }
+        
+        // 5. Remplir l'adresse client
+        if (data.customer_address) {
+            setVal('#address', data.customer_address);
+        }
+        
+        // 6. Remplir le nom de famille avec last_name
+        if (data.last_name) {
+            setVal('#last-name', data.last_name);
+        }
+
+        // 7. Remplir les prénoms (tous) avec first_name + middle_name
+        var prenomsValue = [];
+        if (data.first_name) {
+            prenomsValue.push(data.first_name);
+        }
+        if (data.middle_name) {
+            prenomsValue.push(data.middle_name);
+        }
+        if (prenomsValue.length > 0) {
+            setVal('#prenoms', prenomsValue.join(' '));
+        }
+
+        // 8. Remplir le prénom principal si disponible
+        if (data.first_name) {
+            setVal('#first-name', data.first_name);
+        }
+
+        // 9. Remplir le code agence avec branch_code
         if (data.branch_code) {
-            console.log('Filling branch_code: ' + data.branch_code);
             setVal('#branch-code', data.branch_code);
         }
-        
-        // Essayer FormAutoFiller si disponible
-        if (typeof FormAutoFiller !== 'undefined' && FormAutoFiller.autoFillForm) {
-            try {
-                FormAutoFiller.autoFillForm(data, { debug: false });
-                console.log('FormAutoFiller: Auto-fill completed');
-                return;
-            } catch (e) {
-                console.error('FormAutoFiller error:', e);
-                // Fall through to legacy method
-            }
-        }
-        
-        // Fallback to legacy method
-        console.log('Using legacy form filling method');
-        
-        var fieldMappings = [
-            'first-name', 'last-name', 'middle-name',
-            'email', 'telephone', 'telephone2',
-            'nationality', 'pob', 'residence-country', 'country',
-            'document-number', 'id-number', 'employer-name',
-            'customer-id', 'father-name', 'mother-name', 'sex', 'address'
-        ];
-        
-        // Try mapped field IDs
-        fieldMappings.forEach(function(fieldId) {
+
+        // 10. Essayer de remplir les autres champs standards
+        var standardFields = ['nationality', 'sex', 'pob'];
+        standardFields.forEach(function(fieldId) {
             if (data[fieldId]) {
                 setVal('#' + fieldId, data[fieldId]);
-            }
-        });
-        
-        // Try form_fields if available (mapped UDF data)
-        if (data.form_fields && typeof data.form_fields === 'object') {
-            Object.keys(data.form_fields).forEach(function(apiField) {
-                var value = data.form_fields[apiField];
-                if (!value) return;
-                
-                // Try to find matching form field by ID
-                var fieldId = apiField.replace(/^(.*)-/, '$1');  // Convert dashes
-                setVal('#' + fieldId, value);
-                
-                // Also try with underscores
-                setVal('#' + apiField.replace(/-/g, '_'), value);
-            });
-        }
-        
-        // Generic fill: try any key as ID or name
-        Object.keys(data).forEach(function(key) {
-            var val = data[key];
-            if (!val || key === 'raw_response' || key === 'raw' || key === 'form_fields' || 
-                key === 'udf_raw' || key === 'account_number' || key === 'customer_id' || 
-                key === 'telephone' || key === 'phone' || key === 'phoneNo' || 
-                typeof val !== 'string') return;
-            
-            var el = document.getElementById(key);
-            if (el && !el.value) {
-                el.value = val;
-                return;
-            }
-            
-            var elByName = document.querySelector('[name="' + key + '"]');
-            if (elByName && !elByName.value) {
-                elByName.value = val;
-                return;
             }
         });
     }
@@ -384,16 +327,36 @@ if (!file_exists($htmlFile)) {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'account=' + encodeURIComponent(accountNumber)
-        }).then(function(resp) {
-            return resp.json().then(function(json) {
-                return { status: resp.status, data: json };
+        })
+        .then(function(resp) {
+            console.log('[fetchAccountFromFlexcube] Status:', resp.status);
+            
+            // Essayer de parser le JSON
+            return resp.text().then(function(text) {
+                console.log('[fetchAccountFromFlexcube] Réponse brute:', text);
+                
+                try {
+                    var json = JSON.parse(text);
+                    return { status: resp.status, data: json };
+                } catch (e) {
+                    console.error('[fetchAccountFromFlexcube] Erreur JSON:', e.message);
+                    console.error('[fetchAccountFromFlexcube] Texte reçu:', text);
+                    throw new Error('Réponse invalide du serveur: ' + text);
+                }
             });
-        }).then(function(result) {
+        })
+        .then(function(result) {
+            console.log('[fetchAccountFromFlexcube] Résultat:', result);
+            
             if (result.status === 200 && result.data.success) {
                 return result.data.data;
             } else {
                 throw new Error(result.data.error || 'Compte non trouvé');
             }
+        })
+        .catch(function(err) {
+            console.error('[fetchAccountFromFlexcube] Erreur:', err.message);
+            throw err;
         });
     }
 

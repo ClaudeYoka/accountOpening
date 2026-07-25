@@ -1,14 +1,17 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php 
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
 <?php $get_id = $_GET['edit']; ?>
 <?php 
-	 if (isset($_GET['delete'])) {
+	if (isset($_GET['delete'])) {
 		$department_id = $_GET['delete'];
 		$sql = "DELETE FROM tbldepartments where id = ".$department_id;
 		$result = mysqli_query($conn, $sql);
 		if ($result) {
-			echo "<script>alert('Department deleted Successfully');</script>";
-     		echo "<script type='text/javascript'> document.location = 'department.php'; </script>";
+		echo "<script>alert('Department deleted Successfully');</script>";
+     	echo "<script type='text/javascript'> document.location = 'department.php'; </script>";
 			
 		}
 	}
@@ -56,10 +59,10 @@
     mysqli_stmt_close($stmt);
 
     if ($result) {
-     	echo "<script>alert('Record Successfully Updated');</script>";
-     	echo "<script type='text/javascript'> document.location = 'department.php'; </script>";
+    	echo "<script>alert('Record Successfully Updated');</script>";
+		echo "<script type='text/javascript'> document.location = 'department.php'; </script>";
 	} else{
-	  die(mysqli_error());
+		die(mysqli_error($conn));
    }
 }
 
@@ -111,7 +114,7 @@
 								<h2 class="mb-30 h4">Edit Department</h2>
 								<section>
 									<?php
-									$query = mysqli_query($conn,"SELECT * from tbldepartments where id = '$get_id'")or die(mysqli_error());
+									$query = mysqli_query($conn,"SELECT * from tbldepartments where id = '$get_id'")or die(mysqli_error($conn));
 									$row = mysqli_fetch_array($query);
 									?>
 
@@ -134,8 +137,8 @@
 									</div>
 									<div class="col-sm-12 text-right">
 										<div class="dropdown">
-										   <input class="btn btn-primary" type="submit" value="UPDATE" name="edit" id="edit">
-									    </div>
+											<input class="btn btn-primary" type="submit" value="UPDATE" name="edit" id="edit">
+									</div>
 									</div>
 								   </form>
 							    </section>

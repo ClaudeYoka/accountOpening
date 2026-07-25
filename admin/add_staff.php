@@ -1,5 +1,13 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php
+include('../includes/session.php');
+include('../includes/config.php');
+include('includes/header.php');
+/** @var mysqli $conn */
+if (empty($conn) || !($conn instanceof mysqli)) {
+    echo "<div style='padding:20px;color:#900'>Connexion à la base de données introuvable.</div>";
+    exit;
+}
+?>
 <?php require_once('../includes/audit_logger.php')?>
 
 <?php
@@ -132,7 +140,7 @@ if(isset($_POST['add_staff']))
 ?>
 
 <body>
-    <!-- <div class="pre-loader">
+    <div class="pre-loader">
         <div class="pre-loader-box">
             <div class="loader-logo"><img src="../vendors/images/ecobank-bg3.png" alt=""></div>
             <div class='loader-progress' id="progress_div">
@@ -143,7 +151,7 @@ if(isset($_POST['add_staff']))
                 Loading...
             </div>
         </div>
-    </div> -->
+    </div>
 
     <?php include('includes/navbar.php')?>
     <?php include('includes/right_sidebar.php')?>
@@ -216,7 +224,7 @@ if(isset($_POST['add_staff']))
                                         <div class="form-group">
                                             <label>Agence :</label>
                                             <select name="AgenceShortName" class="custom-select form-control" required="true" autocomplete="off">
-                                                <option value="">Choisir l'Agence</option>
+                                                <option value="">--Choisir l'Agence--</option>
                                                 <?php
                                                 $query = mysqli_query($conn, "SELECT * from tblagences ");
                                                 while($row = mysqli_fetch_array($query)){
@@ -258,7 +266,7 @@ if(isset($_POST['add_staff']))
                                         <div class="form-group">
                                             <label>Département :</label>
                                             <select name="department" class="custom-select form-control" required="true" autocomplete="off">
-                                                <option value="">Choisir Département</option>
+                                                <option value="">---Choisir Département---</option>
                                                 <?php
                                                 $query = mysqli_query($conn, "SELECT * from tbldepartments ");
                                                 while($row = mysqli_fetch_array($query)){
@@ -286,7 +294,7 @@ if(isset($_POST['add_staff']))
                 </div>
 
             </div>
-            <?php include('includes/footer.php'); ?>
+            <!-- <?php include('includes/footer.php'); ?> -->
         </div>
     </div>
     <!-- js -->

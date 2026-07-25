@@ -1,9 +1,14 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php 
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
 <?php include('../includes/flexcube_helpers.php')?>
 <?php
 // Helper to safely escape output and avoid passing null to htmlspecialchars (PHP 8.1+ deprecation)
 function safe_h($s){ return htmlspecialchars((string)($s ?? ''), ENT_QUOTES, 'UTF-8'); }
+
 
 // Option pour utiliser Flexcube comme source principale
 $use_flexcube = false; // DISABLED: Mettre à false pour utiliser uniquement la BD locale
@@ -12,12 +17,12 @@ $use_flexcube_fallback = false; // DISABLED: Fallback vers Flexcube si données 
 
 <body>
 
-	<!-- <?php include('includes/preloader.php')?> -->
+	<?php include('includes/preloader.php')?>
 
 	<?php include('includes/navbar.php')?>
 	<?php include('includes/right_sidebar.php')?>
 	<?php include('includes/left_sidebar.php')?>
-
+	
 	<div class="mobile-menu-overlay"></div>
 
 	<div class="main-container">
@@ -80,7 +85,7 @@ $use_flexcube_fallback = false; // DISABLED: Fallback vers Flexcube si données 
 
                                 if ($escq !== '') {
                                     $where = "WHERE (a.account_number LIKE ? OR a.bank_account_number LIKE ? OR
-                                               c.customer_name LIKE ? OR CONCAT(c.first_name, ' ', c.last_name) LIKE ?)";
+                                            	c.customer_name LIKE ? OR CONCAT(c.first_name, ' ', c.last_name) LIKE ?)";
                                     $search_term = '%' . $escq . '%';
                                     $params = [$search_term, $search_term, $search_term, $search_term];
                                     $types = 'ssss';

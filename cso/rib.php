@@ -28,19 +28,13 @@
 
                 <div class="pd-20 card-box mb-30">
                     <h5 class="mb-20">Générateur de RIB</h5>
-                    <p>Saisissez le numéro de compte et la clé RIB (fournie dans Flexcube), puis cliquez sur <strong>Générer</strong> pour ouvrir le RIB pré-rempli.</p>
+                    <p>Entrez le numéro de compte puis cliquez sur <strong>Générer</strong>. La clé RIB est récupérée automatiquement depuis Flexcube / la base de données.</p>
 
                     <form id="rib-form" class="mt-20">
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Numéro de compte</label>
                             <div class="col-sm-6">
-                                <input type="text" id="account-number" name="account" class="form-control" placeholder="Saisir le numéro de compte" required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Clé RIB</label>
-                            <div class="col-sm-2">
-                                <input type="text" id="rib-key" name="rib_key" class="form-control" placeholder="clé RIB (ex: 12)" required>
+                                <input type="text" id="account-number" name="account" class="form-control" autocomplete="off" placeholder="Saisir le numéro de compte" required>
                             </div>
                         </div>
 
@@ -61,19 +55,17 @@
                             form.addEventListener('submit', function(ev){
                                 ev.preventDefault();
                                 var acct = document.getElementById('account-number').value.trim();
-                                var key = document.getElementById('rib-key').value.trim();
                                 if(!acct){
                                     alert('Veuillez saisir un numéro de compte.');
                                     return;
                                 }
                                 
                                 // Rediriger vers le formulaire RIB (le loader apparaîtra là-bas)
-                                var url = 'rib_ecobank.html?account=' + encodeURIComponent(acct) + '&rib_key=' + encodeURIComponent(key);
+                                var url = 'rib_ecobank.html?account=' + encodeURIComponent(acct);
                                 window.location = url;
                             });
                             clear.addEventListener('click', function(){
                                 document.getElementById('account-number').value = '';
-                                document.getElementById('rib-key').value = '';
                                 generateBtn.disabled = false;
                             });
                         })();

@@ -4,9 +4,10 @@
  * Monitore les violations et permet la gestion
  */
 
-include('./includes/header.php');
-include('../includes/session.php');
-include('../includes/config.php'); // Assurer que $dbh est défini
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+
 require_once('../includes/audit_logger.php');
 include('../includes/audit_helpers.php'); // Ajouté pour log_admin_action
 include('../includes/RateLimiter.php');
@@ -112,6 +113,12 @@ try {
 }
 ?>
 
+<?php include('includes/navbar.php')?>
+
+	<?php include('includes/right_sidebar.php')?>
+
+	<?php include('includes/left_sidebar.php')?>
+
 <body>
     <div class="main-container">
         <div class="pd-ltr-20">
@@ -125,13 +132,10 @@ try {
                             <a href="?debug=1" class="text-info" target="_blank">🔍 Debug Session</a>
                         </small>
                     </div>
-                       
+                    
                     <div class="col-md-6 col-sm-12 text-right">
                         <a href="." class="btn btn-sm btn-primary">
                             ← Retour
-                        </a>
-                        <a href="monitoring_security.php" class="btn btn-sm btn-primary">
-                            ← Retour Sécurité
                         </a>
                     </div>
                 </div>

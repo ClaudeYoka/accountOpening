@@ -1,5 +1,6 @@
-<?php include('includes/header.php')?>
 <?php include('../includes/session.php')?>
+<?php include('../includes/config.php')?>
+<?php include('includes/header.php')?>
 
 <?php
 // Vérifier les droits d'accès

@@ -26,7 +26,7 @@
         .logo-container svg {
             margin: 0;
             padding: 0;
-            width: 120px;
+            width: 160px;
             height: auto;
         }
 
@@ -241,6 +241,84 @@
         flex-direction:column;
         gap:10px;
         z-index:9999;
+    }
+
+    /* Message Container Styles */
+    .message-container {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #fff;
+        border: 2px solid #4CAF50;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        max-width: 500px;
+        z-index: 10000;
+        font-size: 14px;
+        animation: slideDown 0.3s ease-out;
+    }
+
+    .message-container.success {
+        background: #f0f9f7;
+        border-color: #4CAF50;
+        color: #2e7d32;
+    }
+
+    .message-container.error {
+        background: #fff3f3;
+        border-color: #f44336;
+        color: #c62828;
+    }
+
+    .message-container .message-title {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    .message-container .message-text {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .message-container .message-id {
+        font-size: 13px;
+        opacity: 0.8;
+        font-family: monospace;
+        background: rgba(0,0,0,0.05);
+        padding: 6px;
+        border-radius: 4px;
+        margin-top: 8px;
+    }
+
+    .message-container .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: inherit;
+        opacity: 0.6;
+        transition: opacity 0.2s;
+    }
+
+    .message-container .close-btn:hover {
+        opacity: 1;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
     }
 
     /* Declaration Page Styles */
@@ -467,7 +545,9 @@
         background:#194153;
     }
 
-    /* Print layout */
+    /* ----------------------------- */
+    /* Base d'impression (paramètres globaux de la page imprimée) */
+    /* ----------------------------- */
     @page { 
         size: A4; 
         margin: 5mm;
@@ -479,11 +559,17 @@
         @bottom-right { content: none; }
     }
 
-    /* Prévention des coupures de texte */
+    /* ----------------------------- */
+    /* Règles de sécurité d'impression pour éviter les sauts de page à l'intérieur des blocs importants */
+    /* ----------------------------- */
     .row, .section, table, tr {
         page-break-inside: avoid;
     }
 
+    /* ----------------------------- */
+    /* Styles d'impression commençant ici */
+    /* Ce bloc contient toutes les règles qui ne s'appliquent qu'à l'impression */
+    /* ----------------------------- */
     @media print {
         html, body {
             -webkit-print-color-adjust: exact;
@@ -492,11 +578,13 @@
             margin: 0 !important;
             padding: 0 !important;
             height: auto !important;
-            font-size: 14px !important;
+            /* Increase base font size for print, but keep compact spacing */
+            font-size: 15px !important;
         }
 
         @page {
-            margin: 5mm;
+            /* Slightly smaller printer margins to allow content to span wider */
+            margin: 4mm;
             size: A4;
         }
 
@@ -506,49 +594,73 @@
             display: none !important;
         }
 
+        /* ----------------------------- */
+        /* Contrôle la largeur imprimable, les marges intérieures et la densité du texte */
+        /* ----------------------------- */
         .page{
-            width: 190mm !important;
-            max-width: 190mm !important;
+            /* Utilise toute la largeur imprimable pour une page A4 (moins deux fois la marge @page) */
+            width: calc(210mm - 8mm) !important;
+            max-width: calc(210mm - 8mm) !important;
             height: auto !important;
-            margin: 0 !important;
-            padding: 6mm !important;
+            margin: 0 auto !important;
+            /* keep compact side padding so wider content fits on one page */
+            padding: 5mm 5mm !important;
             border: none !important;
             box-shadow: none !important;
             box-sizing: border-box !important;
             overflow: visible !important;
-            font-size: 13px !important;
+            /* match base font-size and keep denser line-height */
+            font-size: 15px !important;
             page-break-after: auto !important;
-            line-height: 1.3 !important;
+            line-height: 1.18 !important;
         }
 
+        /* ----------------------------- */
+        /* Contrôle l'espacement de l'en-tête et la ligne bleue supérieure */
+        /* ----------------------------- */
         .header { 
             padding: 4px 6px !important; 
-            margin-bottom: 8px !important;
+            margin-bottom: 6px !important;
             page-break-inside: avoid !important;
+            border-bottom: 2px solid #007db8 !important;
         }
         
+        /* ----------------------------- */
+        /* Agrandit le titre principal et le sous-titre pour améliorer la lisibilité */
+        /* ----------------------------- */
         .form-title h1 { 
-            font-size: 14px !important; 
+            font-size: 18px !important; 
             margin-bottom: 1px !important;
+            font-weight: 700 !important;
         }
         
         .form-title p { 
-            font-size: 10px !important; 
+            font-size: 12px !important; 
             margin: 0 !important;
         }
         
+        /* ----------------------------- */
+        /* Mise en forme des titres de section à l'impression */
+        /* Contrôle l'apparence des titres comme CARTES MONÉTIQUES et PRODUITS DIGITAUX */
+        /* ----------------------------- */
         .section { 
             padding: 3px 5px !important; 
-            font-size: 13px !important;
+            font-size: 14px !important;
             margin-bottom: 2px !important;
             margin-top: 6px !important;
             page-break-inside: avoid !important;
             page-break-after: avoid !important;
         }
         
+        /* ----------------------------- */
+        /* Mise en forme du bloc de titre de page à l'impression */
+        /* Contrôle la grande zone de titre au-dessus du contenu du formulaire */
+        /* ----------------------------- */
         .title { 
             margin: 4px 0 6px !important; 
-            font-size: 14px !important;
+            font-size: 18px !important;
+            border-bottom: none !important;
+            padding-bottom: 0 !important;
         }
         
         .row{
@@ -556,13 +668,17 @@
             page-break-inside: avoid !important;
         }
         
+        /* ----------------------------- */
+        /* Mise en forme générale des champs à l'impression */
+        /* Augmente la taille du texte et le padding des champs et étiquettes */
+        /* ----------------------------- */
         .field input{
-            font-size: 13px !important;
-            padding: 3px !important;
+            font-size: 14px !important;
+            padding: 4px 6px !important;
         }
         
         .field label{
-            font-size: 12px !important;
+            font-size: 13px !important;
             margin-bottom: 1px !important;
         }
         
@@ -584,8 +700,11 @@
             font-size: 11px !important; 
         }
         
+        /* ----------------------------- */
+        /* Mise en forme du logo à l'impression */
+        /* ----------------------------- */
         .logo-container svg { 
-            width: 80px !important; 
+            width: 160px !important; 
             height: auto !important; 
         }
         
@@ -648,11 +767,22 @@
             word-break: break-word !important;
         }
         
-        .customer-field input,
-        .account-field input {
-            font-size: 19px !important;
+        /* ----------------------------- */
+        /* Mise en forme de l'intitulé du compte et le numéro de compte à l'impression */
+        /* ----------------------------- */
+        .customer-field input {
+            font-size: 30px !important;
             font-weight: bold !important;
-            padding: 8px !important;
+            padding: 10px !important;
+            border: 2px solid #007db8 !important;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f2f9 100%) !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .account-field input {
+            font-size: 28px !important;
+            font-weight: bold !important;
+            padding: 10px !important;
             border: 2px solid #007db8 !important;
             background: linear-gradient(135deg, #f0f8ff 0%, #e6f2f9 100%) !important;
             -webkit-print-color-adjust: exact;
@@ -671,11 +801,16 @@
             color: #007db8 !important;
         }
         
+        /* ----------------------------- */
+        /* Mise en forme des champs CSO et chef d'agence pour impression */
+        /* ----------------------------- */
         .cso-input,
         .chef-input {
-            font-size: 14px !important;
-            padding: 6px !important;
+            font-size: 22px !important;
+            padding: 12px 10px !important;
+            min-height: 32px !important;
             border: 2px solid #0088cc !important;
+            font-weight: bold !important;
         }
         
         /* Signature Section */
@@ -689,8 +824,8 @@
         input[type="number"],
         input[type="date"],
         input[type="tel"] {
-            font-size: 12px !important;
-            padding: 2px 3px !important;
+            font-size: 15px !important;
+            padding: 3px 4px !important;
             border: 0.5px solid #999 !important;
         }
         
@@ -743,8 +878,9 @@
         /* CSO and Chef d'Agence Fields -  Enlarged for print */
         .cso-input,
         .chef-input {
-            font-size: 20px !important;
-            padding: 10px !important;
+            font-size: 25px !important;
+            padding: 12px 10px !important;
+            min-height: 25px !important;
             border: 2px solid #0088cc !important;
             font-weight: bold !important;
         }
@@ -788,12 +924,12 @@
 
     <div class="row">
         <div class="field customer-field" style="flex: 2;">
-            <label>NOM DU CLIENT</label>
-            <input type="text" id="customer-name" readonly style="width: 95%;">
+            <label>INTITULÉ DU COMPTE</label>
+            <input type="text" id="account-title" style="width: 95%;">
         </div>
         <div class="field account-field" style="flex: 1;">
             <label>N° DE COMPTE</label>
-            <input type="text" id="account-number" readonly style="width: 80%;">
+            <input type="text" id="account-number" readonly style="width: 90%;">
         </div>
     </div>
 
@@ -803,21 +939,21 @@
     <table>
         <tr>
             <td class="sub">1. CLASSIC</td>
-            <td><input type="checkbox" class="chk" name="card_classic" id="card_classic_yes">OUI</td>
+            <td><input type="checkbox" class="chk" name="card_classic" id="card_classic_yes"> OUI</td>
             <td class="small">Souscription : 20 000 FCFA HT<br> </td>
             <td class="small">Mensuels : 3 325 FCFA HT</td>
             <td class="small">Annuelle : 20 000 FCFA HT</td>
         </tr>
         <tr>
             <td class="sub">2. GOLD</td>
-            <td><input type="checkbox" class="chk" name="card_gold" id="card_gold_yes">OUI</td>
+            <td><input type="checkbox" class="chk" name="card_gold" id="card_gold_yes"> OUI</td>
             <td class="small">Souscription : 90 000 FCFA HT</td>
             <td class="small">Mensuels : 3 325 FCFA HT</td>
             <td class="small">Annuelle : 90 000 FCFA HT</td>
         </tr>
         <tr>
             <td class="sub">3. PLATINUM</td>
-            <td><input type="checkbox" class="chk" name="card_platinum" id="card_platinum_yes">OUI</td>
+            <td><input type="checkbox" class="chk" name="card_platinum" id="card_platinum_yes"> OUI</td>
             <td class="small">Souscription : 120 000 FCFA HT</td>
             <td class="small">Mensuels : 3 325 FCFA HT</td>
             <td class="small">Annuelle : 120 000 FCFA HT</td>
@@ -834,8 +970,8 @@
             <td><input type="checkbox" class="chk" name="srv_estatement" id="srv_estatement"> <strong>E-STATEMENT</strong></td>
         </tr>
         <tr>
-            <td><input type="checkbox" class="chk" name="srv_airtel_money" id="srv_airtel_money"> <strong>VIREMENT PERMANENT</strong><br>Montant: <input type="text" id="srv_montant" name="montant" style="width: 120px; font-size: 15px;"></td>
-            <td><input type="checkbox" class="chk" name="srv_mobile_money" id="srv_mobile_money"> <strong>MOBILE MONEY</strong> TEL: <input type="tel" id="mobilemoney_phone" name="mobilemoney_phone" style="width: 100px; font-size: 12px;"></td>
+            <td><input type="checkbox" class="chk" name="srv_airtel_money" id="srv_airtel_money"> <strong>VIREMENT PERMANENT</strong><br>Montant: <input type="text" id="srv_montant" name="montant" style="width: 150px; font-size: 15px;"></td>
+            <td><input type="checkbox" class="chk" name="srv_mobile_money" id="srv_mobile_money"> <strong>MOBILE MONEY</strong> TEL: <input type="tel" id="mobilemoney_phone" name="mobilemoney_phone" style="width: 200px; font-size: 15px;"></td>
             <td><input type="checkbox" class="chk" name="srv_sms_alert" id="srv_sms_alert"> <strong>SMS ALERT</strong></td>
         </tr>
     </table>
@@ -907,18 +1043,18 @@
                 <div style="font-size: 12px; font-weight: bold; margin-bottom: 8px;">Date:</div>
                 <div style="display: flex; gap: 8px; align-items: flex-end;">
                     <div style="flex: 0.6; text-align: center;">
-                        <input type="text" maxlength="2" placeholder="JJ" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
-                        <div style="font-size: 10px; margin-top: 2px;">JJ</div>
+                        <input type="text" maxlength="2" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
+                        <div style="font-size: 10px; margin-top: 5px;">JJ</div>
                     </div>
                     <div style="font-weight: bold; font-size: 16px;">-</div>
                     <div style="flex: 0.6; text-align: center;">
-                        <input type="text" maxlength="2" placeholder="MM" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
-                        <div style="font-size: 10px; margin-top: 2px;">MM</div>
+                        <input type="text" maxlength="2" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
+                        <div style="font-size: 10px; margin-top: 5px;">MM</div>
                     </div>
                     <div style="font-weight: bold; font-size: 16px;">-</div>
                     <div style="flex: 0.8; text-align: center;">
-                        <input type="text" maxlength="4" placeholder="AAAA" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
-                        <div style="font-size: 10px; margin-top: 2px;">AAAA</div>
+                        <input type="text" maxlength="4" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
+                        <div style="font-size: 10px; margin-top: 5px;">AAAA</div>
                     </div>
                 </div>
             </td>
@@ -934,11 +1070,11 @@
                 <div style="display: flex; gap: 20px; margin-bottom: 12px;">
                     <div style="flex: 1;">
                         <div style="font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #333;">CSO/SCC (CHARGÉ DE LA CLIENTÈLE):</div>
-                        <input type="text" class="cso-input" style="width: 90%; padding: 10px; border: 2px solid #0088cc; font-size: 15px; font-weight: bold; background: #f5f9fc; border-radius: 4px;">
+                        <input type="text" id="gestionnaire" class="cso-input" style="width: 90%; padding: 10px; border: 2px solid #0088cc; font-size: 15px; font-weight: bold; background: #f5f9fc; border-radius: 4px;">
                     </div>
                     <div style="flex: 1;">
                         <div style="font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #333;">CHEF D'AGENCE:</div>
-                        <input type="text" class="chef-input" style="width: 90%; padding: 10px; border: 2px solid #0088cc; font-size: 15px; font-weight: bold; background: #f5f9fc; border-radius: 4px;">
+                        <input type="text" id="chef_agence" class="chef-input" style="width: 90%; padding: 10px; border: 2px solid #0088cc; font-size: 15px; font-weight: bold; background: #f5f9fc; border-radius: 4px;">
                     </div>
                 </div>
             </td>
@@ -952,17 +1088,17 @@
                 <div style="font-size: 12px; font-weight: bold; margin-bottom: 8px;">Date d'ouverture:</div>
                 <div style="display: flex; gap: 8px; align-items: flex-end;">
                     <div style="flex: 0.6; text-align: center;">
-                        <input type="text" maxlength="2" placeholder="JJ" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
+                        <input type="text" maxlength="2" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
                         <div style="font-size: 10px; margin-top: 2px;">JJ</div>
                     </div>
                     <div style="font-weight: bold; font-size: 16px;">-</div>
                     <div style="flex: 0.6; text-align: center;">
-                        <input type="text" maxlength="2" placeholder="MM" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
+                        <input type="text" maxlength="2" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
                         <div style="font-size: 10px; margin-top: 2px;">MM</div>
                     </div>
                     <div style="font-weight: bold; font-size: 16px;">-</div>
                     <div style="flex: 0.8; text-align: center;">
-                        <input type="text" maxlength="4" placeholder="AAAA" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
+                        <input type="text" maxlength="4" style="width: 100%; text-align: center; border: 1px solid #333; padding: 4px; font-weight: bold; font-size: 14px;">
                         <div style="font-size: 10px; margin-top: 2px;">AAAA</div>
                     </div>
                 </div>
@@ -1116,6 +1252,14 @@
 
 </div>
 
+<!-- Message Container -->
+<div id="messageContainer" class="message-container" style="display: none;">
+    <button class="close-btn" onclick="closeMessage()">×</button>
+    <div class="message-title" id="messageTitle"></div>
+    <div class="message-text" id="messageText"></div>
+    <div class="message-id" id="messageId" style="display: none;"></div>
+</div>
+
 <!-- FAB Buttons -->
 
 <div class="fab-container">
@@ -1125,6 +1269,61 @@
 </div>
 
 <script>
+    // Variables globales pour stocker les infos du CSO et du compte
+    let csoInfo = {};
+    let accountType = 'Compte courant';
+    let customerFirstName = '';
+    let customerLastName = '';
+    let messageTimeout = null;
+
+    // Fonction pour afficher un message de succès
+    function showSuccessMessage(title, text, submissionId) {
+        const container = document.getElementById('messageContainer');
+        container.className = 'message-container success';
+        document.getElementById('messageTitle').textContent = '✓ ' + title;
+        document.getElementById('messageText').textContent = text;
+        
+        const idElement = document.getElementById('messageId');
+        if (submissionId) {
+            idElement.textContent = 'ID Soumission: ' + submissionId;
+            idElement.style.display = 'block';
+        } else {
+            idElement.style.display = 'none';
+        }
+        
+        container.style.display = 'block';
+        
+        // Faire disparaître le message après 8 secondes
+        if (messageTimeout) clearTimeout(messageTimeout);
+        messageTimeout = setTimeout(() => {
+            closeMessage();
+        }, 8000);
+    }
+
+    // Fonction pour afficher un message d'erreur
+    function showErrorMessage(title, text) {
+        const container = document.getElementById('messageContainer');
+        container.className = 'message-container error';
+        document.getElementById('messageTitle').textContent = '✗ ' + title;
+        document.getElementById('messageText').textContent = text;
+        document.getElementById('messageId').style.display = 'none';
+        
+        container.style.display = 'block';
+        
+        // Faire disparaître le message après 6 secondes
+        if (messageTimeout) clearTimeout(messageTimeout);
+        messageTimeout = setTimeout(() => {
+            closeMessage();
+        }, 6000);
+    }
+
+    // Fonction pour fermer le message
+    function closeMessage() {
+        const container = document.getElementById('messageContainer');
+        container.style.display = 'none';
+        if (messageTimeout) clearTimeout(messageTimeout);
+    }
+
     // Récupérer les paramètres de l'URL
     function getUrlParams() {
         const params = new URLSearchParams(window.location.search);
@@ -1133,6 +1332,8 @@
             branch: params.get('branch') || ''
         };
     }
+
+
 
     // Pré-remplir les champs
     function initializeForm() {
@@ -1169,15 +1370,44 @@
                                 var fn = (data.customer.first_name || data.customer.form_fields?.['first-name'] || '').trim();
                                 var ln = (data.customer.last_name || data.customer.form_fields?.['last-name'] || '').trim();
                                 if (fn || ln) {
-                                    nameVal = (fn + ' ' + ln).trim();
+                                    customerLastName = ln;
+                                    customerFirstName = fn;
+                                    nameVal = (ln + ' ' + fn).trim();
                                 } else if (data.customer.customer_name) {
                                     nameVal = data.customer.customer_name;
+                                    customerFirstName = nameVal;
+                                    customerLastName = '';
                                 }
                             }
                         } catch (e) { /* silent */ }
-                        if (!nameVal) nameVal = data.account?.account_title || '';
-                        document.getElementById('customer-name').value = nameVal;
+                        if (!nameVal) {
+                            nameVal = data.account?.account_title || '';
+                            customerFirstName = nameVal;
+                            customerLastName = '';
+                        }
+                        var customerNameEl = document.getElementById('customer-name');
+                        if (customerNameEl) {
+                            customerNameEl.value = nameVal;
+                        }
                     })();
+                    
+                    // Remplir l'intitulé du compte avec le libellé direct Flexcube (ac_desc)
+                    (function(){
+                        var accountTitleVal = data.account?.account_title || data.customer?.customer_name || data.account?.account_number || '';
+                        var accountTitleEl = document.getElementById('account-title');
+                        if (accountTitleEl) {
+                            accountTitleEl.value = accountTitleVal;
+                        }
+                    })();
+                    
+                    // Remplir le compte interne (account_number)
+                    if (data.account?.account_number) {
+                        var internalAccountEl = document.getElementById('internal-account');
+                        if (internalAccountEl) {
+                            internalAccountEl.value = data.account.account_number;
+                        }
+                    }
+                    
                     document.getElementById('oe-account-1').textContent = data.account?.account_number || '';
                     document.getElementById('oe-type-1').textContent = data.account?.account_type || '';
                     document.getElementById('oe-currency-1').textContent = data.account?.currency || '';
@@ -1258,10 +1488,24 @@
         form_data['airtel_phone'] = document.getElementById('airtel_phone')?.value || '';
         form_data['mobilemoney_phone'] = document.getElementById('mobilemoney_phone')?.value || '';
         
+        // Capturer le type de compte
+        form_data['type_compte'] = accountType || 'Compte courant';
+        
+        // Capturer le nom complet du client (title)
+        var computedCustomerTitle = document.getElementById('account-title')?.value || '';
+        if (!computedCustomerTitle) {
+            computedCustomerTitle = [customerFirstName, customerLastName].filter(Boolean).join(' ').trim();
+        }
+        form_data['title'] = computedCustomerTitle;
+        
+        // Capturer le prénom et le nom séparés
+        form_data['first_name'] = customerFirstName || '';
+        form_data['last_name'] = customerLastName || '';
+        
         // Données standards
         form_data['account_number'] = url_params.account;
         form_data['branch_code'] = (document.getElementById('oe-branch-1')?.textContent || '').trim() || url_params.branch;
-        form_data['text_field_0'] = document.getElementById('customer-name')?.value || '';
+        form_data['text_field_0'] = computedCustomerTitle;
         form_data['mobile'] = (document.getElementById('airtel_phone')?.value || document.getElementById('mobilemoney_phone')?.value || '').trim();
         
         return form_data;
@@ -1309,16 +1553,19 @@
         })
         .then(data => {
             if (data.status === 'success') {
-                alert('✓ Formulaire enregistré avec succès !\n\nID Soumission: ' + data.submission_id);
-                // Réinitialiser le formulaire
-                location.reload();
+                showSuccessMessage('Succès', 'Formulaire enregistré avec succès !', data.submission_id);
+                // Réinitialiser le formulaire après un court délai
+                setTimeout(() => {
+                    document.getElementById('submitBtn').style.opacity = '0.5';
+                    document.getElementById('submitBtn').disabled = true;
+                }, 500);
             } else {
-                alert('❌ Erreur: ' + (data.message || 'Une erreur s\'est produite'));
+                showErrorMessage('Erreur', data.message || 'Une erreur s\'est produite');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('❌ Erreur de communication avec le serveur - ' + error.message);
+            showErrorMessage('Erreur de Communication', error.message || 'Erreur de communication avec le serveur');
         });
     });
 

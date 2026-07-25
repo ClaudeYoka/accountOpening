@@ -1,5 +1,18 @@
+<?php 
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
+
+<?php
+// Vérifier que l'utilisateur est authentifié AVANT d'inclure header.php
+if (!isset($_SESSION['emp_id'])) {
+    header('Location: ../index.php');
+    exit('Authentification requise');
+}
+?>
+
 <?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
 
 <?php
 // Récupérer TOUTES les demandes de chéquier (historique complet) à partir de tblcompte
