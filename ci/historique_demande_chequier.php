@@ -17,7 +17,7 @@ function normalize_chequier_status($status) {
     if (in_array($s, ['prestataire'])) {
         return 'prestataire';
     }
-    if (in_array($s, ['encours'])) {
+    if (in_array($s, ['encours', 'en cours'])) {
         return 'encours';
     }
     return 'encours';
@@ -163,7 +163,14 @@ function status_label_php($status) {
                 <div class="pd-20">
                     <form method="GET" class="mb-20" style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;">
                         <div><label>Recherche</label><input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" class="form-control" placeholder="Compte / Nom / RIB"></div>
-                        <div><label>Statut</label><select name="status" class="form-control"><option value="">Tous</option><option value="encours" <?php if ($status_filter=='encours') echo 'selected'; ?>>En cours</option><option value="reçu" <?php if ($status_filter=='reçu') echo 'selected'; ?>>Reçu</option><option value="livré" <?php if ($status_filter=='livré') echo 'selected'; ?>>Livré</option><option value="prestataire" <?php if ($status_filter=='prestataire') echo 'selected'; ?>>Prestataire</option></select></div>
+                        <div><label>Statut</label>
+                            <select name="status" class="form-control"><option value="">Tous</option>
+                                <option value="encours" <?php if ($status_filter=='encours') echo 'selected'; ?>>En cours</option>
+                                <option value="reçu" <?php if ($status_filter=='reçu') echo 'selected'; ?>>Reçu</option>
+                                <option value="livré" <?php if ($status_filter=='livré') echo 'selected'; ?>>Livré</option>
+                                <option value="prestataire" <?php if ($status_filter=='prestataire') echo 'selected'; ?>>Prestataire</option>
+                            </select>
+                        </div>
                         <div><label>Date du</label><input type="date" name="date_from" value="<?php echo htmlspecialchars($date_from); ?>" class="form-control"></div>
                         <div><label>Au</label><input type="date" name="date_to" value="<?php echo htmlspecialchars($date_to); ?>" class="form-control"></div>
                         <div><button type="submit" class="btn btn-primary">Appliquer</button> <a href="historique_demande_chequier.php" class="btn btn-secondary">Réinitialiser</a></div>
@@ -171,20 +178,25 @@ function status_label_php($status) {
 
                     <div class="table-responsive">
                         <table class="data-table table hover nowrap">
-                            <thead><tr><th>#</th><th>Compte</th><th>Client</th><th>Agence</th><th>Type</th><th>Quantité</th><th>Statut</th><th>Date Demande</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>#</th><th>Compte</th><th>Client</th><th>Agence</th><th>Type</th><th>Quantité</th><th>Statut</th><th>Date Demande</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                    <?php foreach ($historic_requests as $idx => $req): ?>
-                        <tr onclick="window.location.href='chequier_request_detail.php?request_id=<?php echo $req['id']; ?>'" style="cursor: pointer;" data-request-id="<?php echo $req['id']; ?>">
-                            <td><?php echo $idx + 1; ?></td>
-                            <td><?php echo htmlspecialchars($req['account_number']); ?></td>
-                            <td><?php echo htmlspecialchars($req['customer_name']); ?></td>
-                            <td><?php echo htmlspecialchars($req['agency_name']); ?></td>
-                            <td><?php echo htmlspecialchars($req['type_compte']); ?></td>
-                            <td><?php echo htmlspecialchars($req['quantity']); ?></td>
-                            <td><span class="badge" style="background:#ffc107;color:#000;<?php if($req['current_status'] =='reçu'){ echo 'background:#28a745;color:#fff;'; } elseif($req['current_status']=='livré'){ echo 'background:#6f42c1;color:#fff;'; } elseif($req['current_status']=='prestataire'){ echo 'background:#17a2b8;color:#fff;'; } ?>"><?php echo status_label_php($req['current_status']); ?></span></td>
-                            <td><?php echo !empty($req['created_at']) ? date('d/m/Y', strtotime($req['created_at'])) : '-'; ?></td>
-                        </tr>
-                    <?php endforeach; ?>
+                                <?php foreach ($historic_requests as $idx => $req): ?>
+                                    <tr onclick="window.location.href='chequier_request_detail.php?request_id=<?php echo $req['id']; ?>'" style="cursor: pointer;" data-request-id="<?php echo $req['id']; ?>">
+                                        <td><?php echo $idx + 1; ?></td>
+                                        <td><?php echo htmlspecialchars($req['account_number']); ?></td>
+                                        <td><?php echo htmlspecialchars($req['customer_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($req['agency_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($req['type_compte']); ?></td>
+                                        <td><?php echo htmlspecialchars($req['quantity']); ?></td>
+                                        <td><span class="badge" style="background:#ffc107;color:#000;<?php if($req['current_status'] =='reçu'){ echo 'background:#28a745;color:#fff;'; } elseif($req['current_status']=='livré'){ echo 'background:#6f42c1;color:#fff;'; } elseif($req['current_status']=='prestataire'){ echo 'background:#17a2b8;color:#fff;'; } ?>">
+                                            <?php echo status_label_php($req['current_status']); ?></span></td>
+                                        <td><?php echo !empty($req['created_at']) ? date('d/m/Y', strtotime($req['created_at'])) : '-'; ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
@@ -193,9 +205,12 @@ function status_label_php($status) {
             </div>
 
             <?php include('includes/footer.php'); ?>
+
         </div>
     </div>
 
     <?php include('includes/scriptJs.php')?>
+
 </body>
+
 </html>

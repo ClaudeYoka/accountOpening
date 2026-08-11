@@ -20,7 +20,8 @@ $query = "SELECT
             tc.titre as has_card,
             tc.objectif as fees,
             tc.devise_pref as enrolled,
-            tc.ident_etud as serial_number,
+            tc.ident_etud as serial_number1,
+            tc.cond as serial_number2,
             COALESCE(tb.DepartmentName, tc.branch_code) as agency_name,
             te.FirstName,
             te.LastName,
@@ -102,8 +103,8 @@ foreach ($rows as $r) {
     $nb_carnets = 1;
     $nb_feuilles = '';
     // Fill with actual data from new columns
-    $serie_de = htmlspecialchars($r['serial_number'] ?? '');
-    $serie_a = '';
+    $serie_de = htmlspecialchars($r['serial_number1'] ?? '');
+    $serie_a = htmlspecialchars($r['serial_number2'] ?? '');
     $date_retrait = '';
     $frais = htmlspecialchars($r['fees'] ?? '');
     $has_card = htmlspecialchars($r['has_card'] ?? '');

@@ -1,21 +1,25 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
-<?php $get_id = $_GET['edit']; ?>
 <?php 
-	 if (isset($_GET['delete'])) {
-		$department_id = $_GET['delete'];
-		$sql = "DELETE FROM tbldepartments where id = ".$department_id;
-		$result = mysqli_query($conn, $sql);
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+<?php $get_id = $_GET['edit']; ?>
+
+<?php 
+		if (isset($_GET['delete'])) {
+			$department_id = $_GET['delete'];
+			$sql = "DELETE FROM tbldepartments where id = ".$department_id;
+			$result = mysqli_query($conn, $sql);
 		if ($result) {
 			echo "<script>alert('Department deleted Successfully');</script>";
-     		echo "<script type='text/javascript'> document.location = 'department.php'; </script>";
+			echo "<script type='text/javascript'> document.location = 'department.php'; </script>";
 			
 		}
 	}
 ?>
 
 <?php
- if(isset($_POST['edit']))
+	if(isset($_POST['edit']))
 {
     // Validation des données de département
     $deptname = trim($_POST['departmentname']);
@@ -56,11 +60,11 @@
     mysqli_stmt_close($stmt);
 
     if ($result) {
-     	echo "<script>alert('Record Successfully Updated');</script>";
-     	echo "<script type='text/javascript'> document.location = 'department.php'; </script>";
-	} else{
-	  die(mysqli_error($conn));
-   }
+    	echo "<script>alert('Record Successfully Updated');</script>";
+    	echo "<script type='text/javascript'> document.location = 'department.php'; </script>";
+	} 	else{
+			die(mysqli_error($conn));
+		}
 }
 
 ?>
@@ -134,8 +138,8 @@
 									</div>
 									<div class="col-sm-12 text-right">
 										<div class="dropdown">
-										   <input class="btn btn-primary" type="submit" value="UPDATE" name="edit" id="edit">
-									    </div>
+											<input class="btn btn-primary" type="submit" value="UPDATE" name="edit" id="edit">
+										</div>
 									</div>
 								</form>
 							    </section>
@@ -195,5 +199,6 @@
 	<!-- js -->
 
 	<?php include('includes/scripts.php')?>
+
 </body>
 </html>

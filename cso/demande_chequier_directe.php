@@ -36,6 +36,11 @@ if (!isset($_SESSION['emp_id'])) {
                                 </ol>
                             </nav>
                         </div>
+                        <div class="col-md-6 col-sm-12 text-right">
+                        <button type="button" id="btn_open_form" class="btn btn-sm btn-primary" style="background: linear-gradient(135deg, #05b7e4 0%, #00455a 100%); border: none;">
+                            <i class="dw dw-file"></i> Formulaire
+                        </button>
+                    </div>
                     </div>
                 </div>
 
@@ -47,34 +52,36 @@ if (!isset($_SESSION['emp_id'])) {
                         </div>
                     </div>
 
+                    <div id="chequier_form_section">
                     <form id="chequerForm">
                         <!-- RECHERCHE ET AUTO-REMPLISSAGE FLEXCUBE -->
-                        <div class="row mb-30" style="border: 1px solid #e8e8e8; padding: 15px; background: #f5f5f5; border-radius: 4px; margin-bottom: 20px;">
+                        <div class="row mb-20" style="border: 1px solid #e8e8e8; padding: 18px 20px; background: linear-gradient(135deg, #f8fbff 0%, #eef6ff 100%); border-radius: 10px; margin-bottom: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,.8);">
                             <div class="col-md-12 col-sm-12">
-                                <h5 style="margin-bottom: 15px; color: #333;">📋 Rechercher un Compte</h5>
+                                <h5 style="margin-bottom: 6px; color: #0f2f45;">🔎 Recherche du compte client</h5>
+                                <p style="margin-bottom: 12px; color: #56708a;">Saisissez le numéro du compte pour charger automatiquement les informations du client puis finalisez votre demande de chéquier.</p>
                             </div>
                             <div class="col-md-8 col-sm-12">
                                 <div class="form-group">
-                                    <label>Numéro de Compte Flexcube</label>
-                                    <input type="text" id="flexcube_search" class="form-control" placeholder="Ex: 37155023238" autocomplete="off">
+                                    <input type="text" id="flexcube_search" class="form-control" placeholder="Saisissez le numéro de compte" autocomplete="off">
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-12" style="display: flex; align-items: flex-end;">
+                            <div class="col-md-4 col-sm-12" style="display: flex; align-items: flex-end; gap: 10px;">
                                 <button type="button" id="btn_search_flexcube" class="btn btn-info w-100" style="background: linear-gradient(135deg, #05b7e4 0%, #00455a 100%); border: none;">
                                     <i class="dw dw-search"></i> Rechercher
+                                </button>
+                                <button type="button" id="btn_apply_search" class="btn btn-outline-primary" style="white-space: nowrap;">
+                                    <i class="dw dw-file"></i> Appliquer
                                 </button>
                             </div>
                             <div class="col-md-12 col-sm-12" id="search_result" style="margin-top: 10px;"></div>
                         </div>
 
-                        <hr style="margin: 30px 0;">
-
-                        <div class="row">
+                        <div class="row" id="chequier_form_section" style="background: #ffffff; border: 1px solid #e8e8e8; border-radius: 10px; padding: 20px; margin-top: 4px; box-shadow: 0 4px 12px rgba(0,0,0,.03);">
                             <!-- NOM DU CLIENT -->
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    <label>Nom du Client <span style="color: red;">*</span></label>
-                                    <input type="text" id="client_name" name="client_name" class="form-control" required placeholder="Ex: Jean Dupont" autocomplete="off">
+                                    <label>Intitulé du Compte <span style="color: red;">*</span></label>
+                                    <input type="text" id="client_name" name="client_name" class="form-control" required placeholder="Ex: YOKA MOSSA CLAUDE" autocomplete="off">
                                 </div>
                             </div>
 
@@ -99,7 +106,7 @@ if (!isset($_SESSION['emp_id'])) {
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label>Numéro Compte <span style="color: red;">*</span></label>
-                                    <input type="text" id="account_number" name="account_number" class="form-control" required placeholder="Numéro de compte client" autocomplete="off">
+                                    <input type="text" id="account_number" name="account_number" class="form-control" required placeholder="N° Compte client" autocomplete="off" readonly>
                                 </div>
                             </div>
 
@@ -108,7 +115,7 @@ if (!isset($_SESSION['emp_id'])) {
                                 <div class="form-group">
                                     <label>Type de Compte <span style="color: red;">*</span></label>
                                     <div style="display:flex; gap:10px; align-items:center;">
-                                        <label style="margin:0"><input type="checkbox" name="account_type" value="COURANT" id="acct_courant"> Courant</label>
+                                        <label style="margin:0"><input type="checkbox" name="account_type" value="COURANT" id="acct_courant" checked> Courant</label>
                                         <label style="margin:0"><input type="checkbox" name="account_type" value="EPARGNE" id="acct_epargne"> Épargne</label>
                                     </div>
                                 </div>
@@ -129,7 +136,7 @@ if (!isset($_SESSION['emp_id'])) {
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label>RIB<span style="color: red;">*</span></label>
-                                    <input type="text" id="rib_key" name="rib_key" class="form-control" required placeholder="RIB du client" autocomplete="off">
+                                    <input type="text" id="rib_key" name="rib_key" class="form-control" required placeholder="RIB du client" autocomplete="off" readonly>
                                 </div>
                             </div>
 
@@ -163,13 +170,6 @@ if (!isset($_SESSION['emp_id'])) {
                                     <input type="tel" id="phone_number" name="phone_number" class="form-control" required placeholder="Téléphone du client" autocomplete="off">
                                 </div>
                             </div>
-                            <!-- NUMÉRO DE SÉRIE -->
-                            <div class="col-md-6 col-sm-12">
-                                <div class="form-group">
-                                    <label>Numéro de Série</label>
-                                    <input type="text" id="serial_number" name="serial_number" class="form-control" placeholder="Numéro de série carte" autocomplete="off">
-                                </div>
-                            </div>
 
                             <!-- EMAIL -->
                             <div class="col-md-6 col-sm-12">
@@ -179,17 +179,32 @@ if (!isset($_SESSION['emp_id'])) {
                                 </div>
                             </div>
 
-                            <!-- ADRESSE DU CLIENT -->
-                            <div class="col-md-12 col-sm-12">
+                            <!-- NUMÉRO DE SÉRIE -->
+                            <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
-                                    <label>Adresse <span style="color: red;">*</span></label>
-                                    <textarea id="address" name="address" class="form-control" rows="2" required placeholder="Ex: 123 rue de la Paix, Brazzaville" autocomplete="off"></textarea>
+                                    <label>Numéro de Série De : </label>
+                                        <input type="text" id="serial_number1" name="serial_number1" class="form-control" placeholder="Numéro de série carte" autocomplete="off" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <label>Numéro de Série A : </label> <br>
+                                        <input type="text" id="serial_number2" name="serial_number2" class="form-control" placeholder="Numéro de série carte" autocomplete="off" readonly>
+                                </div>
+                            </div>
+                            
+                        
+                            <!-- ADRESSE DU CLIENT -->
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Adresse du Client <span style="color: red;">*</span></label>
+                                    <textarea id="address" name="address" class="form-control" rows="2" required  autocomplete="off"></textarea>
                                 </div>
                             </div>
 
 
                             <!-- NOMBRE DE FEUILLES (CHÉQUIERS) -->
-                            <div class="col-md-12 col-sm-12">
+                            <div class="col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label>Nombre de Feuilles <span style="color: red;">*</span></label>
                                     <div style="border: 1px solid #ddd; padding: 15px; border-radius: 4px; background: #f9f9f9;">
@@ -211,21 +226,21 @@ if (!isset($_SESSION['emp_id'])) {
                             </div>
 
                             <!-- QUANTITÉ SÉLECTIONNÉE / MANUELLE -->
-                            <div class="col-md-12 col-sm-12">
+                            <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
                                     <label>Quantité Totale de Chéquiers <span style="color: red;">*</span></label>
                                     <div class="row">
-                                        <div class="col-md-6 col-sm-12">
+                                        <div class="col-md-8 col-sm-12">
                                             <div style="background: #e8f5e9; padding: 15px; border-radius: 4px; text-align: center;">
-                                                <div style="font-size: 12px; color: #666; margin-bottom: 8px;">Basée sur les types sélectionnés</div>
+                                                <div style="font-size: 12px; color: #666; margin-bottom: 8px;">Quantité</div>
                                                 <h3 style="color: #2e7d32; margin: 0;">
                                                     <span id="autoQuantity">0</span> chéquier(s)
                                                 </h3>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input type="number" id="manual_quantity" name="manual_quantity" class="form-control" min="1" placeholder="Saisir une quantité " autocomplete="off">
-                                            <small class="form-text text-muted"><i class="fa fa-info-circle"></i> Laissez vide si la quantité est d'un seul chéquier </small>
+                                        <div class="col-md-4 col-sm-6">
+                                            <input type="number" id="manual_quantity" name="manual_quantity" class="form-control" min="1" autocomplete="off">
+                                            <small class="form-text text-muted"><i class="fa fa-info-circle"></i> Laissez vide si le nombre est 1 chéquier </small>
                                         </div>
                                     </div>
                                 </div>
@@ -245,8 +260,10 @@ if (!isset($_SESSION['emp_id'])) {
                                     </a>
                                 </div>
                             </div>
+
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
 
@@ -256,7 +273,147 @@ if (!isset($_SESSION['emp_id'])) {
 
     <?php include('includes/scriptJs.php')?>
 
+    <div class="modal fade" id="duplicateRequestModal" tabindex="-1" role="dialog" aria-labelledby="duplicateRequestModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#fff3cd; border-bottom:1px solid #ffeeba;">
+                    <h5 class="modal-title" id="duplicateRequestModalLabel" style="color:#856404;">Demande déjà existante</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="duplicateRequestModalBody">
+                    Une demande de chéquier est déjà en cours pour ce compte.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="btnContinueDuplicateRequest">Poursuivre quand même</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmSubmitModal" tabindex="-1" role="dialog" aria-labelledby="confirmSubmitModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#e8f5e9; border-bottom:1px solid #c8e6c9;">
+                    <h5 class="modal-title" id="confirmSubmitModalLabel" style="color:#1b5e20;">Confirmation de la demande</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="confirmSubmitModalBody">
+                    Vérification en cours...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-success" id="btnConfirmSubmitRequest">Confirmer l’envoi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        let currentAccountData = null;
+
+        function focusFormSection() {
+            const formSection = document.getElementById('chequier_form_section') || document.getElementById('chequerForm');
+            if (!formSection) return;
+
+            formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            formSection.style.transition = 'all 0.25s ease';
+            formSection.style.boxShadow = '0 0 0 3px rgba(5, 183, 228, 0.18), 0 10px 24px rgba(0, 69, 90, 0.12)';
+            setTimeout(() => {
+                formSection.style.boxShadow = '';
+            }, 1400);
+        }
+
+        function getFirstValue(source, keys) {
+            if (!source || typeof source !== 'object') return '';
+            for (const key of keys) {
+                const value = source[key];
+                if (typeof value === 'string' && value.trim()) return value.trim();
+                if (typeof value === 'number' && value !== 0) return String(value);
+            }
+            return '';
+        }
+
+        function getSerialQuantity() {
+            const manualQuantity = document.getElementById('manual_quantity').value;
+            if (manualQuantity && Number(manualQuantity) > 0) {
+                return Number(manualQuantity);
+            }
+
+            const selectedChequiers = Array.from(document.querySelectorAll('input[name="chequier"]:checked'));
+            return selectedChequiers.length > 0 ? selectedChequiers.length : 1;
+        }
+
+        function getSelectedLeafCount() {
+            const selectedChequiers = Array.from(document.querySelectorAll('input[name="chequier"]:checked'));
+            if (selectedChequiers.length === 0) return 25;
+
+            return selectedChequiers.reduce((total, checkbox) => total + Number(checkbox.value || 0), 0);
+        }
+
+        async function loadSerialNumbers() {
+            try {
+                const response = await fetch('get_last_serial_number.php');
+                const data = await response.json();
+                if (data.success) {
+                    const start = Number(data.serial_number1 || 1);
+                    const quantity = getSerialQuantity();
+                    const leafCount = getSelectedLeafCount();
+                    const end = start + (leafCount * quantity) - 1;
+                    document.getElementById('serial_number1').value = start;
+                    document.getElementById('serial_number2').value = end;
+                }
+            } catch (error) {
+                console.error('Erreur génération numéros de série', error);
+            }
+        }
+
+        function populateFormFromAccountData(accountData) {
+            if (!accountData || typeof accountData !== 'object') return;
+
+            const fullNameFromFields = [
+                getFirstValue(accountData, ['first_name']),
+                getFirstValue(accountData, ['last_name']),
+                getFirstValue(accountData, ['middle_name'])
+            ].filter(Boolean).join(' ');
+
+            const fullName = getFirstValue(accountData, ['account_title', 'customer_name', 'account_name', 'name', 'full_name']) || fullNameFromFields;
+
+            const accountNumber = getFirstValue(accountData, ['account_number', 'customer_account_number', 'numero_compte']);
+            const phoneValue = getFirstValue(accountData, ['phone_number', 'telephone', 'mobile', 'phone', 'mobile_phone', 'tel']);
+            const ribValue = getFirstValue(accountData, ['rib_key', 'rib', 'clearing_ac_no', 'RIB']);
+            const emailValue = getFirstValue(accountData, ['email', 'email_address', 'adresse_email', 'mail', 'e_mail', 'Email']);
+            const addressValue = getFirstValue(accountData, ['customer_address', 'address', 'account_address', 'adr_rue']);
+            const branchValue = getFirstValue(accountData, ['branch_code', 'agency_code', 'branch']);
+
+            const setValue = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value || '';
+            };
+
+            setValue('client_name', fullName);
+            setValue('account_number', accountNumber);
+            setValue('phone_number', phoneValue);
+            setValue('rib_key', ribValue);
+            setValue('email', emailValue);
+            setValue('address', addressValue);
+            setValue('branch_code', branchValue);
+
+            if (branchValue) {
+                const branchSelect = document.getElementById('branch_code');
+                if (branchSelect) {
+                    const found = Array.from(branchSelect.options).some(option => option.value === branchValue);
+                    if (found) branchSelect.value = branchValue;
+                }
+            }
+
+            focusFormSection();
+        }
+
         // Mettre à jour la quantité automatique
         function updateQuantity() {
             const chequerChecked = Array.from(document.querySelectorAll('input[name="chequier"]:checked')).length;
@@ -266,59 +423,75 @@ if (!isset($_SESSION['emp_id'])) {
         }
 
         document.querySelectorAll('.chequier-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', updateQuantity);
+            checkbox.addEventListener('change', () => {
+                updateQuantity();
+                loadSerialNumbers();
+            });
         });
 
         // Écouter les changements de quantité manuelle
-        document.getElementById('manual_quantity').addEventListener('input', updateQuantity);
+        document.getElementById('manual_quantity').addEventListener('input', () => {
+            updateQuantity();
+            loadSerialNumbers();
+        });
 
-        // Soumettre le formulaire
-        document.getElementById('chequerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        window.addEventListener('load', () => {
+            updateQuantity();
+            loadSerialNumbers();
+        });
 
-            const chequerChecked = Array.from(document.querySelectorAll('input[name="chequier"]:checked')).map(cb => cb.value);
-            if (chequerChecked.length === 0) {
-                alert('❌ Veuillez sélectionner au moins un type de chéquier');
-                return;
+        let pendingFormData = null;
+        let pendingSubmitMode = 'normal';
+
+        function showDuplicateModal(message) {
+            const body = document.getElementById('duplicateRequestModalBody');
+            if (body) body.textContent = message || 'Une demande de chéquier est déjà en cours pour ce compte.';
+            const modal = document.getElementById('duplicateRequestModal');
+            if (modal) {
+                $('#duplicateRequestModal').modal('show');
+            }
+        }
+
+        function showConfirmSubmitModal(summary) {
+            const body = document.getElementById('confirmSubmitModalBody');
+            if (body) {
+                const feesText = summary && summary.fees ? summary.fees : 'Non défini';
+                body.innerHTML = '';
+                body.innerHTML = `
+                    <div style="font-size:15px; line-height:1.6;">
+                        <p><strong>Confirmez l’envoi de cette demande de chéquier.</strong></p>
+                        <ul style="padding-left:18px; margin:0 0 10px 0;">
+                            <li><strong>Client :</strong> ${summary.client || 'Non renseigné'}</li>
+                            <li><strong>Compte :</strong> ${summary.account || 'Non renseigné'}</li>
+                            <li><strong>Agence :</strong> ${summary.agency || 'Non renseignée'}</li>
+                            <li><strong>Quantité :</strong> ${summary.quantity || 0} chéquier(s)</li>
+                            <li><strong>Type(s) :</strong> ${summary.types || 'Non renseigné'}</li>
+                            <li><strong>Frais :</strong> ${feesText}</li>
+                        </ul>
+                        <p style="margin:0; color:#1b5e20;">Si les informations sont correctes, cliquez sur <strong>Confirmer l’envoi</strong>.</p>
+                    </div>
+                `;
             }
 
-            // Déterminer la quantité (manuelle ou automatique)
-            const manualQuantity = document.getElementById('manual_quantity').value;
-            const quantityToUse = manualQuantity ? parseInt(manualQuantity) : chequerChecked.length;
-
-            if (quantityToUse < 1) {
-                alert('❌ La quantité doit être au minimum 1');
-                return;
+            const modal = document.getElementById('confirmSubmitModal');
+            if (modal) {
+                $('#confirmSubmitModal').modal('show');
             }
+        }
 
-            const formData = {
-                client_name: document.getElementById('client_name').value,
-                branch_code: document.getElementById('branch_code').value,
-                account_number: document.getElementById('account_number').value,
-                account_type: Array.from(document.querySelectorAll('input[name="account_type"]:checked')).map(cb => cb.value),
-                carte: Array.from(document.querySelectorAll('input[name="carte"]:checked')).map(cb => cb.value),
-                frais: Array.from(document.querySelectorAll('input[name="frais"]:checked')).map(cb => cb.value),
-                enrolled: Array.from(document.querySelectorAll('input[name="enrolled"]:checked')).map(cb => cb.value),
-                serial_number: document.getElementById('serial_number')?.value || '',
-                rib_key: document.getElementById('rib_key').value,
-                address: document.getElementById('address').value,
-                phone_number: document.getElementById('phone_number').value,
-                email: document.getElementById('email').value,
-                chequier: chequerChecked,
-                quantity: quantityToUse,
-                status: 'encours'
+        function submitChequierRequest(formData, options = {}) {
+            const payload = {
+                ...formData,
+                check_only: Boolean(options.checkOnly),
+                force_submit: Boolean(options.forceSubmit)
             };
 
-            if (!confirm('✓ Êtes-vous sûr de vouloir soumettre cette demande de chéquier ?\n\nClient: ' + formData.client_name + '\nTéléphone: ' + formData.phone_number + '\nEmail: ' + formData.email + '\nCompte: ' + formData.account_number + '\nQuantité: ' + quantityToUse)) {
-                return;
-            }
-
-            fetch('save_chequier_directe.php', {
+            return fetch('save_chequier_directe.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(payload)
             })
             .then(response => response.text())
             .then(text => {
@@ -336,21 +509,156 @@ if (!isset($_SESSION['emp_id'])) {
                         msg += '\nRéponse inattendue: ' + text.substring(0, 400);
                     }
                     alert(msg);
+                    return null;
+                }
+
+                return data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('✗ Erreur de communication avec le serveur');
+                return null;
+            });
+        }
+
+        // Soumettre le formulaire
+        document.getElementById('chequerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const chequerChecked = Array.from(document.querySelectorAll('input[name="chequier"]:checked')).map(cb => cb.value);
+            if (chequerChecked.length === 0) {
+                alert('❌ Veuillez sélectionner au moins un type de chéquier');
+                return;
+            }
+
+            const manualQuantity = document.getElementById('manual_quantity').value;
+            const quantityToUse = manualQuantity ? parseInt(manualQuantity) : chequerChecked.length;
+
+            if (quantityToUse < 1) {
+                alert('❌ La quantité doit être au minimum 1');
+                return;
+            }
+
+            const formData = {
+                client_name: document.getElementById('client_name').value,
+                branch_code: document.getElementById('branch_code').value,
+                account_number: document.getElementById('account_number').value,
+                account_type: Array.from(document.querySelectorAll('input[name="account_type"]:checked')).map(cb => cb.value),
+                carte: Array.from(document.querySelectorAll('input[name="carte"]:checked')).map(cb => cb.value),
+                frais: Array.from(document.querySelectorAll('input[name="frais"]:checked')).map(cb => cb.value),
+                enrolled: Array.from(document.querySelectorAll('input[name="enrolled"]:checked')).map(cb => cb.value),
+                serial_number: document.getElementById('serial_number1')?.value || '',
+                serial_number1: document.getElementById('serial_number1')?.value || '',
+                serial_number2: document.getElementById('serial_number2')?.value || '',
+                rib_key: document.getElementById('rib_key').value,
+                address: document.getElementById('address').value,
+                phone_number: document.getElementById('phone_number').value,
+                email: document.getElementById('email').value,
+                chequier: chequerChecked,
+                quantity: quantityToUse,
+                status: 'encours'
+            };
+
+            pendingFormData = formData;
+
+            submitChequierRequest(formData, { checkOnly: true }).then(data => {
+                if (!data) {
                     return;
                 }
+
+                if (data.status === 'duplicate') {
+                    showDuplicateModal(data.message || 'Une demande de chéquier est déjà en cours pour ce compte.');
+                    return;
+                }
+
+                if (data.status === 'ready') {
+                    showConfirmSubmitModal(data.request_summary || {});
+                    return;
+                }
+
                 if (data.status === 'success') {
-                    alert('✓ Demande enregistrée avec succès !\n\nID: ' + data.submission_id);
+                    submitChequierRequest(formData, { checkOnly: false }).then(finalData => {
+                        if (!finalData) {
+                            return;
+                        }
+
+                        if (finalData.status === 'success') {
+                            alert('✓ ' + (finalData.message || 'Demande enregistrée avec succès !') + '\n\nID: ' + finalData.submission_id);
+                            setTimeout(() => {
+                                window.location.href = 'demande_chequier.php';
+                            }, 1500);
+                        } else {
+                            alert('✗ Erreur: ' + (finalData.message || 'Une erreur s\'est produite'));
+                        }
+                    });
+                } else {
+                    alert('✗ Erreur: ' + (data.message || 'Une erreur s\'est produite'));
+                }
+            });
+        });
+
+        document.getElementById('btnConfirmSubmitRequest').addEventListener('click', function() {
+            if (!pendingFormData) {
+                $('#confirmSubmitModal').modal('hide');
+                return;
+            }
+
+            $('#confirmSubmitModal').modal('hide');
+
+            submitChequierRequest(pendingFormData, { checkOnly: false, forceSubmit: pendingSubmitMode === 'force' }).then(data => {
+                if (!data) {
+                    return;
+                }
+
+                if (data.status === 'success') {
+                    alert('✓ ' + (data.message || 'Demande enregistrée avec succès !') + '\n\nID: ' + data.submission_id);
                     setTimeout(() => {
                         window.location.href = 'demande_chequier.php';
                     }, 1500);
                 } else {
                     alert('✗ Erreur: ' + (data.message || 'Une erreur s\'est produite'));
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('✗ Erreur de communication avec le serveur');
             });
+        });
+
+        document.getElementById('btnContinueDuplicateRequest').addEventListener('click', function() {
+            if (!pendingFormData) {
+                $('#duplicateRequestModal').modal('hide');
+                return;
+            }
+
+            $('#duplicateRequestModal').modal('hide');
+            pendingSubmitMode = 'force';
+            showConfirmSubmitModal({
+                client: pendingFormData.client_name || '',
+                account: pendingFormData.account_number || '',
+                agency: pendingFormData.branch_code || '',
+                quantity: pendingFormData.quantity || 0,
+                types: (pendingFormData.chequier || []).join(', '),
+                fees: 'Vérification en cours'
+            });
+        });
+
+        function redirectToChequierForm(data) {
+            const payload = data ? JSON.stringify(data) : '{}';
+            const url = 'formulaire_chequier.html?clientData=' + encodeURIComponent(payload);
+            window.location.href = url;
+        }
+
+        document.getElementById('btn_apply_search').addEventListener('click', function() {
+            if (currentAccountData) {
+                redirectToChequierForm(currentAccountData);
+            } else {
+                alert('⚠ Aucune donnée de recherche n\'a encore été chargée.');
+            }
+        });
+
+        document.getElementById('btn_open_form').addEventListener('click', function() {
+            if (currentAccountData) {
+                redirectToChequierForm(currentAccountData);
+            } else {
+                redirectToChequierForm(null);
+            }
         });
 
         // Recherche et auto-remplissage Flexcube
@@ -378,60 +686,16 @@ if (!isset($_SESSION['emp_id'])) {
                         console.log('Remplissage des champs...');
                         
                         // Les données sont imbriquées dans data.data si on utilise la nouvelle API
-                        let accountData = data.data || data;
+                        const accountData = data.data || data;
+                        const rawData = data.raw || {};
+                        const mergedAccountData = { ...rawData, ...accountData };
+                        currentAccountData = mergedAccountData;
                         
-                        console.log('Données à utiliser:', accountData);
-                        
-                        // Remplir account_number
-                        const accField = document.getElementById('account_number');
-                        if (accField) {
-                            accField.value = accountData.account_number || '';
-                            console.log('account_number set to:', accField.value);
-                        }
-                        
-                        // Remplir client_name
-                        const nameField = document.getElementById('client_name');
-                        if (nameField) {
-                            nameField.value = (accountData.first_name || '') + ' ' + (accountData.last_name || '');
-                            console.log('client_name set to:', nameField.value);
-                        }
-                        
-                        // Remplir phone_number
-                        const phoneField = document.getElementById('phone_number');
-                        if (phoneField) {
-                            phoneField.value = accountData.phone_number || accountData.telephone || '';
-                            console.log('phone_number set to:', phoneField.value);
-                        }
+                        console.log('Données à utiliser:', mergedAccountData);
+                        populateFormFromAccountData(mergedAccountData);
+                        focusFormSection();
 
-                        // Remplir rib_key
-                        const ribField = document.getElementById('rib_key');
-                        if (ribField) {
-                            ribField.value = accountData.rib_key || accountData.rib || accountData.clearing_ac_no || '';
-                            console.log('rib_key set to:', ribField.value);
-                        }
-                        
-                        // Remplir email
-                        const emailField = document.getElementById('email');
-                        if (emailField) {
-                            emailField.value = accountData.email || '';
-                            console.log('email set to:', emailField.value);
-                        }
-                        
-                        // Remplir address
-                        const addrField = document.getElementById('address');
-                        if (addrField) {
-                            addrField.value = accountData.customer_address || '';
-                            console.log('address set to:', addrField.value);
-                        }
-                        
-                        // Remplir branch_code
-                        const branchField = document.getElementById('branch_code');
-                        if (branchField) {
-                            branchField.value = accountData.branch_code || '';
-                            console.log('branch_code set to:', branchField.value);
-                        }
-
-                        resultDiv.innerHTML = '<div style="color: #28a745; padding: 10px; background: #d4edda; border-radius: 4px;"><strong>✓ Compte trouvé!</strong> Les informations ont été pré-remplies.</div>';
+                        resultDiv.innerHTML = '<div style="color: #28a745; padding: 10px; background: #d4edda; border-radius: 4px;"><strong>✓ Compte trouvé!</strong> Les informations du client ont été chargées dans le formulaire.</div>';
                     } else {
                         resultDiv.innerHTML = '<div style="color: #dc3545; padding: 10px; background: #f8d7da; border-radius: 4px;"><strong>✗ Compte non trouvé</strong><br>' + (data.error || 'Veuillez vérifier le numéro de compte') + '</div>';
                     }

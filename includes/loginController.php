@@ -1,6 +1,7 @@
 <?php
 // Session déjà démarrée dans index.php, pas besoin de la redémarrer
-include('config.php');
+require_once __DIR__ . '/../includes/config.php';
+
 require_once('audit_logger.php');
 include('RateLimiter.php');
 

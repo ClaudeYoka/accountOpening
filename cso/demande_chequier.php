@@ -315,7 +315,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     <div id="detailsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header" style="background: linear-gradient(135deg, #05b7e4 0%, #00455a 100%); color: white;">
+                <div class="modal-header" style="background: linear-gradient(135deg, #0699dd 0%, #02313f 100%); color: white;">
                     <h5 class="modal-title">Détails de la Demande de Chéquier</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
                         <span aria-hidden="true">&times;</span>
@@ -333,8 +333,8 @@ if ($result && mysqli_num_rows($result) > 0) {
         </div>
     </div>
 
-    <?php include('includes/footer.php'); ?>
     <?php include('includes/scriptJs.php')?>
+    
     <script>
         function updateStatusCSO(requestId, newStatus) {
             if (confirm('Êtes-vous sûr de vouloir changer le statut en : ' + newStatus + ' ?')) {

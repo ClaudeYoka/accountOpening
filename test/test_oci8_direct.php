@@ -63,6 +63,7 @@ $sql = "SELECT
     cp.LAST_NAME AS last_name,
     cp.MIDDLE_NAME AS middle_name,
     cp.telephone,
+    cp.e_mail AS Email,
     TRIM(NVL(cu.address_line1, '') || ' ' || NVL(cu.address_line2, '') || ' ' || NVL(cu.address_line3, '') || ' ' || NVL(cu.address_line4, '')) AS customer_address
 FROM
     fcubscs2.sttm_cust_account a

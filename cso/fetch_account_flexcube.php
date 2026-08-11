@@ -104,8 +104,22 @@ function mapFlexcubeDataToFormFields($flexcube_data) {
     // Customer ID
     $form_data['customer_id'] = $flexcube_data['customer_id'] ?? '';
 
-    // Email
-    $form_data['email'] = $flexcube_data['email'] ?? '';
+// Email (support de plusieurs variantes pour l'auto-remplissage du formulaire)
+        $raw_email = $flexcube_data['email']
+            ?? $flexcube_data['email_address']
+            ?? $flexcube_data['adresse_email']
+            ?? $flexcube_data['mail']
+            ?? $flexcube_data['e_mail']
+            ?? $flexcube_data['EMAIL']
+            ?? $flexcube_data['EMAIL_ID']
+            ?? $flexcube_data['EMAILID']
+            ?? '';
+
+        $form_data['email'] = $raw_email;
+        $form_data['email_address'] = $raw_email;
+        $form_data['adresse_email'] = $raw_email;
+        $form_data['mail'] = $raw_email;
+        $form_data['e_mail'] = $raw_email;
 
     // Telephone
     $form_data['telephone'] = $flexcube_data['telephone'] ?? '';

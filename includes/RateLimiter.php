@@ -158,8 +158,8 @@ class RateLimiter {
      */
     private function autoCleanup() {
         // Cleanup tous les jours max
-        $useApcu = function_exists('apcu_fetch') && function_exists('apcu_store');
-        $last_cleanup = $useApcu ? apcu_fetch('rate_limit_last_cleanup') : null;
+        $useApcu = is_callable('apcu_fetch') && is_callable('apcu_store');
+        $last_cleanup = $useApcu ? call_user_func('apcu_fetch', 'rate_limit_last_cleanup') : null;
         if ($last_cleanup && (time() - $last_cleanup) < $this->cleanup_interval) {
             return;
         }
@@ -168,7 +168,7 @@ class RateLimiter {
             $sql = "DELETE FROM {$this->table} WHERE timestamp < DATE_SUB(NOW(), INTERVAL 24 HOUR)";
             $this->pdo->exec($sql);
             if ($useApcu) {
-                apcu_store('rate_limit_last_cleanup', time(), $this->cleanup_interval);
+                call_user_func('apcu_store', 'rate_limit_last_cleanup', time(), $this->cleanup_interval);
             }
         } catch (Exception $e) {
             // Silent fail

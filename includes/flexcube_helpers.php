@@ -94,6 +94,7 @@ function fetchAccountFromOracleDatabase($account_number) {
             cp.LAST_NAME AS last_name,
             cp.MIDDLE_NAME AS middle_name,
             cp.SEX AS sex,
+            cp.e_mail AS Email,
             a.cust_no AS customer_id,
             cp.date_of_birth,
             cp.place_of_birth,

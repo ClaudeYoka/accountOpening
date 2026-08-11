@@ -294,7 +294,7 @@ if(isset($_POST['add_staff']))
                 </div>
 
             </div>
-            <!-- <?php include('includes/footer.php'); ?> -->
+            <?php include('includes/footer.php'); ?>
         </div>
     </div>
     <!-- js -->

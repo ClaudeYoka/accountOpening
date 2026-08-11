@@ -47,7 +47,8 @@ $query = "SELECT
             tc.titre as has_card,
             tc.objectif as fees,
             tc.devise_pref as enrolled,
-            tc.ident_etud as serial_number,
+            tc.ident_etud as serial_number1,
+            tc.cond as serial_number2,
             COALESCE(tb.DepartmentName, tc.branch_code) as agency_name,
             tc.date_enregistrement as date_retrait,
             tc.branch_code,
@@ -182,8 +183,8 @@ foreach ($agency_groups as $agency_name => $agency_rows) {
         $sheet->setCellValue('F' . $rowNum, $ref);
         $sheet->setCellValue('G' . $rowNum, $nb_carnets);
         $sheet->setCellValue('H' . $rowNum, $nb_feuilles);
-        $sheet->setCellValue('I' . $rowNum, $r['serial_number'] ?? '');
-        $sheet->setCellValue('J' . $rowNum, '=G'.$rowNum.'*H'.$rowNum.'+I'.$rowNum.'-1');
+        $sheet->setCellValue('I' . $rowNum, $r['serial_number1'] ?? '');
+        $sheet->setCellValue('J' . $rowNum, $r['serial_number2'] ?? '');
         $sheet->setCellValue('K' . $rowNum, '');
         $sheet->setCellValue('L' . $rowNum, 'BARRE');
         $sheet->setCellValue('M' . $rowNum, $r['fees'] ?? '');

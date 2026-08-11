@@ -1,6 +1,9 @@
+<?php 
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
 <?php
-include('../includes/session.php');
-include('../includes/config.php');
 
 header('Content-Type: application/json; charset=utf-8');
 

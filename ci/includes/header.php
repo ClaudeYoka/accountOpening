@@ -24,8 +24,7 @@
 	<link rel="stylesheet" type="text/css" href="../src/plugins/jquery-steps/jquery.steps.css">
 	<link rel="stylesheet" type="text/css" href="../src/plugins/datatables/css/dataTables.bootstrap4.min.css">
 	<link rel="stylesheet" type="text/css" href="../src/plugins/datatables/css/responsive.bootstrap4.min.css">
-	<link rel="stylesheet" type="text/css" href="../vendors/styles/style.css">
-	<link rel="stylesheet" type="text/css" href="../src/styles/ecobank_admin.css">
+	<link rel="stylesheet" type="text/css" href="../vendors/styles/stylewhite.css">
 	<link rel="stylesheet" type="text/css" href="../vendors/styles/fixes.css">
 	<link rel="stylesheet" type="text/css" href="../src/css/dashboard-modern.css">
 	<!-- Chart.js -->

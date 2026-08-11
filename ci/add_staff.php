@@ -1,5 +1,9 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php 
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
+
 <?php include('../includes/audit_helpers.php')?>
 
 <?php
@@ -221,7 +225,7 @@ if(isset($_POST['add_staff']))
                                         <div class="form-group">
                                             <label>Agence :</label>
                                             <select name="AgenceShortName" class="custom-select form-control" required="true" autocomplete="off">
-                                                <option value="">Choisir l'Agence</option>
+                                                <option value="">---------------Choisir l'Agence----------</option>
                                                 <?php
                                                 $query = mysqli_query($conn, "SELECT * FROM tblagences");
                                                 while($row = mysqli_fetch_array($query)){

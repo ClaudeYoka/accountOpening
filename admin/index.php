@@ -64,6 +64,25 @@ include('monitoring_notification.php');
 
 	<div class="main-container">
 		<div class="pd-ltr-20">
+
+		<div class="card-box pd-20 height-100-p mb-30">
+				<div class="row align-items-center">
+					<div class="col-md-4 user-icon">
+						<img src="../vendors/images/indexlog.png" alt="">
+					</div>
+					<div class="col-md-8">
+
+						<?php $query= mysqli_query($conn,"SELECT * from tblemployees where emp_id = '$session_id'");
+								$row = mysqli_fetch_array($query);
+						?>
+
+						<h4 class="font-20 weight-500 mb-10 text-capitalize">
+							BIENVENUE <div class="weight-600 font-30 text-blue"><?php echo htmlspecialchars($row['FirstName'], ENT_QUOTES, 'UTF-8') . " " . htmlspecialchars($row['LastName'], ENT_QUOTES, 'UTF-8'); ?>,</div>
+						</h4>
+						<p class="font-18 max-width-600">Vous êtes sur l'application d'ouverture de Compte d'Ecobank .</p>
+					</div>
+				</div>
+			</div>
 		
 			<div class="dashboard-section">
 				<h2 class="dashboard-section-title"> Comptes par Agence</h2>

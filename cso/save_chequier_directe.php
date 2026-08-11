@@ -74,14 +74,6 @@ try {
             $has_card = $data['carte'];
         }
     }
-    $fees = '';
-    if (isset($data['frais'])) {
-        if (is_array($data['frais'])) {
-            $fees = $data['frais'][0] ?? '';
-        } else {
-            $fees = $data['frais'];
-        }
-    }
     $enrolled = '';
     if (isset($data['enrolled'])) {
         if (is_array($data['enrolled'])) {
@@ -90,10 +82,117 @@ try {
             $enrolled = $data['enrolled'];
         }
     }
-    $serial_number = $data['serial_number'] ?? '';    // Statut par défaut cohérent : 'En cours'
+    $serial_number1 = trim((string)($data['serial_number1'] ?? $data['serial_number'] ?? ''));
+    $serial_number2 = trim((string)($data['serial_number2'] ?? $data['cond'] ?? ''));
     $status = $data['status'] ?? 'encours';
     $manual_quantity = $data['quantity'] ?? null;
     $emp_id = $_SESSION['emp_id'];
+
+    function parse_leaf_count_from_type_compte($value) {
+        if (empty($value)) {
+            return 0;
+        }
+
+        if (is_array($value)) {
+            $value = implode(', ', array_filter(array_map('trim', $value)));
+        }
+
+        if (!is_string($value)) {
+            $value = (string) $value;
+        }
+
+        $matches = [];
+        preg_match_all('/(\d+)/', $value, $matches);
+
+        $total = 0;
+        foreach ($matches[1] as $number) {
+            $total += (int)$number;
+        }
+
+        return $total;
+    }
+
+    $type_compte = is_array($chequier) ? implode(', ', array_filter($chequier)) : trim((string)$chequier);
+    $quantity = $manual_quantity ? intval($manual_quantity) : (is_array($chequier) ? count($chequier) : 0);
+    $check_only = !empty($data['check_only']);
+    $force_submit = !empty($data['force_submit']);
+
+    // Vérifier si une demande en cours existe déjà pour ce client
+    $pending_request = null;
+    if (!empty($account_number)) {
+        $pending_stmt = mysqli_prepare($conn, "SELECT branch_code, id FROM tblcompte WHERE account_number = ? AND type_compte IS NOT NULL AND type_compte != '' AND (access = 'encours' OR access = 'ENCOURS' OR access = 'En cours' OR access = 'en cours') ORDER BY date_enregistrement DESC LIMIT 1");
+        if ($pending_stmt) {
+            mysqli_stmt_bind_param($pending_stmt, 's', $account_number);
+            mysqli_stmt_execute($pending_stmt);
+            $pending_result = mysqli_stmt_get_result($pending_stmt);
+            if ($pending_result && mysqli_num_rows($pending_result) > 0) {
+                $pending_request = mysqli_fetch_assoc($pending_result);
+            }
+            mysqli_stmt_close($pending_stmt);
+        }
+    }
+
+    if ($pending_request && !$force_submit) {
+        $agency_name = $pending_request['branch_code'] ?? 'Agence non renseignée';
+        if ($check_only) {
+            http_response_code(200);
+            echo json_encode([
+                'status' => 'duplicate',
+                'message' => !empty($agency_name)
+                    ? "Une demande de chéquier est déjà en cours pour ce compte. Elle a été enregistrée à l'agence {$agency_name}."
+                    : 'Une demande de chéquier est déjà en cours pour ce compte.'
+            ]);
+            exit;
+        }
+
+        http_response_code(409);
+        echo json_encode([
+            'status' => 'duplicate',
+            'message' => !empty($agency_name)
+                ? "Une demande de chéquier est déjà en cours pour ce compte. Elle a été enregistrée à l'agence {$agency_name}."
+                : 'Une demande de chéquier est déjà en cours pour ce compte.'
+        ]);
+        exit;
+    }
+
+    // Vérifier le cumul annuel des feuilles pour déterminer si les frais sont prélevés
+    $annual_total_leaves = 0;
+    $annual_stmt = mysqli_prepare($conn, "SELECT type_compte, etabliss FROM tblcompte WHERE account_number = ? AND type_compte IS NOT NULL AND type_compte != '' AND YEAR(date_enregistrement) = YEAR(CURDATE())");
+    if ($annual_stmt) {
+        mysqli_stmt_bind_param($annual_stmt, 's', $account_number);
+        mysqli_stmt_execute($annual_stmt);
+        $annual_result = mysqli_stmt_get_result($annual_stmt);
+        if ($annual_result) {
+            while ($annual_row = mysqli_fetch_assoc($annual_result)) {
+                $leaf_count = parse_leaf_count_from_type_compte($annual_row['type_compte'] ?? '');
+                $existing_quantity = max(1, (int)($annual_row['etabliss'] ?? 1));
+                $annual_total_leaves += $leaf_count * $existing_quantity;
+            }
+        }
+        mysqli_stmt_close($annual_stmt);
+    }
+
+    $current_leaf_count = parse_leaf_count_from_type_compte($type_compte);
+    $annual_total_with_current = $annual_total_leaves + ($current_leaf_count * max(1, $quantity));
+    $fees = ($annual_total_with_current >= 50) ? 'OUI' : 'NON';
+
+    if ($check_only) {
+        http_response_code(200);
+        echo json_encode([
+            'status' => 'ready',
+            'message' => 'Vérification réussie. Veuillez confirmer l’envoi de la demande.',
+            'fees_status' => $fees,
+            'request_summary' => [
+                'client' => $client_name,
+                'account' => $account_number,
+                'agency' => $branch_code,
+                'quantity' => $quantity,
+                'types' => $type_compte,
+                'fees' => $fees
+            ]
+        ]);
+        exit;
+    }
 
     // Validations améliorées
     $errors = [];
@@ -162,9 +261,6 @@ try {
         throw new Exception('Au moins un type de chéquier doit être sélectionné');
     }
 
-    // Utiliser la quantité manuelle si fournie, sinon utiliser le nombre de types
-    $quantity = $manual_quantity ? intval($manual_quantity) : count($chequier);
-    
     if ($quantity < 1) {
         throw new Exception('La quantité doit être au minimum 1');
     }
@@ -175,8 +271,10 @@ try {
         throw new Exception('Table tblcompte inexistante');
     }
 
-    // Construire les valeurs de type_compte
-    $type_compte = implode(', ', $chequier);
+    $check_cond_column = mysqli_query($conn, "SHOW COLUMNS FROM tblcompte LIKE 'cond'");
+    if (!$check_cond_column || mysqli_num_rows($check_cond_column) == 0) {
+        mysqli_query($conn, "ALTER TABLE tblcompte ADD COLUMN cond VARCHAR(255) DEFAULT NULL");
+    }
 
     // Construire la valeur services à partir du type de compte (COURANT/EPARGNE)
     if (is_array($account_type)) {
@@ -204,10 +302,12 @@ try {
         objectif,
         devise_pref,
         ident_etud,
+        cond,
         date_enregistrement
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
 
-    mysqli_stmt_bind_param($stmt, "ssssssssssssssss", 
+    $types = str_repeat('s', 17);
+    mysqli_stmt_bind_param($stmt, $types, 
         $emp_id,
         $client_name,
         $account_number,
@@ -223,7 +323,8 @@ try {
         $has_card,
         $fees,
         $enrolled,
-        $serial_number
+        $serial_number1,
+        $serial_number2
     );
 
     $result = mysqli_stmt_execute($stmt);
@@ -251,7 +352,8 @@ try {
         'has_card' => $has_card,
         'fees' => $fees,
         'enrolled' => $enrolled,
-        'serial_number' => $serial_number,
+        'serial_number1' => $serial_number1,
+        'serial_number2' => $serial_number2,
         'status' => $status
     ]);
 
@@ -279,8 +381,9 @@ try {
     // Réponse de succès
     $response = [
         'status' => 'success',
-        'message' => 'Demande enregistrée avec succès',
-        'submission_id' => $submission_id
+        'message' => 'Demande enregistrée avec succès. Frais prélevés : ' . ($fees === 'OUI' ? 'Oui' : 'Non'),
+        'submission_id' => $submission_id,
+        'fees_status' => $fees
     ];
 
 } catch (Exception $e) {

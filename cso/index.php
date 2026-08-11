@@ -95,7 +95,7 @@ require_once __DIR__ . '/../includes/session.php';
 		</div>
 	</div>
 
-	<?php include('includes/footer.php')?>
+	<!-- <?php include('includes/footer.php')?> -->
 	<!-- js -->
 
 	<?php include('includes/scriptJs.php')?>
