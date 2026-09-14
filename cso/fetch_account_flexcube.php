@@ -100,26 +100,49 @@ function mapFlexcubeDataToFormFields($flexcube_data) {
 
     // Account number
     $form_data['account_number'] = $flexcube_data['account_number'] ?? '';
-
-    // Customer ID
     $form_data['customer_id'] = $flexcube_data['customer_id'] ?? '';
 
-// Email (support de plusieurs variantes pour l'auto-remplissage du formulaire)
-        $raw_email = $flexcube_data['email']
-            ?? $flexcube_data['email_address']
-            ?? $flexcube_data['adresse_email']
-            ?? $flexcube_data['mail']
-            ?? $flexcube_data['e_mail']
-            ?? $flexcube_data['EMAIL']
-            ?? $flexcube_data['EMAIL_ID']
-            ?? $flexcube_data['EMAILID']
-            ?? '';
+    // Type et devise issus directement de b.description et a.ccy dans Flexcube.
+    $form_data['account_type'] = trim((string) ($flexcube_data['description'] ?? ''));
+    if ($form_data['account_type'] === '') {
+        $form_data['account_type'] = trim((string) ($flexcube_data['account_type'] ?? $flexcube_data['type_compte'] ?? $flexcube_data['account_class_description'] ?? ''));
+    }
 
-        $form_data['email'] = $raw_email;
-        $form_data['email_address'] = $raw_email;
-        $form_data['adresse_email'] = $raw_email;
-        $form_data['mail'] = $raw_email;
-        $form_data['e_mail'] = $raw_email;
+    $form_data['description'] = $form_data['account_type'];
+    $form_data['compte1_type'] = $form_data['account_type'];
+
+    $form_data['currency'] = trim((string) ($flexcube_data['ccy'] ?? ''));
+    if ($form_data['currency'] === '') {
+        $form_data['currency'] = trim((string) ($flexcube_data['currency'] ?? $flexcube_data['devise'] ?? $flexcube_data['currency_code'] ?? ''));
+    }
+
+    $form_data['devise'] = $form_data['currency'];
+    $form_data['ccy'] = $form_data['currency'];
+    $form_data['compte1_devise'] = $form_data['currency'];
+
+    $form_data['branch_code'] = $flexcube_data['branch_code'] ?? $flexcube_data['agency_code'] ?? $flexcube_data['branch'] ?? '';
+    $form_data['filiale'] = 'ECG';
+    $form_data['agence'] = $form_data['branch_code'];
+    $form_data['compte1_numero'] = $form_data['account_number'];
+    $form_data['compte1_agence'] = $form_data['branch_code'];
+    $form_data['compte1_filiale'] = 'ECG';
+
+    // Email (support de plusieurs variantes pour l'auto-remplissage du formulaire)
+    $raw_email = $flexcube_data['email']
+        ?? $flexcube_data['email_address']
+        ?? $flexcube_data['adresse_email']
+        ?? $flexcube_data['mail']
+        ?? $flexcube_data['e_mail']
+        ?? $flexcube_data['EMAIL']
+        ?? $flexcube_data['EMAIL_ID']
+        ?? $flexcube_data['EMAILID']
+        ?? '';
+
+    $form_data['email'] = $raw_email;
+    $form_data['email_address'] = $raw_email;
+    $form_data['adresse_email'] = $raw_email;
+    $form_data['mail'] = $raw_email;
+    $form_data['e_mail'] = $raw_email;
 
     // Telephone
     $form_data['telephone'] = $flexcube_data['telephone'] ?? '';

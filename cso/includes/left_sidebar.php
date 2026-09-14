@@ -42,7 +42,7 @@
 						</li>
 
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle no-arrow" data-toggle="modal" data-target="#documentsModal">
+							<a href="formulaires_index" class="dropdown-toggle no-arrow">
 								<span class="micon fi-print"></span><span class="mtext">Formulaires</span>
 							</a>
 						</li>

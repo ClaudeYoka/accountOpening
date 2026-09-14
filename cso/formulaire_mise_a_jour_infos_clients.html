@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulaire de mise à jour des informations clients — Ecobank</title>
+  <link rel="icon" sizes="180x180" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../vendors/images/ecobank-bg.png">
+<style>
+  :root{
+    --ink:#1a1a1a;
+    --line:#333;
+    --dot:#999;
+    --accent:#003b5c; /* ecobank-esque navy */
+    --accent2:#e8a33d; /* ecobank-esque gold/orange */
+    --paper:#ffffff;
+    --muted:#555;
+  }
+
+  * { box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background:#e9e9e9;
+    font-family: Arial, Helvetica, sans-serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    padding:32px 16px;
+  }
+
+  .page{
+    background:var(--paper);
+    width:100%;
+    max-width:900px;
+    padding:48px 56px 40px;
+    box-shadow:0 2px 14px rgba(0,0,0,0.18);
+  }
+
+  /* ---------- Header ---------- */
+  .header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    border-bottom:2px solid var(--accent);
+    padding-bottom:14px;
+    margin-bottom:28px;
+  }
+
+  .logo{
+    display:flex;
+    flex-direction:column;
+    line-height:1.1;
+  }
+
+  .logo .mark{
+    display:flex;
+    align-items:baseline;
+    gap:4px;
+  }
+
+  .logo .mark .eco{
+    font-size:28px;
+    font-weight:800;
+    color:var(--accent);
+    letter-spacing:0.5px;
+  }
+
+  .logo .mark .bank{
+    font-size:28px;
+    font-weight:800;
+    color:var(--accent2);
+    letter-spacing:0.5px;
+  }
+
+  .logo .tagline{
+    font-size:10.5px;
+    font-style:italic;
+    color:var(--muted);
+    margin-top:2px;
+  }
+
+  .header-right{
+    text-align:right;
+    font-size:10.5px;
+    color:var(--muted);
+    max-width:230px;
+    padding-top:6px;
+  }
+
+  /* ---------- Title ---------- */
+  h1.title{
+    text-align:center;
+    font-size:17px;
+    font-weight:800;
+    letter-spacing:0.3px;
+    text-decoration:underline;
+    text-underline-offset:6px;
+    margin:0 0 34px;
+  }
+
+  /* ---------- Form rows ---------- */
+  .row{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    margin-bottom:16px;
+    font-size:13.5px;
+  }
+
+  .row .label{
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+
+  .row .label .req{
+    color:var(--accent);
+    font-weight:700;
+  }
+
+  .fill{
+    flex:1;
+    border:none;
+    border-bottom:1px dotted var(--dot);
+    background:transparent;
+    font-family:inherit;
+    font-size:13.5px;
+    padding:2px 4px;
+    outline:none;
+    min-width:0;
+  }
+
+  .fill:focus{
+    border-bottom:1px solid var(--accent);
+  }
+
+  .fill.short{ max-width:180px; flex:0 0 180px; }
+  .fill.xshort{ max-width:130px; flex:0 0 130px; }
+
+  select.fill{
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    border-bottom:1px dotted var(--dot);
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='10' height='10'><path fill='%23555' d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 4px center;
+    padding-right:20px;
+    cursor:pointer;
+  }
+
+  select.fill:invalid{ color:#888; }
+
+  .row.two-col{
+    display:flex;
+    gap:32px;
+    flex-wrap:wrap;
+  }
+
+  .row.two-col .field{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    flex:1;
+    min-width:220px;
+  }
+
+  .section-gap{ height:14px; }
+
+  fieldset{
+    border:none;
+    padding:0;
+    margin:0 0 4px;
+  }
+
+  legend{ display:none; }
+
+  /* ---------- Signatures ---------- */
+  .signatures{
+    margin-top:44px;
+  }
+
+  .sig-row{
+    display:flex;
+    gap:60px;
+    margin-bottom:26px;
+    font-size:13.5px;
+  }
+
+  .sig-row .field{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+
+  .sig-row .sig-line{
+    border-bottom:1px dotted var(--dot);
+    min-width:220px;
+    display:inline-block;
+  }
+
+  .sig-row .date-line{
+    border-bottom:1px dotted var(--dot);
+    min-width:150px;
+    display:inline-block;
+  }
+
+  /* ---------- Footer ---------- */
+  .footer{
+    margin-top:48px;
+    border-top:1px solid #ccc;
+    padding-top:10px;
+    text-align:center;
+    font-size:9.5px;
+    color:var(--muted);
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid #ddd;
+  }
+
+  .action-buttons button {
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .action-buttons .btn-print {
+    background-color: var(--accent);
+    color: #fff;
+  }
+
+  .action-buttons .btn-print:hover {
+    background-color: #002a42;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .action-buttons .btn-back {
+    background-color: #999;
+    color: #fff;
+  }
+
+  .action-buttons .btn-back:hover {
+    background-color: #777;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  @page{ size:A4; margin:0; }
+
+  @media print{
+    body{ background:#fff; padding:0; }
+    .page{ box-shadow:none; max-width:none; padding:20px 34px; }
+    .action-buttons { display: none; }
+  }
+
+  @media (max-width:600px){
+    .page{ padding:28px 20px; }
+    .row, .sig-row{ flex-direction:column; align-items:stretch; }
+    .row.two-col{ flex-direction:column; gap:16px; }
+    .sig-row{ gap:12px; }
+    .header{ flex-direction:column; gap:12px; }
+    .header-right{ text-align:left; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <div class="mark">
+        <img src="../vendors/images/ecobank-lg.png" alt="" class="" width="150px">
+      </div>
+    </div>
+    <div class="header-right">
+      Group Payment Operations Center — SWIFT 2026 Structured Address
+    </div>
+  </div>
+
+  <h1 class="title">FORMULAIRE DE MISE À JOUR DES INFORMATIONS CLIENTS</h1>
+
+  <form>
+
+    <!-- Pays affilié / Code d'affiliation -->
+    <div class="row two-col">
+      <div class="field">
+        <label class="label" for="pays-affilie">PAYS AFFILIÉ :</label>
+        <select class="fill" id="pays-affilie" name="pays_affilie" required>
+          <option value="" selected disabled hidden></option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="label" for="code-affiliation">CODE D'AFFILIATION :</label>
+        <select class="fill xshort" id="code-affiliation" name="code_affiliation" required>
+          <option value="" selected disabled hidden></option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="label" for="nom-succursale">NOM DE LA SUCCURSALE :</label>
+      <input class="fill" type="text" id="nom-succursale" name="nom_succursale">
+    </div>
+
+    <div class="row">
+      <label class="label" for="code-succursale">CODE DE LA SUCCURSALE :</label>
+      <input class="fill" type="text" id="code-succursale" name="code_succursale">
+    </div>
+
+    <div class="section-gap"></div>
+
+    <div class="row">
+      <label class="label" for="numero-compte">Numéro de compte client :</label>
+      <input class="fill" type="text" id="numero-compte" name="numero_compte_client">
+    </div>
+
+    <div class="row">
+      <label class="label" for="nom-compte">Nom du compte client :</label>
+      <input class="fill" type="text" id="nom-compte" name="nom_compte_client">
+    </div>
+
+    <div class="row">
+      <label class="label" for="departement">Département :</label>
+      <input class="fill" type="text" id="departement" name="departement">
+    </div>
+
+    <div class="row">
+      <label class="label" for="sous-departement">Sous-département :</label>
+      <input class="fill" type="text" id="sous-departement" name="sous_departement">
+    </div>
+
+    <div class="row">
+      <label class="label" for="nom-rue">Nom de la rue <span class="req">*(Obligatoire)</span> :</label>
+      <input class="fill" type="text" id="nom-rue" name="nom_rue" required>
+    </div>
+
+    <div class="row">
+      <label class="label" for="numero-batiment">Numéro de bâtiment / Numéro de maison <span class="req">*(Obligatoire)</span> :</label>
+      <input class="fill" type="text" id="numero-batiment" name="numero_batiment" required>
+    </div>
+
+    <div class="row">
+      <label class="label" for="nom-batiment">Nom du bâtiment :</label>
+      <input class="fill" type="text" id="nom-batiment" name="nom_batiment">
+    </div>
+
+    <div class="row two-col">
+      <div class="field">
+        <label class="label" for="numero-chambre">Numéro de chambre :</label>
+        <input class="fill" type="text" id="numero-chambre" name="numero_chambre">
+      </div>
+      <div class="field">
+        <label class="label" for="boite-postale">Boîte postale :</label>
+        <input class="fill" type="text" id="boite-postale" name="boite_postale">
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="label" for="nom-ville">Nom de la ville <span class="req">*(Obligatoire)</span> :</label>
+      <input class="fill" type="text" id="nom-ville" name="nom_ville" required>
+    </div>
+
+    <div class="row">
+      <label class="label" for="lieu-ville">Nom du lieu de la ville :</label>
+      <input class="fill" type="text" id="lieu-ville" name="lieu_ville">
+    </div>
+
+    <div class="row">
+      <label class="label" for="district">District <span class="req">*(Obligatoire)</span> :</label>
+      <input class="fill" type="text" id="district" name="district" required>
+    </div>
+
+    <div class="row">
+      <label class="label" for="subdivision">Subdivision du pays / Comté / Province / État :</label>
+      <input class="fill" type="text" id="subdivision" name="subdivision">
+    </div>
+
+    <div class="row">
+      <label class="label" for="pays">Pays <span class="req">*(Obligatoire)</span> :</label>
+      <input class="fill" type="text" id="pays" name="pays" required>
+    </div>
+
+    <!-- Signatures -->
+    <br>
+    <div class="signatures">
+      
+      <div class="sig-row">
+        <div class="field">Signature : <span class="sig-line"></span></div>
+        <div class="field">Date : <span class="date-line"></span></div>
+      </div>
+      
+    </div>
+
+  </form>
+  <div class="footer">
+    Group Payment Operations Center — SWIFT 2026 Structured Address
+  </div>
+
+  <div class="action-buttons">
+    <button type="button" class="btn-print" onclick="window.print()">🖨️ Imprimer</button>
+    <button type="button" class="btn-back" onclick="window.history.back()">← Retour</button>
+  </div>
+
+</div>
+
+<script>
+  // Liste des pays affiliés Ecobank (nom FR + code d'affiliation ISO)
+  const paysAffilies = [
+    ["EBJ", "Bénin"],
+    ["EBF", "Burkina Faso"],
+    ["EBI", "Burundi"],
+    ["ECM", "Cameroun"],
+    ["ECV", "Cap-Vert"],
+    ["ECF", "République centrafricaine"],
+    ["ETD", "Tchad"],
+    ["ECG", "Congo"],
+    ["ECD", "République démocratique du Congo"],
+    ["ECI", "Côte d'Ivoire"],
+    ["EGQ", "Guinée équatoriale"],
+    ["EGA", "Gabon"],
+    ["EGM", "Gambie"],
+    ["EGH", "Ghana"],
+    ["EGN", "Guinée"],
+    ["EGW", "Guinée-Bissau"],
+    ["EKE", "Kenya"],
+    ["ELR", "Liberia"],
+    ["EMW", "Malawi"],
+    ["EML", "Mali"],
+    ["EMZ", "Mozambique"],
+    ["ENE", "Niger"],
+    ["ENG", "Nigeria"],
+    ["ERW", "Rwanda"],
+    ["EST", "São Tomé-et-Príncipe"],
+    ["ESN", "Sénégal"],
+    ["ESL", "Sierra Leone"],
+    ["ESS", "Soudan du Sud"],
+    ["ETZ", "Tanzanie"],
+    ["ETG", "Togo"],
+    ["EUG", "Ouganda"],
+    ["EZM", "Zambie"],
+    ["EZW", "Zimbabwe"],
+    ["EET", "Éthiopie"],
+    ["EBI", "France"],
+  ];
+
+  const selectPays = document.getElementById("pays-affilie");
+  const selectCode = document.getElementById("code-affiliation");
+
+  // Trie alphabétique par nom de pays pour la liste "Pays affilié"
+  const parNom = [...paysAffilies].sort((a, b) => a[1].localeCompare(b[1], "fr"));
+  parNom.forEach(([code, nom]) => {
+    const opt = document.createElement("option");
+    opt.value = code;
+    opt.textContent = nom;
+    selectPays.appendChild(opt);
+  });
+
+  // Trie alphabétique par code pour la liste "Code d'affiliation"
+  const parCode = [...paysAffilies].sort((a, b) => a[0].localeCompare(b[0]));
+  parCode.forEach(([code, nom]) => {
+    const opt = document.createElement("option");
+    opt.value = code;
+    opt.textContent = `${code}`;
+    selectCode.appendChild(opt);
+  });
+
+  // Synchronisation bidirectionnelle des deux listes
+  selectPays.addEventListener("change", () => {
+    selectCode.value = selectPays.value;
+  });
+  selectCode.addEventListener("change", () => {
+    selectPays.value = selectCode.value;
+  });
+</script>
+
+<script src="../vendors/js/flexcube_client_search.js?v=20260911"></script>
+
+</body>
+</html>

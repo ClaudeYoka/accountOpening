@@ -55,23 +55,20 @@ if (!isset($_SESSION['emp_id'])) {
                     <div id="chequier_form_section">
                     <form id="chequerForm">
                         <!-- RECHERCHE ET AUTO-REMPLISSAGE FLEXCUBE -->
-                        <div class="row mb-20" style="border: 1px solid #e8e8e8; padding: 18px 20px; background: linear-gradient(135deg, #f8fbff 0%, #eef6ff 100%); border-radius: 10px; margin-bottom: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,.8);">
+                        <div class="row mb-20" style="border: 1px solid #e8e8e8; padding: 18px 20px; background: linear-gradient(135deg, #f8fbff 0%, #eef6ff 100%); border-radius: 5px; margin-bottom: 7px; box-shadow: inset 0 1px 0 rgba(255,255,255,.8);">
                             <div class="col-md-12 col-sm-12">
                                 <h5 style="margin-bottom: 6px; color: #0f2f45;">🔎 Recherche du compte client</h5>
-                                <p style="margin-bottom: 12px; color: #56708a;">Saisissez le numéro du compte pour charger automatiquement les informations du client puis finalisez votre demande de chéquier.</p>
                             </div>
-                            <div class="col-md-8 col-sm-12">
+                            <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
-                                    <input type="text" id="flexcube_search" class="form-control" placeholder="Saisissez le numéro de compte" autocomplete="off">
+                                    <input type="text" id="flexcube_search" class="form-control" placeholder="Saisir le numéro de compte" autocomplete="off">
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-12" style="display: flex; align-items: flex-end; gap: 10px;">
+                            <div class="col-md-3 col-sm-12" style="display: flex; align-items: flex-end; gap: 10px;">
                                 <button type="button" id="btn_search_flexcube" class="btn btn-info w-100" style="background: linear-gradient(135deg, #05b7e4 0%, #00455a 100%); border: none;">
                                     <i class="dw dw-search"></i> Rechercher
                                 </button>
-                                <button type="button" id="btn_apply_search" class="btn btn-outline-primary" style="white-space: nowrap;">
-                                    <i class="dw dw-file"></i> Appliquer
-                                </button>
+                            
                             </div>
                             <div class="col-md-12 col-sm-12" id="search_result" style="margin-top: 10px;"></div>
                         </div>
@@ -107,6 +104,13 @@ if (!isset($_SESSION['emp_id'])) {
                                 <div class="form-group">
                                     <label>Numéro Compte <span style="color: red;">*</span></label>
                                     <input type="text" id="account_number" name="account_number" class="form-control" required placeholder="N° Compte client" autocomplete="off" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Type de compte Flexcube</label>
+                                    <input type="text" id="flexcube_account_type" name="flexcube_account_type" class="form-control" readonly placeholder="Récupéré depuis Flexcube">
                                 </div>
                             </div>
 
@@ -146,8 +150,8 @@ if (!isset($_SESSION['emp_id'])) {
                                 <div class="form-group">
                                     <label>Frais Prélevé ? <span style="color: red;">*</span></label>
                                     <div style="display:flex; gap:10px; align-items:center;">
-                                        <label style="margin:0"><input type="checkbox" name="frais" value="OUI" id="acct_courant"> OUI</label>
-                                        <label style="margin:0"><input type="checkbox" name="frais" value="NON" id="acct_epargne"> NON</label>
+                                        <label style="margin:0"><input type="checkbox" name="frais" value="OUI" id="frais_oui"> OUI</label>
+                                        <label style="margin:0"><input type="checkbox" name="frais" value="NON" id="frais_non"> NON</label>
                                     </div>
                                 </div>
                             </div>
@@ -222,29 +226,20 @@ if (!isset($_SESSION['emp_id'])) {
                                         </div>
                                         <small class="form-text text-muted"><i class="fa fa-info-circle"></i> Au moins un chéquier doit être sélectionné</small>
                                     </div>
-                                </div>
-                            </div>
-
-                            <!-- QUANTITÉ SÉLECTIONNÉE / MANUELLE -->
-                            <div class="col-md-3 col-sm-12">
-                                <div class="form-group">
-                                    <label>Quantité Totale de Chéquiers <span style="color: red;">*</span></label>
-                                    <div class="row">
-                                        <div class="col-md-8 col-sm-12">
-                                            <div style="background: #e8f5e9; padding: 15px; border-radius: 4px; text-align: center;">
-                                                <div style="font-size: 12px; color: #666; margin-bottom: 8px;">Quantité</div>
-                                                <h3 style="color: #2e7d32; margin: 0;">
-                                                    <span id="autoQuantity">0</span> chéquier(s)
-                                                </h3>
-                                            </div>
-                                        </div>
+                                    <div style="background: #e8f5e9; padding: 15px; border-radius: 4px; text-align: center;">
+                                        <div style="font-size: 12px; color: #666; margin-bottom: 8px;">Quantité</div>
+                                        <h3 style="color: #2e7d32; margin: 0;">
+                                            <span id="autoQuantity">0</span> chéquier(s)
+                                        </h3>
                                         <div class="col-md-4 col-sm-6">
                                             <input type="number" id="manual_quantity" name="manual_quantity" class="form-control" min="1" autocomplete="off">
-                                            <small class="form-text text-muted"><i class="fa fa-info-circle"></i> Laissez vide si le nombre est 1 chéquier </small>
+                                            <small class="form-text text-muted"><i class="fa fa-info-circle"></i> Laissez vide si 1 chéquier </small>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            
 
                             <!-- BUTTONS -->
                             <div class="col-md-12 col-sm-12">
@@ -307,6 +302,7 @@ if (!isset($_SESSION['emp_id'])) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        <button type="button" id="btnPrintBeforeSubmit" class="btn btn-outline-primary"><i class="fa fa-print"></i> Impression formulaire </button>
                     <button type="button" class="btn btn-success" id="btnConfirmSubmitRequest">Confirmer l’envoi</button>
                 </div>
             </div>
@@ -315,6 +311,7 @@ if (!isset($_SESSION['emp_id'])) {
 
     <script>
         let currentAccountData = null;
+        const directDraftKey = 'ecobank_chequier_direct_draft';
 
         function focusFormSection() {
             const formSection = document.getElementById('chequier_form_section') || document.getElementById('chequerForm');
@@ -387,8 +384,9 @@ if (!isset($_SESSION['emp_id'])) {
             const phoneValue = getFirstValue(accountData, ['phone_number', 'telephone', 'mobile', 'phone', 'mobile_phone', 'tel']);
             const ribValue = getFirstValue(accountData, ['rib_key', 'rib', 'clearing_ac_no', 'RIB']);
             const emailValue = getFirstValue(accountData, ['email', 'email_address', 'adresse_email', 'mail', 'e_mail', 'Email']);
-            const addressValue = getFirstValue(accountData, ['customer_address', 'address', 'account_address', 'adr_rue']);
+            const addressValue = getFirstValue(accountData, ['account_address', 'customer_address', 'address', 'adr_rue']);
             const branchValue = getFirstValue(accountData, ['branch_code', 'agency_code', 'branch']);
+            const accountTypeValue = getFirstValue(accountData, ['account_type', 'description', 'type_compte']);
 
             const setValue = (id, value) => {
                 const el = document.getElementById(id);
@@ -402,6 +400,17 @@ if (!isset($_SESSION['emp_id'])) {
             setValue('email', emailValue);
             setValue('address', addressValue);
             setValue('branch_code', branchValue);
+            setValue('flexcube_account_type', accountTypeValue);
+
+            const normalizedType = accountTypeValue.toUpperCase();
+            document.querySelectorAll('input[name="account_type"]').forEach(input => { input.checked = false; });
+            if (normalizedType.includes('EPARGNE')) {
+                const savings = document.querySelector('input[name="account_type"][value="EPARGNE"]');
+                if (savings) savings.checked = true;
+            } else if (normalizedType.includes('COURANT')) {
+                const current = document.querySelector('input[name="account_type"][value="COURANT"]');
+                if (current) current.checked = true;
+            }
 
             if (branchValue) {
                 const branchSelect = document.getElementById('branch_code');
@@ -413,6 +422,42 @@ if (!isset($_SESSION['emp_id'])) {
 
             focusFormSection();
         }
+
+        function saveDirectDraft() {
+            const fields = {};
+            document.querySelectorAll('#chequerForm [name]').forEach(function (field) {
+                fields[field.name] = field.type === 'checkbox' ? field.checked : field.value;
+            });
+            sessionStorage.setItem(directDraftKey, JSON.stringify({ fields: fields, accountData: currentAccountData }));
+        }
+
+        function restoreDirectDraft() {
+            try {
+                const draft = JSON.parse(sessionStorage.getItem(directDraftKey) || 'null');
+                if (!draft) return;
+                currentAccountData = draft.accountData || null;
+                Object.keys(draft.fields || {}).forEach(function (name) {
+                    const fields = document.querySelectorAll('#chequerForm [name="' + CSS.escape(name) + '"]');
+                    fields.forEach(function (field) {
+                        if (field.type === 'checkbox') field.checked = Boolean(draft.fields[name]);
+                        else field.value = draft.fields[name] || '';
+                    });
+                });
+                updateQuantity();
+            } catch (error) {
+                console.warn('Brouillon chéquier indisponible', error);
+            }
+        }
+
+        document.getElementById('chequerForm').addEventListener('reset', function () {
+            const serialStart = document.getElementById('serial_number1').value;
+            const serialEnd = document.getElementById('serial_number2').value;
+            setTimeout(function () {
+                document.getElementById('serial_number1').value = serialStart;
+                document.getElementById('serial_number2').value = serialEnd;
+                saveDirectDraft();
+            }, 0);
+        });
 
         // Mettre à jour la quantité automatique
         function updateQuantity() {
@@ -426,6 +471,7 @@ if (!isset($_SESSION['emp_id'])) {
             checkbox.addEventListener('change', () => {
                 updateQuantity();
                 loadSerialNumbers();
+                saveDirectDraft();
             });
         });
 
@@ -433,9 +479,14 @@ if (!isset($_SESSION['emp_id'])) {
         document.getElementById('manual_quantity').addEventListener('input', () => {
             updateQuantity();
             loadSerialNumbers();
+            saveDirectDraft();
         });
 
+        document.getElementById('chequerForm').addEventListener('input', saveDirectDraft);
+        document.getElementById('chequerForm').addEventListener('change', saveDirectDraft);
+
         window.addEventListener('load', () => {
+            restoreDirectDraft();
             updateQuantity();
             loadSerialNumbers();
         });
@@ -456,6 +507,8 @@ if (!isset($_SESSION['emp_id'])) {
             const body = document.getElementById('confirmSubmitModalBody');
             if (body) {
                 const feesText = summary && summary.fees ? summary.fees : 'Non défini';
+                const calculationText = summary && summary.fees_calculation ? summary.fees_calculation : 'Non disponible';
+                const reasonText = summary && summary.fees_reason ? summary.fees_reason : 'Aucune explication disponible.';
                 body.innerHTML = '';
                 body.innerHTML = `
                     <div style="font-size:15px; line-height:1.6;">
@@ -466,8 +519,10 @@ if (!isset($_SESSION['emp_id'])) {
                             <li><strong>Agence :</strong> ${summary.agency || 'Non renseignée'}</li>
                             <li><strong>Quantité :</strong> ${summary.quantity || 0} chéquier(s)</li>
                             <li><strong>Type(s) :</strong> ${summary.types || 'Non renseigné'}</li>
-                            <li><strong>Frais :</strong> ${feesText}</li>
+                            <li><strong>Frais selon votre choix :</strong> ${feesText}</li>
+                            <li><strong>Calcul automatique :</strong> ${calculationText}</li>
                         </ul>
+                        <p style="margin:0 0 10px; color:#795548;"><strong>Pourquoi :</strong> ${reasonText}</p>
                         <p style="margin:0; color:#1b5e20;">Si les informations sont correctes, cliquez sur <strong>Confirmer l’envoi</strong>.</p>
                     </div>
                 `;
@@ -539,13 +594,34 @@ if (!isset($_SESSION['emp_id'])) {
                 return;
             }
 
+            const fraisChoice = document.querySelector('input[name="frais"]:checked');
+            if (!fraisChoice) {
+                alert('❌ Veuillez préciser si les frais doivent être prélevés.');
+                return;
+            }
+
+            const flexcubeType = (document.getElementById('flexcube_account_type').value || '').toUpperCase();
+            const isSavings = flexcubeType.includes('EPARGNE') || flexcubeType.includes('SAVINGS');
+            const isCurrent = flexcubeType.includes('COURANT') || flexcubeType.includes('CURRENT');
+            const isPhysicalCurrent = flexcubeType.includes('COMPTE COURANT CLASSIC') && flexcubeType.includes('PERSONNES PHYSIQUES');
+            if (isSavings) {
+                alert('Ce compte est un compte épargne : les chéquiers ne peuvent pas être délivrés.');
+                return;
+            }
+
+            if (isCurrent && !isPhysicalCurrent && fraisChoice.value !== 'OUI') {
+                alert('Pour ce type de compte courant, les frais doivent être prélevés. Sélectionnez OUI.');
+                return;
+            }
+
             const formData = {
                 client_name: document.getElementById('client_name').value,
                 branch_code: document.getElementById('branch_code').value,
                 account_number: document.getElementById('account_number').value,
+                flexcube_account_type: document.getElementById('flexcube_account_type').value,
                 account_type: Array.from(document.querySelectorAll('input[name="account_type"]:checked')).map(cb => cb.value),
                 carte: Array.from(document.querySelectorAll('input[name="carte"]:checked')).map(cb => cb.value),
-                frais: Array.from(document.querySelectorAll('input[name="frais"]:checked')).map(cb => cb.value),
+                frais: fraisChoice.value,
                 enrolled: Array.from(document.querySelectorAll('input[name="enrolled"]:checked')).map(cb => cb.value),
                 serial_number: document.getElementById('serial_number1')?.value || '',
                 serial_number1: document.getElementById('serial_number1')?.value || '',
@@ -583,6 +659,7 @@ if (!isset($_SESSION['emp_id'])) {
                         }
 
                         if (finalData.status === 'success') {
+                            sessionStorage.removeItem(directDraftKey);
                             alert('✓ ' + (finalData.message || 'Demande enregistrée avec succès !') + '\n\nID: ' + finalData.submission_id);
                             setTimeout(() => {
                                 window.location.href = 'demande_chequier.php';
@@ -611,6 +688,7 @@ if (!isset($_SESSION['emp_id'])) {
                 }
 
                 if (data.status === 'success') {
+                    sessionStorage.removeItem(directDraftKey);
                     alert('✓ ' + (data.message || 'Demande enregistrée avec succès !') + '\n\nID: ' + data.submission_id);
                     setTimeout(() => {
                         window.location.href = 'demande_chequier.php';
@@ -640,18 +718,31 @@ if (!isset($_SESSION['emp_id'])) {
         });
 
         function redirectToChequierForm(data) {
-            const payload = data ? JSON.stringify(data) : '{}';
-            const url = 'formulaire_chequier.html?clientData=' + encodeURIComponent(payload);
+            saveDirectDraft();
+            const selectedLeaflets = Array.from(document.querySelectorAll('input[name="chequier"]:checked')).map(cb => cb.value);
+            const payloadData = { ...(data || {}), selected_chequiers: selectedLeaflets };
+            const payload = JSON.stringify(payloadData);
+            const url = 'formulaire_chequier.html?clientData=' + encodeURIComponent(payload) + '&feuillets=' + encodeURIComponent(selectedLeaflets[0] || '');
             window.location.href = url;
         }
 
-        document.getElementById('btn_apply_search').addEventListener('click', function() {
-            if (currentAccountData) {
+        const printButton = document.getElementById('btnPrintBeforeSubmit');
+        if (printButton) {
+            printButton.addEventListener('click', function () {
                 redirectToChequierForm(currentAccountData);
-            } else {
-                alert('⚠ Aucune donnée de recherche n\'a encore été chargée.');
-            }
-        });
+            });
+        }
+
+        const applySearchButton = document.getElementById('btn_apply_search');
+        if (applySearchButton) {
+            applySearchButton.addEventListener('click', function() {
+                if (currentAccountData) {
+                    redirectToChequierForm(currentAccountData);
+                } else {
+                    alert('⚠ Aucune donnée de recherche n\'a encore été chargée.');
+                }
+            });
+        }
 
         document.getElementById('btn_open_form').addEventListener('click', function() {
             if (currentAccountData) {

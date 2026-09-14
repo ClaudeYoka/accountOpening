@@ -96,13 +96,13 @@ ob_end_flush();
                             </div>
 
                             <div class="input-group custom">
-                                <input type="text" class="form-control form-control-lg" placeholder="Nom d'utilisateur" name="username" id="username" required autocomplete="username">
+                                <input type="text" class="form-control form-control-lg" placeholder="Nom d'utilisateur" name="username" id="username" required autocomplete="off">
                                 <div class="input-group-append custom">
                                     <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
                                 </div>
                             </div>
                             <div class="input-group custom">
-                                <input type="password" class="form-control form-control-lg" placeholder="Mot de passe" name="password" id="password" required autocomplete="current-password">
+                                <input type="password" class="form-control form-control-lg" placeholder="Mot de passe" name="password" id="password" required autocomplete="off">
                                 <div class="input-group-append custom">
                                     <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
                                 </div>

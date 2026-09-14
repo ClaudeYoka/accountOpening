@@ -28,7 +28,7 @@ function connectToFlexcubeDatabase() {
     $port = '1521';
     $service = 'SRVFCUBSCS2';
     $username = 'cyoka';
-    $password = 'Welcometo@2026';
+    $password = 'Piratemoi@2026';
     
     $last_error = null;
     
@@ -88,15 +88,21 @@ function fetchAccountFromOracleDatabase($account_number) {
         // Requête SQL pour récupérer les données du compte depuis Oracle
         $sql = "SELECT
             a.branch_code,
+            a.cust_no AS ID,
             a.cust_ac_no AS account_number,
             a.ac_desc AS account_name,
+            a.account_class AS Account_Class,
+            a.ccy AS Devise,
+            a.ccy AS currency,
+            b.description,
+            b.description AS account_type,
+            TO_CHAR(cp.date_of_birth, 'YYYY-MM-DD') AS date_of_birth,
             cp.FIRST_NAME AS first_name,
             cp.LAST_NAME AS last_name,
             cp.MIDDLE_NAME AS middle_name,
             cp.SEX AS sex,
             cp.e_mail AS Email,
             a.cust_no AS customer_id,
-            cp.date_of_birth,
             cp.place_of_birth,
             cp.P_NATIONAL_ID AS national_id,
             cp.PASSPORT_NO AS passport_no,
@@ -105,13 +111,15 @@ function fetchAccountFromOracleDatabase($account_number) {
             a.clearing_ac_no AS rib,
             cp.telephone,
             cp.e_mail AS email,
-            a.ac_open_date AS opening_date,
+            TO_CHAR(a.ac_open_date, 'YYYY-MM-DD') AS opening_date,
             mis.code_desc AS manager_name,
             TRIM(NVL(a.address1, '') || ' ' || NVL(a.address2, '') || ' ' || NVL(a.address4, '')) AS account_address,
             TRIM(NVL(cu.address_line1, '') || ' ' || NVL(cu.address_line2, '') || ' ' || NVL(cu.address_line3, '') || ' ' || NVL(cu.address_line4, '')) AS customer_address
         FROM
             fcubscs2.sttm_cust_account a
         LEFT JOIN
+            fcubscs2.sttm_account_class b ON a.account_class = b.account_class
+        LEFT JOIN 
             fcubscs2.sttm_account_balance c ON a.cust_ac_no = c.cust_ac_no
         LEFT JOIN
             fcubscs2.sttm_cust_personal cp ON a.cust_no = cp.customer_no
@@ -177,6 +185,70 @@ function fetchAccountFromOracleDatabase($account_number) {
  */
 function fetchAccountFromFlexcube($account_number) {
     return fetchAccountFromOracleDatabase($account_number);
+}
+
+/**
+ * Recherche les comptes Flexcube par intitulé de compte (AC_DESC).
+ *
+ * @param string $account_name Nom ou partie du nom du compte
+ * @param int $limit Nombre maximal de résultats
+ * @return array Liste des comptes trouvés
+ */
+function searchAccountsByName($account_name, $limit = 50) {
+    $account_name = trim((string) $account_name);
+    if ($account_name === '') {
+        return [];
+    }
+
+    $conn = connectToFlexcubeDatabase();
+    if ($conn === null) {
+        return [];
+    }
+
+    $limit = max(1, min(100, (int) $limit));
+    $sql = "SELECT * FROM (
+                SELECT
+                    a.cust_ac_no AS account_number,
+                    a.ac_desc AS account_name,
+                    b.description AS account_type,
+                    cp.date_of_birth AS date_of_birth,
+                    a.branch_code,
+                    a.clearing_ac_no AS rib,
+                    a.cust_no AS customer_id,
+                    TRIM(NVL(a.address1, '') || ' ' || NVL(a.address2, '') || ' ' || NVL(a.address4, '')) AS account_address
+                FROM fcubscs2.sttm_cust_account a
+                LEFT JOIN fcubscs2.sttm_account_class b ON a.account_class = b.account_class
+                LEFT JOIN fcubscs2.sttm_cust_personal cp ON a.cust_no = cp.customer_no
+                WHERE a.location = 'CG'
+                  AND UPPER(a.ac_desc) LIKE UPPER(:account_name)
+                ORDER BY a.ac_desc, a.cust_ac_no
+            ) WHERE ROWNUM <= :result_limit";
+
+    try {
+        $stid = oci_parse($conn, $sql);
+        if (!$stid) {
+            return [];
+        }
+
+        $search_pattern = '%' . $account_name . '%';
+        oci_bind_by_name($stid, ':account_name', $search_pattern);
+        oci_bind_by_name($stid, ':result_limit', $limit);
+
+        if (!oci_execute($stid)) {
+            oci_free_statement($stid);
+            return [];
+        }
+
+        $results = [];
+        while ($row = oci_fetch_assoc($stid)) {
+            $results[] = array_change_key_case($row, CASE_LOWER);
+        }
+        oci_free_statement($stid);
+        return $results;
+    } catch (Throwable $e) {
+        error_log('[Flexcube] Erreur recherche par intitulé: ' . $e->getMessage());
+        return [];
+    }
 }
 
 /**

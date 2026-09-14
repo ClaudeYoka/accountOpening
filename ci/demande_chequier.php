@@ -1,5 +1,8 @@
 <?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
+<?php 
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/session.php';
+?>
 
 <?php
 // Récupérer les données JSON de ecobank_form_submissions pour les demandes de chéquier
@@ -204,6 +207,7 @@ function normalize_chequier_status($status) {
     if (in_array($s, ['livre', 'livré'])) {
         return 'livré';
     }
+    
     if (in_array($s, ['prestataire'])) {
         return 'prestataire';
     }
@@ -218,7 +222,7 @@ function status_label_php($status) {
         'encours' => 'En cours',
         'prestataire' => 'Prestataire',
         'reçu' => 'Reçu',
-        'livré' => 'Livré'
+        'livré' => 'Livré',
     ];
     $key = normalize_chequier_status($status);
     return isset($map[$key]) ? $map[$key] : ucfirst($status);
@@ -354,6 +358,18 @@ if ($result && mysqli_num_rows($result) > 0) {
 
                     <div id="chequier-status-feedback" style="margin-bottom: 16px; display: none;"></div>
 
+                    <div class="mb-20" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#f8f9fa;padding:12px;border:1px solid #e5e7eb;border-radius:5px;">
+                        <strong>Actions groupées</strong>
+                        <select id="bulkChequierStatus" class="form-control" style="width:auto;min-width:160px;">
+                            <option value="">Choisir un statut</option>
+                            <?php foreach ($all_statuses as $st): ?>
+                                <option value="<?php echo htmlspecialchars($st, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars(status_label_php($st)); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button type="button" class="btn btn-primary" onclick="updateSelectedChequierStatuses()">Appliquer aux demandes sélectionnées</button>
+                        <span id="selectedChequierCount" class="text-muted">0 sélectionnée(s)</span>
+                    </div>
+
                     <?php if (empty($chequier_requests)): ?>
                         <div style="text-align: center; padding: 40px;">
                             <i class="fa fa-inbox" style="font-size: 48px; color: #ccc; margin-bottom: 20px;"></i>
@@ -366,6 +382,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                             <table class="data-table table hover multiple-select-row nowrap">
                                 <thead>
                                     <tr>
+                                        <th><input type="checkbox" id="selectAllChequiers" title="Sélectionner toutes les demandes"></th>
                                         <th class="table-plus">AGENCE</th>
                                         <th>NOM CLIENT</th>
                                         <th>COMPTE</th>
@@ -378,6 +395,9 @@ if ($result && mysqli_num_rows($result) > 0) {
                                 <tbody>
                                     <?php foreach ($chequier_requests as $req): ?>
                                         <tr ondblclick="showDetailsCI(<?php echo $req['id']; ?>)" style="cursor: pointer;" data-request-id="<?php echo $req['id']; ?>">
+                                            <td onclick="event.stopPropagation();">
+                                                <input type="checkbox" class="chequier-select" value="<?php echo (int)$req['id']; ?>" aria-label="Sélectionner la demande <?php echo (int)$req['id']; ?>">
+                                            </td>
                                             <td class="table-plus">
                                                 <span class="badge" style="background: #007db8; color: white; padding: 6px 12px; border-radius: 4px;">
                                                     <?php echo htmlspecialchars($req['branch_code']); ?>
@@ -425,6 +445,8 @@ if ($result && mysqli_num_rows($result) > 0) {
                                                     $status_color = '#28A745';
                                                 } elseif ($status_norm === 'livré') {
                                                     $status_color = '#6F42C1';
+                                                } elseif ($status_norm === 'donné') {
+                                                    $status_color = '#28A745';
                                                 } else {
                                                     $status_color = '#FFC107';
                                                 }
@@ -604,6 +626,62 @@ if ($result && mysqli_num_rows($result) > 0) {
             });
         }
 
+        function updateSelectedChequierStatuses() {
+            var status = document.getElementById('bulkChequierStatus').value;
+            var selected = Array.from(document.querySelectorAll('.chequier-select:checked')).map(function (checkbox) {
+                return Number(checkbox.value);
+            });
+
+            if (!status) {
+                displayChequierFeedback('error', 'Choisissez un statut.');
+                return;
+            }
+            if (!selected.length) {
+                displayChequierFeedback('error', 'Sélectionnez au moins une demande.');
+                return;
+            }
+            if (!confirm('Confirmer la mise à jour de ' + selected.length + ' demande(s) en « ' + status + ' » ?')) return;
+
+            fetch('update_chequier_status.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ request_ids: selected, status: status })
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (data) {
+                if (data.status === 'success') {
+                    displayChequierFeedback('success', data.message || 'Statuts mis à jour.');
+                    setTimeout(function () { location.reload(); }, 800);
+                } else {
+                    displayChequierFeedback('error', data.message || 'Impossible de mettre à jour les statuts.');
+                }
+            })
+            .catch(function () {
+                displayChequierFeedback('error', 'Erreur de communication. Réessayez.');
+            });
+        }
+
+        function refreshSelectedChequierCount() {
+            var count = document.querySelectorAll('.chequier-select:checked').length;
+            var label = document.getElementById('selectedChequierCount');
+            if (label) label.textContent = count + ' sélectionnée(s)';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var selectAll = document.getElementById('selectAllChequiers');
+            if (selectAll) {
+                selectAll.addEventListener('change', function () {
+                    document.querySelectorAll('.chequier-select').forEach(function (checkbox) {
+                        checkbox.checked = selectAll.checked;
+                    });
+                    refreshSelectedChequierCount();
+                });
+            }
+            document.querySelectorAll('.chequier-select').forEach(function (checkbox) {
+                checkbox.addEventListener('change', refreshSelectedChequierCount);
+            });
+        });
+
         function showHistory(requestId) {
             // Chercher l'historique injecté côté PHP dans le DOM (data attribute technique)
             // Nous allons ouvrir un modal dynamique
@@ -698,7 +776,8 @@ if ($result && mysqli_num_rows($result) > 0) {
             const colors = {
                 'encours': { bg: '#FFC107', color: 'white' },
                 'reçu': { bg: '#17A2B8', color: 'white' },
-                'livré': { bg: '#28A745', color: 'white' }
+                'livré': { bg: '#28A745', color: 'white' },
+                'donné': { bg: '#28A745', color: 'white' }
             };
             return colors[status] || { bg: '#6C757D', color: 'white' };
         }
@@ -707,7 +786,8 @@ if ($result && mysqli_num_rows($result) > 0) {
             const labels = {
                 'encours': 'En cours',
                 'reçu': 'Reçu',
-                'livré': 'Livré'
+                'livré': 'Livré',
+                'donné': 'Donné'
             };
             return labels[status] || status;
         }

@@ -86,6 +86,7 @@ try {
     $serial_number2 = trim((string)($data['serial_number2'] ?? $data['cond'] ?? ''));
     $status = $data['status'] ?? 'encours';
     $manual_quantity = $data['quantity'] ?? null;
+    $flexcube_account_type = trim((string)($data['flexcube_account_type'] ?? ''));
     $emp_id = $_SESSION['emp_id'];
 
     function parse_leaf_count_from_type_compte($value) {
@@ -114,6 +115,11 @@ try {
 
     $type_compte = is_array($chequier) ? implode(', ', array_filter($chequier)) : trim((string)$chequier);
     $quantity = $manual_quantity ? intval($manual_quantity) : (is_array($chequier) ? count($chequier) : 0);
+    $requested_fees = $data['frais'] ?? '';
+    if (is_array($requested_fees)) {
+        $requested_fees = $requested_fees[0] ?? '';
+    }
+    $requested_fees = strtoupper(trim((string)$requested_fees));
     $check_only = !empty($data['check_only']);
     $force_submit = !empty($data['force_submit']);
 
@@ -172,9 +178,28 @@ try {
         mysqli_stmt_close($annual_stmt);
     }
 
-    $current_leaf_count = parse_leaf_count_from_type_compte($type_compte);
-    $annual_total_with_current = $annual_total_leaves + ($current_leaf_count * max(1, $quantity));
-    $fees = ($annual_total_with_current >= 50) ? 'OUI' : 'NON';
+    $normalized_account_type = strtoupper(trim(preg_replace('/\s+/', ' ', $flexcube_account_type)));
+    $is_savings_account = strpos($normalized_account_type, 'EPARGNE') !== false || strpos($normalized_account_type, 'SAVINGS') !== false;
+    $is_current_account = strpos($normalized_account_type, 'COURANT') !== false || strpos($normalized_account_type, 'CURRENT') !== false;
+    $is_physical_current = strpos($normalized_account_type, 'COMPTE COURANT CLASSIC') !== false
+        && strpos($normalized_account_type, 'PERSONNES PHYSIQUES') !== false;
+
+    if ($is_savings_account) {
+        throw new Exception('Un compte épargne ne peut pas recevoir de chéquier.');
+    }
+
+    $fees_required = $annual_total_leaves >= 50 || ($is_current_account && !$is_physical_current);
+    $calculated_fees = $fees_required ? 'OUI' : 'NON';
+    $fees = in_array($requested_fees, ['OUI', 'NON'], true) ? $requested_fees : $calculated_fees;
+    $fees_reason = $fees_required
+        ? "Les frais sont obligatoires : le cumul antérieur est de {$annual_total_leaves} feuille(s) ou le type de compte impose le prélèvement."
+        : "Les frais ne sont pas obligatoires : le cumul antérieur est de {$annual_total_leaves} feuille(s) et le compte est un compte courant classic pour personnes physiques."
+    ;
+    $fees_calculation = "Cumul avant cette demande : {$annual_total_leaves} feuille(s) => Frais prélevés : {$calculated_fees}";
+
+    if ($requested_fees !== $calculated_fees) {
+        throw new Exception("Le choix des frais est incorrect. Selon le cumul et le type de compte Flexcube, sélectionnez « {$calculated_fees} » puis recommencez.");
+    }
 
     if ($check_only) {
         http_response_code(200);
@@ -188,7 +213,9 @@ try {
                 'agency' => $branch_code,
                 'quantity' => $quantity,
                 'types' => $type_compte,
-                'fees' => $fees
+                'fees' => $fees,
+                'fees_calculation' => $fees_calculation,
+                'fees_reason' => $fees_reason
             ]
         ]);
         exit;

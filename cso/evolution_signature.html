@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Évolution de signature - Ecobank</title>
+  <link rel="icon" sizes="180x180" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../vendors/images/ecobank-bg.png">
+<style>
+  :root{
+    --ecobank-blue:#004b87;
+    --ecobank-blue-dark:#003a68;
+    --ecobank-teal:#00a99d;
+    --text-dark:#1a1a1a;
+    --grey-line:#bbb;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:0;
+    background:#e9edf0;
+    font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+    color:var(--text-dark);
+  }
+  .page{
+    max-width:850px;
+    margin:30px auto;
+    background:#ffffff;
+    box-shadow:0 0 12px rgba(0,0,0,0.15);
+    padding:44px 55px 60px 55px;
+    min-height:600px;
+  }
+  .logo{ margin-bottom:30px; }
+  .logo .name{
+    font-size:30px;
+    font-weight:700;
+    color:var(--ecobank-blue);
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+  .logo .name span{ color:var(--ecobank-teal); }
+  .logo .tagline{
+    font-size:12px;
+    font-style:italic;
+    color:var(--ecobank-teal);
+    margin-top:-4px;
+  }
+
+  form{ font-size:15px; line-height:2.2; font-weight:700; }
+
+  input[type="text"]{
+    border:none;
+    border-bottom:1px dotted var(--text-dark);
+    background:transparent;
+    font-family:inherit;
+    font-weight:700;
+    font-size:15px;
+    color:var(--text-dark);
+    padding:2px 4px;
+    outline:none;
+  }
+  input[type="text"]:focus{
+    border-bottom:1px solid var(--ecobank-blue);
+    background:#f5faff;
+  }
+  input.inline-lg{ width:100%; }
+  input.inline-md{ width:320px; }
+
+  p.dest{ margin:0 0 28px 0; }
+  p.dest input{ min-width:280px; }
+
+  p.objet{
+    text-decoration:underline;
+    margin:0 0 28px 0;
+  }
+
+  p.statement{ margin:0 0 14px 0; }
+  p.statement input{ display:block; width:100%; margin-top:4px; }
+
+  .signature-section{
+    margin:34px 0;
+  }
+  .signature-item{
+    margin-bottom:34px;
+  }
+  .signature-item .label{
+    text-decoration:underline;
+    margin-bottom:10px;
+  }
+  .signature-box{
+    border:1.5px solid var(--text-dark);
+    height:90px;
+    background:#fbfbfb;
+  }
+  .signature-box input{
+    width:100%;
+    height:100%;
+    border:none;
+    background:transparent;
+    padding:8px 12px;
+    font-family:inherit;
+    font-size:13px;
+    font-weight:400;
+    color:#888;
+  }
+
+  .date-line{
+    margin-top:40px;
+  }
+  .date-line input{ margin:0 2px; }
+  input.day, input.month{ width:34px; text-align:center; }
+  input.year{ width:60px; text-align:center; }
+
+  .form-actions{
+    max-width:850px;
+    margin:0 auto 20px auto;
+    padding:0 4px;
+    display:flex;
+    gap:12px;
+  }
+  .form-actions button{
+    font-family:inherit;
+    font-size:14px;
+    padding:10px 20px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+  }
+  .btn-print{ background:var(--ecobank-blue); color:#fff; }
+  .btn-print:hover{ background:var(--ecobank-blue-dark); }
+  .btn-reset{ background:#e0e0e0; color:#333; }
+  .btn-reset:hover{ background:#cacaca; }
+
+  @page{
+    size:A4;
+    margin:0;
+  }
+
+  @media print{
+    html, body{
+      background:#fff;
+      margin:0;
+      padding:0;
+    }
+    .page{
+      box-shadow:none;
+      max-width:none;
+      width:100%;
+      min-height:297mm;
+      margin:0;
+      padding:24mm 25mm;
+    }
+    .signature-section{
+      margin:20px 0 16px;
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+    .signature-item{
+      margin-bottom:18px;
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+    .signature-box{ height:70px; }
+    .date-line{
+      margin-top:16px;
+      break-inside:avoid;
+      page-break-inside:avoid;
+      break-before:avoid;
+      page-break-before:avoid;
+    }
+    .date-line + .date-line{ margin-top:8px; }
+    .form-actions{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="form-actions">
+  <button class="btn-print" onclick="window.print()">🖨️ Imprimer </button>
+  <button class="btn-reset" onclick="document.getElementById('signatureForm').reset()">↺ Réinitialiser</button>
+  <button type="button" class="btn-back" onclick="window.history.back()">← Retour</button>
+</div>
+
+<div class="page">
+
+  <div class="logo">
+      <img src="../vendors/images/ecobank-lg.png" alt="" class="" width="160px">
+  </div>
+
+  <form id="signatureForm" onsubmit="return false;">
+
+    <p class="dest">
+      A Monsieur le chef d'agence de <input type="text" class="inline-md" name="agence">
+    </p>
+
+    <p class="objet">Objet : Evolution de signature</p>
+
+    <p class="statement">
+      Je soussigné(e) <input type="text" class="inline-lg" name="nom">
+    </p>
+
+    <p class="statement">
+      Pièce d'identité N° <input type="text" class="inline-md" name="pieceIdentite">
+    </p>
+
+    <p class="statement">
+      Agissant au nom et pour le compte N° <input type="text" class="inline-md" name="numeroCompte">
+      dans vos livres, viens par la présente, vous demander de bien vouloir désormais tenir compte de la nouvelle signature pour mes opérations à l'exclusion de l'ancienne.
+    </p>
+
+    <div class="signature-section">
+      <div class="signature-item">
+        <div class="label">Ancienne signature :</div>
+        <div class="signature-box">
+          <input type="text" name="ancienneSignature" placeholder="">
+        </div>
+      </div>
+
+      <div class="signature-item">
+        <div class="label">Nouvelle signature :</div>
+        <div class="signature-box">
+          <input type="text" name="nouvelleSignature" placeholder="">
+        </div>
+      </div>
+    </div>
+
+    <p class="date-line">
+      Fait à <input type="text" class="inline-md" name="lieu" style="min-width:200px;">
+    </p>
+    <p class="date-line">
+      Le <input type="text" class="day" name="jour" maxlength="2">
+      / <input type="text" class="month" name="mois" maxlength="2">
+      / <input type="text" class="year" name="annee" maxlength="4">
+    </p>
+
+  </form>
+</div>
+
+<script src="../vendors/js/today_form_dates.js"></script>
+</body>
+</html>

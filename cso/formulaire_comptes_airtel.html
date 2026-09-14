@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulaire liaison comptes — Ecobank / Airtel Money</title>
+  <link rel="icon" sizes="180x180" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../vendors/images/ecobank-bg.png">
+<style>
+  :root{
+    --ink:#1a1a1a;
+    --line:#333;
+    --dot:#999;
+    --accent:#003b5c;
+    --accent2:#e8a33d;
+    --band-blue:#4f81bd;
+    --band-text:#ffffff;
+    --paper:#ffffff;
+    --muted:#444;
+    --airtel-red:#e2231a;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:#e9e9e9;
+    font-family: Arial, Helvetica, sans-serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    padding:32px 16px;
+    font-size:12.5px;
+  }
+
+  .page{
+    background:var(--paper);
+    width:100%;
+    max-width:900px;
+    padding:26px 40px 34px;
+    box-shadow:0 2px 14px rgba(0,0,0,0.18);
+    position:relative;
+  }
+
+  .internal-use{
+    font-size:9.5px;
+    font-weight:700;
+    letter-spacing:0.3px;
+    color:var(--ink);
+    margin-bottom:6px;
+  }
+
+  /* ---------- Header ---------- */
+  .header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+    gap:16px;
+  }
+
+  .logo{
+    display:flex;
+    flex-direction:column;
+    line-height:1.1;
+  }
+  .logo .mark{ display:flex; align-items:baseline; gap:3px; }
+  .logo .mark .eco{ font-size:26px; font-weight:800; color:var(--accent); font-style:italic; }
+  .logo .mark .bank{ font-size:26px; font-weight:800; color:var(--accent2); font-style:italic; }
+  .logo .tagline{ font-size:10px; font-style:italic; color:var(--muted); margin-top:1px; }
+
+  .airtel-logo{
+    border:1px solid #ccc;
+    padding:10px 26px;
+    text-align:center;
+  }
+  .airtel-logo .swoosh{
+    font-size:22px;
+    color:var(--airtel-red);
+    line-height:1;
+  }
+  .airtel-logo .wordmark{
+    font-size:24px;
+    font-weight:800;
+    color:var(--airtel-red);
+    letter-spacing:0.5px;
+    margin-top:-2px;
+  }
+
+  /* ---------- section band ---------- */
+  .band{
+    background:var(--band-blue);
+    color:var(--band-text);
+    font-weight:700;
+    font-size:13px;
+    padding:7px 14px;
+    margin:20px 0 14px;
+    letter-spacing:0.2px;
+  }
+  .band:first-of-type{ margin-top:6px; }
+
+  /* ---------- request type row ---------- */
+  .request-type{
+    display:flex;
+    align-items:center;
+    gap:24px;
+    flex-wrap:wrap;
+    font-size:13px;
+    margin-bottom:4px;
+  }
+  .request-type .label{ font-weight:700; }
+  .request-type .opt{ display:flex; align-items:center; gap:8px; }
+
+  .checkbox{
+    width:15px;
+    height:15px;
+    border:1px solid var(--line);
+    flex-shrink:0;
+    display:inline-block;
+    background:transparent;
+    appearance:none;
+    -webkit-appearance:none;
+    position:relative;
+    cursor:pointer;
+    vertical-align:middle;
+  }
+  .checkbox:checked::after{
+    content:"✓";
+    position:absolute;
+    left:1px;
+    top:-4px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--accent);
+  }
+
+  /* ---------- form fields ---------- */
+  .field{
+    display:flex;
+    align-items:baseline;
+    gap:6px;
+    margin-bottom:14px;
+    flex-wrap:wrap;
+  }
+  .field .lbl{ white-space:nowrap; }
+  .field .dotted-input{
+    flex:1;
+    min-width:150px;
+    border:none;
+    border-bottom:1px dotted var(--dot);
+    background:transparent;
+    font-family:inherit;
+    font-size:12.5px;
+    outline:none;
+    padding:1px 4px;
+  }
+  .field .dotted-input:focus{ border-bottom:1px solid var(--accent); }
+
+  .field.two-line .dotted-input{
+    flex-basis:100%;
+  }
+  .field.two-line .dotted-input.second{ margin-top:8px; }
+
+  /* ---------- id documents row ---------- */
+  .doc-row{
+    display:flex;
+    gap:40px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-bottom:14px;
+    font-size:13px;
+  }
+  .doc-row .opt{ display:flex; align-items:center; gap:8px; }
+
+  /* ---------- legal text ---------- */
+  .legal p{
+    font-size:11.5px;
+    line-height:1.5;
+    margin:0 0 10px;
+  }
+  .legal .note{
+    font-size:10.5px;
+    font-style:italic;
+    margin:0 0 10px;
+  }
+
+  .sig-row{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    font-size:12.5px;
+    margin-bottom:6px;
+  }
+  .sig-row .field{ flex:1; margin-bottom:0; min-width:260px; }
+
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid #ddd;
+  }
+
+  .action-buttons button {
+    padding: 10px 24px;
+    font-size: 12.5px;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .action-buttons .btn-print {
+    background-color: var(--accent);
+    color: #fff;
+  }
+
+  .action-buttons .btn-print:hover {
+    background-color: #002a42;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .action-buttons .btn-back {
+    background-color: #999;
+    color: #fff;
+  }
+
+  .action-buttons .btn-back:hover {
+    background-color: #777;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  @media print{
+    @page{ margin:0; }
+    body{ background:#fff; padding:0; }
+    .page{ box-shadow:none; max-width:none; padding:20px 34px; }
+    .action-buttons { display: none; }
+  }
+
+  @media (max-width:640px){
+    .page{ padding:20px 20px; }
+    .header{ flex-direction:column; align-items:flex-start; }
+    .request-type{ flex-direction:column; align-items:flex-start; gap:10px; }
+    .doc-row{ flex-direction:column; align-items:flex-start; gap:10px; }
+    .sig-row{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+        <img src="../vendors/images/ecobank-lg.png" alt="" class="" width="160px">
+    </div>
+    <div class="airtel-logo">
+      <div class="logo">
+        <img src="../vendors/images/airtel-bg.png" width="60px" alt="">
+    </div>
+    </div>
+  </div>
+
+  <div class="request-type">
+    <span class="label">Type de demande :</span>
+    <label class="opt">Nouvelle demande : <input type="checkbox" class="checkbox"></label>
+    <label class="opt">Modification : <input type="checkbox" class="checkbox"></label>
+  </div>
+
+  <form>
+
+    <div class="band">DETAILS DU COMPTE A ECOBANK*</div>
+
+    <div class="field">
+      <span class="lbl">Intitulé du compte :</span>
+      <input class="dotted-input" type="text" name="intituleCompte" id="intituleCompte">
+    </div>
+    <div class="field">
+      <span class="lbl">N° du compte :</span>
+      <input class="dotted-input" type="text" name="numeroCompte" id="numeroCompte">
+    </div>
+    <div class="field">
+      <span class="lbl">N° de Téléphone :</span>
+      <input class="dotted-input" type="tel" name="telephone" id="telephone">
+    </div>
+    <div class="field">
+      <span class="lbl">E-mail :</span>
+      <input class="dotted-input" type="email" name="email" id="email">
+    </div>
+    <div class="field two-line">
+      <span class="lbl">Adresse résidentielle :</span>
+      <input class="dotted-input" type="text" name="adresseResidentielle1" id="adresseResidentielle1">
+      <input class="dotted-input second" type="text" name="adresseResidentielle2" id="adresseResidentielle2">
+    </div>
+
+    <div class="band">INFORMATIONS AIRTEL MONEY</div>
+
+    <div class="field">
+      <span class="lbl">N° de Téléphone à lier :</span>
+      <input class="dotted-input" type="tel" name="telephoneLier" id="telephoneLier">
+    </div>
+
+    <div class="band">DETAILS D'IDENTIFICATION :</div>
+
+    <p style="margin:0 0 10px;">Type de document à joindre au formulaire :</p>
+
+    <div class="doc-row">
+      <label class="opt">Passeport : <input type="checkbox" class="checkbox"></label>
+      <label class="opt">Carte d'identité : <input type="checkbox" class="checkbox"></label>
+      <label class="opt">Permis CEMAC : <input type="checkbox" class="checkbox"></label>
+    </div>
+
+    <div class="field">
+      <span class="lbl">Autres (Indiquer) :</span>
+      <input class="dotted-input" type="text">
+    </div>
+
+    <div class="legal">
+      <p>Je certifie que toutes les informations ci-dessus sont correctes et je souhaiterais m'enregistrer pour bénéficier des services Airtel Money fournis par ECOBANK CONGO en partenariat avec AIRTEL MONEY SA conformément aux conditions d'utilisation des clients Airtel Money.</p>
+      <p>J'autorise Ecobank Congo à considérer le numéro de téléphone AIRTEL indiqué plus haut comme l'un de mes contacts téléphoniques si celui-ci est différent du contact préalablement enregistré lors de l'ouverture du compte.</p>
+      <p>Le présent formulaire de demande de rattachement des comptes Ecobank et Airtel Money constitue un accord officiel.</p>
+      <p class="note">(Lu et approuvé) *</p>
+    </div>
+
+    <div class="sig-row">
+      <div class="field"><span class="lbl">Signature :</span><input class="dotted-input" type="text"></div>
+      <div class="field"><span class="lbl">Date :</span><input class="dotted-input" type="text"></div>
+    </div>
+
+    <div class="band">PARTIE RESERVEE A LA BANQUE</div>
+
+    <div class="field">
+      <span class="lbl">Nom de l'Agent :</span>
+      <input class="dotted-input" type="text">
+    </div>
+            <br><br>
+    <div class="sig-row">
+      <div class="field"><span class="lbl">Signature :</span><input class="dotted-input" type="text"></div>
+      <div class="field"><span class="lbl">Date :</span><input class="dotted-input" type="text"></div>
+    </div>
+
+  </form>
+
+
+  <div class="action-buttons">
+    <button type="button" class="btn-print" onclick="window.print()">🖨️ Imprimer</button>
+    <button type="button" class="btn-back" onclick="window.history.back()">← Retour</button>
+  </div>
+
+</div>
+
+<script src="../vendors/js/flexcube_client_search.js"></script>
+</body>
+</html>

@@ -14,7 +14,7 @@ ini_set('session.cookie_httponly', '1');
 $secureCookie = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
 ini_set('session.cookie_secure', $secureCookie ? '1' : '0');
 ini_set('session.cookie_samesite', 'Strict');
-ini_set('session.gc_maxlifetime', 3600); // 1 heure
+ini_set('session.gc_maxlifetime', 7200); // 2 heures
 
 require_once __DIR__ . '/security_config.php';
 include_once __DIR__ . '/config.php';
@@ -32,7 +32,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 // Timeout de session pour inactivité
-$timeout = 3600; // 1 heure
+$timeout = 7200; // 2 heures
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $timeout)) {
     session_destroy();
     header('Location: ../index.php');

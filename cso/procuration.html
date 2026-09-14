@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Procuration - Ecobank Congo</title>
+<style>
+  :root{
+    --text-dark:#1a1a1a;
+    --grey-title-bg:#e2e2e2;
+    --logo-blue:#4a5aa0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:0;
+    background:#e9edf0;
+    font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+    color:var(--text-dark);
+  }
+  .page{
+    width:794px;
+    min-height:1123px;
+    margin:30px auto;
+    background:#ffffff;
+    box-shadow:0 0 12px rgba(0,0,0,0.15);
+    padding:50px 60px;
+  }
+
+  .logo{
+    text-align:right;
+    margin-bottom:6px;
+  }
+  .logo .name{
+    font-size:30px;
+    font-weight:700;
+    font-style:italic;
+    color:var(--logo-blue);
+    font-family: Georgia, 'Times New Roman', serif;
+    letter-spacing:1px;
+  }
+  .logo .sub{
+    font-size:13px;
+    font-weight:700;
+    font-style:italic;
+    color:var(--text-dark);
+    margin-top:-4px;
+  }
+
+  h1.title{
+    text-align:center;
+    font-size:24px;
+    font-weight:400;
+    letter-spacing:2px;
+    background:var(--grey-title-bg);
+    border:2px solid var(--text-dark);
+    border-radius:10px;
+    padding:14px 20px;
+    margin:20px 0 45px 0;
+  }
+
+  form{ font-size:14.5px; line-height:2.6; }
+
+  input[type="text"]{
+    border:none;
+    border-bottom:1px dotted var(--text-dark);
+    background:transparent;
+    font-family:inherit;
+    font-size:14.5px;
+    color:var(--text-dark);
+    padding:2px 4px;
+    outline:none;
+  }
+  input[type="text"]:focus{
+    border-bottom:1px solid var(--logo-blue);
+    background:#f5faff;
+  }
+
+  .field-line{
+    display:flex;
+    align-items:baseline;
+    gap:6px;
+    margin-bottom:6px;
+    flex-wrap:wrap;
+  }
+  .field-line label{ white-space:nowrap; }
+  .field-line input[type="text"]{ flex:1; min-width:200px; }
+
+  p.operations-intro{
+    margin:22px 0 12px 0;
+  }
+
+  .operations-list{
+    list-style:none;
+    margin:0 0 30px 0;
+    padding:0;
+  }
+  .operations-list li{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:16px;
+  }
+  .operations-list li label{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    cursor:pointer;
+  }
+  .operations-list input[type="checkbox"]{
+    width:22px;
+    height:22px;
+    border:1.5px solid var(--text-dark);
+    accent-color:var(--text-dark);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .operations-list .autre-line{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex:1;
+  }
+  .operations-list .autre-line input[type="text"]{ flex:1; }
+
+  .fait-line{
+    text-align:center;
+    margin:30px 0 55px 0;
+  }
+  .fait-line input[type="text"]{ min-width:220px; }
+
+  .bon-pour-row{
+    display:flex;
+    justify-content:space-around;
+    text-align:center;
+    font-size:14.5px;
+  }
+
+  .form-actions{
+    max-width:794px;
+    margin:0 auto 20px auto;
+    padding:0 4px;
+    display:flex;
+    gap:12px;
+  }
+  .form-actions button{
+    font-family:inherit;
+    font-size:14px;
+    padding:10px 20px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+  }
+  .btn-print{ background:var(--logo-blue); color:#fff; }
+  .btn-print:hover{ background:#37437a; }
+  .btn-reset{ background:#e0e0e0; color:#333; }
+  .btn-reset:hover{ background:#cacaca; }
+
+  .btn-link-form{ background:#c69a4b; color:#fff; }
+  .btn-link-form:hover{ background:#a97e35; }
+
+  @media print{
+    @page{ size:A4; margin:10mm; }
+    body{ background:#fff; }
+    .page{
+      box-shadow:none;
+      margin:0;
+      width:100%;
+      min-height:0;
+      padding:20px 34px 24px;
+      page-break-after:avoid;
+      page-break-inside:avoid;
+    }
+    .logo{ margin-bottom:0; }
+    h1.title{ font-size:20px; padding:10px 16px; margin:12px 0 24px; }
+    form{ font-size:13px; line-height:1.8; }
+    .field-line{ margin-bottom:5px; }
+    .operations-list{ margin-bottom:16px; }
+    .operations-list li{ margin-bottom:7px; }
+    .fait-line{ margin:18px 0 28px; }
+    .form-actions{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="form-actions">
+  <button class="btn-print" onclick="window.print()">🖨️ Imprimer </button>
+  <button class="btn-reset" onclick="document.getElementById('procurationForm').reset()">↺ Réinitialiser</button>
+  <button type="button" class="btn-link-form" id="openFeesProcuration">Frais de procuration</button>
+  <button type="button" class="btn-back" onclick="window.history.back()">← Retour</button>
+
+</div>
+
+<div class="page">
+
+  <div class="logo">
+    	<img src="../vendors/images/ecobank-lg.png" alt="" class="" width="140px">
+  </div>
+
+  <h1 class="title">PROCURATION</h1>
+
+  <form id="procurationForm" onsubmit="return false;">
+
+    <div class="field-line">
+      <label>Je soussigné (e)</label>
+      <input type="text" name="nomSoussigne" style="flex:1;">
+    </div>
+
+    <div class="field-line">
+      <label>Adresse :</label>
+      <input type="text" name="adresse" style="flex:1;">
+    </div>
+
+    <div class="field-line">
+      <label>Titulaire du compte N°</label>
+      <input type="text" name="numeroCompte" style="flex:1;">
+    </div>
+
+
+    <div class="field-line">
+      <label>Ouvert le :</label>
+      <input type="text" name="dateOuverture" style="max-width:220px;">
+      <span>dans les livres de ECOBANK-CONGO,</span>
+    </div>
+
+    <div class="field-line">
+      <label>donne procuration à Mr, Mme, Mlle :</label>
+      <input type="text" name="mandataire" style="flex:1;">
+    </div>
+
+    <div class="field-line">
+      <label>Pièce d'identité :</label>
+      <input type="text" name="pieceIdentiteType" style="max-width:220px;">
+      <label>N°</label>
+      <input type="text" name="pieceIdentiteNumero" style="flex:1;">
+    </div>
+
+    <p class="operations-intro">Pour exécuter les opérations suivantes sur ledit compte :</p>
+
+    <ul class="operations-list">
+      <li><label><input type="checkbox" name="operation" value="Toutes les opérations sans exceptions"> Toutes les opérations sans exceptions</label></li>
+      <li><label><input type="checkbox" name="operation" value="Versements d'espèces et de chèques"> Versements d'espèces et de chèques</label></li>
+      <li><label><input type="checkbox" name="operation" value="Retraits de fonds"> Retraits de fonds</label></li>
+      <li><label><input type="checkbox" name="operation" value="Retraits de documents"> Retraits de documents</label></li>
+      <li><label><input type="checkbox" name="operation" value="Retraits de chéquiers"> Retraits de chéquiers</label></li>
+      <li><label><input type="checkbox" name="operation" value="Retraits de courriers"> Retraits de courriers</label></li>
+      <li><label><input type="checkbox" name="operation" value="Retraits de relevés de compte"> Retraits de relevés de compte</label></li>
+      <li>
+        <input type="checkbox" name="operation" value="Autres">
+        <div class="autre-line">
+          <label>Autres :</label>
+          <input type="text" name="autrePrecision">
+        </div>
+      </li>
+    </ul>
+
+    <p class="fait-line">
+      Fait à <input type="text" name="lieuSignature">, le <input type="text" name="dateSignature">
+    </p>
+
+    <div class="bon-pour-row">
+      <div>BON POUR ACCEPTATION</div>
+      <div>BON POUR POUVOIR</div>
+    </div>
+
+  </form>
+</div>
+
+<script src="../vendors/js/flexcube_client_search.js?v=20260914"></script>
+<script>
+  document.getElementById('openFeesProcuration').addEventListener('click', function () {
+    const draft = {};
+    document.querySelectorAll('#procurationForm [name]').forEach(function (field) {
+      draft[field.name] = field.type === 'checkbox' ? field.checked : field.value;
+    });
+    sessionStorage.setItem('ecobank_procuration_draft', JSON.stringify(draft));
+    window.location.href = 'frais_de_procuration.html';
+  });
+</script>
+</body>
+</html>

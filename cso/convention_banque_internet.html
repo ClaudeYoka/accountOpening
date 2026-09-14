@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Convention Banque par Internet - Ecobank Congo</title>
+<style>
+  :root{
+    --ecobank-blue:#004b87;
+    --ecobank-blue-dark:#003a68;
+    --ecobank-teal:#00a99d;
+    --text-dark:#1a1a1a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:0;
+    background:#e9edf0;
+    font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+    color:var(--text-dark);
+  }
+  .page{
+    max-width:850px;
+    margin:30px auto;
+    background:#ffffff;
+    box-shadow:0 0 12px rgba(0,0,0,0.15);
+    padding:40px 50px 50px 50px;
+  }
+
+  h1.title{
+    text-align:center;
+    font-size:15px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+    color:var(--text-dark);
+    margin:0 0 22px 0;
+    padding-bottom:14px;
+    border-bottom:2px solid var(--ecobank-blue);
+  }
+
+  .convention-text{
+    font-size:10.3px;
+    line-height:1.45;
+    column-count:2;
+    column-gap:28px;
+    text-align:justify;
+    color:var(--text-dark);
+  }
+  .convention-text h2{
+    font-size:10.8px;
+    font-weight:700;
+    color:var(--ecobank-blue);
+    margin:10px 0 4px 0;
+    break-after:avoid;
+  }
+  .convention-text p{
+    margin:0 0 8px 0;
+  }
+
+  .signature-section{
+    column-span:all;
+    display:flex;
+    justify-content:space-between;
+    gap:40px;
+    margin-top:22px;
+    padding-top:16px;
+    border-top:1px solid #ccc;
+  }
+  .signature-section .sig-block{
+    flex:1;
+    font-size:11px;
+  }
+  .signature-section .sig-title{
+    font-weight:700;
+    text-align:center;
+    margin-bottom:14px;
+    color:var(--ecobank-blue);
+  }
+  .signature-section .sig-line{
+    display:flex;
+    align-items:baseline;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+  .signature-section input[type="text"]{
+    border:none;
+    border-bottom:1px dotted var(--text-dark);
+    background:transparent;
+    font-family:inherit;
+    font-size:11px;
+    color:var(--text-dark);
+    padding:2px 4px;
+    outline:none;
+  }
+  .signature-section input[type="text"]:focus{
+    border-bottom:1px solid var(--ecobank-blue);
+    background:#f5faff;
+  }
+  .signature-section input.lieu{ min-width:110px; }
+  .signature-section input.date{ min-width:90px; }
+
+  .footer-caption{
+    column-span:all;
+    text-align:center;
+    font-size:9px;
+    font-style:italic;
+    color:#666;
+    margin-top:18px;
+    padding-top:10px;
+    border-top:1px solid #ccc;
+  }
+
+  .form-actions{
+    max-width:850px;
+    margin:0 auto 20px auto;
+    padding:0 4px;
+    display:flex;
+    gap:12px;
+  }
+  .form-actions button{
+    font-family:inherit;
+    font-size:14px;
+    padding:10px 20px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+  }
+  .btn-print{ background:var(--ecobank-blue); color:#fff; }
+  .btn-print:hover{ background:var(--ecobank-blue-dark); }
+  .btn-reset{ background:#e0e0e0; color:#333; }
+  .btn-reset:hover{ background:#cacaca; }
+
+  @media print{
+    body{ background:#fff; }
+    .page{ box-shadow:none; margin:0; padding:20px 30px; }
+    .form-actions{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <h1 class="title">Convention Banque par Internet Ecobank Congo</h1>
+
+  <form id="conventionForm" onsubmit="return false;">
+    <div class="convention-text">
+
+      <h2>Article 1 : Objet</h2>
+      <p>L'objet de la présente convention est de définir les conditions et modalités suivant lesquelles ECOBANK (ci-après, '' la Banque'') met à la disposition de son client soussigné (ci-après '' l'Abonné '') qui accepte, ECOBANK par Internet.</p>
+      <p>ECOBANK par Internet est un produit d'informations bancaires et financières, de consultation de comptes bancaires et de transmission d'ordres de paiement, accessible par le réseau Internet.</p>
+      <p>ECOBANK par Internet pourra également être accessible, compte tenu de l'évolution des techniques, par d'autres moyens de communication à distance.</p>
+
+      <h2>Article 2 : Champ d'application</h2>
+      <p>Lors de la souscription de l'abonnement, l'abonné indique de manière exhaustive les comptes pour lesquels il demande la fourniture des services d'ECOBANK par Internet.</p>
+      <p>La détermination des pouvoirs à cette fin est fonction des instructions de signature reçues lors de l'ouverture du compte dans les livres de la banque ou par instructions ultérieures dûment enregistrées par la banque.</p>
+      <p>Les services d'ECOBANK par Internet sont distingués suivant des modules nommés « Bleu », « Argent », « Or », « Platinium » dont les fonctionnalités diffèrent. L'abonné choisit lors de la souscription de son abonnement le module souhaité.</p>
+      <p>Les comptes faisant l'objet d'abonnement à l'un des modules d'ECOBANK par Internet bénéficient automatiquement et au fur et à mesure de leur mise à disposition, de toutes les fonctionnalités offertes sous le module considéré, ce en fonction de la nature du compte concerné.</p>
+
+      <h2>Article 3 : Identification, Accès, Confidentialité</h2>
+      <p>L'abonné accède à ECOBANK par Internet après s'être identifié par la composition d'une double clé formée du numéro d'abonné et d'un code secret numérique qui lui sont, l'un et l'autre, communiqués par la banque. Le code secret est transmis par la Banque à l'Abonné lors de la souscription.</p>
+      <p>Il est conseillé à l'Abonné de modifier périodiquement son code secret et de le garder hors de la portée de toute personne. En tout état de cause, l'Abonné est exclusivement responsable de l'entière confidentialité de son code secret.</p>
+      <p>Pour sa part, ECOBANK garantit que la circulation de ce code sur Internet n'entrave nullement cette confidentialité, en raison du cryptage systématique protégé par une licence de type SSL de la société VeriSign.</p>
+
+      <h2>Article 4 : Refus d'accès</h2>
+      <p>A tout moment, la banque peut suspendre l'accès de l'Abonné à ECOBANK par Internet au cas où il existe des faits laissant présumer l'utilisation frauduleuse ou la tentative d'utilisation frauduleuse de ses services. L'Abonné en est informé par tout moyen.</p>
+
+      <h2>Article 5 : Tarification</h2>
+      <p>L'utilisation des services d'ECOBANK par Internet donne lieu à une tarification mensuelle indivisible payable par avance par le débit du compte de facturation indiqué par l'Abonné lors de la souscription.</p>
+      <p>Les tarifs varient suivant les modules choisis et sont communiqués à l'Abonné lors de son adhésion. Toute modification des tarifs ou des modalités de facturation sera communiquée à l'Abonné par tout moyen, sous préavis de trente jours. L'utilisation d'ECOBANK par Internet, postérieurement à l'entrée en vigueur des modifications tarifaires, vaudra acceptation de celles-ci par l'Abonné.</p>
+      <p>La tarification des services d'ECOBANK par Internet est strictement distincte du coût des communications téléphoniques inhérentes à la connexion, et dont l'Abonné assume l'entière responsabilité.</p>
+
+      <h2>Article 6 : Mise en œuvre des services - Responsabilité de la Banque</h2>
+      <p>La Banque s'engage à mettre en œuvre tous les moyens raisonnables pour assurer le bon fonctionnement d'ECOBANK par Internet ainsi que l'exécution diligente des ordres reçus dans les formes convenues et la confidentialité des informations communiquées.</p>
+      <p>Toutefois, ECOBANK ne saurait en aucun cas être tenue responsable d'un défaut de fonctionnement ou d'un mauvais fonctionnement du service par suite d'évènements dont elle n'a pas la maîtrise, tels notamment que le transport des données, la défaillance dans le fonctionnement des matériels ou des réseaux de télécommunication ou toute erreur imputable aux gestionnaires de ces réseaux de télécommunication, les interruptions de service par suite de cas fortuits ou de force majeure ou de tout événement de nature à entraver le fonctionnement normal d'ECOBANK par Internet (tels que des conflits sociaux, même partiels, survenant à la Banque ou chez tout autre prestataire intervenant dans le fonctionnement d'ECOBANK par Internet, le défaut de fourniture électrique etc.), le mauvais fonctionnement du matériel de l'Abonné ; cette liste étant simplement indicative.</p>
+      <p>De même, la Banque ne saurait être tenue responsable des conséquences d'un accès à ECOBANK par Internet non conforme aux procédures ou de l'utilisation par un tiers, avant opposition, des numéros d'Abonné et code secret de l'Abonné ou de ses mandataires.</p>
+
+      <h2>Article 7 : Responsabilité de l'Abonné</h2>
+      <p>L'Abonné est responsable de la conservation et de l'utilisation de son code secret. En cas d'abonnement joint, les co-abonnés sont solidairement responsables de la conversation et de l'utilisation du code secret. Il est, en conséquence, expressément convenu que toute interrogation ou tout ordre précédé de la frappe du numéro d'abonné et du code secret, est réputé émaner de l'Abonné lui-même ou des co-abonnés le cas échéant.</p>
+
+      <h2>Article 8 : Force probante des livres de la banque</h2>
+      <p>Toutes les opérations passées au compte de l'Abonné, au moyen d'instructions reçues via ECOBANK par Internet ou non, font l'objet d'un relevé de compte établi sur une base mensuelle ou trimestrielle selon la nature du compte. L'Abonné est tenu de contrôler les relevés de compte périodiques adressés par la Banque, qui seuls font foi. Passé le délai de trois mois, à compter de l'envoi du relevé de compte, l'Abonné est réputé avoir approuvé les opérations portées à sa connaissance et aucune réclamation les concernant ne sera plus recevable.</p>
+
+      <h2>Article 9 : Durée de l'abonnement - résiliation</h2>
+      <p>La durée de l'abonnement est convenue entre la banque et l'abonné lors de la souscription, au moyen des formulaires existant à cet effet. Il est toutefois entendu qu'en cas de clôture du compte avant l'échéance d'un abonnement ECOBANK par Internet en cours, celui-ci sera de plein droit considéré comme éteint pour compter de la clôture du compte.</p>
+      <p>Toute souscription échue doit faire l'objet d'un renouvellement à l'initiative du client. Chacune des parties conserve la faculté de résilier un abonnement en cours, sous préavis de quinze (15) jours courant à compter de la réception de la notification.</p>
+
+      <h2>Article 10 : Données personnelles</h2>
+      <p>La Banque s'engage à ne faire usage des informations nominatives recueillies dans le cadre de ECOBANK par Internet que pour les seules nécessités de leur gestion et pour satisfaire aux obligations légales et réglementaires.</p>
+      <p>L'Abonné et, le cas échéant, son mandataire autorisent expressément la Banque à communiquer, aux entreprises auxquelles elle pourrait sous-traiter certains travaux, les données nécessaires à l'exécution de ceux-ci.</p>
+
+      <h2>Article 11 : Documents contractuels et loi applicable</h2>
+      <p>Toute convention ECOBANK par Internet se compose nécessairement du présent texte auxquels sont joints un bulletin de souscription ainsi que tous autres formulaires en usage.</p>
+      <p>La présente convention est soumise au droit congolais et les tribunaux congolais ont compétence pour connaître de toute question se rapportant à son interprétation ou à son exécution, à défaut d'accord amiable.</p>
+
+      <div class="signature-section">
+        <div class="sig-block">
+          <div class="sig-title">Pour l'Abonné</div>
+          <div class="sig-line">
+            A <input type="text" class="lieu" name="lieuAbonne">, le <input type="text" class="date" name="dateAbonne">
+          </div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-title">Pour la Banque</div>
+          <div class="sig-line">
+            A <input type="text" class="lieu" name="lieuBanque">, le <input type="text" class="date" name="dateBanque">
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-caption">CONVENTION BANQUE PAR INTERNET ECOBANK CONGO</div>
+
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

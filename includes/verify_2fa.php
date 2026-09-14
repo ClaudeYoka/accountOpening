@@ -44,7 +44,7 @@
         
         <form method="post">
             <input type="text" name="twofa_code" placeholder="Code à 6 chiffres" required>
-            <input class="btn btn-outline-primary" type="submit" name="verify_2fa" value="Vérifier">
+            <input class="btn btn-outline-primary" type="submit" name="verify_2fa" value="Vérifier" autocomplete="off">
         </form>
         
         <div class="mt-3">

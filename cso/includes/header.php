@@ -3,7 +3,7 @@
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>AO & KYC</title>
+	<title>E-AGENCY</title>
 
 	<!-- Site favicon -->
 	<link rel="ecobank-bg" sizes="180x180" href="../vendors/images/ecobank-bg.png">

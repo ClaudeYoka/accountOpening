@@ -28,7 +28,7 @@ function connectToFlexcubeDatabase() {
     $port = '1521';
     $service = 'SRVFCUBSCS2';
     $username = 'cyoka';
-    $password = 'Welcometo@2026';
+    $password = 'Piratemoi@2026';
     
     $last_error = null;
     
@@ -88,15 +88,20 @@ function fetchAccountFromOracleDatabase($account_number) {
         // Requête SQL pour récupérer les données du compte depuis Oracle
         $sql = "SELECT
             a.branch_code,
+            a.cust_no AS ID,
             a.cust_ac_no AS account_number,
             a.ac_desc AS account_name,
+            a.account_class AS account_class,
+            a.ccy AS ccy,
+            b.description AS description,
+            b.description AS account_type,
             cp.FIRST_NAME AS first_name,
             cp.LAST_NAME AS last_name,
             cp.MIDDLE_NAME AS middle_name,
             cp.SEX AS sex,
             cp.e_mail AS Email,
             a.cust_no AS customer_id,
-            cp.date_of_birth,
+            TO_CHAR(cp.date_of_birth, 'YYYY-MM-DD') AS date_of_birth,
             cp.place_of_birth,
             cp.P_NATIONAL_ID AS national_id,
             cp.PASSPORT_NO AS passport_no,
@@ -104,12 +109,14 @@ function fetchAccountFromOracleDatabase($account_number) {
             cp.PPT_EXP_DATE AS passport_expiry_date,
             a.clearing_ac_no AS rib,
             cp.telephone,
-            a.ac_open_date AS opening_date,
+            TO_CHAR(a.ac_open_date, 'YYYY-MM-DD') AS opening_date,
             mis.code_desc AS manager_name,
             TRIM(NVL(a.address1, '') || ' ' || NVL(a.address2, '') || ' ' || NVL(a.address4, '')) AS account_address,
             TRIM(NVL(cu.address_line1, '') || ' ' || NVL(cu.address_line2, '') || ' ' || NVL(cu.address_line3, '') || ' ' || NVL(cu.address_line4, '')) AS customer_address
         FROM
             fcubscs2.sttm_cust_account a
+        LEFT JOIN
+            fcubscs2.sttm_account_class b ON a.account_class = b.account_class
         LEFT JOIN
             fcubscs2.sttm_account_balance c ON a.cust_ac_no = c.cust_ac_no
         LEFT JOIN

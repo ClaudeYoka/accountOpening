@@ -54,6 +54,9 @@ function normalize_chequier_status($status) {
     if (in_array($s, ['livre', 'livré'])) {
         return 'livré';
     }
+    if (in_array($s, ['donne', 'donné', 'donnee', 'donnée'])) {
+        return 'donné';
+    }
     if (in_array($s, ['prestataire'])) {
         return 'prestataire';
     }
@@ -76,6 +79,7 @@ function status_badge_style($status) {
     switch ($status) {
         case 'reçu': return 'background:#28a745;color:#fff;';
         case 'livré': return 'background:#6f42c1;color:#fff;';
+        case 'donné': return 'background:#28a745;color:#fff;';
         case 'prestataire': return 'background:#17a2b8;color:#fff;';
         default: return 'background:#ffc107;color:#000;';
     }

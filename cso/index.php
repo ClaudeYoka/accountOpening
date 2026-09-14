@@ -28,8 +28,9 @@ require_once __DIR__ . '/../includes/session.php';
 					</div>
 					<div class="col-md-8">
 
-						<?php $query= mysqli_query($conn,"SELECT * from tblemployees where emp_id = '$session_id'");
-								$row = mysqli_fetch_array($query);
+						<?php 
+							$query= mysqli_query($conn,"SELECT * from tblemployees where emp_id = '$session_id'");
+							$row = mysqli_fetch_array($query);
 						?>
 
 						<h4 class="font-20 weight-500 mb-10 text-capitalize">
@@ -42,38 +43,56 @@ require_once __DIR__ . '/../includes/session.php';
 
 			<div class="card-box mb-30">
 				<div class="pd-20">
-					<h2 class="text-blue h4">Mes Comptes Ouverts au cours des 7 derniers jours</h2>
+					<h2 class="text-blue h4">Mes demandes de chéquier des 7 derniers jours</h2>
 				</div>
 				<div class="pb-20">
 					<table class="data-table table hover multiple-select-row nowrap">
 						<thead>
 							<tr>
-								<th class="table-plus">NUM COMPTE</th>
-								<th>NOM & PRENOM</th>
-								<th>TYPE COMPTE</th>
-								<th>DATE OUVERTURE </th>
+								<th class="table-plus">NOM CLIENT</th>
+								<th>NUM COMPTE</th>
+								<th>QUANTITÉ</th>
+								<th>DATE DEMANDE</th>
+								<th>STATUT</th>
 								<th class="datatable-nosort">ACTION</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php
-								$sql = "SELECT * from ecobank_form_submissions where emp_id = '$session_id' AND ecobank_form_submissions.created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) ORDER BY ecobank_form_submissions.created_at desc";
-								$query = $dbh->prepare($sql);
-								$query->execute();
-								$results = $query->fetchAll(PDO::FETCH_OBJ);
+								$sql = "SELECT id, firstname, account_number, type_compte, etabliss, access, date_enregistrement
+										FROM tblcompte
+										WHERE emp_id = ?
+										AND date_enregistrement >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+										ORDER BY date_enregistrement DESC";
+								$stmt = mysqli_prepare($conn, $sql);
+								mysqli_stmt_bind_param($stmt, 's', $session_id);
+								mysqli_stmt_execute($stmt);
+								$results = mysqli_stmt_get_result($stmt);
 								$cnt = 1;
-								if ($query->rowCount() > 0) {
-									foreach ($results as $result) {
+								if ($results && mysqli_num_rows($results) > 0) {
+									while ($result = mysqli_fetch_assoc($results)) {
 							?>
 							<tr>
-								<td><?php echo h($result->account_number); ?></td>
-								<td><?php echo h($result->customer_name); ?></td>
-								<td><?php echo h($result->account_type); ?></td>
-								<td><?php echo h(!empty($result->created_at) ? date('d-m-Y', strtotime($result->created_at)) : ''); ?></td>
-					
+								<td><?php echo h($result['firstname']); ?></td>
+								<td><?php echo h($result['account_number']); ?></td>
+								<td><?php echo h($result['etabliss']); ?></td>
+								<td><?php echo h(!empty($result['date_enregistrement']) ? date('d-m-Y H:i', strtotime($result['date_enregistrement'])) : ''); ?></td>
+								<?php
+									$status = strtolower(trim($result['access'] ?: 'encours'));
+									$statusStyles = [
+										'encours' => ['label' => 'En cours', 'background' => '#fff0d9', 'color' => '#a85d00'],
+										'reçu' => ['label' => 'Reçu', 'background' => '#d9f3f0', 'color' => '#087f73'],
+										'livré' => ['label' => 'Livré', 'background' => '#e3f5e6', 'color' => '#237a35'],
+										'donné' => ['label' => 'Donné', 'background' => '#e3f5e6', 'color' => '#237a35'],
+										'prestataire' => ['label' => 'Prestataire', 'background' => '#e3eefa', 'color' => '#265ed7']
+									];
+									$statusStyle = $statusStyles[$status] ?? ['label' => ucfirst($status), 'background' => '#edf0f2', 'color' => '#52606d'];
+								?>
+								<td><span style="display:inline-block;padding:6px 12px;border-radius:999px;background:<?php echo $statusStyle['background']; ?>;color:<?php echo $statusStyle['color']; ?>;font-weight:600;font-size:12px;"><?php echo h($statusStyle['label']); ?></span></td>
+
 								<td>
 									<div class="table-actions">
-										<a title="VIEW" href="ecobank_submission_view?id=<?php echo h($result->id); ?>" data-color="#265ed7">
+										<a title="Voir le détail complet" href="chequier_request_detail.php?request_id=<?php echo (int)$result['id']; ?>" data-color="#265ed7">
 											<i class="icon-copy dw dw-eye"></i>
 										</a>
 									</div>
@@ -82,8 +101,8 @@ require_once __DIR__ . '/../includes/session.php';
 							<?php 
 									$cnt++;
 									} 
-								} else {
-									echo "<tr><td colspan='7' style='text-align: center; vertical-align: middle;'><div style='display: inline-block;'>
+										} else {
+										echo "<tr><td colspan='6' style='text-align: center; vertical-align: middle;'><div style='display: inline-block;'>
 									<img src='../vendors/images/expertise-seo-hero.svg' alt='Aucune Demande pour le moment' style='max-width: 250px; width: 100%; height: auto; display: block; margin: 0 auto;'/></div></td></tr>";
 									}
 							?>

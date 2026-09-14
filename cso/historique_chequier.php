@@ -274,14 +274,22 @@ if ($result && mysqli_num_rows($result) > 0) {
     </div>
 
     <!-- Modal Détails Demande CSO -->
+    <style>
+        #detailsModal .modal-dialog { max-width: 820px; }
+        #detailsModal .modal-content { border: 0; border-radius: 10px; overflow: hidden; box-shadow: 0 18px 50px rgba(15, 47, 69, .22); }
+        #detailsModal .modal-header { padding: 20px 26px; background: #0f2f45 !important; }
+        #detailsModal .modal-title { font-size: 21px; font-weight: 700; }
+        #detailsModal .modal-body { padding: 28px 30px; font-size: 16px; line-height: 1.6; }
+        #detailsModal .detail-item { padding: 14px 16px; margin-bottom: 12px; background: #f7fafc; border: 1px solid #e3ebf1; border-radius: 7px; }
+        #detailsModal .detail-label { display:block; margin-bottom: 3px; color:#607585; font-size: 12px; text-transform:uppercase; letter-spacing:.04em; }
+        #detailsModal .detail-value { color:#102a43; font-weight:600; font-size:16px; }
+        #detailsModal .modal-footer { display:none; }
+    </style>
     <div id="detailsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header" style="background: linear-gradient(135deg, #05b7e4 0%, #00455a 100%); color: white;">
-                    <h5 class="modal-title">Détails de la Demande de Chéquier</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="modal-header">
+                    <h5 class="modal-title">Détails de la demande de chéquier</h5>
                 </div>
                 <div class="modal-body" id="detailsContent">
                     <div style="text-align: center; padding: 20px;">
@@ -330,26 +338,26 @@ if ($result && mysqli_num_rows($result) > 0) {
                     if (data.success) {
                         const req = data.request;
                         let html = `
-                            <div class="mb-3">
-                                <label class="font-weight-600">Agence : ${escapeHtml(req.branch_code)}</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Agence</span><span class="detail-value">${escapeHtml(req.branch_code)}</span>
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Client : ${escapeHtml(req.customer_name || req.client_name)}</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Client</span><span class="detail-value">${escapeHtml(req.customer_name || req.client_name)}</span>
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Numéro de compte : ${escapeHtml(req.account_number)}</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Numéro de compte</span><span class="detail-value">${escapeHtml(req.account_number)}</span>
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Type de chéquier : ${escapeHtml(req.chequier_types || req.type_compte)}</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Type de chéquier</span><span class="detail-value">${escapeHtml(req.chequier_types || req.type_compte)}</span>
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Quantité : ${escapeHtml(req.quantity || req.etabliss)}</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Quantité</span><span class="detail-value">${escapeHtml(req.quantity || req.etabliss)}</span>
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Statut : <span class="badge badge-info">${escapeHtml(req.status || 'encours')}</span></label>
+                            <div class="detail-item">
+                                <span class="detail-label">Statut</span><span class="detail-value">${escapeHtml(req.status || 'encours')}</span>
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Date de demande : ${new Date(req.created_at).toLocaleDateString('fr-FR')}</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Date de demande</span><span class="detail-value">${new Date(req.created_at).toLocaleDateString('fr-FR')}</span>
                             </div>
                         `;
                         document.getElementById('detailsContent').innerHTML = html;

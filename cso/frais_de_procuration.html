@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Frais de Procuration - Ecobank</title>
+  <link rel="stylesheet" type="text/css" href="../vendors/styles/procurations.css">
+  <link rel="icon" sizes="180x180" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../vendors/images/ecobank-bg.png">
+<style></style>
+</head>
+<body>
+
+<div class="form-actions">
+  <button class="btn-print" onclick="window.print()">🖨️ Imprimer</button>
+  <button class="btn-reset" onclick="document.getElementById('procurationForm').reset()">↺ Réinitialiser</button>
+  <button type="button" class="btn-back" onclick="window.history.back()">← Retour</button>
+
+</div>
+
+<div class="page">
+    <div class="logo">
+        <img src="../vendors/images/ecobank-lg.png" alt="" class="" width="160px">
+    </div>
+    <br>
+  <!-- <hr class="sep"> -->
+  <h1 class="title">FRAIS DE PROCURATION</h1>
+
+  <form id="procurationForm" onsubmit="return false;">
+
+    <p class="statement">
+      Je soussigné(e) <input type="text" class="inline-lg" name="nom" style="max-width:100%; display:block; margin:4px 0 14px 0;">
+      titulaire du compte n° <input type="text" class="inline-md" name="numeroCompte">
+      ouvert à l'agence <input type="text" class="inline-md" name="agence">
+      autorise ECOBANK CONGO à prélever dans mon compte la somme de <input type="text" class="inline-amount" name="montant"> HT
+      couvrant les frais de chèque de guichet.
+    </p>
+
+    <p class="date-line">
+      Fait à Brazzaville, le <input type="text" class="day" name="jour" maxlength="2">
+      / <input type="text" class="month" name="mois" maxlength="2">
+      / <input type="text" class="year" name="annee" maxlength="2">
+    </p>
+
+    <div class="signatures">
+      <div class="sig-block">
+        <div class="sig-title">Le client</div>
+        <div class="sig-line"></div>
+      </div>
+
+      <div class="sig-block">
+        <div class="sig-title">Le chef d'agence</div>
+        <div class="sig-line"></div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script src="../vendors/js/flexcube_client_search.js?v=20260914"></script>
+</body>
+</html>

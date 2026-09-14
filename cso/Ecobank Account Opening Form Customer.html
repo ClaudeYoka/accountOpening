@@ -253,6 +253,8 @@
         }
 
         /* Print Styles */
+        @page { size: A4; margin: 0; }
+
         @media print {
             .section-navigation {
                 display: none !important;
@@ -428,7 +430,7 @@
 
                             <div class="form-row" style="display: flex; gap: 22px; align-items: flex-start; flex-wrap: wrap; margin-top: 12px;">
                                 <div class="form-group" style="flex: 1 1 220px;">
-                                   
+                                
                                     <div class="column">
                                         <label for="form-bank-account-number" style="font-size: 13px; font-weight: normal;">Numéro de compte:</label>
                                         <input type="text" id="form-bank-account-number" name="account_number" style="height: 35px;  font-size: 20px; font-weight: bold;" readonly>
@@ -451,7 +453,7 @@
             <div class="form-section compact-section">
                 <div class="section-header">Aidez-nous à personnaliser votre expérience bancaire</div>
                 <div class="section-content">
-                  
+                
                     <div class="form-row compact-margin">
                         <div class="access-break">
                         <!-- Access Methods Section -->
@@ -726,11 +728,12 @@
                                     <label for="father-name">Nom(s) du père:</label>
                                     <input type="text" id="father-name" style="height: 20px;"  required>
                                 </div>
-                                 <div class="column">
+                                
+                                <div class="column">
                                     <label for="father-name">Prénom(s) du père:</label>
                                     <input type="text" id="father-name2" style="height: 20px;">
                                 </div>
-                               
+                            
                                 <div class="column">
                                     <label for="mother-name">Nom(s) de la mère:</label>
                                     <input type="text" id="mother-name" style="height: 20px; " required>
@@ -2130,6 +2133,7 @@
             <p>© 2025 Ecobank. All rights reserved.</p>
         </div> -->
     </div>
+<script src="../vendors/js/today_form_dates.js"></script>
 </body>
 
 </html>

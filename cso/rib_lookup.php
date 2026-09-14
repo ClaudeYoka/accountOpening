@@ -38,8 +38,8 @@ try {
             'internal_account' => $flexcube_data['account_number'] ?? null,
             'currency' => 'XAF',
             'branch_code' => $flexcube_data['branch_code'] ?? 'T31',
-            'account_type' => 'Courant',
-            'created_at' => date('Y-m-d'),
+            'account_type' => $flexcube_data['account_type'] ?? ($flexcube_data['description'] ?? null),
+            'opening_date' => $flexcube_data['opening_date'] ?? null,
             'source' => 'flexcube_oracle',
             'rib_key' => null,
             'json_snapshot' => json_encode($flexcube_data)
@@ -105,12 +105,12 @@ $rkey_val = $rib_key ?: extractRibKey($rib_value);
 
 // Determine account opening date: prefer DB created_at (submission date), fallback to snapshot fields
 $date_open_val = null;
-if ($row && !empty($row['created_at'])) {
-    $ts = strtotime($row['created_at']);
+if ($row && !empty($row['opening_date'])) {
+    $ts = strtotime($row['opening_date']);
     if ($ts !== false) $date_open_val = date('d-m-Y', $ts);
 }
 if ($date_open_val === null) {
-    $tmp = pick_sn($row ?: [], $data, ['date_open','date-of-opening','date_ouverture']);
+    $tmp = pick_sn($row ?: [], $data, ['opening_date','date_open','date-of-opening','date_ouverture']);
     if ($tmp) {
         $ts2 = strtotime($tmp);
         if ($ts2 !== false) $date_open_val = date('d-m-Y', $ts2);

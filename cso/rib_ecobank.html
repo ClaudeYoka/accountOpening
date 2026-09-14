@@ -76,7 +76,7 @@
         /* Optimisations pour impression : A4, polices plus grandes et images lisibles */
         /* Tenter de conserver le rendu sur 2 pages maximum */
         /* ----------------------------- */
-        @page { size: A4 portrait; margin: 5mm; }
+        @page { size: A4 portrait; margin: 0; }
         @media print {
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             html, body { 
@@ -407,7 +407,6 @@
 
     <!-- CORRESPONDANTS -->
     <div class="section-title">NOS CORRESPONDANTS</div>
-    <br>
     <table>
         <tr>
             <th>Banque</th>
@@ -824,6 +823,7 @@
     });
 </script>
 
+<script src="../vendors/js/today_form_dates.js"></script>
 </body>
 </html>
 

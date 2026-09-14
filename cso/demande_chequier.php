@@ -177,6 +177,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 ?>
 
 <body>
+    <?php include('includes/preloader.php')?>
     <?php include('includes/navbar.php')?>
     <?php include('includes/right_sidebar.php')?>
     <?php include('includes/left_sidebar.php')?>
@@ -311,23 +312,32 @@ if ($result && mysqli_num_rows($result) > 0) {
     </div>
 
 
+    <style>
+        #detailsModal .modal-dialog { max-width: 820px; }
+        #detailsModal .modal-content { border: 0; border-radius: 10px; overflow: hidden; box-shadow: 0 18px 50px rgba(15, 47, 69, .22); }
+        #detailsModal .modal-header { padding: 20px 26px; background: #f3f7f7 !important; color: #fff; border: 0; }
+        #detailsModal .modal-title { font-size: 21px; font-weight: 700; }
+        #detailsModal .modal-body { padding: 28px 30px; font-size: 16px; line-height: 1.6; }
+        #detailsModal .detail-item { padding: 14px 16px; margin-bottom: 12px; background: #f7fafc; border: 1px solid #e3ebf1; border-radius: 7px; }
+        #detailsModal .detail-label { display: block; margin-bottom: 3px; color: #607585; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+        #detailsModal .detail-value { color: #102a43; font-weight: 600; font-size: 16px; }
+        #detailsModal .modal-footer { display: none; }
+        #detailsModal .modal-close-button { margin-left: auto; padding: 0 4px; border: 0; background: transparent; color: #033b5c; font-size: 30px; line-height: 1; opacity: .9; cursor: pointer; }
+        #detailsModal .modal-close-button:hover { opacity: 1; }
+    </style>
+
     <!-- Modal Détails Demande CSO -->
     <div id="detailsModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header" style="background: linear-gradient(135deg, #0699dd 0%, #02313f 100%); color: white;">
+                <div class="modal-header">
                     <h5 class="modal-title">Détails de la Demande de Chéquier</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="modal-close-button" data-dismiss="modal" aria-label="Fermer">&times;</button>
                 </div>
                 <div class="modal-body" id="detailsContent">
                     <div style="text-align: center; padding: 20px;">
                         <i class="fa fa-spinner fa-spin" style="font-size: 24px; color: #05b7e4;"></i> Chargement...
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
@@ -343,7 +353,15 @@ if ($result && mysqli_num_rows($result) > 0) {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ request_id: requestId, status: newStatus })
                 })
-                .then(response => response.json())
+                .then(response => response.text().then(text => {
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (error) {
+                        throw new Error('Réponse serveur invalide (' + response.status + '): ' + text.slice(0, 180));
+                    }
+                    return data;
+                }))
                 .then(data => {
                     if (data.success || data.status === 'success') {
                         alert('Statut mis à jour avec succès');
@@ -354,13 +372,13 @@ if ($result && mysqli_num_rows($result) > 0) {
                 })
                 .catch(error => {
                     console.error('Erreur:', error);
-                    alert('Erreur réseau');
+                    alert(error.message || 'Erreur réseau');
                 });
             }
         }
 
         function showDetailsCSO(requestId) {
-            document.getElementById('detailsContent').innerHTML = '<div style="text-align: center; padding: 20px;"><i class="fa fa-spinner fa-spin" style="font-size: 24px; color: #05b7e4;"></i> Chargement...</div>';
+            document.getElementById('detailsContent').innerHTML = '<div style="text-align: center; padding: 20px;"><i class="fa fa-spinner fa-spin" style="font-size: 24px; color: #3ab7da;"></i> Chargement...</div>';
             
             fetch('get_chequier_details.php?request_id=' + requestId)
                 .then(response => response.json())
@@ -368,38 +386,38 @@ if ($result && mysqli_num_rows($result) > 0) {
                     if (data.success) {
                         const req = data.request;
                         let html = `
-                            <div class="mb-3">
-                                <label class="font-weight-600">Agence : ${escapeHtml(req.branch_code)}</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Agence</span><span class="detail-value">${escapeHtml(req.branch_code)}</span>
                                 
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Nom du Client : ${escapeHtml(req.client_name)}</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Nom du client</span><span class="detail-value">${escapeHtml(req.client_name)}</span>
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Numéro de Compte et Téléphone :</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Compte et téléphone</span><span class="detail-value">
                                 <p>
                                     <strong>Tél :</strong> ${escapeHtml(req.phone || req.mobile1 || 'N/A')}<br>
                                     <strong>Compte :</strong> <code>${escapeHtml(req.account_number || 'N/A')}</code>
                                 </p>
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Email : ${escapeHtml(req.email || 'N/A')}</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Email</span><span class="detail-value">${escapeHtml(req.email || 'N/A')}</span>
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Type de Chéquier : ${escapeHtml(req.type_compte)} Feuilles</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Type de chéquier</span><span class="detail-value">${escapeHtml(req.type_compte)} Feuilles</span>
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Quantité : ${escapeHtml(req.quantity|| 'N/A')}</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Quantité</span><span class="detail-value">${escapeHtml(req.quantity|| 'N/A')}</span>
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Statut :
+                            <div class="detail-item">
+                                <span class="detail-label">Statut</span><span class="detail-value">
                                     <span style="display: inline-block; padding: 6px 12px; background-color: ${getStatusColor(req.status).bg}; color: ${getStatusColor(req.status).color}; border-radius: 4px; font-weight: 500;">
                                         ${getStatusLabel(req.status)}
                                     </span>
                                 </label>
                             </div>
-                            <div class="mb-3">
-                                <label class="font-weight-600">Date de Demande Client: ${new Date(req.created_at).toLocaleString('fr-FR')}</label>
+                            <div class="detail-item">
+                                <span class="detail-label">Date de demande client</span><span class="detail-value">${new Date(req.created_at).toLocaleString('fr-FR')}</span>
                             </div>
                         `;
                         document.getElementById('detailsContent').innerHTML = html;
@@ -418,8 +436,8 @@ if ($result && mysqli_num_rows($result) > 0) {
         function getStatusColor(status) {
             const colors = {
                 'encours': { bg: '#ffe4cd', color: '#eb6c05' },
-                'reçu': { bg: '#d1ecf1', color: '#0c5460' },
-                'livré': { bg: '#d4edda', color: '#155724' },
+                'reçu': { bg: '#d1ecf1', color: '#014797' },
+                'livré': { bg: '#d4edda', color: '#09a52e' },
                 'donné': { bg: '#d4edda', color: '#155724' }
             };
             return colors[status] || { bg: '#e2e3e5', color: '#383d41' };

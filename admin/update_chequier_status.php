@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../includes/config.php');
+require_once __DIR__ . '/../includes/config.php';
 include('../includes/audit_helpers.php');
 
 header('Content-Type: application/json; charset=utf-8');
@@ -15,6 +15,19 @@ if (!$data || empty($data['request_id']) || empty($data['status'])) {
 $request_id = intval($data['request_id']);
 $status = substr(trim($data['status']), 0, 100);
 $changed_by = isset($_SESSION['emp_id']) ? intval($_SESSION['emp_id']) : null;
+
+$current_stmt = mysqli_prepare($conn, "SELECT COALESCE((SELECT status FROM chequier_status WHERE request_id = ? ORDER BY changed_at DESC, id DESC LIMIT 1), access, 'encours') AS current_status FROM tblcompte WHERE id = ? LIMIT 1");
+if ($current_stmt) {
+    mysqli_stmt_bind_param($current_stmt, 'ii', $request_id, $request_id);
+    mysqli_stmt_execute($current_stmt);
+    $current_result = mysqli_stmt_get_result($current_stmt);
+    $current_row = $current_result ? mysqli_fetch_assoc($current_result) : null;
+    mysqli_stmt_close($current_stmt);
+    if ($current_row && in_array(strtolower(trim($current_row['current_status'])), ['donné', 'donne', 'donnee', 'donnée'], true)) {
+        echo json_encode(['status' => 'error', 'message' => 'Une demande donnée ne peut plus être modifiée']);
+        exit;
+    }
+}
 
 // Ensure table exists (safe: CREATE IF NOT EXISTS)
 $sql_create = "CREATE TABLE IF NOT EXISTS chequier_status (

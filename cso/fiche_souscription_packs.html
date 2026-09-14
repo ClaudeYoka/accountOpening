@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Fiche de souscription aux Packs - Ecobank</title>
+  <link rel="icon" sizes="180x180" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../vendors/images/ecobank-bg.png">
+<style>
+  :root{
+    --ecobank-blue:#004b87;
+    --ecobank-blue-dark:#003a68;
+    --ecobank-teal:#00a99d;
+    --text-dark:#1a1a1a;
+    --grey-line:#bbb;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:0;
+    background:#e9edf0;
+    font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+    color:var(--text-dark);
+  }
+  .page{
+    max-width:850px;
+    margin:30px auto;
+    background:#ffffff;
+    box-shadow:0 0 12px rgba(0,0,0,0.15);
+    border:1px solid #222;
+    padding:34px 44px 40px 44px;
+  }
+  .logo{ margin-bottom:6px; }
+  .logo .name{
+    font-size:34px;
+    font-weight:700;
+    color:var(--ecobank-blue);
+    letter-spacing:0.5px;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+  .logo .name span{ color:var(--ecobank-teal); }
+  .logo .tagline{
+    font-size:13px;
+    font-style:italic;
+    color:var(--ecobank-teal);
+    margin-top:-4px;
+  }
+  hr.sep{
+    border:none;
+    border-top:2px solid var(--grey-line);
+    margin:14px 0 20px 0;
+  }
+  h1.title{
+    text-align:center;
+    font-size:19px;
+    margin:0 0 10px 0;
+  }
+  p.intro{
+    font-style:italic;
+    font-size:14px;
+    margin:0 0 18px 0;
+  }
+  h2.section{
+    font-size:15px;
+    margin:22px 0 12px 0;
+  }
+  form{ font-size:14px; line-height:1.8; }
+
+  input[type="text"], input[type="date"], input[type="email"], input[type="tel"]{
+    border:none;
+    border-bottom:1px dotted var(--text-dark);
+    background:transparent;
+    font-family:inherit;
+    font-size:14px;
+    color:var(--text-dark);
+    padding:2px 4px;
+    outline:none;
+  }
+  input[type="text"]:focus, input[type="date"]:focus, input[type="email"]:focus, input[type="tel"]:focus{
+    border-bottom:1px solid var(--ecobank-blue);
+    background:#f5faff;
+  }
+
+  .info-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+  .info-list li{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .info-list li strong{ white-space:nowrap; }
+  .info-list li input{ flex:1; min-width:180px; }
+
+  p.pack-instruction{ margin:0 0 14px 0; }
+
+  .pack-block{
+    border:1px solid #d8d8d8;
+    border-radius:6px;
+    padding:14px 18px;
+    margin-bottom:18px;
+    background:#fafbfc;
+  }
+  .pack-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:8px;
+    cursor:pointer;
+  }
+  .pack-header input[type="radio"]{
+    width:18px;
+    height:18px;
+    accent-color:var(--ecobank-blue);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .pack-header .pack-name{
+    font-weight:700;
+    font-size:15px;
+  }
+  .pack-block ul{
+    margin:0 0 8px 0;
+    padding-left:34px;
+  }
+  .pack-block ul li{ margin-bottom:3px; }
+  .pack-price{ font-weight:700; }
+
+  .options-title{
+    font-weight:700;
+    margin:10px 0 6px 0;
+    font-size:13.5px;
+  }
+  .options-title em{ font-weight:400; font-style:italic; }
+  .options-list{
+    list-style:none;
+    padding:0;
+    margin:0 0 4px 0;
+  }
+  .options-list li{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:6px;
+    font-size:13.5px;
+  }
+  .options-list li input[type="checkbox"]{
+    width:15px;
+    height:15px;
+    accent-color:var(--ecobank-teal);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+
+  .autorisation-text{
+    margin-bottom:12px;
+  }
+  .autorisation-text input[type="text"]{
+    display:inline-block;
+    min-width:160px;
+  }
+  .autorisation-text .short{ min-width:100px; }
+
+  .signature-row{
+    display:flex;
+    gap:14px;
+    align-items:baseline;
+    margin:16px 0 6px 0;
+  }
+
+  .bank-use{
+    border-top:2px solid var(--grey-line);
+    padding-top:14px;
+    margin-top:20px;
+  }
+
+  .footer-quote{
+    text-align:center;
+    font-style:italic;
+    font-weight:700;
+    color:var(--ecobank-blue);
+    margin-top:28px;
+    border-top:2px solid var(--grey-line);
+    padding-top:16px;
+  }
+
+  .print-page-break,
+  .print-page-header{
+    display:none;
+  }
+
+  .print-frame{
+    display:none;
+  }
+
+  .footnote{
+    font-style:italic;
+    font-size:10.5px;
+    margin-top:26px;
+    color:#555;
+  }
+
+  .form-actions{
+    max-width:850px;
+    margin:0 auto 20px auto;
+    padding:0 4px;
+    display:flex;
+    gap:12px;
+  }
+  .form-actions button{
+    font-family:inherit;
+    font-size:14px;
+    padding:10px 20px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+  }
+  .btn-print{ background:var(--ecobank-blue); color:#fff; }
+  .btn-print:hover{ background:var(--ecobank-blue-dark); }
+  .btn-reset{ background:#e0e0e0; color:#333; }
+  .btn-reset:hover{ background:#cacaca; }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  @media print{
+    body{ background:#fff; }
+    .page{
+      box-shadow:none;
+      margin:0;
+      max-width:none;
+      width:100%;
+      border:none;
+      padding:18mm 18mm 20mm;
+      font-size:12px;
+      position:relative;
+      z-index:1;
+    }
+    .print-frame{
+      display:block;
+      position:fixed;
+      z-index:2;
+      inset:6mm;
+      border:3px double #222;
+      pointer-events:none;
+    }
+    .form-actions{ display:none; }
+    .pack-block{ break-inside:avoid; }
+
+    .print-page-break{
+      display:block;
+      break-before:page;
+      page-break-before:always;
+      height:0;
+    }
+    .print-page-header{
+      display:block;
+      break-before:page;
+      page-break-before:always;
+      position:relative;
+      z-index:3;
+      margin:2mm 0 4mm;
+      padding:2mm 0 5mm;
+      background:#fff;
+    }
+    .print-page-header img{
+      display:block;
+      width:180px;
+      height:auto;
+      margin:0 0 6px 0;
+      position:relative;
+      z-index:1;
+    }
+    .print-page-header hr{
+      border:0;
+      border-top:2px solid var(--grey-line);
+      margin:0;
+    }
+
+    .logo .name{ font-size:24px; }
+    .logo .tagline{ font-size:11px; }
+    hr.sep{ margin:8px 0 12px; }
+    h1.title{ font-size:16px; margin-bottom:6px; }
+    p.intro{ font-size:12px; margin-bottom:10px; }
+    h2.section{ font-size:13.5px; margin:12px 0 8px; }
+    form{ font-size:13.5px; line-height:1.6; }
+
+    .info-list li{
+      gap:6px;
+      margin-bottom:6px;
+      align-items:center;
+    }
+    .info-list li strong{ font-size:13.5px; }
+    .info-list li input{
+      font-size:13.5px;
+      min-width:140px;
+    }
+
+    .pack-header .pack-name{ font-size:14px; }
+    .pack-block{
+      padding:10px 12px;
+      margin-bottom:10px;
+    }
+    .pack-block ul{ padding-left:24px; margin:0 0 6px; }
+    .pack-block ul li{ margin-bottom:2px; }
+    .options-title{ font-size:13px; margin:8px 0 4px; }
+    .options-list li{ margin-bottom:4px; font-size:13px; }
+    .autorisation-text{ margin-bottom:8px; }
+    .signature-row{ margin:10px 0 4px; }
+    .bank-use{ padding-top:8px; margin-top:10px; }
+    .footer-quote{ margin-top:14px; padding-top:10px; }
+    .footnote{ margin-top:12px; }
+    h2.section{ break-after:avoid; }
+    .bank-use, .signature-row, .footer-quote, .footnote{ break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="print-frame" aria-hidden="true"></div>
+
+<div class="form-actions">
+  <button class="btn-print" onclick="window.print()">🖨️ Imprimer</button>
+  <button class="btn-reset" onclick="document.getElementById('packsForm').reset()">↺ Réinitialiser</button>
+  <button type="button" class="btn-back" onclick="window.history.back()">← Retour</button>
+</div>
+
+<div class="page">
+
+  <div class="logo">
+      <img src="../vendors/images/ecobank-lg.png" alt="Ecobank">
+  </div>
+
+  <hr>
+    <h1 class="title">FICHE DE SOUSCRIPTION AUX PACKS</h1>
+      <p class="intro">Veuillez remplir soigneusement cette fiche pour souscrire à nos packs.</p>
+  <hr class="sep">
+
+  <form id="packsForm" onsubmit="return false;">
+
+    <h2 class="section">1. Informations personnelles :</h2>
+    <ul class="info-list">
+      <li><strong>Nom :</strong><input type="text" name="nom"></li>
+      <li><strong>Prénom :</strong><input type="text" name="prenom"></li>
+      <li><strong>Date de naissance :</strong><input type="date" name="dateNaissance"></li>
+      <li><strong>Nationalité :</strong><input type="text" name="nationalite"></li>
+      <li><strong>Adresse :</strong><input type="text" name="adresse"></li>
+      <li><strong>Numéro de compte :</strong><input type="text" name="numeroCompte"></li>
+      <li><strong>Téléphone :</strong><input type="tel" name="telephone"></li>
+      <li><strong>Email :</strong><input type="email" name="email"></li>
+      <li><strong>Profession :</strong><input type="text" name="profession"></li>
+    </ul>
+
+    <hr class="sep">
+    <h2 class="section">2. Informations sur les packs :</h2>
+    <p class="pack-instruction">Veuillez cocher le pack qui vous convient</p>
+
+    <!-- Pack Essentiel -->
+    <div class="pack-block">
+      <label class="pack-header">
+        <input type="radio" name="pack" value="Essentiel">
+        <span class="pack-name">Pack Essentiel :</span>
+      </label>
+      <ul>
+        <li>Carte visa virtuelle ;</li>
+        <li>Application mobile ;</li>
+        <li>Banque par Internet ;</li>
+        <li>Prix du pack : <span class="pack-price">1 000 fcfa HT/mois</span>.</li>
+      </ul>
+    </div>
+
+    <!-- Pack Direct -->
+    <div class="pack-block">
+      <label class="pack-header">
+        <input type="radio" name="pack" value="Direct">
+        <span class="pack-name">Pack Direct :</span>
+      </label>
+      <ul>
+        <li>Carte visa classic ;</li>
+        <li>Banque par internet ;</li>
+        <li>Application mobile ;</li>
+        <li>Assurance parrainage de compte ;</li>
+        <li>Prix du pack : <span class="pack-price">7 500 fcfa HT/mois</span></li>
+      </ul>
+      <div class="options-title">Produits en option (<em>Veuillez sélectionner le/les produits de votre choix)</em></div>
+      <ul class="options-list">
+        <li><label><input type="checkbox" name="option_direct" value="Assurance Voyage"> Assurance Voyage : 8 000 fcfa TTC/an ;</label></li>
+        <li><label><input type="checkbox" name="option_direct" value="Assurance moyen de paiement"> Assurance moyen de paiement : 4 025 fcfa TTC/an ;</label></li>
+        <li><label><input type="checkbox" name="option_direct" value="Assurance individuelle accident"> Assurance individuelle accident : 8 050 fcfa TTC/an ;</label></li>
+        <li><label><input type="checkbox" name="option_direct" value="Assurance responsabilité civile scolaire"> Assurance responsabilité civile scolaire : 2 300 fcfa TTC/an ;</label></li>
+      </ul>
+    </div>
+      
+    <div class="print-page-header" aria-hidden="true">
+      <img src="../vendors/images/ecobank-lg.png" alt="Ecobank">
+      <hr>
+    </div>
+    <!-- Pack Advantage -->
+    <div class="pack-block">
+      <label class="pack-header">
+        <input type="radio" name="pack" value="Advantage">
+        <span class="pack-name">Pack Advantage :</span>
+      </label>
+      <ul>
+        <li>Carte visa GOLD ;</li>
+        <li>Banque par internet ;</li>
+        <li>Service advantage ;</li>
+        <li>Assurance parrainage de compte ;</li>
+        <li>Prix du pack : <span class="pack-price">15 000 fcfa HT/mois</span></li>
+      </ul>
+      <div class="options-title">Produits en option (<em>Veuillez sélectionner le/les produits de votre choix)</em></div>
+      <ul class="options-list">
+        <li><label><input type="checkbox" name="option_advantage" value="Assurance Voyage"> Assurance Voyage : 15 000 fcfa TTC/an ;</label></li>
+        <li><label><input type="checkbox" name="option_advantage" value="Assurance moyen de paiement"> Assurance moyen de paiement : 4 025 fcfa TTC/an ;</label></li>
+        <li><label><input type="checkbox" name="option_advantage" value="Assurance individuelle accident"> Assurance individuelle accident : 8 050 fcfa TTC/an ;</label></li>
+        <li><label><input type="checkbox" name="option_advantage" value="Assurance responsabilité civile scolaire"> Assurance responsabilité civile scolaire : 2 300 fcfa TTC/an ;</label></li>
+      </ul>
+    </div>
+
+    <!-- Pack Prestige -->
+    <div class="pack-block">
+      <label class="pack-header">
+        <input type="radio" name="pack" value="Prestige">
+        <span class="pack-name">Pack Prestige :</span>
+      </label>
+      <ul>
+        <li>Carte visa PLATINIUM ;</li>
+        <li>Banque par internet ;</li>
+        <li>Service prestige ;</li>
+        <li>Assurance moyen de paiement ;</li>
+        <li>Assurance parrainage de compte ;</li>
+        <li>Assurance voyage ;</li>
+        <li>Prix du pack : <span class="pack-price">30 000 fcfa HT/mois</span></li>
+      </ul>
+    </div>
+
+    <!-- Pack Privilège -->
+    <div class="pack-block">
+      <label class="pack-header">
+        <input type="radio" name="pack" value="Privilege">
+        <span class="pack-name">Pack Privilège :</span>
+      </label>
+      <ul>
+        <li>Carte visa PLATINIUM ;</li>
+        <li>Banque par internet ;</li>
+        <li>Service privilège ;</li>
+        <li>Assurance moyen de paiement ;</li>
+        <li>Assurance parrainage de compte ;</li>
+        <li>Assurance voyage ;</li>
+        <li>Prix du pack : <span class="pack-price">25 000 fcfa HT/mois</span></li>
+      </ul>
+    </div>
+
+    <div class="print-page-header" aria-hidden="true">
+      <img src="../vendors/images/ecobank-lg.png" alt="Ecobank">
+      <hr>
+    </div>
+
+    <!-- Pack Premium -->
+    <div class="pack-block">
+      <label class="pack-header">
+        <input type="radio" name="pack" value="Premium">
+        <span class="pack-name">Pack Premium :</span>
+      </label>
+      <ul>
+        <li>Carte visa GOLD ;</li>
+        <li>Banque par internet ;</li>
+        <li>Service premium ;</li>
+        <li>Assurance moyen de paiement ;</li>
+        <li>Assurance parrainage de compte ;</li>
+        <li>Assurance voyage ;</li>
+        <li>Prix du pack : <span class="pack-price">20 000 fcfa HT/mois</span></li>
+      </ul>
+    </div>
+    <h2 class="section">3. Autorisation :</h2>
+    <p class="autorisation-text">
+      Je soussigné(e), <input type="text" name="autorisationNom" style="min-width:500px;">
+      titulaire du compte n° <input type="text" name="autorisationCompte" class="short">
+      ouvert dans les livres d'ECOBANK CONGO, autorise expressément et irrévocablement Ecobank Congo à procéder au prélèvement automatique des frais du pack
+      <input type="text" name="autorisationPack" style="min-width:200px;"> et
+      <!-- <input type="text" name="autorisationAssurances" style="min-width:160px;">. -->
+      J'autorise Ecobank Congo à procéder au renouvellement automatique de mon pack et les assurances auxquelles j'ai souscrit.
+
+    </p>
+    <p class="autorisation-text">
+    </p>
+
+    <h2 class="section">4. Droit de rétractation :</h2>
+    <p>
+      Conformément au règlement n°1/20/CEMAC/UMAC/COBAC relatif à la protection des consommateurs des produits et services,
+      le client bénéficie d'un droit de rétractation de 14 jours calendaires révolus. Ce délai court à compter de la conclusion 
+      du contrat ou de la réception des informations contractuelles lorsque celles-ci sont communiquées postérieurement.
+    </p>
+
+    <h2 class="section">5. Signature du client <small>(précédée de la mention « lu et approuvé »)</small> :</h2>
+    <div class="signature-row">
+      <br>
+    </div>
+
+    <div class="bank-use">
+      <h2 class="section">6. Pour l'usage de la Banque :</h2>
+      <ul class="info-list">
+        <li><strong>Date de réception de la souscription :</strong>
+          <input type="date" name="dateReception">
+        </li>
+        <li><strong>Nom de l'agent :</strong><input type="text" name="nomAgent"></li>
+        <br><br>
+        <li><strong>Signature de l'agent :</strong><input type="text" name="signatureAgent"></li>
+      </ul>
+    </div>
+
+    <p class="footer-quote">ECOBANK, UN MEILLEUR CHOIX POUR VOUS SERVIR</p>
+
+          <hr>
+
+    <p class="footnote">CCB/FICHE DE SOUSCRIPTION AUX PACKS ECG</p>
+
+  </form>
+</div>
+
+<script src="../vendors/js/flexcube_client_search.js?v=20260904-2"></script>
+</body>
+</html>

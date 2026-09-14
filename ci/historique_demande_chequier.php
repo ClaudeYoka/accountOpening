@@ -14,6 +14,9 @@ function normalize_chequier_status($status) {
     if (in_array($s, ['livre', 'livré'])) {
         return 'livré';
     }
+    if (in_array($s, ['donne', 'donné', 'donnee', 'donnée'])) {
+        return 'donné';
+    }
     if (in_array($s, ['prestataire'])) {
         return 'prestataire';
     }
@@ -25,6 +28,8 @@ function normalize_chequier_status($status) {
 
 $search = trim($_GET['search'] ?? '');
 $status_filter = trim($_GET['status'] ?? '');
+$filter_month = trim($_GET['filter_month'] ?? '');
+$filter_year = trim($_GET['filter_year'] ?? '');
 $date_from = trim($_GET['date_from'] ?? '');
 $date_to = trim($_GET['date_to'] ?? '');
 
@@ -57,6 +62,18 @@ if ($date_from !== '') {
         $bindTypes .= 's';
         $bindValues[] = $dateFrom->format('Y-m-d') . ' 00:00:00';
     }
+}
+
+if ($filter_month !== '' && ctype_digit($filter_month) && (int)$filter_month >= 1 && (int)$filter_month <= 12) {
+    $whereParts[] = "MONTH(tc.date_enregistrement) = ?";
+    $bindTypes .= 'i';
+    $bindValues[] = (int)$filter_month;
+}
+
+if ($filter_year !== '' && ctype_digit($filter_year) && (int)$filter_year >= 2000 && (int)$filter_year <= 2100) {
+    $whereParts[] = "YEAR(tc.date_enregistrement) = ?";
+    $bindTypes .= 'i';
+    $bindValues[] = (int)$filter_year;
 }
 
 if ($date_to !== '') {
@@ -133,7 +150,8 @@ function status_label_php($status) {
         'encours' => 'En cours',
         'prestataire' => 'Prestataire',
         'reçu' => 'Reçu',
-        'livré' => 'Livré'
+        'livré' => 'Livré',
+        'donné' => 'Donné'
     ];
     return isset($map[$status]) ? $map[$status] : ucfirst($status);
 }
@@ -168,11 +186,28 @@ function status_label_php($status) {
                                 <option value="encours" <?php if ($status_filter=='encours') echo 'selected'; ?>>En cours</option>
                                 <option value="reçu" <?php if ($status_filter=='reçu') echo 'selected'; ?>>Reçu</option>
                                 <option value="livré" <?php if ($status_filter=='livré') echo 'selected'; ?>>Livré</option>
+                                <option value="donné" <?php if ($status_filter=='donné') echo 'selected'; ?>>Donné</option>
                                 <option value="prestataire" <?php if ($status_filter=='prestataire') echo 'selected'; ?>>Prestataire</option>
                             </select>
                         </div>
                         <div><label>Date du</label><input type="date" name="date_from" value="<?php echo htmlspecialchars($date_from); ?>" class="form-control"></div>
                         <div><label>Au</label><input type="date" name="date_to" value="<?php echo htmlspecialchars($date_to); ?>" class="form-control"></div>
+                        <div><label>Mois</label>
+                            <select name="filter_month" class="form-control">
+                                <option value="">Tous</option>
+                                <?php for ($month = 1; $month <= 12; $month++): ?>
+                                    <option value="<?php echo str_pad($month, 2, '0', STR_PAD_LEFT); ?>" <?php echo $filter_month == str_pad($month, 2, '0', STR_PAD_LEFT) ? 'selected' : ''; ?>><?php echo date('F', mktime(0, 0, 0, $month, 1)); ?></option>
+                                <?php endfor; ?>
+                            </select>
+                        </div>
+                        <div><label>Année</label>
+                            <select name="filter_year" class="form-control">
+                                <option value="">Toutes</option>
+                                <?php for ($year = date('Y'); $year >= date('Y') - 5; $year--): ?>
+                                    <option value="<?php echo $year; ?>" <?php echo (string)$filter_year === (string)$year ? 'selected' : ''; ?>><?php echo $year; ?></option>
+                                <?php endfor; ?>
+                            </select>
+                        </div>
                         <div><button type="submit" class="btn btn-primary">Appliquer</button> <a href="historique_demande_chequier.php" class="btn btn-secondary">Réinitialiser</a></div>
                     </form>
 
@@ -192,7 +227,7 @@ function status_label_php($status) {
                                         <td><?php echo htmlspecialchars($req['agency_name']); ?></td>
                                         <td><?php echo htmlspecialchars($req['type_compte']); ?></td>
                                         <td><?php echo htmlspecialchars($req['quantity']); ?></td>
-                                        <td><span class="badge" style="background:#ffc107;color:#000;<?php if($req['current_status'] =='reçu'){ echo 'background:#28a745;color:#fff;'; } elseif($req['current_status']=='livré'){ echo 'background:#6f42c1;color:#fff;'; } elseif($req['current_status']=='prestataire'){ echo 'background:#17a2b8;color:#fff;'; } ?>">
+                                        <td><span class="badge" style="background:#ffc107;color:#000;<?php if($req['current_status'] =='reçu' || $req['current_status'] =='donné'){ echo 'background:#28a745;color:#fff;'; } elseif($req['current_status']=='livré'){ echo 'background:#6f42c1;color:#fff;'; } elseif($req['current_status']=='prestataire'){ echo 'background:#17a2b8;color:#fff;'; } ?>">
                                             <?php echo status_label_php($req['current_status']); ?></span></td>
                                         <td><?php echo !empty($req['created_at']) ? date('d/m/Y', strtotime($req['created_at'])) : '-'; ?></td>
                                     </tr>

@@ -130,11 +130,11 @@
       <div class="field-row">
         <div class="field-label">Date :</div>
         <div class="date-input">
-          <input type="text" maxlength="2" placeholder="JJ">
+          <input type="text" maxlength="2">
           <span class="date-sep">/</span>
-          <input type="text" maxlength="2" placeholder="MM">
+          <input type="text" maxlength="2">
           <span class="date-sep">/</span>
-          <input type="text" maxlength="4" placeholder="AAAA">
+          <input type="text" maxlength="4">
         </div>
       </div>
     </div>

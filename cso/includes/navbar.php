@@ -35,32 +35,3 @@
 				
 			</div>
 	</div>
-
-<!-- Documents modal (added to navbar so it exists on pages without footer) -->
-<div class="modal fade" id="documentsModal" tabindex="-1" role="dialog" aria-labelledby="documentsModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="documentsModalLabel">Impression Formulaires</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body text-center">
-				<p>Choisir le formulaire à Imprimer</p>
-				<div class="mb-3">
-					<a href="formulaire_ouverture_compte_tuteur.html" class="btn btn-primary btn-block" role="button">Formulaire Tuteur (Compte Mineur)</a>
-					<a href="formulaire_produits" class="btn btn-primary btn-block" role="button">Formulaire Produits</a>
-					<!-- <a href="bic_personne_physique" class="btn btn-primary btn-block" role="button">Formulaire BIC Personne Physique</a> -->
-					<a href="rib" class="btn btn-primary btn-block" role="button">Relevé Identité Bancaire (RIB)</a>
-					<a href="formulaire_carte" class="btn btn-primary btn-block" role="button">Formulaire Carte </a>
-					<a href="formulaire_chequier.html" class="btn btn-primary btn-block" role="button">Formulaire Chéquier </a>
-				</div>
-			</div>
-			<div class="modal-footer justify-content-center">
-				<button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
-			</div>
-		</div>
-	</div>
-</div>
-

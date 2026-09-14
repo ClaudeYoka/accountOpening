@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Formulaire de Réactivation Comptes Dormants</title>
+  <link rel="icon" sizes="180x180" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../vendors/images/ecobank-bg.png">
+<style>
+  :root{
+    --ecobank-blue:#004b87;
+    --ecobank-blue-dark:#003a68;
+    --ecobank-teal:#00a99d;
+    --text-dark:#1a1a1a;
+    --grey-line:#bbb;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:0;
+    background:#e9edf0;
+    font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+    color:var(--text-dark);
+  }
+  .internal-tag{
+    max-width:850px;
+    margin:0 auto;
+    padding:6px 44px 0 44px;
+    font-size:11px;
+    color:#666;
+  }
+  .page{
+    max-width:850px;
+    margin:10px auto 30px auto;
+    background:#ffffff;
+    box-shadow:0 0 12px rgba(0,0,0,0.15);
+    padding:26px 44px 40px 44px;
+  }
+  .logo{ margin-bottom:18px; }
+  .logo .name{
+    font-size:30px;
+    font-weight:700;
+    color:var(--ecobank-blue);
+    letter-spacing:0.5px;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+  .logo .name span{ color:var(--ecobank-teal); }
+  .logo .tagline{
+    font-size:12px;
+    color:var(--ecobank-teal);
+    margin-top:-4px;
+  }
+  h1.title{
+    font-size:16.5px;
+    text-decoration:underline;
+    text-align:center;
+    margin:0 0 22px 0;
+  }
+  form{ font-size:14.5px; line-height:2.1; }
+
+  input[type="text"], input[type="date"], input[type="email"], input[type="tel"]{
+    border:none;
+    border-bottom:1px dotted var(--text-dark);
+    background:transparent;
+    font-family:inherit;
+    font-size:14.5px;
+    color:var(--text-dark);
+    padding:2px 4px;
+    outline:none;
+  }
+  input[type="text"]:focus, input[type="date"]:focus, input[type="email"]:focus, input[type="tel"]:focus{
+    border-bottom:1px solid var(--ecobank-blue);
+    background:#f5faff;
+  }
+
+  .date-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:14px;
+  }
+  .date-row label{ display:flex; align-items:center; gap:8px; }
+
+  p.salutation{ margin:0 0 14px 0; }
+  p.intro-text{ margin:0 0 20px 0; }
+
+  .field-line{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    margin-bottom:16px;
+    flex-wrap:wrap;
+  }
+  .field-line label{ white-space:nowrap; }
+  .field-line input[type="text"]{ flex:1; min-width:180px; }
+  .field-line.two-cols{ gap:30px; }
+  .field-line.two-cols > div{ display:flex; align-items:baseline; gap:8px; flex:1; }
+  .field-line.two-cols > div:last-child{ flex:1.6; min-width:320px; }
+  .field-line.two-cols > div:last-child input{ min-width:260px; }
+
+  .address-block .field-line{ margin-bottom:8px; }
+  .address-block textarea{
+    width:90%;
+    min-height:76px;
+    border:none;
+    border-bottom:1px dotted var(--text-dark);
+    background:transparent;
+    font:inherit;
+    color:var(--text-dark);
+    line-height:1.5;
+    padding:2px 4px;
+    resize:none;
+    outline:none;
+  }
+  .address-block textarea:focus{ border-bottom:1px solid var(--ecobank-blue); background:#f5faff; }
+
+  p.closing{ margin:24px 0 14px 0; }
+
+  .signature-block{
+    border-top:2px solid var(--grey-line);
+    margin-top:28px;
+    padding-top:18px;
+  }
+  .signature-block h2{
+    font-size:14.5px;
+    text-decoration:underline;
+    margin:0 0 18px 0;
+  }
+
+  .form-actions{
+    max-width:850px;
+    margin:0 auto 16px auto;
+    padding:0 4px;
+    display:flex;
+    gap:12px;
+  }
+  .form-actions button{
+    font-family:inherit;
+    font-size:14px;
+    padding:10px 20px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+  }
+  .btn-print{ background:var(--ecobank-blue); color:#fff; }
+  .btn-print:hover{ background:var(--ecobank-blue-dark); }
+  .btn-reset{ background:#e0e0e0; color:#333; }
+  .btn-reset:hover{ background:#cacaca; }
+
+  @media print{
+    @page{
+      size:A4;
+      margin:0;
+    }
+    body{ background:#fff; }
+    .internal-tag{
+      max-width:none;
+      padding:0 18px 4px;
+      font-size:10px;
+    }
+    .page{
+      box-shadow:none;
+      max-width:none;
+      width:100%;
+      margin:0;
+      min-height:277mm;
+      padding:24px 28px 30px;
+    }
+    .form-actions{ display:none; }
+    .logo{ margin-bottom:18px; }
+    .logo svg{ width:180px; height:60px; }
+    h1.title{ font-size:16.5px; margin-bottom:22px; }
+    form{ font-size:14.5px; line-height:2.1; }
+    input[type="text"], input[type="date"], input[type="email"], input[type="tel"]{
+      font-size:14.5px;
+      padding:2px 4px;
+    }
+    .date-row{ margin-bottom:14px; }
+    p.salutation{ margin-bottom:14px; }
+    p.intro-text{ margin-bottom:20px; }
+    .field-line{ gap:8px; margin-bottom:16px; }
+    .field-line input[type="text"]{ min-width:180px; }
+    .field-line.two-cols{ gap:40px; }
+    .field-line.two-cols > div{ gap:9px; }
+    .field-line.two-cols > div:last-child{ min-width:320px; }
+    .field-line.two-cols > div:last-child input{ min-width:260px; }
+    .address-block .field-line{ margin-bottom:8px; }
+    p.closing{ margin:24px 0 14px; }
+    .signature-block{
+      margin-top:28px;
+      padding-top:18px;
+    }
+    .signature-block h2{
+      font-size:14.5px;
+      margin-bottom:18px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="form-actions">
+  <button class="btn-print" onclick="window.print()">🖨️ Imprimer</button>
+  <button class="btn-reset" onclick="document.getElementById('dormantForm').reset()">↺ Réinitialiser</button>
+  <button type="button" class="btn-back" onclick="window.history.back()">← Retour</button>
+</div>
+
+<div class="page">
+
+  <div class="logo">
+    	<img src="../vendors/images/ecobank-lg.png" alt="" class="" width="160px">
+  </div>
+
+  <h1 class="title">FORMULAIRE DE REACTIVATION DE COMPTES DORMANTS</h1>
+
+  <form id="dormantForm" onsubmit="return false;">
+
+    <div class="date-row">
+      <label>Date <input type="date" name="date"></label>
+    </div>
+
+    <p class="salutation">Cher (e) Monsieur/ Madame,</p>
+
+    <p class="intro-text">
+      Nous vous saurions gré de bien vouloir réactiver mon compte dès réception du présent formulaire. Nous comprenons que pour des raisons sécuritaires, Ecobank a classé mon compte dans la catégorie des comptes dormants.
+    </p>
+
+    <div class="field-line">
+      <label>Numéro de compte</label>
+      <input type="text" name="numeroCompte">
+    </div>
+
+    <div class="field-line">
+      <label>Intitulé du compte</label>
+      <input type="text" name="intituleCompte">
+    </div>
+
+    <div class="address-block">
+      <div class="field-line">
+        <label>Adresse</label>
+          <textarea name="adresse" rows="1"></textarea>
+      </div>
+    </div>
+
+    <div class="field-line two-cols">
+      <div><label>Téléphone</label><input type="tel" name="telephone"></div>
+      <div><label>E-mail :</label><input type="email" name="email"></div>
+    </div>
+
+    <p class="closing">Meilleures salutations,</p>
+
+    <div class="field-line">
+      <label>Nom &amp; Prénoms:</label>
+      <input type="text" name="nomPrenoms">
+    </div>
+
+    <div class="field-line">
+      <label>Signature <small>(Avec mention "Lu et approuvée")</small>:</label>
+    </div>
+
+    <div class="signature-block">
+      <h2>PARTIE RESERVEE A LA BANQUE</h2>
+
+      <div class="field-line">
+        <label>Solde du compte</label>
+        <input type="text" name="soldeCompte">
+      </div>
+
+      <div class="field-line">
+        <label>Compte réactivé par:</label>
+        <input type="text" name="reactiveParPour">
+      </div>
+
+      <div class="field-line">
+        <label>AUTORISE PAR</label>
+        <input type="text" name="autorisePar">
+      </div>
+
+      <div class="field-line">
+        <label>SIGNATURE:</label>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script src="../vendors/js/flexcube_client_search.js?v=20260904"></script>
+</body>
+</html>

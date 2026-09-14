@@ -31,7 +31,7 @@ $hosts = ['ADC-CEMACFC-SCAN', 'LDC-CEMACFC-SCAN'];
 $port = '1521';
 $service = 'SRVFCUBSCS2';
 $username = 'cyoka';
-$password = 'Welcometo@2026';
+$password = 'Piratemoi@2026';
 
 $conn = null;
 foreach ($hosts as $host) {

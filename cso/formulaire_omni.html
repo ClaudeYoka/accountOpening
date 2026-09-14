@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Formulaire de souscription aux offres numériques - Ecobank</title>
+<style>
+  :root{
+    --bar-blue:#a9cfe0;        /* bandeaux de section (fond) */
+    --field-bg:#dcebf2;        /* fond clair derrière les champs */
+    --label-text:#1c5a72;      /* texte des libellés / titre */
+    --border-blue:#1c5a72;     /* bordure fine des champs / cases */
+    --header-bg:#dceaf2;       /* bandeau d'en-tête complet */
+    --white:#ffffff;
+    --black:#000000;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:0;
+    background:#e9edf0;
+    font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+    color:#1a1a1a;
+  }
+  .page{
+    max-width:980px;
+    margin:30px auto;
+    background:#ffffff;
+    box-shadow:0 0 12px rgba(0,0,0,0.15);
+    padding-bottom:40px;
+  }
+
+  /* ===== HEADER ===== */
+  .header{
+    background:var(--header-bg);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:26px 40px;
+  }
+  .header h1{
+    font-size:23px;
+    color:var(--label-text);
+    margin:0;
+    line-height:1.25;
+    font-weight:800;
+    max-width:640px;
+  }
+  .logo{ text-align:right; flex-shrink:0; }
+  .logo .name{
+    font-size:34px;
+    font-weight:700;
+    color:#0f6386;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+  .logo .tagline{
+    font-size:13px;
+    font-style:italic;
+    color:#0f6386;
+    margin-top:-4px;
+  }
+  .intro{
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--label-text);
+    padding:14px 40px;
+    line-height:1.5;
+  }
+
+  /* ===== TABS ===== */
+  .tabs{
+    display:flex;
+    gap:6px;
+    padding:0 40px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .tab-btn{
+    font-family:inherit;
+    font-size:13px;
+    font-weight:700;
+    padding:10px 18px;
+    border:none;
+    background:#eef3f7;
+    color:var(--label-text);
+    cursor:pointer;
+    border-radius:6px 6px 0 0;
+  }
+  .tab-btn.active{ background:var(--bar-blue); color:#fff; }
+  .tab-content{ display:none; padding:0 40px; }
+  .tab-content.active{ display:block; }
+
+  /* ===== SECTION BARS ===== */
+  h2.section-title{
+    background:var(--bar-blue);
+    color:#fff;
+    font-size:13px;
+    text-transform:uppercase;
+    padding:8px 14px;
+    margin:22px 0 0 0;
+    font-weight:700;
+  }
+  h2.section-title .note{ font-weight:400; text-transform:none; font-size:11.5px; color:#fff; }
+  h3.subsection{
+    background:var(--bar-blue);
+    color:#fff;
+    font-size:12.5px;
+    text-transform:uppercase;
+    padding:7px 14px;
+    margin:0;
+    font-weight:700;
+  }
+
+  .box-body{ background:var(--field-bg); padding:14px; }
+
+  form{ font-size:13.5px; }
+
+  input[type="text"], input[type="tel"], input[type="email"], input[type="number"]{
+    border:1px solid var(--border-blue);
+    background:#ffffff;
+    font-family:inherit;
+    font-size:13px;
+    color:#1a1a1a;
+    padding:4px 6px;
+    outline:none;
+  }
+  input[type="text"]:focus, input[type="tel"]:focus, input[type="email"]:focus, input[type="number"]:focus{
+    background:#f5faff;
+    border-color:#0f6386;
+  }
+
+  .field-row{ display:flex; align-items:center; gap:8px; margin:8px 0; flex-wrap:wrap; }
+  .field-row label.lbl{ font-weight:700; color:var(--label-text); white-space:nowrap; font-size:12.5px; flex-shrink:0; }
+  .field-row input[type="text"]{ flex:1; min-width:150px; }
+
+  /* ===== CASES CHIFFRES (comptes, téléphones, dates, identité) ===== */
+  .digit-group-wrap{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  .digit-boxes{ display:flex; gap:1px; flex-wrap:nowrap; }
+  .digit-boxes input{
+    width:15px; height:19px;
+    text-align:center;
+    border:1px solid var(--border-blue);
+    background:#fff;
+    font-size:10px;
+    padding:0;
+    flex-shrink:0;
+  }
+  .digit-boxes input:focus{ outline:none; background:#f5faff; border-color:#0f6386; }
+  .digit-boxes input.hint{ color:#a9c4d8; font-weight:700; }
+
+  /* ===== CASES A COCHER / RADIO (carrées, bordure noire) ===== */
+  input[type="checkbox"], input[type="radio"]{
+    appearance:none; -webkit-appearance:none;
+    width:14px; height:14px;
+    border:1.5px solid #000;
+    background:#fff;
+    cursor:pointer;
+    position:relative;
+    flex-shrink:0;
+    border-radius:0;
+    margin:0;
+  }
+  input[type="checkbox"]:checked::after, input[type="radio"]:checked::after{
+    content:"";
+    position:absolute;
+    left:2px; top:2px; right:2px; bottom:2px;
+    background:#000;
+  }
+
+  .user-grid{ display:flex; gap:0; flex-wrap:wrap; margin:0; }
+  .user-block{ flex:1; min-width:420px; }
+  .user-block h4{ background:var(--bar-blue); margin:0; padding:7px 14px; color:#fff; font-size:12.5px; font-weight:700; text-transform:uppercase; }
+  .user-block .box-body{ padding:10px 14px; }
+  .title-radio-row{ display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin:6px 0; }
+  .title-radio-row label{ display:flex; align-items:center; gap:5px; font-size:12.5px; color:var(--label-text); font-weight:700; }
+  .priv-row{ display:flex; gap:16px; flex-wrap:wrap; margin-top:6px; }
+  .priv-row label{ display:flex; align-items:center; gap:5px; font-size:12px; color:var(--label-text); font-weight:700; }
+
+  .auth-row{ display:flex; align-items:center; gap:16px; margin:0; padding:10px 14px; flex-wrap:wrap; border-bottom:1px solid #fff; }
+  .auth-row input[type="text"]{ flex:1; min-width:260px; }
+  .auth-row .limite{ display:flex; align-items:center; gap:8px; }
+  .auth-row .limite input{ width:160px; }
+  .auth-row .limite label{ color:var(--label-text); font-weight:700; white-space:nowrap; }
+
+  table.pdv-table{ width:100%; border-collapse:collapse; margin:0 0 20px 0; }
+  table.pdv-table th{ background:var(--field-bg); color:var(--label-text); padding:8px; font-size:12px; text-align:left; border:1px solid #bcd; }
+  table.pdv-table td{ border:1px solid #bcd; padding:0; }
+  table.pdv-table td input[type="text"]{ width:100%; border:none; padding:8px; }
+
+  .indicators{ margin:0; }
+  .indicator-row{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .indicator-row label{ flex:1; font-size:12.5px; color:var(--label-text); font-weight:700; }
+  .indicator-row input{ width:220px; }
+
+  .gmb-block{ padding:14px 0; font-size:12.5px; line-height:1.6; }
+  .gmb-choice{ display:flex; gap:24px; margin-top:10px; align-items:center; }
+  .gmb-choice label{ display:flex; align-items:center; gap:6px; }
+
+  .id-form-row{ display:flex; gap:12px; align-items:center; margin:8px 0; flex-wrap:wrap; }
+  .id-form-row label{ display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--label-text); font-weight:700; }
+
+  /* Champ NOMS : un seul cadre avec 3 zones internes (comme l'original) */
+  .noms-box{
+    display:flex;
+    border:1px solid var(--border-blue);
+    background:#fff;
+    flex:1;
+  }
+  .noms-box input{
+    flex:1;
+    border:none;
+    background:transparent;
+    text-align:center;
+    font-size:12px;
+    padding:5px 4px;
+    outline:none;
+    color:#1a1a1a;
+  }
+  .noms-box input:focus{ background:#f5faff; }
+  .noms-box input::placeholder{ color:#9fb8c4; font-weight:700; text-transform:uppercase; font-size:11px; }
+
+  .declaration-text{ font-size:12.5px; line-height:1.7; padding:14px 0; color:#1a1a1a; }
+  .consent-block{ margin:16px 0; }
+  .consent-block label{ display:flex; align-items:flex-start; gap:8px; margin-bottom:10px; font-size:12.5px; line-height:1.5; }
+
+  .signature-grid{ display:flex; flex-direction:column; gap:16px; margin:16px 0; }
+  .signature-line{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .signature-line .lbl{ font-weight:700; width:160px; font-size:12.5px; color:var(--label-text); flex-shrink:0; }
+  .signature-line .date-lbl{ font-weight:700; font-size:12.5px; color:var(--label-text); }
+
+  .signature-box{
+    flex:1;
+    min-width:220px;
+    height:56px;
+    border:1px solid var(--border-blue);
+    background:#fff;
+  }
+  .signature-box input{
+    width:100%; height:100%;
+    border:none; background:transparent;
+    padding:6px 10px;
+    font-family:inherit; font-size:12px; color:#888;
+    outline:none;
+  }
+
+  .bank-only{ background:var(--field-bg); }
+  .bank-only .box-body{ padding:14px; }
+
+  .terms-text{
+    font-size:11.5px;
+    line-height:1.6;
+    column-count:2;
+    column-gap:30px;
+    padding:16px 0;
+    text-align:justify;
+    color:#1a1a1a;
+  }
+  .terms-text h4{ font-size:12px; margin:10px 0 4px 0; break-after:avoid; color:var(--label-text); }
+  .terms-text p{ margin:0 0 8px 0; }
+  .terms-title{ font-size:20px; color:#1a1a1a; font-weight:800; margin:16px 0 4px 0; column-span:all; }
+  .terms-subtitle{ font-size:13px; font-weight:700; margin:0 0 14px 0; column-span:all; color:var(--label-text); }
+
+  .final-declaration{ margin-top:26px; border-top:2px solid var(--bar-blue); padding-top:16px; }
+
+  .form-actions{
+    max-width:980px;
+    margin:0 auto 20px auto;
+    padding:0 4px;
+    display:flex;
+    gap:12px;
+  }
+  .form-actions button{
+    font-family:inherit;
+    font-size:14px;
+    padding:10px 20px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+  }
+  .btn-print{ background:#0f6386; color:#fff; }
+  .btn-print:hover{ background:#0b4d68; }
+  .btn-reset{ background:#e0e0e0; color:#333; }
+  .btn-reset:hover{ background:#cacaca; }
+  .btn-back{ background:#f0f0f0; color:#333; }
+  .btn-back:hover{ background:#e0e0e0; }
+
+  @page{
+    size:A4;
+    margin:12mm;
+  }
+
+  @media print{
+    html, body{
+      background:#fff;
+      margin:0;
+      padding:0;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+    .page{
+      box-shadow:none;
+      margin:0;
+      max-width:none;
+      width:100%;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+    .form-actions, .tabs{ display:none; }
+    .tab-content{ display:block !important; }
+    #tab2, #tab3, #tab4{
+      break-before:page;
+      page-break-before:always;
+    }
+    .header,
+    h2.section-title,
+    h3.subsection,
+    .box-body,
+    .user-block h4,
+    table.pdv-table th,
+    .bank-only{
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="form-actions">
+  <button class="btn-print" onclick="window.print()">🖨️ Imprimer</button>
+  <button class="btn-reset" onclick="document.getElementById('digitalOffersForm').reset()">↺ Réinitialiser</button>
+  <button type="button" class="btn-back" onclick="window.history.back()">← Retour</button>
+</div>
+
+<div class="page">
+
+  <div class="header">
+    <h1>FORMULAIRE DE SOUSCRIPTION AUX OFFRES NUMÉRIQUES DE LA BANQUE COMMERCIALE</h1>
+    <div class="logo">
+        <img src="../vendors/images/ecobank-lg1.png" alt="" class="" width="160px">
+    </div>
+  </div>
+
+  <p class="intro">
+    Veuillez lire attentivement et remplir toutes les sections pertinentes. Toutes les rubriques doivent être renseignées par la personne souhaitant ouvrir un
+    compte. Si vous avez la moindre question, un membre du personnel se fera un plaisir de vous aider.
+  </p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('tab1', this)">1. Omni Lite &amp; EcobankPay</button>
+    <button class="tab-btn" onclick="showTab('tab2', this)">2. Google My Business &amp; Carte prépayée</button>
+    <button class="tab-btn" onclick="showTab('tab3', this)">3. Déclaration &amp; Signatures</button>
+    <button class="tab-btn" onclick="showTab('tab4', this)">4. Termes et Conditions</button>
+  </div>
+
+  <form id="digitalOffersForm" onsubmit="return false;">
+
+    <!-- ================= TAB 1 ================= -->
+    <div class="tab-content active" id="tab1">
+
+      <h2 class="section-title">Information du compte existant <span class="note">(à fournir lorsqu'un compte courant commercial existe déjà)</span></h2>
+      <div class="box-body">
+        <div class="field-row">
+          <label class="lbl">Nom du compte :</label>
+          <input type="text" name="nomCompteExistant" style="flex:1;">
+        </div>
+        <div class="field-row">
+          <label class="lbl">N° de compte :</label>
+          <div class="digit-boxes" data-count="10" data-group="carte">
+              <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+              <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+              <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+              <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+              <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-title">Information Omni Lite</h2>
+      <div class="user-grid">
+        <!-- Utilisateur 1 -->
+        <div class="user-block">
+          <h4>Utilisateur 1</h4>
+          <div class="box-body">
+            <div class="title-radio-row">
+              <span class="lbl">Titre :</span>
+              <label><input type="radio" name="titreU1"> M.</label>
+              <label><input type="radio" name="titreU1"> Mme.</label>
+              <label><input type="radio" name="titreU1"> Mlle</label>
+              <label><input type="radio" name="titreU1"> Dr.</label>
+            </div>
+            <div class="field-row"><label class="lbl">Nom :</label><input type="text" name="nomU1" style="flex:1;"></div>
+            <div class="field-row"><label class="lbl">Prénom :</label><input type="text" name="prenomU1" style="flex:1;"></div>
+            <div class="field-row"><label class="lbl">N° de tél :</label>
+              <div class="digit-boxes" data-count="10" data-group="telU1">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+              </div>
+            </div>
+            <div class="field-row"><label class="lbl">Courriel :</label><input type="email" name="courrielU1" style="flex:1;"></div>
+            <div class="field-row"><span class="lbl">Privilèges :</span></div>
+            <div class="priv-row">
+              <label><input type="checkbox" name="privU1"> Initiateur</label>
+              <label><input type="checkbox" name="privU1"> Examinateur</label>
+              <label><input type="checkbox" name="privU1"> Autorisateur</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Utilisateur 2 -->
+        <div class="user-block">
+          <h4>Utilisateur 2</h4>
+          <div class="box-body">
+            <div class="title-radio-row">
+              <span class="lbl">Titre :</span>
+              <label><input type="radio" name="titreU2"> M.</label>
+              <label><input type="radio" name="titreU2"> Mme.</label>
+              <label><input type="radio" name="titreU2"> Mlle</label>
+              <label><input type="radio" name="titreU2"> Dr.</label>
+            </div>
+            <div class="field-row"><label class="lbl">Nom :</label><input type="text" name="nomU2" style="flex:1;"></div>
+            <div class="field-row"><label class="lbl">Prénom :</label><input type="text" name="prenomU2" style="flex:1;"></div>
+            <div class="field-row"><label class="lbl">N° de tél :</label>
+              <div class="digit-boxes" data-count="10" data-group="telU2">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+              </div>
+            </div>
+            <div class="field-row"><label class="lbl">Courriel :</label><input type="email" name="courrielU2" style="flex:1;"></div>
+            <div class="field-row"><span class="lbl">Privilèges :</span></div>
+            <div class="priv-row">
+              <label><input type="checkbox" name="privU2"> Initiateur</label>
+              <label><input type="checkbox" name="privU2"> Examinateur</label>
+              <label><input type="checkbox" name="privU2"> Autorisateur</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Utilisateur 3 -->
+        <div class="user-block">
+          <h4>Utilisateur 3</h4>
+          <div class="box-body">
+            <div class="title-radio-row">
+              <span class="lbl">Titre :</span>
+              <label><input type="radio" name="titreU3"> M.</label>
+              <label><input type="radio" name="titreU3"> Mme.</label>
+              <label><input type="radio" name="titreU3"> Mlle</label>
+              <label><input type="radio" name="titreU3"> Dr.</label>
+            </div>
+            <div class="field-row"><label class="lbl">Nom :</label><input type="text" name="nomU3" style="flex:1;"></div>
+            <div class="field-row"><label class="lbl">Prénom :</label><input type="text" name="prenomU3" style="flex:1;"></div>
+            <div class="field-row"><label class="lbl">N° de tél :</label>
+              <div class="digit-boxes" data-count="10" data-group="telU3">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+              </div>
+            </div>
+            <div class="field-row"><label class="lbl">Courriel :</label><input type="email" name="courrielU3" style="flex:1;"></div>
+            <div class="field-row"><span class="lbl">Privilèges :</span></div>
+            <div class="priv-row">
+              <label><input type="checkbox" name="privU3"> Initiateur</label>
+              <label><input type="checkbox" name="privU3"> Examinateur</label>
+              <label><input type="checkbox" name="privU3"> Autorisateur</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Utilisateur 4 -->
+        <div class="user-block">
+          <h4>Utilisateur 4</h4>
+          <div class="box-body">
+            <div class="title-radio-row">
+              <span class="lbl">Titre :</span>
+              <label><input type="radio" name="titreU4"> M.</label>
+              <label><input type="radio" name="titreU4"> Mme.</label>
+              <label><input type="radio" name="titreU4"> Mlle</label>
+              <label><input type="radio" name="titreU4"> Dr.</label>
+            </div>
+            <div class="field-row"><label class="lbl">Nom :</label><input type="text" name="nomU4" style="flex:1;"></div>
+            <div class="field-row"><label class="lbl">Prénom :</label><input type="text" name="prenomU4" style="flex:1;"></div>
+            <div class="field-row"><label class="lbl">N° de tél :</label>
+              <div class="digit-boxes" data-count="10" data-group="telU2">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+                    <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+              </div>
+            </div>
+            <div class="field-row"><label class="lbl">Courriel :</label><input type="email" name="courrielU4" style="flex:1;"></div>
+            <div class="field-row"><span class="lbl">Privilèges :</span></div>
+            <div class="priv-row">
+              <label><input type="checkbox" name="privU4"> Initiateur</label>
+              <label><input type="checkbox" name="privU4"> Examinateur</label>
+              <label><input type="checkbox" name="privU4"> Autorisateur</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-title">Autorisation de transaction <span class="note">(veuillez indiquer le ou les autorisateurs requis pour effectuer une transaction)</span></h2>
+      <div style="background:var(--field-bg);">
+        <div class="auth-row">
+          <input type="text" name="autorisateur1" placeholder="Nom de l'autorisateur">
+          <div class="limite"><label>Limite de signature :</label><input type="text" name="limite1"></div>
+        </div>
+        <div class="auth-row">
+          <input type="text" name="autorisateur2" placeholder="Nom de l'autorisateur">
+          <div class="limite"><label>Limite de signature :</label><input type="text" name="limite2"></div>
+        </div>
+        <div class="auth-row" style="border-bottom:none;">
+          <input type="text" name="autorisateur3" placeholder="Nom de l'autorisateur">
+          <div class="limite"><label>Limite de signature :</label><input type="text" name="limite3"></div>
+        </div>
+      </div>
+
+      <h2 class="section-title">EcobankPay et informations PDV</h2>
+      <table class="pdv-table">
+        <tr>
+          <th>Emplacement physique du terminal / de l'agent proposé</th>
+          <th>Nom de la personne à contacter</th>
+          <th>Numéro de téléphone</th>
+        </tr>
+        <tr><td><input type="text" name="pdv1_emplacement"></td><td><input type="text" name="pdv1_contact"></td><td><input type="text" name="pdv1_tel"></td></tr>
+        <tr><td><input type="text" name="pdv2_emplacement"></td><td><input type="text" name="pdv2_contact"></td><td><input type="text" name="pdv2_tel"></td></tr>
+        <tr><td><input type="text" name="pdv3_emplacement"></td><td><input type="text" name="pdv3_contact"></td><td><input type="text" name="pdv3_tel"></td></tr>
+        <tr><td><input type="text" name="pdv4_emplacement"></td><td><input type="text" name="pdv4_contact"></td><td><input type="text" name="pdv4_tel"></td></tr>
+        <tr><td><input type="text" name="pdv5_emplacement"></td><td><input type="text" name="pdv5_contact"></td><td><input type="text" name="pdv5_tel"></td></tr>
+      </table>
+
+      <h2 class="section-title">Indicateur de transactions commerciales</h2>
+      <div class="indicators box-body">
+        <div class="indicator-row"><label>1. Volume moyen de transactions :</label><input type="text" name="ind1"></div>
+        <div class="indicator-row"><label>2. Décompte journalier moyen des transactions :</label><input type="text" name="ind2"></div>
+        <div class="indicator-row"><label>3. Ventes moyennes journalières :</label><input type="text" name="ind3"></div>
+        <div class="indicator-row"><label>4. Ventes moyennes mensuelles :</label><input type="text" name="ind4"></div>
+      </div>
+
+    </div>
+
+    <!-- ================= TAB 2 ================= -->
+    <div class="tab-content" id="tab2">
+
+      <h2 class="section-title">Informations sur Google My Business</h2>
+      <div class="gmb-block">
+        Allez plus loin, plus vite, faites la promotion de votre entreprise exclusivement avec Ecobank et Google.
+        Obtenez un site Web GRATUIT avec EcobankPay intégré pour simplifier les paiements de vos clients ; faites la promotion de votre entreprise en ligne pour
+        toucher davantage de clients ; et permettez à vos clients de vous trouver plus facilement sur Google Search et Google Maps.
+        <div class="gmb-choice">
+          <span>Acceptez-vous que Ecobank partage vos informations avec Google et ses partenaires pour enregistrer votre entreprise sur Google My Business ?</span>
+          <label><input type="checkbox" name="gmbConsent" value="OUI"> OUI</label>
+          <label><input type="checkbox" name="gmbConsent" value="NON"> NON</label>
+        </div>
+      </div>
+
+      <h2 class="section-title">Offre supplémentaire <span class="note">(en option)</span></h2>
+      <h2 class="section-title">Informations sur les cartes prépayées professionnelles</h2>
+
+      <h3 class="subsection">Coordonnées du détenteur de la carte</h3>
+      <div class="box-body">
+        <div class="title-radio-row">
+          <span class="lbl">Titre :</span>
+          <label><input type="radio" name="titreCarte"> M.</label>
+          <label><input type="radio" name="titreCarte"> Mme.</label>
+          <label><input type="radio" name="titreCarte"> Mlle</label>
+          <label><input type="radio" name="titreCarte"> Dr.</label>
+          <label><input type="radio" name="titreCarte"> Autre (veuillez préciser)</label>
+          <input type="text" name="titreCarteAutre" style="width:150px;">
+        </div>
+
+        <div class="field-row">
+          <label class="lbl">Noms :</label>
+          <div class="noms-box">
+            <input type="text" name="nomCarte" placeholder="NOM">
+            <input type="text" name="prenomCarte" placeholder="PRÉNOM">
+            <input type="text" name="autreNomCarte" placeholder="AUTRE NOM">
+          </div>
+        </div>
+        <div class="field-row"><label class="lbl">Nom de jeune fille <span style="font-weight:400;">(le cas échéant)</span> :</label><input type="text" name="nomJeuneFille" style="flex:1;"></div>
+
+        <div class="field-row"><span class="lbl">Forme d'identification :</span></div>
+        <div class="id-form-row">
+          <label><input type="checkbox" name="formeId" value="Passeport"> Passeport</label>
+          <label><input type="checkbox" name="formeId" value="Carte d'identité"> Carte d'identité</label>
+        </div>
+        <div class="id-form-row">
+          <label><input type="checkbox" name="formeId" value="Autre"> Autre (veuillez préciser)</label>
+          <input type="text" name="formeIdAutre" style="flex:1;">
+        </div>
+        <div class="field-row">
+          <label class="lbl">N° de carte d'identité :</label>
+          <div class="digit-boxes" data-count="10" data-group="carte">
+            <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+            <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+            <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+            <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+            <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+            <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+          </div>
+        </div>
+        <div class="field-row">
+          <label class="lbl">Pays d'émission :</label>
+          <div class="field-row" data-group="paysEmission">
+              <input type="text" name="formeIdAutre" style="flex:1;">
+          </div>
+        </div>
+        <div class="field-row">
+          <label class="lbl">Date :</label>
+          <div class="digit-boxes" data-group="dateId">
+            <input type="text" maxlength="1" class="hint" placeholder="J">
+            <input type="text" maxlength="1" class="hint" placeholder="M">
+            <input type="text" maxlength="1" class="hint" placeholder="A">
+          </div>
+          <label class="lbl" style="margin-left:20px;">Date d'expiration :</label>
+          <div class="digit-boxes" data-group="dateExpId">
+            <input type="text" maxlength="1" class="hint" placeholder="J"><input type="text" maxlength="1" class="hint" placeholder="M"><input type="text" maxlength="1" class="hint" placeholder="A">
+          </div>
+        </div>
+        <div class="field-row"><label class="lbl">Nationalité :</label>
+          <input type="text" name="nationaliteCarte" style="flex:1;">
+        </div>
+        <div class="field-row">
+          <span class="lbl">Sexe :</span>
+          <label style="display:flex;align-items:center;gap:5px;"><input type="radio" name="sexeCarte"> M</label>
+          <label style="display:flex;align-items:center;gap:5px;"><input type="radio" name="sexeCarte"> F</label>
+        </div>
+      </div>
+
+      <h3 class="subsection">Mode de remise de la carte</h3>
+      <div class="box-body">
+        <div class="field-row"><label class="lbl">Retrait en agence (nom) :</label><input type="text" name="retraitAgence" style="flex:1;"></div>
+        <div class="field-row"><label class="lbl">Livraison par coursier à l'attention de : <span style="font-weight:400;">(modalités applicables)</span></label></div>
+        <div class="field-row"><label class="lbl" style="margin-left:20px;">A l'attention de :</label><input type="text" name="livraisonAttentionDe" style="flex:1;"></div>
+        <div class="field-row"><label class="lbl" style="margin-left:20px;">Adresse de livraison :</label><input type="text" name="adresseLivraison" style="flex:1;"></div>
+      </div>
+
+      <h3 class="subsection">Coordonnées du titulaire du compte</h3>
+      <div class="box-body">
+        <div class="field-row">
+          <span class="lbl">Compte auprès d'Ecobank :</span>
+          <label style="display:flex;align-items:center;gap:5px;"><input type="radio" name="compteEcobank"> OUI</label>
+          <label style="display:flex;align-items:center;gap:5px;"><input type="radio" name="compteEcobank"> NON</label>
+        </div>
+      </div>
+
+      <h3 class="subsection">Coordonnées du détenteur de la carte</h3>
+      <div class="box-body">
+        <div class="field-row"><label class="lbl">Adresse de résidence <span style="font-weight:400;">(préciser la ville, le pays)</span> :</label><input type="text" name="adresseResidence" style="flex:1;"></div>
+        <div class="field-row"><label class="lbl">Adresse postale :</label><input type="text" name="adressePostale" style="flex:1;"></div>
+        <div class="field-row">
+          <label class="lbl">N° de téléphone :</label>
+            <div class="digit-boxes" data-count="10" data-group="telU3">
+                <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+                <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+                <input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric"><input maxlength="1" inputmode="numeric">
+            </div>
+        </div>
+        <div class="field-row"><label class="lbl">Courriel <span style="font-weight:400;">(optionnel)</span> :</label><input type="email" name="courrielCarte" style="flex:1;"></div>
+      </div>
+
+      <h3 class="subsection">Coordonnées professionnelles du détenteur de la carte</h3>
+      <div class="box-body">
+        <div class="field-row"><label class="lbl">Emploi :</label><input type="text" name="emploi" style="flex:1;"></div>
+        <div class="field-row"><label class="lbl">Poste actuel :</label><input type="text" name="posteActuel" style="flex:1;"></div>
+      </div>
+
+    </div>
+
+    <!-- ================= TAB 3 ================= -->
+    <div class="tab-content" id="tab3">
+
+      <h2 class="section-title">Déclaration</h2>
+      <p class="declaration-text">
+        Je confirme / nous confirmons que les informations ci-dessus sont véridiques et complètes. À réception des produits/services, j'accepte / nous acceptons les
+        conditions d'utilisation applicables qui, conjointement à la présente demande, constituent un accord contraignant entre Ecobank et l'entreprise. Je demande
+        et autorise / nous demandons et autorisons également Ecobank à déduire du dépôt initial de la carte prépayée professionnelle les frais d'émission de celle-ci
+        et/ou les frais de livraison.
+      </p>
+
+      <h3 class="subsection">Consentement de marché</h3>
+      <p class="declaration-text">
+        Ecobank <input type="text" name="ecobankFiliale" style="min-width:260px;"> membre du Groupe Ecobank, souhaite vous informer que toutes les informations concernant
+        les données personnelles, professionnelles et finales sont traitées comme strictement confidentielles. Pour permettre au Groupe Ecobank de proposer une
+        gamme complète de produits et de services, nous vous demandons d'utiliser votre consentement au sein du Groupe pour communiquer de manière continue
+        avec le titulaire du compte. Veuillez indiquer votre consentement en cochant la case appropriée ci-après.
+      </p>
+
+      <div class="consent-block">
+        <label><input type="radio" name="consentement"> JE CONSENS / NOUS CONSENTONS PAR LA PRÉSENTE À CE QUI PRÉCÈDE</label>
+        <label><input type="radio" name="consentement"> JE N'ACCORDE PAS MON / NOUS N'ACCORDONS PAS NOTRE CONSENTEMENT ET COMPRENDS/COMPRENONS PARFAITEMENT LES IMPLICATIONS ET LES RAMIFICATIONS DE TELLE DÉCISION, ET NE TIENDRAI/TIENDRONS PAS ECOBANK RESPONSABLE AU TITRE DES CONSEILS FINANCIERS ET DES OFFRES QUE JE NE RECEVRAI / NOUS NE RECEVRONS PAS</label>
+      </div>
+
+      <div class="signature-grid">
+        <div class="signature-line">
+          <span class="lbl">Signature autorisée :</span>
+          <div class="signature-box"><input type="text" name="sigAutorisee1" placeholder="(signature manuscrite après impression)"></div>
+          <span class="date-lbl">Date :</span>
+          <div class="digit-boxes" data-group="dateSig1">
+            <input type="text" maxlength="1" class="hint" placeholder="J"><input type="text" maxlength="1" class="hint" placeholder="J"><input type="text" maxlength="1" class="hint" placeholder="M"><input type="text" maxlength="1" class="hint" placeholder="M"><input type="text" maxlength="1" class="hint" placeholder="A"><input type="text" maxlength="1" class="hint" placeholder="A"><input type="text" maxlength="1" class="hint" placeholder="A"><input type="text" maxlength="1" class="hint" placeholder="A">
+          </div>
+        </div>
+        <div class="signature-line">
+          <span class="lbl">Signature autorisée :</span>
+          <div class="signature-box"><input type="text" name="sigAutorisee2" placeholder="(signature manuscrite après impression)"></div>
+          <span class="date-lbl">Date :</span>
+          <div class="digit-boxes" data-group="dateSig2">
+            <input type="text" maxlength="1" class="hint" placeholder="J"><input type="text" maxlength="1" class="hint" placeholder="J"><input type="text" maxlength="1" class="hint" placeholder="M"><input type="text" maxlength="1" class="hint" placeholder="M"><input type="text" maxlength="1" class="hint" placeholder="A"><input type="text" maxlength="1" class="hint" placeholder="A"><input type="text" maxlength="1" class="hint" placeholder="A"><input type="text" maxlength="1" class="hint" placeholder="A">
+          </div>
+        </div>
+        <div class="signature-line">
+          <span class="lbl">Signature autorisée :</span>
+          <div class="signature-box"><input type="text" name="sigAutorisee3" placeholder="(signature manuscrite après impression)"></div>
+          <span class="date-lbl">Date :</span>
+          <div class="digit-boxes" data-group="dateSig3">
+            <input type="text" maxlength="1" class="hint" placeholder="J"><input type="text" maxlength="1" class="hint" placeholder="J"><input type="text" maxlength="1" class="hint" placeholder="M"><input type="text" maxlength="1" class="hint" placeholder="M"><input type="text" maxlength="1" class="hint" placeholder="A"><input type="text" maxlength="1" class="hint" placeholder="A"><input type="text" maxlength="1" class="hint" placeholder="A"><input type="text" maxlength="1" class="hint" placeholder="A">
+          </div>
+        </div>
+      </div>
+
+      <h3 class="subsection">À usage exclusif de la banque</h3>
+      <div class="bank-only">
+        <div class="box-body">
+          <div class="field-row"><label class="lbl">Nom :</label><input type="text" name="banqueNom" style="flex:1;"></div>
+          <div class="field-row"><label class="lbl">Succursale :</label><input type="text" name="banqueSuccursale" style="flex:1;"></div>
+          <div class="field-row">
+            <span class="lbl">Compte vérifié :</span>
+            <label style="display:flex;align-items:center;gap:5px;"><input type="radio" name="compteVerifie"> OUI</label>
+            <label style="display:flex;align-items:center;gap:5px;"><input type="radio" name="compteVerifie"> NON</label>
+          </div>
+          <div class="field-row">
+            <label class="lbl">Signature vérifiée :</label>
+            <div class="signature-box" style="height:44px; flex:1; min-width:180px;">
+              <input type="text" name="banqueSignature" placeholder="(signature manuscrite après impression)">
+            </div>
+          </div>
+            <span class="date-lbl">Date :</span>
+            <div class="digit-boxes" data-group="dateBanque">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= TAB 4 : TERMES ET CONDITIONS ================= -->
+    <div class="tab-content" id="tab4">
+
+      <div class="terms-text">
+        <div class="terms-title">TERMES ET CONDITIONS DU COMPTE GENERAL</div>
+        <div class="terms-subtitle">Merci de lire attentivement cette page, qui vous procure des informations importantes concernant votre compte (ou vos comptes) Ecobank</div>
+
+        <p>Les informations contenues dans le présent Contrat ainsi que toutes les instructions et conditions supplémentaires susceptibles d'être prescrites à tout moment par la Banque constitueront les termes du contrat entre le Client et Ecobank. Dès la signature du présent formulaire de souscription, le Client sera réputé avoir accepté d'être lié par les Conditions générales engageantes contenues dans le Contrat.</p>
+        <p>À la demande d'Ecobank, le Client fournira à cette dernière tous les documents et autres informations jugés raisonnables en rapport avec son compte ou le service fourni.</p>
+
+        <h4>Définitions</h4>
+        <p><strong>« Compte »</strong> désigne tout compte courant, d'épargne, de dépôt, de carte, d'avance, mobile, en ligne, de contrat, de produit, de transaction ou de service, ou tout autre compte tenu auprès de la Banque par le Client dans l'une des agences de la Banque.</p>
+        <p><strong>« Contrat »</strong> désigne à la fois : (a) Le présent Contrat (b) Chaque annexe Pays (c) Chaque annexe Service (d) Tout contrat de licence logicielle (e) Toute déclaration de politique de la Banque ou tout certificat émis par celle-ci.</p>
+        <p><strong>« DAB »</strong> désigne un distributeur automatique de billets qui remet des espèces aux titulaires de comptes via l'utilisation de cartes de débit/crédit/prépayées ou nos distributeurs automatiques de dépôt de billets ou d'espèces.</p>
+        <p><strong>« La Banque »</strong> ou Ecobank désigne la filiale Ecobank auprès de laquelle le compte est domicilié ainsi que tout successeur et ayant droit.</p>
+        <p><strong>« Carte »</strong> désigne les cartes Ecobank de crédit et de débit de MasterCard, de débit et prépayées de Visa, de même que de débit et prépayées de Verve et toute autre carte qui sera délivrée par Ecobank. Les cartes ci-dessus sont la propriété de la Banque et lui seront restituées inconditionnellement et immédiatement à sa demande.</p>
+        <p><strong>« Client »</strong> désigne un client, un détenteur de carte ou un commerçant d'Ecobank qui détient ou gère un compte auprès d'Ecobank et dont le nom figure dans le formulaire de souscription. Toutefois, lorsque deux personnes sont nommées, l'une, l'autre ou les deux sera ou seront désignée(s) comme Clients.</p>
+        <p><strong>« Données »</strong> désigne les données, fichiers, messages ou autres informations, quelle qu'en soit la forme, stockés sur les Systèmes directement ou indirectement par, pour et au nom du Commerçant dans le cadre des Services, et pour lesquels le Commerçant assume l'entière responsabilité en termes de légalité, de propriété ou autre.</p>
+        <p><strong>« Commerçant »</strong> désigne un Client dont Ecobank acquiert et fournit une passerelle de paiement en ligne acceptant les paiements par carte.</p>
+        <p><strong>« PIN »/Mot de passe/Code/Mot de passe à usage unique (OTP)</strong>, Numéro d'autorisation de transaction/Clé(s) privée(s), Clé(s) électronique(s) privée(s) désignent le numéro secret, la lettre, les caractères, la phrase ou toute combinaison connue uniquement du Client ou de l'Utilisateur désigné par le Client pour authentification/vérification par la Banque de l'identité du Client ou de l'Utilisateur ; sera désigné comme « Code d'accès » aux fins du présent Contrat.</p>
+        <p><strong>« Dispositif de communication sécurisée »</strong> désigne le dispositif permettant au client, dans le cadre du service de banque en ligne, d'envoyer des messages électroniques (courriels, SMS) à la Banque, y compris et sans restriction des messages au format libre, des messages au format fixe ou des ordres de paiement, des demandes de chéquiers, de tirages bancaires et d'achat ou vente de titres et de participations dans des fonds communs de placement.</p>
+        <p><strong>« Service »</strong> désigne l'un des éléments suivants : banque de détail sur Internet (Ecobank Retail Internet Banking), distributeur automatique de billets, TPE, alertes SMS, banque mobile, services EcobankPay, cartes et tout autre service qui pourra être proposé par la Banque.</p>
+        <p><strong>« Territoire »</strong> désigne le pays dans lequel Ecobank est constituée et domiciliée.</p>
+
+        <h4>1. Le(s) Service(s)</h4>
+        <p>a. Les Services rendus comprennent l'un quelconque des Services répertoriés suivants, auxquels le Client a souscrit : banque en ligne ; guichet automatique ; terminal de paiement électronique ; alertes SMS ; banque mobile ; EcobankPay ; services de cartes, ainsi que les méthodes de paiement sur sites (e-commerce) et autres services auxquels le Client peut souscrire.</p>
+        <p>b. Dès réception de l'instruction du Client, la Banque s'efforcera de l'exécuter sans délai, sauf en cas de circonstances imprévues telles que les catastrophes naturelles, les cas de force majeure et les autres causes échappant au contrôle de la Banque.</p>
+        <p>c. Pour que le Client puisse accéder à l'un des services, il doit disposer de tout ou partie des éléments suivants : un compte ouvert auprès de la Banque ; une adresse e-mail valide ; un code d'accès ; un nom d'utilisateur ; un numéro valide de téléphone cellulaire.</p>
+        <p>d. La fourniture des Services est à la discrétion de la Banque, ces Services pouvant être modifiés, suspendus, retirés, annulés ou interrompus par la Banque à tout moment, auquel cas la Banque en informera le Client. La Banque peut à tout moment mettre à jour et/ou modifier une application permettant de proposer des Services.</p>
+
+        <h4>2. Code d'accès / Sécurité du courrier électronique</h4>
+        <p>a. Le Client comprend que son Code d'accès/Courriel est utilisé comme moyen pour donner des instructions à la Banque et qu'il s'engage en conséquence.</p>
+        <p>b. En aucun cas le code d'accès ne sera divulgué à un tiers.</p>
+        <p>c. Le code d'accès ne sera pas écrit dans un lieu ouvert afin d'éviter l'accès de tiers.</p>
+        <p>d. Une fois que la Banque aura reçu une instruction du Client au moyen du code d'accès, celle-ci sera en droit de respecter les instructions données par le Client et de fournir une réponse en ce sens.</p>
+        <p>e. Le code d'accès du Client devra être immédiatement modifié s'il devient connu d'une autre personne.</p>
+        <p>f. La Banque sera exonérée de toute forme de responsabilité pour le respect des instructions du Client transmises au moyen du code d'accès si celui-ci est connu d'un tiers.</p>
+        <p>g. Lorsqu'un Client notifie à la Banque son intention de modifier son code d'accès suite à un oubli ou parce que le code est devenu connu d'un tiers, la banque, avec le consentement du client, supprimera le code et permettra ensuite au client d'entrer un nouveau code d'accès, à condition que la banque ne soit tenue responsable d'aucune perte survenue entre l'oubli et la notification à la banque.</p>
+        <p>h. Le code d'accès, une fois donné, suffit à confirmer l'authenticité de l'instruction fournie.</p>
+        <p>i. Le Client sera responsable de toute instruction donnée au moyen de son code d'accès. La banque ne sera pas tenue responsable de l'usage du code d'accès par le Client.</p>
+
+        <h4>3. Services de cartes</h4>
+        <p>L'utilisation des cartes est soumise à de nombreuses conditions relatives à la sécurité du PIN et du CVV/CVC, à l'autorisation des transactions effectuées avec la carte, aux plafonds de retrait, à la propriété de la carte par la Banque, à son renouvellement automatique, à la déclaration en cas de perte ou de vol, et aux frais applicables en cas de remplacement, de rechargement ou de restriction du solde.</p>
+
+        <h4>4. Messages d'alerte / Service bancaire de relevés électroniques par courriel</h4>
+        <p>Tous les messages d'opération envoyés par les alertes sont présumés autorisés par le Client. Le Client est responsable de la confidentialité et de la sécurité du message d'alerte. La Banque n'est pas responsable des pertes résultant d'un arrêt du système indépendant de sa volonté, d'une maintenance, ou d'une défaillance du prestataire de services.</p>
+
+        <h4>5. Banque mobile et paiements mobiles</h4>
+        <p>Le Client doit modifier son code PIN dès réception, ne le divulguer à personne (y compris aux employés de la Banque), et s'assurer que personne ne l'observe lors de la saisie. La Banque n'est pas responsable si le Client permet à un tiers d'y accéder.</p>
+
+        <h4>6. EcobankPay</h4>
+        <p>Le Commerçant doit afficher le code QR EcobankPay de façon visible, ne pas surfacturer les clients payant par ce moyen, et effectuer au moins une transaction par semaine. Ecobank peut retirer le kit après 14 jours d'inactivité.</p>
+
+        <h4>7. Terminaux de paiement électronique (TPE)</h4>
+        <p>Le Commerçant s'engage à honorer toutes les cartes valides sans discrimination, à ne pas surtaxer les paiements par carte, à signaler tout vol ou dommage du TPE, à respecter les normes PCIDSS, et à ne pas déplacer le TPE sans préavis écrit à la Banque.</p>
+
+        <h4>8. eCommerce</h4>
+        <p>Le Commerçant s'engage à maintenir un site sécurisé (certificat SSL), à informer Ecobank de tout changement d'adresse IP ou de coordonnées bancaires, à ne pas stocker les données de carte des utilisateurs, et à coopérer avec Ecobank en cas d'incident de sécurité.</p>
+
+        <h4>9. Configuration d'Omni Lite</h4>
+        <p>Ecobank s'engage à fournir les Services sélectionnés, à faire preuve de soin raisonnable, à s'assurer du bon fonctionnement des Services, et à prendre des mesures raisonnables pour empêcher tout accès non autorisé.</p>
+
+        <h4>10. Obligations du client en matière de sécurité</h4>
+        <p>Le Client doit se conformer aux procédures de sécurité, informer immédiatement la Banque en cas de problème suspecté, et confirmer que toute personne identifiée comme utilisateur est autorisée à agir en son nom.</p>
+
+        <h4>11. Confirmations du Client par courriel</h4>
+        <p>Le Client confirme être propriétaire de la ou des adresses courriel communiquées et garantit la Banque contre toute violation de confidentialité liée à l'envoi de ses identifiants Omni Lite par courriel.</p>
+
+        <h4>12. Frais de gestion du service</h4>
+        <p>Le Client s'engage à payer les tarifs et frais applicables et autorise Ecobank à débiter son compte en conséquence.</p>
+
+        <h4>13. Disponibilité du service</h4>
+        <p>Ecobank décline toute responsabilité en cas de suspension liée à une faille de sécurité, à un manquement du Client aux précautions de sécurité, ou à une maintenance du système.</p>
+
+        <h4>14. Conditions générales</h4>
+        <p><strong>A. Frais et charges</strong> — Le Client accepte que la Banque puisse facturer des frais et commissions pour l'utilisation des Services, débités directement de son compte.</p>
+        <p><strong>B. Responsabilité</strong> — Ecobank ne peut être tenue responsable des pertes indirectes, des défaillances hors de son contrôle, ou des conséquences d'une utilisation abusive du Service par le Client ou des personnes autorisées.</p>
+        <p><strong>C. Indemnisation</strong> — Le Client s'engage à indemniser Ecobank contre toute perte résultant d'un manquement à ses obligations contractuelles.</p>
+        <p><strong>D. Sites web</strong> — Ecobank peut utiliser des cookies ; les liens vers des sites tiers ne relèvent pas de sa responsabilité.</p>
+        <p><strong>E. Cession</strong> — Aucune partie ne peut céder ses obligations sans le consentement écrit préalable de l'autre.</p>
+        <p><strong>F. Confidentialité</strong> — Chaque partie s'engage à garder confidentielles les informations échangées.</p>
+        <p><strong>G. Résiliation</strong> — Le Client peut annuler ses services par écrit à tout moment ; la Banque peut résilier à sa discrétion.</p>
+        <p><strong>H. Notifications</strong> — Les notifications sont réputées signifiées selon le mode d'envoi (courrier ou voie électronique).</p>
+        <p><strong>I. Google My Business</strong> — Ecobank facilite l'intégration du Client à l'offre Google My Business, sous réserve des conditions applicables.</p>
+        <p><strong>J. Droit applicable et tribunaux compétents</strong> — Les présentes conditions sont régies par le droit du Territoire.</p>
+        <p><strong>K. Utilisation des informations et confidentialité</strong> — Le Client consent à la collecte, l'utilisation et au traitement de ses données par la Banque.</p>
+        <p><strong>L. Déclaration</strong> — J'accepte / nous acceptons de fournir à la demande d'Ecobank les détails de toute transaction réalisée.</p>
+      </div>
+
+      <div class="final-declaration">
+        <h3 class="subsection">Déclaration finale</h3>
+        <div class="box-body">
+          <div class="field-row"><label class="lbl">Nom :</label><input type="text" name="declFinalNom" style="flex:1;"></div>
+          <div class="field-row"><label class="lbl">Désignation :</label><input type="text" name="declFinalDesignation" style="flex:1;"></div>
+          <div class="field-row">
+            <label class="lbl">Date :</label>
+            <div class="digit-boxes" data-group="dateFinale">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </form>
+</div>
+
+<script>
+  function showTab(id, btn){
+    document.querySelectorAll('.tab-content').forEach(function(el){ el.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(el){ el.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  document.querySelectorAll('.digit-boxes').forEach(function(group){
+    const inputs = group.querySelectorAll('input');
+    inputs.forEach(function(input, idx){
+      input.addEventListener('focus', function(){ input.classList.remove('hint'); });
+      input.addEventListener('input', function(){
+        if(input.value.length >= 1 && idx < inputs.length - 1){
+          inputs[idx+1].focus();
+        }
+      });
+      input.addEventListener('keydown', function(e){
+        if(e.key === 'Backspace' && input.value === '' && idx > 0){
+          inputs[idx-1].focus();
+        }
+      });
+    });
+  });
+</script>
+
+<script src="../vendors/js/today_form_dates.js"></script>
+</body>
+</html>

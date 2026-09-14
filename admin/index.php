@@ -84,7 +84,7 @@ include('monitoring_notification.php');
 				</div>
 			</div>
 		
-			<div class="dashboard-section">
+			<!-- <div class="dashboard-section">
 				<h2 class="dashboard-section-title"> Comptes par Agence</h2>
 				<div class="stats-grid">
 					<?php
@@ -114,7 +114,7 @@ include('monitoring_notification.php');
 						</div>
 					<?php } ?>
 				</div>
-			</div>
+			</div> -->
 
 			<div class="dashboard-section" style="margin-top: 40px;">
 				<h2 class="dashboard-section-title"> Demandes de Chéquiers</h2>

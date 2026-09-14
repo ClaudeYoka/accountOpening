@@ -28,7 +28,7 @@ echo "\n2. Testing Connection to Flexcube Oracle:\n";
 // Connection parameters
 $hosts = ['ADC-CEMACFC-SCAN', 'LDC-CEMACFC-SCAN'];
 $username = 'cyoka';
-$password = 'Welcometo@2026';
+$password = 'Piratemoi@2026';
 $service = 'SRVFCUBSCS2';
 $port = 1521;
 

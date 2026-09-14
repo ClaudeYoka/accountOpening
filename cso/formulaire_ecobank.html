@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Formulaire de souscription à Banque par Internet - Ecobank</title>
+  <link rel="icon" sizes="180x180" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../vendors/images/ecobank-bg.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../vendors/images/ecobank-bg.png">
+  <link rel="stylesheet" type="text/css" href="../vendors/styles/convention.css">
+
+<style>
+    :root{
+      --ecobank-blue:#004b87;
+      --ecobank-blue-dark:#003a68;
+      --ecobank-teal:#00a99d;
+      --highlight-yellow:#ffe680;
+      --highlight-cyan:#a8e6e0;
+      --text-dark:#1a1a1a;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      padding:0;
+      background:#e9edf0;
+      font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+      color:var(--text-dark);
+    }
+    .page{
+      max-width:850px;
+      margin:30px auto;
+      background:#ffffff;
+      box-shadow:0 0 12px rgba(0,0,0,0.15);
+      position:relative;
+      padding-bottom:40px;
+    }
+    .top-bar{
+      height:30px;
+      background:linear-gradient(90deg,var(--ecobank-blue) 0%,var(--ecobank-blue) 60%,var(--ecobank-teal) 100%);
+    }
+    .header{
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      padding:18px 40px 6px 40px;
+    }
+    .logo{ text-align:right; }
+    .logo .name{
+      font-size:34px;
+      font-weight:700;
+      color:var(--ecobank-blue);
+      letter-spacing:0.5px;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .logo .name span{ color:var(--ecobank-teal); }
+    .logo .tagline{
+      font-size:12px;
+      font-style:italic;
+      color:var(--ecobank-blue);
+      margin-top:-4px;
+    }
+    h1.title{
+      text-align:center;
+      font-size:20px;
+      text-decoration:underline;
+      margin:10px 0 24px 0;
+    }
+    .content{
+      padding:0 40px;
+      font-size:14px;
+      line-height:1.7;
+    }
+    .reserved-box{
+      border:1.5px solid var(--text-dark);
+      padding:12px 16px;
+      margin-bottom:22px;
+    }
+    .reserved-box .title-line{
+      font-style:italic;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+    .reserved-row{
+      display:flex;
+      gap:60px;
+      flex-wrap:wrap;
+    }
+    .reserved-row label{ display:flex; align-items:center; gap:6px; }
+
+    input[type="text"], input[type="tel"], input[type="email"]{
+      border:none;
+      border-bottom:1px dotted var(--text-dark);
+      background:transparent;
+      font-family:inherit;
+      font-size:14px;
+      color:var(--text-dark);
+      padding:2px 4px;
+      outline:none;
+    }
+    input[type="text"]:focus, input[type="tel"]:focus, input[type="email"]:focus{
+      border-bottom:1px solid var(--ecobank-blue);
+      background:#f5faff;
+    }
+    .checkbox-row{
+      display:flex;
+      gap:34px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+    .checkbox-item{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+    }
+    input[type="checkbox"], input[type="radio"]{
+      width:16px;
+      height:16px;
+      accent-color:var(--ecobank-blue);
+      cursor:pointer;
+      flex-shrink:0;
+    }
+    .field-line{
+      display:flex;
+      align-items:baseline;
+      margin-bottom:14px;
+      gap:6px;
+    }
+    .field-label{ white-space:nowrap; }
+    .field-line input[type="text"], .field-line input[type="tel"], .field-line input[type="email"]{
+      flex:1;
+      min-width:120px;
+    }
+    .address-field textarea{
+      flex:1;
+      min-height:44px;
+      border:none;
+      border-bottom:1px dotted var(--text-dark);
+      background:transparent;
+      font:inherit;
+      color:var(--text-dark);
+      line-height:1.5;
+      padding:2px 4px;
+      resize:none;
+      outline:none;
+    }
+    .address-field textarea:focus{ border-bottom:1px solid var(--ecobank-blue); background:#f5faff; }
+    p.declare{ margin:20px 0 6px 0; }
+    p.declare .note{ font-style:italic; font-size:12.5px; }
+
+    .option-row{
+      display:flex;
+      justify-content:space-between;
+      max-width:600px;
+      margin:14px 0 20px 0;
+      flex-wrap:wrap;
+      gap:14px;
+    }
+    .highlight{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:4px 8px;
+      cursor:pointer;
+    }
+    .highlight.yellow{ background:var(--highlight-yellow); }
+    .highlight.cyan{ background:var(--highlight-cyan); }
+
+    p.debit-line{ margin:18px 0 4px 0; }
+
+    .amount-row{
+      display:flex;
+      gap:28px;
+      flex-wrap:wrap;
+      margin:14px 0 26px 0;
+      font-size:14px;
+    }
+    .amount-row label{ display:flex; align-items:center; gap:6px; cursor:pointer; }
+
+    p.list-title{ margin:0 0 2px 0; }
+    p.list-note{ font-style:italic; font-size:12.5px; margin:0 0 10px 0; }
+
+    table.accounts{
+      width:100%;
+      border-collapse:collapse;
+      margin-bottom:14px;
+    }
+    table.accounts th, table.accounts td{
+      border:1px solid var(--text-dark);
+      padding:0;
+      text-align:left;
+      font-size:13px;
+      height:35px;
+    }
+    table.accounts th{
+      background:#f2f2f2;
+      font-weight:700;
+      padding:8px 10px;
+    }
+    table.accounts td input[type="text"]{
+      width:100%;
+      height:100%;
+      border:none;
+      padding:6px 8px;
+      background:transparent;
+    }
+    table.accounts td input[type="text"]:focus{
+      background:#f5faff;
+      outline:1px solid var(--ecobank-blue);
+      outline-offset:-1px;
+    }
+    .table-actions{
+      display:flex;
+      gap:10px;
+      margin-bottom:26px;
+    }
+    .table-actions button{
+      font-family:inherit;
+      font-size:12.5px;
+      padding:5px 12px;
+      border:1px solid var(--ecobank-blue);
+      background:#fff;
+      color:var(--ecobank-blue);
+      border-radius:4px;
+      cursor:pointer;
+    }
+    .table-actions button:hover{ background:var(--ecobank-blue); color:#fff; }
+
+    .signature-row{
+      display:flex;
+      justify-content:space-between;
+      gap:40px;
+      margin-top:10px;
+      font-size:14px;
+    }
+    .signature-row .sig-block{ flex:4; }
+    .signature-row .sig-line{
+      margin-top:50px;
+      border-bottom:1px dotted var(--text-dark);
+      height:1px;
+    }
+    .footnote{ font-style:italic; font-size:11px; margin-top:40px; }
+
+    .form-actions{
+      max-width:850px;
+      margin:0 auto 20px auto;
+      padding:0 40px;
+      display:flex;
+      gap:12px;
+    }
+    .form-actions button{
+      font-family:inherit;
+      font-size:14px;
+      padding:10px 20px;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
+    }
+    .btn-print{ background:var(--ecobank-blue); color:#fff; }
+    .btn-print:hover{ background:var(--ecobank-blue-dark); }
+    .btn-reset{ background:#e0e0e0; color:#333; }
+    .btn-reset:hover{ background:#cacaca; }
+    .btn-back{ background:#f0f0f0; color:#333; }
+    .btn-back:hover{ background:#e0e0e0; }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    @media print{
+      body{
+        background:#fff;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
+      .page{
+        box-shadow:none;
+        margin:0;
+        max-width:none;
+        width:100%;
+        box-sizing:border-box;
+        padding-bottom:8px;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
+      .form-actions, .table-actions{ display:none; }
+
+      .top-bar{ height:40px; }
+      .header{ padding:10px 20px 2px; }
+      .logo .name{ font-size:20px; }
+      .logo .tagline{ font-size:10px; }
+      h1.title{
+        font-size:17px;
+        margin:8px 0 12px;
+      }
+      .content{
+        padding:0 20px;
+        font-size:12px;
+        line-height:1.45;
+      }
+      .reserved-box{
+        padding:8px 10px;
+        margin-bottom:12px;
+      }
+      .reserved-box .title-line{ margin-bottom:6px; }
+      .reserved-row{ gap:18px; }
+      .checkbox-row{
+        gap:16px;
+        margin-bottom:12px;
+      }
+      .field-line{
+        margin-bottom:8px;
+        gap:5px;
+      }
+      .field-line input[type="text"],
+      .field-line input[type="tel"],
+      .field-line input[type="email"]{
+        min-width:80px;
+      }
+      .address-field textarea{ min-height:38px; }
+      p.declare{ margin:12px 0 4px; }
+      .option-row{
+        max-width:420px;
+        margin:8px 0 12px;
+        gap:8px;
+      }
+      .highlight{
+        padding:3px 6px;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
+      p.debit-line{ margin:10px 0 4px; }
+      .amount-row{
+        gap:10px;
+        margin:8px 0 12px;
+        font-size:12px;
+      }
+      p.list-title, p.list-note{ margin-bottom:4px; }
+      table.accounts th, table.accounts td{
+        font-size:9px;
+        height:25px;
+      }
+      table.accounts th{ padding:6px 8px; }
+      table.accounts td input[type="text"]{ padding:3px 5px; }
+      .signature-row{
+        gap:40px;
+        margin-top:20px;
+        min-height:120px;
+        break-inside:avoid;
+        page-break-inside:avoid;
+      }
+      .signature-row .sig-block{ min-height:120px; }
+      .signature-row .sig-line{ margin-top:82px; }
+      table.accounts th{
+        background:#f2f2f2 !important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
+      .footnote{ margin-top:10px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="form-actions">
+  <button class="btn-print" onclick="window.print()">🖨️ Imprimer</button>
+  <button class="btn-reset" onclick="document.getElementById('ecobankForm').reset()">↺ Réinitialiser</button>
+  <button type="button" class="btn-back" onclick="window.history.back()">← Retour</button>
+
+</div>
+
+<div class="page">
+  <div class="top-bar"></div>
+  <div class="header">
+    <div class="logo">
+				<img src="../vendors/images/ecobank-lg.png" alt="" class="" width="160px">
+    </div>
+  </div>
+
+  <h1 class="title">Formulaire de souscription à Banque par Internet</h1>
+
+  <form id="ecobankForm" class="content" onsubmit="return false;">
+
+    <div class="reserved-box">
+      <div class="title-line">Cadre réservé à ECOBANK</div>
+      <div class="reserved-row">
+        <label>Code client :
+          <input type="text" name="codeClient">
+        </label>
+        <label>Code client Internet :
+          <input type="text" name="codeClientInternet">
+        </label>
+      </div>
+    </div>
+
+    <div class="checkbox-row">
+      <label class="checkbox-item"><input type="checkbox" name="typeClient" value="Particulier"> Particulier</label>
+      <label class="checkbox-item"><input type="checkbox" name="typeClient" value="ETS/SARL"> ETS/SARL</label>
+      <label class="checkbox-item"><input type="checkbox" name="typeClient" value="Société"> Société</label>
+      <label class="checkbox-item"><input type="checkbox" name="typeClient" value="Institution/Organisme"> Institution/Organisme</label>
+    </div>
+
+    <div class="field-line">
+      <span class="field-label">Nom ou raison sociale :</span>
+      <input type="text" name="nom" style="flex:1;">
+    </div>
+    <div class="field-line address-field">
+      <span class="field-label">Adresse :</span>
+      <textarea name="adresse" rows="2"></textarea>
+    </div>
+    <div class="field-line">
+      <span class="field-label">Pays de résidence :</span>
+      <input type="text" name="pays" style="flex:1;">
+    </div>
+    <div class="field-line">
+      <span class="field-label">Tél.<sup>(*)</sup> :</span>
+      <input type="tel" name="telephone" style="max-width:220px;">
+      <span class="field-label" style="margin-left:20px;">E-mail<sup>(*)</sup> :</span>
+      <input type="email" name="email" style="flex:1;">
+    </div>
+
+    <p class="declare">
+      Déclarons avoir pris connaissance de la convention de souscription et de la banque par Internet de ECOBANK et optons pour :<br>
+      <span class="note">(Cocher la case correspondante à la formule de votre choix)</span>
+    </p>
+
+    <div class="option-row">
+      <label class="highlight yellow"><input type="checkbox" name="option" value="virements"> Activer les virements</label>
+      <label class="highlight cyan"><input type="checkbox" name="option" value="westernUnion"> Activer Western Union</label>
+    </div>
+
+    <p class="debit-line">Nous autorisons ECOBANK à débiter le compte n° :</p>
+    <div class="field-line">
+      <input type="text" name="compteDebit" style="flex:1;">
+    </div>
+
+    <p class="debit-line"><strong>d'un montant hors taxe en FCFA</strong> :</p>
+    <div class="amount-row">
+      <label><input type="radio" name="montant" value="1500"> Particulier(<strong>1500</strong>)</label>
+      <label><input type="radio" name="montant" value="5000"> ETS/SARL(<strong>5000</strong>)</label>
+      <label><input type="radio" name="montant" value="15000-societe"> Société(<strong>15000</strong>)</label>
+      <label><input type="radio" name="montant" value="15000-institution"> Institution/Organisme(<strong>15000</strong>)</label>
+    </div>
+
+    <p class="list-title">Liste de vos comptes ouverts dans nos filiales :</p>
+    <p class="list-note">(Précise dans la rubrique 'Filiale', le pays de domiciliation du compte)</p>
+
+    <table class="accounts" id="accountsTable">
+      <thead>
+        <tr>
+          <th>N° de compte</th>
+          <th>Type</th>
+          <th>Devise</th>
+          <th>Agence</th>
+          <th>Filiale</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr><td><input type="text" name="compte1_numero"></td><td><input type="text" name="compte1_type"></td>
+              <td><input type="text" name="compte1_devise"></td><td><input type="text" name="compte1_agence"></td>
+              <td><input type="text" name="compte1_filiale"></td>
+          </tr>
+          <tr><td><input type="text" name="compte2_numero"></td><td><input type="text" name="compte2_type"></td>
+              <td><input type="text" name="compte2_devise"></td><td><input type="text" name="compte2_agence"></td>
+              <td><input type="text" name="compte2_filiale"></td>
+          </tr>
+          <tr><td><input type="text" name="compte3_numero"></td><td><input type="text" name="compte3_type"></td>
+              <td><input type="text" name="compte3_devise"></td><td><input type="text" name="compte3_agence"></td>
+              <td><input type="text" name="compte3_filiale"></td>
+          </tr>
+      </tbody>
+    </table>
+    <div class="table-actions">
+      <button type="button" onclick="ajouterLigne()">+ Ajouter une ligne</button>
+    </div>
+
+    <div class="signature-row">
+      <div class="sig-block">
+        * Date et signature du client <small>(Ecrire Lu et approuvé)</small>
+        <!-- <div class="sig-line"></div> -->
+      </div>
+      <div class="sig-block">
+        Date et cachet ECOBANK
+      </div>
+    </div>
+
+    <div class="footnote">(*) : mention obligatoire</div>
+
+  </form>
+</div>
+
+<div class="page1">
+
+  <h1 class="title2">Convention Banque par Internet Ecobank Congo</h1>
+
+  <form id="conventionForm" onsubmit="return false;">
+    <div class="convention-text">
+
+      <h2>Article 1 : Objet</h2>
+      <p>L'objet de la présente convention est de définir les conditions et modalités suivant lesquelles ECOBANK (ci-après, '' la Banque'') met à la disposition de son client soussigné (ci-après '' l'Abonné '') qui accepte, ECOBANK par Internet.</p>
+      <p>ECOBANK par Internet est un produit d'informations bancaires et financières, de consultation de comptes bancaires et de transmission d'ordres de paiement, accessible par le réseau Internet.</p>
+      <p>ECOBANK par Internet pourra également être accessible, compte tenu de l'évolution des techniques, par d'autres moyens de communication à distance.</p>
+
+      <h2>Article 2 : Champ d'application</h2>
+      <p>Lors de la souscription de l'abonnement, l'abonné indique de manière exhaustive les comptes pour lesquels il demande la fourniture des services d'ECOBANK par Internet.</p>
+      <p>La détermination des pouvoirs à cette fin est fonction des instructions de signature reçues lors de l'ouverture du compte dans les livres de la banque ou par instructions ultérieures dûment enregistrées par la banque.</p>
+      <p>Les services d'ECOBANK par Internet sont distingués suivant des modules nommés « Bleu », « Argent », « Or », « Platinium » dont les fonctionnalités diffèrent. L'abonné choisit lors de la souscription de son abonnement le module souhaité.</p>
+      <p>Les comptes faisant l'objet d'abonnement à l'un des modules d'ECOBANK par Internet bénéficient automatiquement et au fur et à mesure de leur mise à disposition, de toutes les fonctionnalités offertes sous le module considéré, ce en fonction de la nature du compte concerné.</p>
+
+      <h2>Article 3 : Identification, Accès, Confidentialité</h2>
+      <p>L'abonné accède à ECOBANK par Internet après s'être identifié par la composition d'une double clé formée du numéro d'abonné et d'un code secret numérique qui lui sont, l'un et l'autre, communiqués par la banque. Le code secret est transmis par la Banque à l'Abonné lors de la souscription.</p>
+      <p>Il est conseillé à l'Abonné de modifier périodiquement son code secret et de le garder hors de la portée de toute personne. En tout état de cause, l'Abonné est exclusivement responsable de l'entière confidentialité de son code secret.</p>
+      <p>Pour sa part, ECOBANK garantit que la circulation de ce code sur Internet n'entrave nullement cette confidentialité, en raison du cryptage systématique protégé par une licence de type SSL de la société VeriSign.</p>
+
+      <h2>Article 4 : Refus d'accès</h2>
+      <p>A tout moment, la banque peut suspendre l'accès de l'Abonné à ECOBANK par Internet au cas où il existe des faits laissant présumer l'utilisation frauduleuse ou la tentative d'utilisation frauduleuse de ses services. L'Abonné en est informé par tout moyen.</p>
+
+      <h2>Article 5 : Tarification</h2>
+      <p>L'utilisation des services d'ECOBANK par Internet donne lieu à une tarification mensuelle indivisible payable par avance par le débit du compte de facturation indiqué par l'Abonné lors de la souscription.</p>
+      <p>Les tarifs varient suivant les modules choisis et sont communiqués à l'Abonné lors de son adhésion. Toute modification des tarifs ou des modalités de facturation sera communiquée à l'Abonné par tout moyen, sous préavis de trente jours. L'utilisation d'ECOBANK par Internet, postérieurement à l'entrée en vigueur des modifications tarifaires, vaudra acceptation de celles-ci par l'Abonné.</p>
+      <p>La tarification des services d'ECOBANK par Internet est strictement distincte du coût des communications téléphoniques inhérentes à la connexion, et dont l'Abonné assume l'entière responsabilité.</p>
+
+      <h2>Article 6 : Mise en œuvre des services - Responsabilité de la Banque</h2>
+      <p>La Banque s'engage à mettre en œuvre tous les moyens raisonnables pour assurer le bon fonctionnement d'ECOBANK par Internet ainsi que l'exécution diligente des ordres reçus dans les formes convenues et la confidentialité des informations communiquées.</p>
+      <p>Toutefois, ECOBANK ne saurait en aucun cas être tenue responsable d'un défaut de fonctionnement ou d'un mauvais fonctionnement du service par suite d'évènements dont elle n'a pas la maîtrise, tels notamment que le transport des données, la défaillance dans le fonctionnement des matériels ou des réseaux de télécommunication ou toute erreur imputable aux gestionnaires de ces réseaux de télécommunication, les interruptions de service par suite de cas fortuits ou de force majeure ou de tout événement de nature à entraver le fonctionnement normal d'ECOBANK par Internet (tels que des conflits sociaux, même partiels, survenant à la Banque ou chez tout autre prestataire intervenant dans le fonctionnement d'ECOBANK par Internet, le défaut de fourniture électrique etc.), le mauvais fonctionnement du matériel de l'Abonné ; cette liste étant simplement indicative.</p>
+      <p>De même, la Banque ne saurait être tenue responsable des conséquences d'un accès à ECOBANK par Internet non conforme aux procédures ou de l'utilisation par un tiers, avant opposition, des numéros d'Abonné et code secret de l'Abonné ou de ses mandataires.</p>
+
+      <h2>Article 7 : Responsabilité de l'Abonné</h2>
+      <p>L'Abonné est responsable de la conservation et de l'utilisation de son code secret. En cas d'abonnement joint, les co-abonnés sont solidairement responsables de la conversation et de l'utilisation du code secret. Il est, en conséquence, expressément convenu que toute interrogation ou tout ordre précédé de la frappe du numéro d'abonné et du code secret, est réputé émaner de l'Abonné lui-même ou des co-abonnés le cas échéant.</p>
+
+      <h2>Article 8 : Force probante des livres de la banque</h2>
+      <p>Toutes les opérations passées au compte de l'Abonné, au moyen d'instructions reçues via ECOBANK par Internet ou non, font l'objet d'un relevé de compte établi sur une base mensuelle ou trimestrielle selon la nature du compte. L'Abonné est tenu de contrôler les relevés de compte périodiques adressés par la Banque, qui seuls font foi. Passé le délai de trois mois, à compter de l'envoi du relevé de compte, l'Abonné est réputé avoir approuvé les opérations portées à sa connaissance et aucune réclamation les concernant ne sera plus recevable.</p>
+
+      <h2>Article 9 : Durée de l'abonnement - résiliation</h2>
+      <p>La durée de l'abonnement est convenue entre la banque et l'abonné lors de la souscription, au moyen des formulaires existant à cet effet. Il est toutefois entendu qu'en cas de clôture du compte avant l'échéance d'un abonnement ECOBANK par Internet en cours, celui-ci sera de plein droit considéré comme éteint pour compter de la clôture du compte.</p>
+      <p>Toute souscription échue doit faire l'objet d'un renouvellement à l'initiative du client. Chacune des parties conserve la faculté de résilier un abonnement en cours, sous préavis de quinze (15) jours courant à compter de la réception de la notification.</p>
+
+      <h2>Article 10 : Données personnelles</h2>
+      <p>La Banque s'engage à ne faire usage des informations nominatives recueillies dans le cadre de ECOBANK par Internet que pour les seules nécessités de leur gestion et pour satisfaire aux obligations légales et réglementaires.</p>
+      <p>L'Abonné et, le cas échéant, son mandataire autorisent expressément la Banque à communiquer, aux entreprises auxquelles elle pourrait sous-traiter certains travaux, les données nécessaires à l'exécution de ceux-ci.</p>
+
+      <h2>Article 11 : Documents contractuels et loi applicable</h2>
+      <p>Toute convention ECOBANK par Internet se compose nécessairement du présent texte auxquels sont joints un bulletin de souscription ainsi que tous autres formulaires en usage.</p>
+      <p>La présente convention est soumise au droit congolais et les tribunaux congolais ont compétence pour connaître de toute question se rapportant à son interprétation ou à son exécution, à défaut d'accord amiable.</p>
+
+      <div class="signature-section">
+        <div class="sig-block">
+          <div class="sig-title">Pour l'Abonné</div>
+          <div class="sig-line">
+            A <input type="text" class="lieu" name="lieuAbonne">, le <input type="text" class="date" name="dateAbonne">
+          </div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-title">Pour la Banque</div>
+          <div class="sig-line">
+            A <input type="text" class="lieu" name="lieuBanque">, le <input type="text" class="date" name="dateBanque">
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-caption">CONVENTION BANQUE PAR INTERNET ECOBANK CONGO</div>
+
+    </div>
+  </form>
+</div>
+
+<script>
+  let compteIndex = 4;
+
+  function rechercherCodeClient() {
+    const compte = document.querySelector('input[name="compteDebit"]');
+    const codeClient = document.querySelector('input[name="codeClient"]');
+    if (!compte || !codeClient) return;
+
+    const accountNumber = compte.value.trim();
+    if (!accountNumber) {
+      codeClient.value = '';
+      return;
+    }
+
+    fetch('fetch_account_flexcube.php?account=' + encodeURIComponent(accountNumber), {
+      headers: { Accept: 'application/json' }
+    })
+      .then(function (response) {
+        return response.json().then(function (result) {
+          if (!response.ok || !result.success) {
+            throw new Error(result.error || 'Compte introuvable dans Flexcube');
+          }
+          return result;
+        });
+      })
+      .then(function (result) {
+        const customerId = result.data && result.data.customer_id;
+        if (customerId !== undefined && customerId !== null) {
+          codeClient.value = String(customerId);
+          codeClient.dispatchEvent(new Event('input', { bubbles: true }));
+          codeClient.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      })
+      .catch(function (error) {
+        console.error('[formulaire_ecobank] Recherche du code client:', error.message);
+      });
+  }
+
+  const compteDebit = document.querySelector('input[name="compteDebit"]');
+  if (compteDebit) {
+    compteDebit.addEventListener('blur', rechercherCodeClient);
+    compteDebit.addEventListener('change', rechercherCodeClient);
+    compteDebit.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        rechercherCodeClient();
+      }
+    });
+  }
+
+  function ajouterLigne(){
+    const tbody = document.querySelector('#accountsTable tbody');
+    const tr = document.createElement('tr');
+    const champs = ['numero','type','devise','agence','filiale'];
+    champs.forEach(function(champ){
+      const td = document.createElement('td');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.name = 'compte' + compteIndex + '_' + champ;
+      td.appendChild(input);
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+    compteIndex++;
+  }
+</script>
+<script src="../vendors/js/flexcube_client_search.js?v=20260904"></script>
+</body>
+</html>

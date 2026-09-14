@@ -1,0 +1,132 @@
+:root{
+      --ecobank-blue:#004b87;
+      --ecobank-blue-dark:#003a68;
+      --ecobank-teal:#00a99d;
+      --text-dark:#1a1a1a;
+      --grey-line:#bbb;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      padding:0;
+      background:#e9edf0;
+      font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+      color:var(--text-dark);
+    }
+    .page{
+      max-width:850px;
+      margin:30px auto;
+      background:#ffffff;
+      box-shadow:0 0 12px rgba(0,0,0,0.15);
+      padding:50px 55px 60px 55px;
+      min-height:500px;
+    }
+    hr.sep{
+      border:none;
+      border-top:1.5px solid var(--text-dark);
+      margin:0 0 28px 0;
+    }
+    h1.title{
+      text-align:center;
+      font-size:19px;
+      font-weight:700;
+      margin:0 0 34px 0;
+      letter-spacing:0.5px;
+    }
+    form{ font-size:15px; line-height:2.3; }
+
+    input[type="text"]{
+      border:none;
+      border-bottom:1px dotted var(--text-dark);
+      background:transparent;
+      font-family:inherit;
+      font-size:15px;
+      color:var(--text-dark);
+      padding:2px 4px;
+      outline:none;
+    }
+    input[type="text"]:focus{
+      border-bottom:1px solid var(--ecobank-blue);
+      background:#f5faff;
+    }
+    input.inline-sm{ width:220px; }
+    input.inline-md{ width:280px; }
+    input.inline-lg{ width:100%; }
+    input.inline-amount{ width:130px; }
+    input.day, input.month{ width:34px; text-align:center; }
+    input.year{ width:60px; text-align:center; }
+
+    p.statement{
+      margin:0 0 36px 0;
+    }
+    p.statement input{ margin:0 2px; }
+
+    .date-line{
+      margin:0 0 60px 0;
+    }
+    .date-line input{ margin:0 2px; }
+
+    .signatures{
+      display:flex;
+      justify-content:space-between;
+      margin-top:20px;
+    }
+    .signatures .sig-block{
+      text-align:center;
+      width:45%;
+    }
+    .signatures .sig-title{
+      font-weight:700;
+      margin-bottom:60px;
+    }
+    .signatures .sig-line{
+      border-bottom:1px dotted var(--text-dark);
+      height:1px;
+    }
+
+    .form-actions{
+      max-width:850px;
+      margin:0 auto 20px auto;
+      padding:0 4px;
+      display:flex;
+      gap:12px;
+    }
+    .form-actions button{
+      font-family:inherit;
+      font-size:14px;
+      padding:10px 20px;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
+    }
+    .btn-print{ background:var(--ecobank-blue); color:#fff; }
+    .btn-print:hover{ background:var(--ecobank-blue-dark); }
+    .btn-reset{ background:#e0e0e0; color:#333; }
+    .btn-reset:hover{ background:#cacaca; }
+
+    @page{
+      size:A4;
+      margin:0;
+    }
+
+    @media print{
+      html, body{
+        background:#fff;
+        margin:0;
+        padding:0;
+      }
+      .page{
+        box-shadow:none;
+        max-width:none;
+        width:100%;
+        min-height:297mm;
+        margin:0;
+        padding:18mm 22mm;
+      }
+      .form-actions{ display:none; }
+      .signatures,
+      .date-line{
+        break-inside:avoid;
+        page-break-inside:avoid;
+      }
+    }
